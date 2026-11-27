@@ -2,7 +2,7 @@ import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSP
 import { Link, useLocation, useNavigate, useNavigationType, useSearchParams } from 'react-router-dom';
 import { ArrowUpRight, CalendarDays, ChevronDown, Gamepad2, Search, Shuffle, X } from 'lucide-react';
 import type { GameDef } from '@/data/gameRegistry';
-import { describeSave, savedGames } from '@/data/continueSaves';
+import { describeSave, savedGames, type SavedGame } from '@/data/continueSaves';
 import { useGamePicks } from '@/hooks/useGamePicks';
 import { GamePickButton, GamePicksWarning } from '@/components/game/GamePickButton';
 import { CATEGORY_SPORT } from '@/data/homeFront';
@@ -27,13 +27,14 @@ export function filterHubGames(games: GameDef[], filter: HubFilter, query: strin
     && (!needle || `${game.label} ${game.description}`.toLocaleLowerCase().includes(needle)));
 }
 
-function readContinuations(games: GameDef[]): Record<string, { path: string; line: string }> {
+function readContinuations(games: GameDef[]): Record<string, { path: string; line: string; state?: SavedGame['resumeState'] }> {
   try {
     return Object.fromEntries(savedGames(window.localStorage)
       .filter(({ game }) => games.some(item => item.path === game.path))
-      .map(({ entry, game }) => [game.path, {
+      .map(({ entry, game, description, resumeState }) => [game.path, {
         path: entry.path,
-        line: describeSave(entry, window.localStorage.getItem(entry.saveKey)) || 'Saved in this browser',
+        line: description || describeSave(entry, window.localStorage.getItem(entry.saveKey)) || 'Saved in this browser',
+        state: resumeState,
       }]));
   } catch { return {}; }
 }
@@ -102,7 +103,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
     <article key={game.path} data-hub-game={game.path} className={featured ? styles.featuredCard : styles.gameCard}>
       <span aria-hidden="true" className={styles.gameIcon}>{game.emoji}</span>
       <div className={styles.gameCopy}>
-        <h3><Link className={styles.gameLink} to={continuations[game.path]?.path ?? game.path} data-google-vignette="false">{game.label}</Link></h3>
+        <h3><Link className={styles.gameLink} to={continuations[game.path]?.path ?? game.path} state={continuations[game.path]?.state} data-google-vignette="false">{game.label}</Link></h3>
         <p>{game.description}</p>
         <div className={styles.cardActions}>
           {continuations[game.path] ? (
@@ -135,7 +136,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
           <p className={styles.tagline}>{arena.line}</p>
           <p className={styles.welcome}>All {games.length} of them in one place. Every one is free with no sign-up.</p>
           <div className={styles.arenaActions}>
-            {first && <Link to={firstSaved ? continuations[firstSaved.path].path : first.path} data-google-vignette="false" className={styles.heroPlay}>
+            {first && <Link to={firstSaved ? continuations[firstSaved.path].path : first.path} state={firstSaved ? continuations[firstSaved.path].state : undefined} data-google-vignette="false" className={styles.heroPlay}>
               <Gamepad2 aria-hidden="true" />{firstSaved ? `Resume ${firstSaved.label}` : `Play ${first.label}`}<ArrowUpRight aria-hidden="true" />
             </Link>}
             <button type="button" className={styles.heroBrowse} onClick={() => {
@@ -151,7 +152,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
 
       {saved.length > 0 && <section data-no-prerender aria-label="Your saved games" className={styles.saved}>
         <h2>Pick up where you left off</h2>
-        <div>{saved.map(game => <Link key={game.path} to={continuations[game.path].path} data-google-vignette="false" data-hub-saved={game.path}>
+        <div>{saved.map(game => <Link key={game.path} to={continuations[game.path].path} state={continuations[game.path].state} data-google-vignette="false" data-hub-saved={game.path}>
           <span aria-hidden="true">{game.emoji}</span><span><b>{game.label}</b><small>{continuations[game.path].line}</small></span><ArrowUpRight aria-hidden="true" />
         </Link>)}</div>
       </section>}

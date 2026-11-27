@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { safeLocalStorage } from '@/lib/safeStorage';
-import { calls, defense, drives, driveStep, fieldGoalYards, fieldPosition, gameClock, kickoff, looks, plays, playoffLedger, playoffRounds, readPlayoff, replayDrive, type Action, type DriveScenario, type PlayoffRun } from '@/lib/twoMinuteDrive';
+import {
+  calls, defense, drives, driveStep, fieldGoalYards, fieldPosition, gameClock, kickoff, looks, plays,
+  playoffLedger, playoffRounds, playoffSaveKey as playoffKey, practiceSaveKey as key, readDriveCard, readPlayoff,
+  replayDrive, unfinishedDrives, type Action, type DriveCard as Card, type DriveScenario, type PlayoffRun,
+} from '@/lib/twoMinuteDrive';
 
 const button = 'min-h-11 rounded-lg border border-border bg-background px-3 py-2 text-sm font-semibold hover:border-primary focus-visible:ring-2 focus-visible:ring-primary';
-type Card = { actions: Action[]; best: Action[] | null };
 type Finish = (verdict: 'win' | 'tie' | 'loss') => void;
 type PlayoffStore = { load: () => Card; save: (card: Card) => boolean | null };
-const key = (s: DriveScenario) => 'dukb-two-minute-v1:' + s.id;
 function saveForVisit(storageKey: string, value: object) {
   const raw = JSON.stringify(value);
   safeLocalStorage.setItem(storageKey, raw);
@@ -16,11 +18,7 @@ function saveForVisit(storageKey: string, value: object) {
 
 function read(s: DriveScenario): Card {
   try {
-    const data = JSON.parse(safeLocalStorage.getItem(key(s)) || '{}');
-    return {
-      actions: Array.isArray(data.actions) && replayDrive(s, data.actions) ? data.actions : [],
-      best: Array.isArray(data.best) && replayDrive(s, data.best)?.verdict === 'win' ? data.best : null,
-    };
+    return readDriveCard(s, safeLocalStorage.getItem(key(s)));
   } catch { return { actions: [], best: null }; }
 }
 
@@ -124,12 +122,14 @@ function DriveRules() {
   </div>;
 }
 
-const playoffKey = 'dukb-two-minute-playoff-v1';
 const savedPlayoff = () => readPlayoff(safeLocalStorage.getItem(playoffKey));
 
-function Playoffs({ onBack, onFinish }: { onBack: () => void; onFinish?: Finish }) {
+function Playoffs({ onBack, onFinish, resume }: { onBack: () => void; onFinish?: Finish; resume: boolean }) {
   const [run, setRun] = useState(savedPlayoff);
-  const [round, setRound] = useState<number | null>(null);
+  const [round, setRound] = useState<number | null>(() => {
+    const legs = resume && run ? playoffLedger(run) : [];
+    return legs.length && !legs[legs.length - 1].drive.verdict ? legs.length - 1 : null;
+  });
   const [note, setNote] = useState('');
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => { if (round === null) heading.current?.focus({ preventScroll: true }); }, [round]);
@@ -176,26 +176,34 @@ function Playoffs({ onBack, onFinish }: { onBack: () => void; onFinish?: Finish 
   </section>;
 }
 
-export function TwoMinuteDriveBoard({ onFinish }: { onFinish?: Finish } = {}) {
-  const [scenario, setScenario] = useState<DriveScenario | null>(null);
-  const [postseason, setPostseason] = useState(false);
+export function TwoMinuteDriveBoard({ onFinish, resume = false }: { onFinish?: Finish; resume?: boolean } = {}) {
+  const [unfinished] = useState(() => resume ? unfinishedDrives(safeLocalStorage) : []);
+  const resumeScreen = (id: string) => id === 'playoff' ? 'resume-playoff' : id;
+  const [screen, setScreen] = useState(() => unfinished.length === 1 ? resumeScreen(unfinished[0].id) : unfinished.length ? 'unfinished' : 'menu');
+  const scenario = drives.find(s => s.id === screen);
   const returnTo = useRef<string | null>(null);
   useEffect(() => {
-    if (!scenario && !postseason && returnTo.current) {
+    if (screen === 'menu' && returnTo.current) {
       document.getElementById('two-minute-' + returnTo.current)?.focus({ preventScroll: true });
       returnTo.current = null;
     }
-  }, [scenario, postseason]);
-  if (postseason) return <Playoffs onFinish={onFinish} onBack={() => { returnTo.current = 'playoff'; setPostseason(false); }} />;
-  if (scenario) return <DriveRoom key={scenario.id} scenario={scenario} onFinish={onFinish} onBack={() => { returnTo.current = scenario.id; setScenario(null); }} />;
+  }, [screen]);
+  function allDrives(previous: string) { returnTo.current = previous; setScreen('menu'); }
+  if (screen === 'playoff' || screen === 'resume-playoff') return <Playoffs resume={screen === 'resume-playoff'} onFinish={onFinish} onBack={() => allDrives('playoff')} />;
+  if (scenario) return <DriveRoom key={scenario.id} scenario={scenario} onFinish={onFinish} onBack={() => allDrives(scenario.id)} />;
+  if (screen === 'unfinished') return <section className="space-y-2">
+    <h2 className="text-lg font-bold">Choose an unfinished drive</h2>
+    {unfinished.map(item => <button key={item.id} type="button" className={button + ' block w-full text-left'} onClick={() => setScreen(resumeScreen(item.id))}>{item.line}</button>)}
+    <button type="button" className={button} onClick={() => allDrives(unfinished[0].id)}>All drives</button>
+  </section>;
   return <div className="space-y-3">
     <DriveRules />
-    <button id="two-minute-playoff" type="button" className={button + ' w-full border-primary/50 bg-primary/10 text-left'} onClick={() => setPostseason(true)}>
+    <button id="two-minute-playoff" type="button" className={button + ' w-full border-primary/50 bg-primary/10 text-left'} onClick={() => setScreen('playoff')}>
       <strong className="block">Playoff Run</strong><span className="text-xs font-normal">Three knockout drives. One shared timeout.</span>
     </button>
     <div className="grid gap-2 sm:grid-cols-2">{drives.map(s => {
       const card = read(s), last = replayDrive(s, card.actions);
-      return <button type="button" id={'two-minute-' + s.id} className={button + ' text-left'} key={s.id} onClick={() => setScenario(s)}>
+      return <button type="button" id={'two-minute-' + s.id} className={button + ' text-left'} key={s.id} onClick={() => setScreen(s.id)}>
         <span className="flex items-baseline justify-between gap-2"><strong>{s.name}</strong><span className="font-mono">{gameClock(s.seconds)}</span></span>
         <span className="block text-xs font-normal">{fieldPosition(s.spot)} · Down {s.deficit} · {s.timeouts} {s.timeouts === 1 ? 'timeout' : 'timeouts'}{card.best ? ' · Won' : ''}{card.actions.length && !last?.verdict ? ' · Resume' : ''}</span>
       </button>;

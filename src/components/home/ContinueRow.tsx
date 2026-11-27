@@ -1,6 +1,6 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, History } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, History } from 'lucide-react';
 import { CONTINUE_SAVES, continueSaveEntries, describeSave, savedGames, type SavedGame } from '@/data/continueSaves';
 import { ALL_GAMES } from '@/data/gameRegistry';
 import { sportOf } from '@/data/homeFront';
@@ -8,6 +8,7 @@ import { BUILD_XI_DRAFT_KEY, readBuildXiDraft } from '@/lib/buildXiDraft';
 import { readWhoAmIRound, readWhoAmIRoundBytes, WHO_AM_I_ROUND_KEY } from '@/lib/whoAmIRoundSave';
 import { FIGHT_PROMOTER_MODE_KEY } from '@/lib/fightPromoterRoutes';
 import { parkedKey, SLOT_COUNT, SLOTS_INDEX_KEY } from '@/lib/clubManagerSaveKeys';
+import { drives, playoffSaveKey, practiceSaveKey } from '@/lib/twoMinuteDrive';
 import { homeSaveStorage, useHomeSaveRefresh } from './homeSaveRefresh';
 import { SportGlyph, sportStyle } from './SportGlyph';
 import styles from './HomeLaunchDeck.module.css';
@@ -21,6 +22,8 @@ const xiGame = ALL_GAMES.find(game => game.path === xiEntry.path);
 const whoEntry = { path: '/who-am-i', saveKey: WHO_AM_I_ROUND_KEY };
 const whoGame = ALL_GAMES.find(game => game.path === whoEntry.path);
 const continueKeys = new Set([
+  playoffSaveKey,
+  ...drives.map(practiceSaveKey),
   ...CONTINUE_SAVES.flatMap(entry => continueSaveEntries(entry).map(save => save.saveKey)),
   BUILD_XI_DRAFT_KEY,
   WHO_AM_I_ROUND_KEY,
@@ -83,18 +86,51 @@ export function ContinueRow() {
       ? previous : { saved: current, lines: descriptions });
   }, []);
   useHomeSaveRefresh(continueKeys, refresh);
+  const rail = useRef<HTMLDivElement>(null);
+  const [ends, setEnds] = useState({ previous: false, next: false });
+  const measure = useCallback(() => {
+    const el = rail.current;
+    const previous = !!el && el.scrollLeft > 1;
+    const next = !!el && el.scrollLeft + el.clientWidth < el.scrollWidth - 1;
+    setEnds(old => old.previous === previous && old.next === next ? old : { previous, next });
+  }, []);
+  useLayoutEffect(() => {
+    measure();
+    const el = rail.current;
+    if (!el) return;
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', measure);
+      return () => window.removeEventListener('resize', measure);
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [saved.length, measure]);
+  function pageSaved(forward: boolean) {
+    const el = rail.current;
+    if (!el) return;
+    el.scrollBy({
+      left: (forward ? 1 : -1) * el.clientWidth,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    });
+  }
 
   if (saved.length === 0) return null;
 
   return (
     <section aria-labelledby="home-continue" data-home-continue="" className={styles.continueSection}>
-      <h2 id="home-continue" className={`font-display ${styles.continueHeading}`}>
+      <div className={styles.continueHeader}><h2 id="home-continue" className={`font-display ${styles.continueHeading}`}>
         <History aria-hidden="true" />
         Continue playing
       </h2>
-      <div data-home-shelf-rail="" className={styles.continueRail}>
+        {(ends.previous || ends.next) && <div className={styles.continueControls}>
+          <button type="button" aria-label="Previous saved games" aria-disabled={!ends.previous} onClick={() => { if (ends.previous) pageSaved(false); }}><ChevronLeft aria-hidden="true" /></button>
+          <button type="button" aria-label="Next saved games" aria-disabled={!ends.next} onClick={() => { if (ends.next) pageSaved(true); }}><ChevronRight aria-hidden="true" /></button>
+        </div>}
+      </div>
+      <div ref={rail} onScroll={measure} data-home-shelf-rail="" className={styles.continueRail}>
         <ul className={styles.continueList}>
-          {saved.map(({ entry, game, slot, description: savedDescription }) => {
+          {saved.map(({ entry, game, slot, description: savedDescription, resumeState }) => {
             const sport = sportOf(game.path);
             const line = savedDescription ?? lines[entry.path];
             const description = slot === undefined ? line ?? SAVED_FALLBACK : [`Slot ${slot}`, line].filter(Boolean).join(' · ');
@@ -102,6 +138,7 @@ export function ContinueRow() {
               <li key={entry.path}>
                 <Link
                   to={entry.path}
+                  state={resumeState}
                   data-google-vignette="false"
                   style={sportStyle(sport)}
                   data-continue-card={game.path}

@@ -96,9 +96,14 @@
 .primaryCta svg { width: 15px; height: 15px; }
 
 .continueSection { min-width: 0; padding: 12px; border: 1px solid hsl(var(--border)); border-radius: 12px; background: hsl(var(--surface-1)); }
-.continueHeading { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; font-size: 15px; font-weight: 700; line-height: 24px; }
+.continueHeader { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.continueHeading { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 15px; font-weight: 700; line-height: 24px; }
+.continueControls { display: flex; gap: 4px; }
+.continueControls button { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid hsl(var(--border)); border-radius: 8px; }
+.continueControls button[aria-disabled=true] { opacity: .4; }
+.continueControls svg { width: 17px; height: 17px; }
 .continueHeading svg { width: 17px; height: 17px; color: hsl(var(--primary)); }
-.continueRail { overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: thin; padding-bottom: 4px; }
+.continueRail { overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: hsl(var(--muted-foreground) / .55) transparent; padding-bottom: 4px; }
 .continueList { display: flex; width: max-content; gap: 10px; }
 .continueList > li { scroll-snap-align: start; }
 .continueCard { display: flex; align-items: center; gap: 10px; width: 248px; height: 72px; padding: 0 12px; border: 1px solid hsl(var(--border)); border-left: 3px solid hsl(var(--tile)); border-radius: 7px; background: hsl(var(--background)); }

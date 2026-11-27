@@ -130,3 +130,42 @@ export function readPlayoff(raw: string | null): PlayoffRun | null {
     return run;
   } catch { return null; }
 }
+
+export const playoffSaveKey = 'dukb-two-minute-playoff-v1';
+export const practiceSaveKey = (s: DriveScenario) => 'dukb-two-minute-v1:' + s.id;
+export type DriveCard = { actions: Action[]; best: Action[] | null };
+
+export function readDriveCard(s: DriveScenario, raw: string | null): DriveCard {
+  try {
+    const data = JSON.parse(raw || '{}');
+    return {
+      actions: Array.isArray(data.actions) && replayDrive(s, data.actions) ? data.actions : [],
+      best: Array.isArray(data.best) && replayDrive(s, data.best)?.verdict === 'win' ? data.best : null,
+    };
+  } catch { return { actions: [], best: null }; }
+}
+
+export function unfinishedDrives(storage: Pick<Storage, 'getItem'>) {
+  const read = (key: string) => {
+    try { return storage.getItem(key); } catch { return null; }
+  };
+  const active: { id: string; saveKey: string; line: string }[] = [];
+  function add(scenario: DriveScenario, current: Drive, id: string, saveKey: string) {
+    active.push({ id, saveKey, line: [scenario.name, gameClock(current.seconds), fieldPosition(current.spot)].join(' · ') });
+  }
+  const run = readPlayoff(read(playoffSaveKey));
+  if (run) {
+    const legs = playoffLedger(run);
+    const next = legs[legs.length - 1];
+    if (next && !next.drive.verdict) add(next.scenario, next.drive, 'playoff', playoffSaveKey);
+  }
+  for (const scenario of drives) {
+    const saveKey = practiceSaveKey(scenario);
+    const raw = read(saveKey);
+    if (!raw) continue;
+    const { actions } = readDriveCard(scenario, raw);
+    const current = actions.length ? replayDrive(scenario, actions) : null;
+    if (current && !current.verdict) add(scenario, current, scenario.id, saveKey);
+  }
+  return active;
+}

@@ -5,6 +5,7 @@ import {
 } from '@/lib/fightPromoterRoutes';
 import { parkedKey, readClubManagerActiveSlot, readableClubManagerSave, SLOT_COUNT } from '@/lib/clubManagerSaveKeys';
 import { restoreParkedCareer } from '@/lib/clubManagerParkedSave';
+import { unfinishedDrives } from '@/lib/twoMinuteDrive';
 
 /**
  * Round 717: the Continue playing row on the home page (master spec sections
@@ -129,6 +130,7 @@ export interface SavedGame {
   game: GameDef;
   slot?: number;
   description?: string | null;
+  resumeState?: { resumeTwoMinute: true };
 }
 
 /**
@@ -179,6 +181,12 @@ export function savedGames(storage: Pick<Storage, 'getItem'> | null | undefined,
       }
     }
   }
+  const drives = unfinishedDrives(storage);
+  const football = drives.length && ALL_GAMES.find(game => game.path === '/two-minute-drive');
+  if (football) out.push({
+    entry: { path: football.path, saveKey: drives[0].saveKey }, game: football, resumeState: { resumeTwoMinute: true },
+    description: drives.length === 1 ? drives[0].line : drives.length + ' unfinished drives',
+  });
   return out;
 }
 
