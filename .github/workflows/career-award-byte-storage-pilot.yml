@@ -1,0 +1,478 @@
+name: Award lossless byte storage pilot
+on:
+  push:
+    branches: [codex/award-byte-storage-pilot]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.21.0
+      - name: Exact two-leaf source and canonical package preparation
+        run: |
+          mkdir -p award-byte-pilot-work/payload/provenance award-byte-pilot-work/inputs award-byte-pilot-work/diagnostic
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          test "$(git rev-parse aa564f16019b9e821981d5c4e3e0262312c73b62^{tree})" = e3e5332ddf95b79802c82487a03df3c0aca32e75
+          git diff --name-only aa564f16019b9e821981d5c4e3e0262312c73b62 HEAD > award-byte-pilot-work/payload/provenance/changed-source.txt
+          python3 - <<'PY'
+          import subprocess
+          expected={'.github/workflows/career-award-byte-storage-pilot.yml','scripts/qa/awardByteStoragePilot.mjs'}
+          actual=set(subprocess.check_output(['git','diff','--name-only','aa564f16019b9e821981d5c4e3e0262312c73b62','HEAD'],text=True).splitlines())
+          assert actual==expected,'exact two runtime leaves only'
+          PY
+          printf '%s\n' "$(git rev-parse HEAD)" > award-byte-pilot-work/payload/provenance/source-head.txt
+          printf '%s\n' "$(git rev-parse HEAD^{tree})" > award-byte-pilot-work/payload/provenance/source-tree.txt
+          git -c core.autocrlf=false archive --format=zip --output=award-byte-pilot-work/payload/provenance/source.zip HEAD
+          git -c core.autocrlf=false archive --format=zip --output=award-byte-pilot-work/payload/provenance/base-source.zip aa564f16019b9e821981d5c4e3e0262312c73b62
+          git ls-tree -r HEAD > award-byte-pilot-work/payload/provenance/source-inventory.txt
+          git ls-tree -r aa564f16019b9e821981d5c4e3e0262312c73b62 > award-byte-pilot-work/payload/provenance/base-source-inventory.txt
+          sha256sum package.json package-lock.json > award-byte-pilot-work/payload/provenance/packages-before.txt
+          sha256sum scripts/qa/awardByteStoragePilot.mjs .github/workflows/career-award-byte-storage-pilot.yml > award-byte-pilot-work/payload/provenance/helpers-before.txt
+          test "$(sha256sum scripts/qa/awardByteStoragePilot.mjs | cut -d' ' -f1)" = 87004d13b9f4f658805f496ddcac06eec2cb85feabc50ffff9dbab2ccec6d9ac
+          cp scripts/qa/awardByteStoragePilot.mjs award-byte-pilot-work/payload/provenance/pilot-source.mjs
+          cp .github/workflows/career-award-byte-storage-pilot.yml award-byte-pilot-work/payload/provenance/workflow-source.yml
+          node --version > award-byte-pilot-work/payload/provenance/node-version.txt
+          test "$(node --version)" = v24.21.0
+      - name: Retain exact input helper source
+        if: always()
+        run: |
+          mkdir -p award-byte-pilot-work/payload/provenance award-byte-pilot-work/inputs award-byte-pilot-work/diagnostic
+          cat > award-byte-pilot-work/bootstrap.py <<'PY'
+          import copy
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+          import subprocess
+          import sys
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+          import zipfile
+
+          ROOT = Path('award-byte-pilot-work')
+          MANIFEST = ROOT / 'payload/provenance'
+          REPO = 'PapiSalgueroM/ballpark-hero'
+          MANIFEST.mkdir(parents=True, exist_ok=True)
+
+          def write_json(file, value):
+              file.parent.mkdir(parents=True, exist_ok=True)
+              file.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+
+          def sha_file(file):
+              digest = hashlib.sha256()
+              with file.open('rb') as handle:
+                  for block in iter(lambda: handle.read(1024 * 1024), b''):
+                      digest.update(block)
+              return digest.hexdigest()
+
+
+          def api_json(route, file):
+              token = os.environ.get('RECOVERY_GITHUB_TOKEN')
+              assert token, 'read-only Actions token is available'
+              request = urllib.request.Request('https://api.github.com/repos/' + REPO + route, headers={'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'exact-award-artifact-recovery'})
+              with urllib.request.build_opener(NoRedirect).open(request, timeout=120) as response:
+                  raw = response.read()
+              file.write_bytes(raw)
+              return json.loads(raw)
+
+
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, request, fp, code, message, headers, newurl):
+                  return None
+
+
+          def download_original(spec, destination):
+              token = os.environ['RECOVERY_GITHUB_TOKEN']
+              request = urllib.request.Request('https://api.github.com/repos/' + REPO + '/actions/artifacts/' + str(spec['id']) + '/zip', headers={'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'exact-award-artifact-recovery'})
+              opener = urllib.request.build_opener(NoRedirect)
+              try:
+                  response = opener.open(request, timeout=120)
+              except urllib.error.HTTPError as error:
+                  assert error.code in (301, 302, 303, 307, 308), 'official archive endpoint supplies a redirect'
+                  location = error.headers.get('Location')
+                  error.close()
+                  parsed = urllib.parse.urlsplit(location or '')
+                  assert parsed.scheme == 'https' and parsed.hostname and not parsed.username and not parsed.password, 'archive redirect is HTTPS without user credentials'
+                  # The private redirect stays only in memory; no Authorization header crosses origins.
+                  response = urllib.request.urlopen(urllib.request.Request(location, headers={'User-Agent': 'exact-award-artifact-recovery'}), timeout=120)
+              digest = hashlib.sha256()
+              count = 0
+              with response, destination.open('xb') as output:
+                  while True:
+                      block = response.read(1024 * 1024)
+                      if not block:
+                          break
+                      output.write(block)
+                      digest.update(block)
+                      count += len(block)
+              assert count == spec['bytes'], 'complete original archive byte length matches immutable metadata'
+              assert digest.hexdigest() == spec['sha256'], 'complete original archive SHA256 matches immutable digest'
+
+
+          def safe_name(info):
+              name = info.filename
+              assert info.orig_filename == name, 'ZIP member preserves its complete literal path'
+              assert name and '\x00' not in name and '\\' not in name and ':' not in name, 'ZIP member has a native-safe literal path'
+              assert all(ord(char) >= 32 and char not in '<>"|?*' for char in name), 'ZIP member avoids Windows-invalid characters and controls'
+              assert not name.startswith('/') and not PurePosixPath(name).is_absolute(), 'ZIP member is relative'
+              raw_parts = name.rstrip('/').split('/')
+              assert raw_parts and all(part not in ('', '.', '..') and part == part.rstrip(' .') for part in raw_parts), 'ZIP path has no escape or ambiguous component'
+              reserved = {'CON', 'PRN', 'AUX', 'NUL'} | {'COM' + str(i) for i in range(1, 10)} | {'LPT' + str(i) for i in range(1, 10)}
+              assert all(part.split('.')[0].upper() not in reserved for part in raw_parts), 'ZIP member avoids reserved native file names'
+              assert not info.flag_bits & 1, 'ZIP member is not encrypted'
+              mode = info.external_attr >> 16
+              kind = stat.S_IFMT(mode)
+              assert kind in (0, stat.S_IFREG, stat.S_IFDIR), 'ZIP member is a regular file or directory'
+              if info.is_dir():
+                  assert kind in (0, stat.S_IFDIR) and info.file_size == 0, 'ZIP directory has zero body bytes'
+              else:
+                  assert kind in (0, stat.S_IFREG), 'ZIP file is regular'
+              return name.rstrip('/'), 'directory' if info.is_dir() else 'file'
+
+
+          EARLY = {'label': 'early', 'id': 11712069077, 'name': 'career-award-generations-early-38163973428-1', 'bytes': 1030234072, 'sha256': '4d4211fdf787a0d91a6d04a4809ca18d6be4abf0ce3e9a4825ce213a51976290'}
+          REFERENCE = {'label': 'reference', 'id': 11714084821, 'name': 'award-38163973428-exact-recovery-manifests-and-diagnostics', 'bytes': 221157631, 'sha256': '76a92b00dad83c303aaa60ab17e8489c540f1a09681bd0d300aae261cca898a8'}
+          REFERENCE_ROWS = {'early-whole-zip-inventory.json': (24706001, 'e4a245b84e2f49faf220a3d62a1731ff3e2d2ba6d4f674a891f75d3e793f455e'), 'early-original-artifact-metadata.json': (756, '3549053d70af46bcf2c607ab6aab724ba291e5fca5bd46650fff49868dc84f51')}
+          stage = 'initialization'
+          result = {'status': 'fail', 'scope': 'Exact historical input transport only; no application or feature-cap credit.'}
+
+          def check_metadata(spec, expected_run, expected_head):
+              metadata = api_json('/actions/artifacts/' + str(spec['id']), MANIFEST / (spec['label'] + '-current-api-metadata.json'))
+              assert metadata['id'] == spec['id'] and metadata['name'] == spec['name']
+              assert metadata['size_in_bytes'] == spec['bytes'] and metadata['digest'] == 'sha256:' + spec['sha256'] and metadata['expired'] is False
+              assert metadata['workflow_run']['id'] == expected_run and metadata['workflow_run']['head_sha'] == expected_head
+              return metadata
+
+          def scan(archive, destination=None, selected=None, expected=None):
+              rows, screened, seen = [], [], {}
+              with zipfile.ZipFile(archive) as source:
+                  for index, info in enumerate(source.infolist()):
+                      name, kind = safe_name(info)
+                      assert name.casefold() not in seen, 'duplicate or case-colliding input member'
+                      seen[name.casefold()] = kind
+                      screened.append((index, info, name, kind))
+                  for _, _, name, _ in screened:
+                      parts = name.split('/')
+                      assert all(seen.get('/'.join(parts[:i]).casefold()) != 'file' for i in range(1, len(parts))), 'input file-parent conflict'
+                  for index, info, name, kind in screened:
+                      write = destination is not None and kind == 'file' and (selected is None or name in selected)
+                      target = destination.joinpath(*name.split('/')) if write else None
+                      if target:
+                          assert target.resolve().is_relative_to(destination.resolve()), 'input extraction containment'
+                          target.parent.mkdir(parents=True, exist_ok=True)
+                      digest, count = hashlib.sha256(), 0
+                      with source.open(info) as input_stream:
+                          output = target.open('xb') if target else None
+                          try:
+                              for block in iter(lambda: input_stream.read(1024 * 1024), b''):
+                                  digest.update(block); count += len(block)
+                                  if output: output.write(block)
+                          finally:
+                              if output: output.close()
+                      assert count == info.file_size, 'complete input member length'
+                      row = {'zipIndex': index, 'path': name, 'kind': kind, 'bytes': count, 'sha256': digest.hexdigest(), 'compressedBytes': info.compress_size, 'crc32': info.CRC, 'method': info.compress_type, 'externalAttributes': info.external_attr}
+                      if expected is not None:
+                          assert name in expected, 'unexpected original input path'
+                          for key, value in row.items(): assert expected[name][key] == value, 'original full member metadata mismatch'
+                      if target: assert target.stat().st_size == count and sha_file(target) == row['sha256'], 'whole extracted input body'
+                      rows.append(row)
+              if expected is not None: assert len(rows) == len(expected), 'complete original input path bijection'
+              return rows
+
+          try:
+              stage = 'original-runtime-binding'
+              run = api_json('/actions/runs/38163973428', MANIFEST / 'original-current-run-metadata.json')
+              job = api_json('/actions/jobs/114542563191', MANIFEST / 'original-current-job-metadata.json')
+              assert run['id'] == 38163973428 and run['head_sha'] == '39fdafd54e64792b78af21896ccb035500bf32cb' and run['status'] == 'completed' and run['conclusion'] == 'failure'
+              assert job['id'] == 114542563191 and job['run_id'] == 38163973428 and job['status'] == 'completed' and job['conclusion'] == 'failure'
+              assert subprocess.check_output(['git', 'rev-parse', '39fdafd54e64792b78af21896ccb035500bf32cb^{tree}'], text=True).strip() == '5071d305c59c7339d029f8eace758c01db52eecf'
+              stage = 'immutable-reference-download'
+              check_metadata(REFERENCE, 38171726604, '6fc47cce144899a29d2887a2abb6530d27d5e619')
+              reference = ROOT / 'inputs/reference.zip'; download_original(REFERENCE, reference)
+              reference_rows = scan(reference, MANIFEST, REFERENCE_ROWS)
+              write_json(MANIFEST / 'complete-reference-archive-member-vector.json', reference_rows)
+              for name, (size, sha) in REFERENCE_ROWS.items():
+                  file = MANIFEST / name
+                  assert file.stat().st_size == size and sha_file(file) == sha, 'exact immutable reference serialization'
+              frozen_meta = json.loads((MANIFEST / 'early-original-artifact-metadata.json').read_bytes())
+              assert frozen_meta['id'] == EARLY['id'] and frozen_meta['size_in_bytes'] == EARLY['bytes'] and frozen_meta['digest'] == 'sha256:' + EARLY['sha256'] and frozen_meta['workflow_run']['head_sha'] == '39fdafd54e64792b78af21896ccb035500bf32cb'
+              frozen_rows = json.loads((MANIFEST / 'early-whole-zip-inventory.json').read_bytes())
+              expected = {row['path']: row for row in frozen_rows}
+              assert len(expected) == len(frozen_rows) == 64778
+              stage = 'complete-original-download'
+              check_metadata(EARLY, 38163973428, '39fdafd54e64792b78af21896ccb035500bf32cb')
+              original = ROOT / 'inputs/original.zip'; download_original(EARLY, original)
+              stage = 'every-original-member-safe-extraction'
+              original_rows = scan(original, ROOT / 'inputs/original', expected=expected)
+              write_json(MANIFEST / 'complete-original-archive-member-vector.json', original_rows)
+              assert (ROOT / 'inputs/original/source-head.txt').read_text().strip() == '39fdafd54e64792b78af21896ccb035500bf32cb'
+              assert (ROOT / 'inputs/original/source-tree.txt').read_text().strip() == '5071d305c59c7339d029f8eace758c01db52eecf'
+              result.update(status='pass', originalZip=EARLY, referenceZip=REFERENCE, originalMembers=len(original_rows), originalBodyBytes=sum(row['bytes'] for row in original_rows), immutableReferenceBytesHeld=True)
+          except Exception as error:
+              detail = str(error) if isinstance(error, AssertionError) else 'Transport or native archive operation failed; URL and header details suppressed.'
+              result.update(stage=stage, error={'type': type(error).__name__, 'detail': detail})
+              print('FAIL exact pilot input stage: ' + stage + ' (' + type(error).__name__ + ')')
+          finally:
+              write_json(MANIFEST / 'input-transport-result.json', result)
+          if result['status'] != 'pass': sys.exit(1)
+          print('PASS exact original input ZIP, immutable reference bodies and all64778 whole members')
+          PY
+          cp award-byte-pilot-work/bootstrap.py award-byte-pilot-work/payload/provenance/bootstrap-source.py
+      - name: Exact original and immutable recovery reference acquisition
+        id: input
+        env:
+          RECOVERY_GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 award-byte-pilot-work/bootstrap.py > award-byte-pilot-work/payload/provenance/input-stdout.log 2> award-byte-pilot-work/payload/provenance/input-stderr.log
+      - name: Complete builtins-only lossless data pilot
+        id: pilot
+        if: ${{ !cancelled() && steps.input.outcome == 'success' }}
+        env:
+          AWARD_BYTE_PILOT_PROOF: award-byte-pilot-work/inputs/original/proof
+          AWARD_BYTE_PILOT_ZIP: award-byte-pilot-work/inputs/original.zip
+          AWARD_BYTE_PILOT_MEMBERS: award-byte-pilot-work/payload/provenance/early-whole-zip-inventory.json
+          AWARD_BYTE_PILOT_METADATA: award-byte-pilot-work/payload/provenance/early-original-artifact-metadata.json
+          AWARD_BYTE_PILOT_OUT: award-byte-pilot-work/payload/pilot
+        run: |
+          set +e
+          node scripts/qa/awardByteStoragePilot.mjs > award-byte-pilot-work/payload/provenance/pilot-stdout.log 2> award-byte-pilot-work/payload/provenance/pilot-stderr.log
+          code=$?
+          set -e
+          printf '{"exitCode":%s}\n' "$code" > award-byte-pilot-work/payload/provenance/pilot-exit.json
+          exit "$code"
+      - name: Final whole source and package holds
+        if: always()
+        run: |
+          failed=0
+          git diff --exit-code HEAD -- . > award-byte-pilot-work/payload/provenance/source-held.log || failed=1
+          sha256sum package.json package-lock.json > award-byte-pilot-work/payload/provenance/packages-after.txt
+          sha256sum scripts/qa/awardByteStoragePilot.mjs .github/workflows/career-award-byte-storage-pilot.yml > award-byte-pilot-work/payload/provenance/helpers-after.txt
+          cmp award-byte-pilot-work/payload/provenance/packages-before.txt award-byte-pilot-work/payload/provenance/packages-after.txt || failed=1
+          cmp award-byte-pilot-work/payload/provenance/helpers-before.txt award-byte-pilot-work/payload/provenance/helpers-after.txt || failed=1
+          printf '{"exitCode":%s}\n' "$failed" > award-byte-pilot-work/payload/provenance/final-hold-exit.json
+          exit "$failed"
+      - name: Retain capture and upload helper sources
+        if: always()
+        run: |
+          cat > award-byte-pilot-work/capture.py <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+          import tarfile
+
+          ROOT = Path('award-byte-pilot-work')
+          PAYLOAD = ROOT / 'payload'
+          DIAGNOSTIC = ROOT / 'diagnostic'
+          TRANSPORT = ROOT / 'transport'
+          ACTION = ROOT / 'transport-upload'
+          PART_BYTES = 200_000_000
+          CAP = 500_000_000
+          DIAGNOSTIC.mkdir(parents=True, exist_ok=True)
+          TRANSPORT.mkdir(parents=True, exist_ok=True)
+          ACTION.mkdir(parents=True, exist_ok=True)
+          result = {'status': 'fail', 'qualification': 'Data-only pilot, original430M/500M failures remain failed; transport has no feature-cap credit.'}
+
+          def sha(file):
+              h = hashlib.sha256()
+              with file.open('rb') as handle:
+                  for block in iter(lambda: handle.read(1024 * 1024), b''): h.update(block)
+              return h.hexdigest()
+
+          def write(file, data): file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          def expression(value): return '$' + '{{ ' + value + ' }}'
+
+          def files(root):
+              rows = []
+              for file in sorted(root.rglob('*')):
+                  info = file.lstat()
+                  assert not stat.S_ISLNK(info.st_mode), 'no output symlink'
+                  if file.is_dir(): continue
+                  assert file.is_file(), 'regular complete output only'
+                  relative = file.relative_to(root).as_posix()
+                  rows.append({'path': relative, 'bytes': info.st_size, 'sha256': sha(file)})
+              return rows
+
+          parts = []
+          try:
+              before = files(PAYLOAD)
+              pilot = PAYLOAD / 'pilot'
+              pilot_rows = files(pilot) if pilot.exists() else []
+              full_bytes, pilot_bytes = sum(row['bytes'] for row in before), sum(row['bytes'] for row in pilot_rows)
+              result.update(fullPayloadBytes=full_bytes, fullPayloadFiles=len(before), pilotOutputBytes=pilot_bytes, pilotOutputFiles=len(pilot_rows), strictCap=CAP, fullPayloadCapHeld=full_bytes < CAP, pilotOutputCapHeld=pilot_bytes < CAP)
+              write(DIAGNOSTIC / 'complete-payload-member-vector.json', before)
+              write(DIAGNOSTIC / 'complete-pilot-output-member-vector.json', pilot_rows)
+              try:
+                  if pilot_rows:
+                      physical = json.loads((pilot / 'physical-size.json').read_bytes())
+                      assert physical['files'] == len(pilot_rows) and physical['bytes'] == pilot_bytes, 'whole actual self-including pilot size'
+                      inventory = json.loads((pilot / 'output-inventory.json').read_bytes())['files']
+                      mapped = {row['path']: row for row in pilot_rows}
+                      seen = set()
+                      for row in inventory:
+                          assert row['path'] not in seen and mapped[row['path']] == row, 'complete pilot output inventory body'
+                          seen.add(row['path'])
+                      assert seen == set(mapped) - {'output-inventory.json', 'physical-size.json'}, 'all actual pilot files included'
+                      report = json.loads((pilot / 'report.json').read_bytes())
+                      result['pilotReportedStatus'] = report['status']
+                      if report['status'] == 'pass':
+                          assert report['measurement']['attemptedObjects'] == report['measurement']['fullyDecodedObjects'] == 64676
+                          assert report['measurement']['effectiveControls'] == ['copied-packed-chunk-byte', 'copied-valid-same-length-reference']
+                          assert json.loads((pilot / 'failures.json').read_bytes()) == []
+                      else: result['pilotReportedFailureHeld'] = True
+              except Exception as error:
+                  result['pilotValidationError'] = {'type': type(error).__name__, 'detail': str(error)}
+              archive = ROOT / 'complete-pilot-payload.tar'
+              with tarfile.open(archive, 'x', format=tarfile.PAX_FORMAT) as target:
+                  for row in before:
+                      file = PAYLOAD / row['path']
+                      info = tarfile.TarInfo(row['path']); info.size = row['bytes']; info.mode = 0o644; info.mtime = 0; info.uid = info.gid = 0; info.uname = info.gname = ''
+                      with file.open('rb') as handle: target.addfile(info, handle)
+              restored = []
+              with tarfile.open(archive, 'r:') as source:
+                  for info in source:
+                      assert info.isfile() and info.name in {row['path'] for row in before}, 'complete transport regular member'
+                      h, count = hashlib.sha256(), 0
+                      with source.extractfile(info) as handle:
+                          for block in iter(lambda: handle.read(1024 * 1024), b''): h.update(block); count += len(block)
+                      restored.append({'path': info.name, 'bytes': count, 'sha256': h.hexdigest()})
+              assert restored == before, 'all complete transport bodies match unmodified pilot outputs'
+              offset = 0
+              with archive.open('rb') as source:
+                  index = 0
+                  while True:
+                      block = source.read(PART_BYTES)
+                      if not block: break
+                      name = 'part-' + str(index).zfill(6) + '.raw'
+                      file = TRANSPORT / name
+                      with file.open('xb') as handle: handle.write(block)
+                      parts.append({'index': index, 'name': name, 'offset': offset, 'bytes': len(block), 'sha256': sha(file)})
+                      offset += len(block); index += 1
+              assert offset == archive.stat().st_size and all(0 < row['bytes'] <= PART_BYTES for row in parts)
+              whole = hashlib.sha256()
+              with archive.open('rb') as original:
+                  for row in parts:
+                      with (TRANSPORT / row['name']).open('rb') as handle:
+                          for block in iter(lambda: handle.read(1024 * 1024), b''):
+                              assert block == original.read(len(block)), 'whole ordered byte restoration'
+                              whole.update(block)
+                  assert original.read(1) == b'', 'complete original transport allocation'
+              assert whole.hexdigest() == sha(archive)
+              assert before == files(PAYLOAD), 'all complete payload bodies held after transport preparation'
+              result.update(archiveBytes=archive.stat().st_size, archiveSha256=sha(archive), parts=parts, completeOrderedByteRestoration=True, fullPayloadBodiesHeld=True)
+              for name in ['pilot/report.json', 'pilot/failures.json', 'pilot/physical-size.json', 'pilot/output-inventory.json', 'pilot/controls.json', 'provenance/input-transport-result.json', 'provenance/pilot-exit.json', 'provenance/pilot-stdout.log', 'provenance/pilot-stderr.log', 'provenance/source-held.log', 'provenance/packages-before.txt', 'provenance/packages-after.txt']:
+                  file = PAYLOAD / name
+                  if file.exists():
+                      target = DIAGNOSTIC / name; target.parent.mkdir(parents=True, exist_ok=True)
+                      with target.open('xb') as output, file.open('rb') as source:
+                          for block in iter(lambda: source.read(1024 * 1024), b''): output.write(block)
+                      assert sha(target) == sha(file), 'selected full diagnostic body'
+              write(DIAGNOSTIC / 'complete-ordered-part-manifest.json', {'archiveBytes': archive.stat().st_size, 'archiveSha256': sha(archive), 'parts': parts, 'qualification': 'Complete TAR transport only, all original file bytes retained without normalization or pruning.'})
+              result['status'] = 'pass' if result.get('pilotReportedStatus') == 'pass' and not result.get('pilotValidationError') and result['fullPayloadCapHeld'] and result['pilotOutputCapHeld'] else 'fail'
+          except Exception as error:
+              result['captureError'] = {'type': type(error).__name__, 'detail': str(error)}
+          finally:
+              write(DIAGNOSTIC / 'capture-result.json', result)
+              action = ['name: Exact complete pilot byte transport', 'description: Upload every actual ordered raw part without rerunning application code', 'runs:', '  using: composite', '  steps:']
+              for row in parts:
+                  index = str(row['index']).zfill(6); step = 'part' + index
+                  action += ['    - name: Upload actual raw part ' + index, '      if: always()', '      id: ' + step, '      continue-on-error: true', '      uses: actions/upload-artifact@v4', '      with:', '        name: award-byte-pilot-part-' + index + '-' + expression('github.run_id') + '-' + expression('github.run_attempt'), '        path: award-byte-pilot-work/transport/' + row['name'], '        compression-level: 0', '        retention-days: 5', '        if-no-files-found: error', '    - name: Retain actual upload outcome ' + index, '      if: always()', '      shell: bash', '      env:', '        PILOT_PART_INDEX: "' + str(row['index']) + '"', '        PILOT_PART_OUTCOME: ' + expression('steps.' + step + '.outcome'), '        PILOT_PART_ID: ' + expression('steps.' + step + '.outputs.artifact-id'), '        PILOT_PART_DIGEST: ' + expression('steps.' + step + '.outputs.artifact-digest'), '      run: python3 award-byte-pilot-work/record-upload.py']
+              action += ['    - name: Verify complete part upload outcomes', '      if: always()', '      shell: bash', '      run: python3 award-byte-pilot-work/verify-uploads.py']
+              (ACTION / 'action.yml').write_text('\n'.join(action) + '\n', encoding='utf-8')
+              (DIAGNOSTIC / 'generated-action.yml').write_bytes((ACTION / 'action.yml').read_bytes())
+              write(DIAGNOSTIC / 'generated-action-source.json', {'bytes': (ACTION / 'action.yml').stat().st_size, 'sha256': sha(ACTION / 'action.yml'), 'actualPartSteps': len(parts)})
+          print('Complete pilot physical bytes: ' + str(result.get('pilotOutputBytes', 0)))
+          print('Complete capture physical bytes: ' + str(result.get('fullPayloadBytes', 0)))
+          print('Actual raw transport parts: ' + str(len(parts)))
+          if result['status'] != 'pass': sys.exit(1)
+          PY
+          cat > award-byte-pilot-work/record-upload.py <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path('award-byte-pilot-work/diagnostic')
+          parts = json.loads((root / 'complete-ordered-part-manifest.json').read_bytes())['parts']
+          index = int(os.environ['PILOT_PART_INDEX'])
+          assert 0 <= index < len(parts) and parts[index]['index'] == index
+          row = {'index': index, 'part': parts[index], 'outcome': os.environ['PILOT_PART_OUTCOME'], 'artifactId': os.environ.get('PILOT_PART_ID', ''), 'artifactDigest': os.environ.get('PILOT_PART_DIGEST', '')}
+          file = root / ('upload-outcome-' + str(index).zfill(6) + '.json')
+          with file.open('x', encoding='utf-8') as output: json.dump(row, output, indent=2); output.write('\n')
+          PY
+          cat > award-byte-pilot-work/verify-uploads.py <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('award-byte-pilot-work/diagnostic')
+          manifest = root / 'complete-ordered-part-manifest.json'
+          parts = json.loads(manifest.read_bytes())['parts'] if manifest.exists() else []
+          rows, errors = [], []
+          for part in parts:
+              file = root / ('upload-outcome-' + str(part['index']).zfill(6) + '.json')
+              if not file.exists(): errors.append({'index': part['index'], 'cause': 'actual upload outcome missing'}); continue
+              row = json.loads(file.read_bytes()); rows.append(row)
+              if row['index'] != part['index'] or row['part'] != part or row['outcome'] != 'success' or not row['artifactId'].isdigit() or len(row['artifactDigest']) != 64:
+                  errors.append({'index': part['index'], 'cause': 'actual complete upload did not succeed', 'wholeOutcome': row})
+          result = {'status': 'pass' if parts and len(rows) == len(parts) and not errors else 'fail', 'actualParts': len(parts), 'actualCompleteUploads': len(rows), 'rows': rows, 'errors': errors, 'qualification': 'Transport only, no original or feature cap acceptance.'}
+          with (root / 'complete-upload-results.json').open('x', encoding='utf-8') as output: json.dump(result, output, indent=2); output.write('\n')
+          assert result['status'] == 'pass', 'all actual ordered transport uploads required'
+          PY
+          cp award-byte-pilot-work/{capture,record-upload,verify-uploads}.py award-byte-pilot-work/payload/provenance/
+      - name: Measure strict500M physical output and prepare complete byte transport
+        if: always()
+        run: |
+          python3 award-byte-pilot-work/capture.py > award-byte-pilot-work/diagnostic/capture-stdout.log 2> award-byte-pilot-work/diagnostic/capture-stderr.log
+      - name: Upload every actual ordered transport part
+        if: always()
+        uses: ./award-byte-pilot-work/transport-upload
+      - name: Seal complete diagnostics and transport outcomes
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('award-byte-pilot-work/diagnostic')
+          files=sorted(file for file in root.rglob('*') if file.is_file())
+          rows=[{'path':file.relative_to(root).as_posix(),'bytes':file.stat().st_size,'sha256':hashlib.sha256(file.read_bytes()).hexdigest()} for file in files]
+          (root/'final-diagnostic-member-vector.json').write_text(json.dumps(rows,indent=2)+'\n')
+          diagnostic_base=sum(row['bytes'] for row in rows)+(root/'final-diagnostic-member-vector.json').stat().st_size
+          payload=Path('award-byte-pilot-work/payload')
+          payload_bytes=sum(file.stat().st_size for file in payload.rglob('*') if file.is_file())
+          size={'diagnosticBytes':diagnostic_base,'payloadBytes':payload_bytes,'completeEvidenceBytes':payload_bytes+diagnostic_base,'strictCap':500000000,'capHeld':False,'qualification':'Complete pilot and provenance plus diagnostics. Original inputs and byte-identical transport copies excluded from this logical evidence total. Original430M/500M failures remain failed.'}
+          receipt=root/'diagnostic-size.json'
+          for _ in range(12):
+              receipt.write_text(json.dumps(size,indent=2)+'\n')
+              diagnostic_bytes=diagnostic_base+receipt.stat().st_size
+              actual=dict(size,diagnosticBytes=diagnostic_bytes,completeEvidenceBytes=payload_bytes+diagnostic_bytes,capHeld=payload_bytes+diagnostic_bytes<500000000)
+              if actual==size: break
+              size=actual
+          else: raise AssertionError('self-including complete evidence size did not stabilize')
+          assert json.loads(receipt.read_bytes())==size and receipt.stat().st_size+diagnostic_base==size['diagnosticBytes']
+          assert size['capHeld'],'strict complete pilot/provenance/diagnostics cap'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-byte-pilot-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: award-byte-pilot-work/diagnostic/
+          compression-level: 0
+          retention-days: 5
+          if-no-files-found: error
