@@ -103,7 +103,9 @@ const emptyAwardState = raw => {
 try {
   await waitForServer();
   const browser = await pw.chromium.launch({ headless: true });
-  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, serviceWorkers: 'block' });
+  await context.route('**/*', route => new URL(route.request().url()).origin === BASE && route.request().method() === 'GET' ? route.continue() : route.abort());
+  await context.routeWebSocket('**/*', socket => socket.close());
   const controlMutationProof = { resetButton: 0, randomGuard: 0 };
   let controlMutationError = '';
   if (CONTROL === 'noinvalidate') {
@@ -153,6 +155,22 @@ try {
   await page.goto(`${BASE}/world-cup-bracket`, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.getByRole('button', { name: 'Auto Fill Everything' }).waitFor({ timeout: 30000 });
   await dismissConsent();
+  const tools = page.getByRole('group', { name: 'Bracket tools' });
+  const rankings = tools.getByRole('button', { name: /FIFA Rankings/ });
+  say(await rankings.isVisible() && await tools.getByRole('button', { name: 'Auto Fill Everything' }).isVisible(),
+    'the rankings and full-bracket actions share the bracket toolbar');
+  const [bar, rank, fill, random] = await Promise.all([
+    tools, rankings, tools.getByRole('button', { name: 'Auto Fill Everything' }), page.getByRole('button', { name: 'Random All' }),
+  ].map(control => control.boundingBox()));
+  say([rank, fill].every(box => box && bar && box.height >= 44 && box.x >= bar.x && box.y >= bar.y
+    && box.x + box.width <= bar.x + bar.width + 1 && box.y + box.height <= bar.y + bar.height + 1)
+    && random && random.y >= bar.y + bar.height, 'both 44px tools stay inside their row above Random All');
+  await rankings.click();
+  const rankingList = page.getByRole('dialog', { name: /FIFA World Rankings/ });
+  say(await rankingList.getByRole('table').isVisible(), 'Rankings opens the team table');
+  await page.keyboard.press('Escape');
+  await rankingList.waitFor({ state: 'hidden' });
+  say(await rankings.evaluate(button => button === document.activeElement), 'closing Rankings returns focus to its button');
   if (CONTROL) {
     if (controlMutationError) throw new Error(`control refused: ${controlMutationError}`);
     if (controlMutationProof.resetButton < 1 || controlMutationProof.randomGuard < 1) {
