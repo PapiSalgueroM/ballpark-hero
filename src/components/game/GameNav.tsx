@@ -1,11 +1,13 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRoutePath } from '@/hooks/useRoutePath';
-import { CATEGORIES, GameCategory, GameDef } from '@/data/gameRegistry';
-import { ArrowRight } from 'lucide-react';
+import { ALL_GAMES, CATEGORIES, GameCategory, GameDef } from '@/data/gameRegistry';
+import { dealtBySport, sportOf, SPORT_NAME } from '@/data/homeFront';
+import { ArrowRight, RotateCw } from 'lucide-react';
 import { getTodayET } from '@/lib/dateUtils';
 import { getStreakState } from '@/lib/streaks';
 import { DailyCountdown } from '@/components/game/DailyCountdown';
+import styles from './GameNav.module.css';
 
 interface GameNavProps {
   currentPath?: string;
@@ -64,7 +66,7 @@ export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
 
   const category = CATEGORIES.find(c => c.title === detectedCategory);
 
-  const nextGames = useMemo(() => {
+  const openingPicks = useMemo(() => {
     const today = getTodayET();
     const picks: GameDef[] = [];
     const usedPaths = new Set<string>([path]);
@@ -109,10 +111,36 @@ export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
     }
 
     return picks;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path]);
+  }, [path, category]);
 
-  if (nextGames.length === 0) return null;
+  return <PlayNext key={path} path={path} openingPicks={openingPicks} />;
+}
+
+type GameFilter = 'mix' | 'sport' | 'daily';
+
+function PlayNext({ path, openingPicks }: { path: string; openingPicks: GameDef[] }) {
+  const [filter, setFilter] = useState<GameFilter>('mix');
+  const [offset, setOffset] = useState(0);
+  const [interacted, setInteracted] = useState(false);
+  const sport = sportOf(path);
+  const pools = useMemo(() => {
+    const others = ALL_GAMES.filter(game => game.path !== path);
+    const first = new Set(openingPicks.map(game => game.path));
+    const bySport = dealtBySport(others);
+    return {
+      mix: [...openingPicks, ...bySport.filter(game => !first.has(game.path))],
+      sport: ALL_GAMES.some(game => game.path === path) ? others.filter(game => sportOf(game.path) === sport) : [],
+      daily: bySport.filter(game => game.daily),
+    };
+  }, [path, sport, openingPicks]);
+  const pool = pools[filter];
+  if (!pool.length) return null;
+  const nextGames = Array.from({ length: Math.min(3, pool.length) }, (_, i) => pool[(offset + i) % pool.length]);
+  const filters: [GameFilter, string][] = [
+    ['mix', 'Across sports'],
+    ['sport', sport === 'world' ? 'World games' : SPORT_NAME[sport]],
+    ['daily', 'Daily games'],
+  ];
 
   return (
     /* ROUND 280: THIS BLOCK ROTATES DAILY AND MUST NOT BE PHOTOGRAPHED.
@@ -142,25 +170,42 @@ export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
 
        Found by scripts/playSnapshotDrift.mjs on its first real run, which is
        the entire reason that harness was written this round. */
-    <div className="mt-12 mb-6" data-no-prerender="true">
+    <section className="mt-12 mb-6" data-no-prerender="true" aria-label="Play Next">
       <div className="border-t border-border/50 pt-8">
-        <p className="text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+        <p className="text-center font-display text-xl font-bold mb-3">
           Play Next
         </p>
+        <div className="mb-3 flex flex-wrap items-center justify-center gap-1" role="group" aria-label="Filter game suggestions">
+          {filters.filter(([value]) => pools[value].length > 0).map(([value, label]) => (
+            <button type="button" key={value} aria-pressed={filter === value}
+              className="min-h-11 rounded-full px-3 text-sm font-semibold text-muted-foreground hover:text-foreground aria-pressed:bg-secondary aria-pressed:text-foreground"
+              onClick={() => { if (value !== filter) { setFilter(value); setOffset(0); setInteracted(true); } }}>
+              {label}
+            </button>
+          ))}
+          {pool.length > 3 && <button type="button" className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-primary hover:underline"
+            onClick={() => { setOffset((offset + 3) % pool.length); setInteracted(true); }}>
+            <RotateCw size={15} aria-hidden="true" /> New picks
+          </button>}
+        </div>
+        <span className="sr-only" role="status">{interacted ? nextGames.map(game => game.label).join(', ') : ''}</span>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
           {nextGames.map(game => (
             <Link
-              key={game.path}
+              key={filter + game.path}
               to={game.path}
               data-google-vignette="false"
-              className="rounded-2xl border border-border bg-card p-4 hover:border-primary/40 hover:shadow-lg transition-all group flex flex-col items-center text-center"
+              className={`${styles.pick} ${interacted ? styles.changed : ''} group flex min-w-0 flex-col gap-2 rounded-2xl border border-border bg-card p-4 text-left hover:border-primary/50 focus-visible:border-primary`}
             >
-              <span className="text-3xl mb-2 block">{game.emoji}</span>
-              <h3 className="text-base font-display font-bold text-foreground group-hover:text-primary transition-colors mb-1">
+              <span className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+                <span className="text-xl" aria-hidden="true">{game.emoji}</span>
+                {SPORT_NAME[sportOf(game.path)]}
+              </span>
+              <h3 className="text-base font-display font-bold text-foreground group-hover:text-primary">
                 {game.label}
               </h3>
-              <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{game.description}</p>
-              <span className="mt-auto inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary text-primary-foreground font-semibold text-xs group-hover:opacity-90 transition-opacity">
+              <p className="text-sm text-muted-foreground line-clamp-2">{game.description}</p>
+              <span className="mt-auto inline-flex items-center gap-1.5 pt-1 font-semibold text-xs text-primary">
                 Play Now
                 <ArrowRight className="w-3.5 h-3.5" />
               </span>
@@ -175,12 +220,12 @@ export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
           <Link
             to="/"
             data-google-vignette="false"
-            className="inline-flex items-center rounded-full px-4 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
+            className="inline-flex min-h-11 items-center rounded-full px-4 py-2 text-xs text-muted-foreground hover:text-primary"
           >
             See all games →
           </Link>
         </p>
       </div>
-    </div>
+    </section>
   );
 }
