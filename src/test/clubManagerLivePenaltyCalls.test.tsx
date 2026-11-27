@@ -115,6 +115,7 @@ describe('calling a competitive shootout', () => {
     expect(livePenaltyProgress(next)!.kicks.filter(k => k.side === 'me')).toMatchObject([{ taker: starter.name }]);
     expect(livePenaltyProgress(JSON.parse(JSON.stringify(next)))).toEqual(livePenaltyProgress(next));
     expect(resumeMatch(next).state).toBe(next);
+    expect(playNextEntry(next, { skipHalftime: true }).state).toBe(next);
     expect(startLivePenaltyCalls(next)).toBeNull();
     const stale = structuredClone(next);
     stale.live!.penaltyCalls!.fixture = 'another match';

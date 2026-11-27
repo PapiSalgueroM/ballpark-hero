@@ -22917,6 +22917,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * Never mutates the input state.
  */
 export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; benchOrder?: BenchOrder }): PlayResult {
+  if (career.live?.penaltyCalls) return { state: career, kind: 'halftime', live: career.live };
   if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));
   /* Release AL: `noCoach` plays a quick sim the way it was played before
