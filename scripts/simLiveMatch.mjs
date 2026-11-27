@@ -196,7 +196,7 @@ const CONTROLS = {
     must: [3], also: [],
     what: 'the count line in drawOppSubs',
     edits: [[
-      '  const count = Math.min(room, Math.round(ri(1, 3) * len));\n',
+      '  const count = Math.min(room, Math.round(ri(rule.subs - 2, rule.subs) * len));\n',
       '  const count = 0;\n',
     ]],
     note: 'drawOppSubs hands back the subs already made and draws none; section 3 must go red',
