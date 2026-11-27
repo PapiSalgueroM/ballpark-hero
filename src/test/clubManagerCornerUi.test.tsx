@@ -56,11 +56,15 @@ const otherGoal: PlayEvent = { minute: 39, side: 'me', kind: 'shot', who: 'Other
 it('links a finish to its delivery, reads a later review and leaves the live score to the match clock', () => {
   const later: PlayEvent = { ...corner, minute: 79,
     cornerDelivery: { ...corner.cornerDelivery!, id: '79b', read: true, outcome: 'disallowed' } };
-  const review: PlayEvent = { minute: 79, kind: 'var', side: 'me', who: 'Wide player', cornerChance: '79b' };
-  const play = [later, otherGoal, review, shot, corner];
+  const review: PlayEvent = { minute: 79, kind: 'var', side: 'me', who: 'Wide player', cornerChance: '79b',
+    review: { id: '79b-review', incident: 'goal', decision: 'disallowed', reason: 'ruled_out' } };
+  const confirmed: PlayEvent = { ...review, minute: 39, cornerChance: '39a',
+    review: { id: '39a-review', incident: 'goal', decision: 'confirmed', reason: 'clear' } };
+  const play = [later, otherGoal, confirmed, review, shot, corner];
   const view = render(<RehearsedCornerReview play={play} routine={routine} />);
   const region = screen.getByRole('region', { name: 'Rehearsed corners' });
   expect(region).toHaveTextContent('Wide player scored.');
+  expect(region).not.toHaveTextContent('ruled out');
   expect(region).not.toHaveTextContent('Other scorer');
   fireEvent.click(within(region).getByRole('button', { name: 'Next corner' }));
   expect(region).toHaveTextContent('defence was ready');

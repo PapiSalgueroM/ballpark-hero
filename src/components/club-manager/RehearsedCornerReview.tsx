@@ -19,7 +19,7 @@ export function RehearsedCornerReview({ play, routine, live = false }: {
   const index = live ? corners.length - 1 : Math.min(step, corners.length - 1);
   const event = corners[index], delivery = event.cornerDelivery!;
   const shot = play.find(e => e.kind === 'shot' && e.cornerChance === delivery.id);
-  const overturned = play.some(e => e.kind === 'var' && e.cornerChance === delivery.id);
+  const review = play.find(e => e.kind === 'var' && e.cornerChance === delivery.id && e.review?.incident === 'goal')?.review;
   const target = <strong>{delivery.target}{delivery.targetGenerated && <MadeUpTag className="ml-1" />}</strong>;
   const action = 'min-h-11 min-w-11 rounded-md border border-border px-2.5 text-xs font-semibold disabled:opacity-40';
   return <section aria-label={title} className="space-y-2 rounded-lg border border-border bg-card p-3 text-left text-xs">
@@ -32,8 +32,8 @@ export function RehearsedCornerReview({ play, routine, live = false }: {
       {delivery.read && <p>The defence was ready for that routine.</p>}
       {delivery.outcome === 'cleared' ? <p>The opposition cleared the delivery.</p>
         : delivery.outcome === 'recycled' ? <p>Your side kept possession.</p>
-        : live ? (shot || overturned ? <p>The delivery led to a chance.</p> : null)
-        : overturned ? <p>The goal was ruled out after review.</p>
+        : live ? (shot || review ? <p>The delivery led to a chance.</p> : null)
+        : review?.decision === 'disallowed' ? <p>The goal was ruled out after review.</p>
         : shot ? <p>{shot.who}{shot.whoGenerated && <MadeUpTag className="ml-1" />} {shot.goal ? 'scored' : shot.on ? 'shot on target' : 'shot off target'}.</p>
         : null}
     </div>
