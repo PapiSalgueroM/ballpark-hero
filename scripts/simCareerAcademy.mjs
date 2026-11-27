@@ -35,11 +35,9 @@
  *      plays on, and a focus that is not one of the position's families
  *      (a corrupt or hand edited save) moves no stat at all.
  *   6. The page's wiring, read from src/pages/SoccerCareer.tsx with its
- *      comments stripped: the press builds the report from the save before
- *      the year and the save the year returned (in that order), the card's
- *      render guard is evaluated against real reports (true for its own year,
- *      false for a stale one), and the focus handler refuses every phase but
- *      the academy.
+ *      comments stripped: the press requests a saved rating path, the
+ *      contract screen reads the current youth row after reload, and the
+ *      focus handler refuses every phase but the academy.
  *   7. Real careers, made the way the creation screen makes them (the page's
  *      own generateStatsFromOverall lifted out of its source, rollStartingOverall
  *      and rollPotential): the coach's verdict spreads across its tiers, a focus
@@ -58,7 +56,7 @@
  *   cardlie       the card prints the before value as the after    -> section 4
  *   corrupt       a foreign focus is trusted without a check       -> section 5
  *   norecalc      the year applies the focus but keeps the old overall -> section 2
- *   swapargs      the page builds the report from (after, before)  -> section 6
+ *   swapargs      the year stores the report from (after, before)  -> section 6
  *   anyphase      the page lets the focus change outside the academy -> section 6
  *   createdovr    the card starts from the saved overall           -> section 7
  *   oldtiers      the verdict reads the overall gained (the first cut) -> section 7
@@ -117,7 +115,7 @@ const CONTROLS = {
   cardlie: { file: CARD, from: '{l.after} <span', to: '{l.before} <span' },
   corrupt: { file: ACADEMY, from: '  return academyFocusOptions(s.position).some(o => o.key === f) ? (f as AcademyFocus) : null;', to: '  return f as AcademyFocus;' },
   norecalc: { file: ENGINE, from: '  if (applyAcademyFocus(s, pot) > 0) s.overall = calcOverall(s, s.position);', to: '  applyAcademyFocus(s, pot);' },
-  swapargs: { file: PAGE, from: 'buildAcademyReport(career, next, effectivePotential(career))', to: 'buildAcademyReport(next, career, effectivePotential(career))' },
+  swapargs: { file: ENGINE, from: 'academyReportReceipt(prev, s, effectivePotential(prev))', to: 'academyReportReceipt(s, prev, effectivePotential(prev))' },
   anyphase: { file: PAGE, from: '    if (!career || career.phase !== "youth") return;\n    setCareer(withAcademyFocus(', to: '    if (!career) return;\n    setCareer(withAcademyFocus(' },
   createdovr: { file: ACADEMY, from: '  const overallBefore = allocOverall(before, before.position);', to: '  const overallBefore = before.overall;' },
   oldtiers: { file: ACADEMY, from: '  const tier = perSkill >= VERDICT_BIG ? "big"', to: '  const tier = after.overall - before.overall >= 3 ? "big"' },
@@ -509,32 +507,26 @@ async function main() {
     if (all.length !== 1) { fail(`${PAGE}: expected ${what} once, found it ${all.length} times`); return null; }
     return all[0];
   };
-  const press = once(/const (\w+) = advanceYouthYear\((\w+), \w+\);\s*setAcademyReport\(buildAcademyReport\((\w+), (\w+), effectivePotential\((\w+)\)\)\);/g, 'the academy press');
-  if (press) {
-    const [, out, from, a, b, p] = press;
-    check(a === from && b === out && p === from,
-      `the press builds the report from (${a}, ${b}, ceiling of ${p}) while the year is ${out} = advanceYouthYear(${from}): it must be (${from}, ${out}, ceiling of ${from})`);
-  }
-  const guard = once(/\{(academyReport && [^{}]+?) && \(\s*<AcademyReportCard report=\{academyReport\} \/>/g, 'the report card and its guard');
+  once(/setCareer\(advanceYouthYear\(career, clubs, true\)\)/g, 'the academy press that records the rating path');
+  once(/const academyReport = career\.phase === "contract_offer" \? savedAcademyReport\(career\) : null/g, 'the saved report on the contract screen');
+  const guard = once(/\{academyReport && <AcademyReportCard report=\{academyReport\} \/>\}/g, 'the report card and its guard');
   const overlay = code.indexOf('career.phase === "contract_offer" && career.pendingOffers.length > 0 && (');
   const heading = code.indexOf('Contract Offers</h3>');
   check(guard && overlay >= 0 && overlay < guard.index && guard.index < heading, 'the report card is not inside the contract offers overlay, above the offers');
   let guardShown = 0, guardStale = 0;
-  if (guard) {
-    /* The guard's own expression, run against real reports: currentSeason is
-       the game screen's last season row. */
-    const show = new Function('academyReport', 'currentSeason', 'career', `return Boolean(${guard[1]});`);
-    for (let c = 0; c < 20; c += 1) {
-      const fresh = () => { seeded(c * 104729 + 7); const s = newCareer(soccer, c); unseed(); return s; };
-      const s0 = fresh();
-      seeded(c * 31 + 5); const after = soccer.advanceYouthYear(s0, clubs); unseed();
-      const r = academy.buildAcademyReport(fresh(), after, soccer.effectivePotential(fresh()));
-      const cur = after.seasons[after.seasons.length - 1];
-      if (r && show(r, cur, after)) guardShown += 1;
-      else fail(`career ${c}: the card's guard hides the report of the year just played`);
-      if (r && !show({ ...r, year: r.year - 1 }, cur, after) && !show({ ...r, club: `${r.club} B` }, cur, after) && !show(null, cur, after)) guardStale += 1;
-      else fail(`career ${c}: the card's guard shows a stale or missing report`);
-    }
+  for (let c = 0; c < 20; c += 1) {
+    seeded(c * 104729 + 7); const before = newCareer(soccer, c); unseed();
+    seeded(c * 31 + 5); const after = soccer.advanceYouthYear(before, clubs, true); unseed();
+    const expected = academy.buildAcademyReport(before, after, soccer.effectivePotential(before));
+    const loaded = soccer.repairCareer(JSON.parse(JSON.stringify(after)));
+    const report = academy.savedAcademyReport(loaded);
+    if (report && JSON.stringify(report) === JSON.stringify(expected)) guardShown += 1;
+    else fail(`career ${c}: the reloaded report differs from the academy year just played`);
+    const current = loaded.seasons[loaded.seasons.length - 1];
+    const stale = row => ({ ...loaded, seasons: [...loaded.seasons, row] });
+    if (!academy.savedAcademyReport(stale({ ...current, type: 'playing' }))
+      && !academy.savedAcademyReport(stale({ ...current, academyReport: undefined }))) guardStale += 1;
+    else fail(`career ${c}: a newer season without its own youth receipt inherited a report`);
   }
   const handler = once(/const handleAcademyFocus = \((\w+)[^)]*\) => \{\s*if \(([^)]*)\) return;\s*setCareer\(withAcademyFocus\(career, (\w+)\)\);/g, 'the focus handler');
   let phasesRight = 0;
@@ -551,8 +543,7 @@ async function main() {
   }
   once(/career\.phase === "youth" && onAcademyFocus && \(\s*<AcademyFocusPicker position=\{career\.position\} focus=\{academyFocusOf\(career\)\} onPick=\{onAcademyFocus\} \/>/g, 'the focus picker on the academy screen');
   once(/onAcademyFocus=\{handleAcademyFocus\}/g, 'the focus handler handed to the game screen');
-  once(/academyReport=\{academyReport\}/g, 'the report handed to the game screen');
-  console.log(`   press ${press ? `(${press[3]}, ${press[4]})` : 'missing'}, guard shown ${guardShown} of 20 and hid ${guardStale} of 20 stale reports, focus handler right in ${phasesRight} of 5 phases`);
+  console.log(`   restored ${guardShown} of 20 correct reports and hid ${guardStale} of 20 stale reports, focus handler right in ${phasesRight} of 5 phases`);
 
   /* 7 */
   section = 7;

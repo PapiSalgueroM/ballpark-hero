@@ -27,6 +27,29 @@
  */
 import { attrTreeFor } from "./soccerCareerAttributes";
 import { allocOverall, type AllocKey } from "./careerEras";
+import type { CareerState, SeasonRecord } from "./soccerCareerEngine";
+
+export const PLACEMENT_YOUTH_GAMES = 2;
+export const PLACEMENT_SENIOR_GAMES = 3;
+
+export function academyPlacementOf(row: SeasonRecord | undefined) {
+  const placement = row?.type === 'youth' ? row.academyPlacement : undefined;
+  return typeof placement?.club === 'string' && placement.club &&
+    (placement.signedWith === undefined || typeof placement.signedWith === 'string') ? placement : undefined;
+}
+
+export function hasFirstTeamPlacement(state: CareerState): boolean {
+  const placement = academyPlacementOf(state.seasons[state.seasons.length - 1]);
+  return !!placement && !state.retired && !state.loan && placement.club === state.currentClub && placement.signedWith === placement.club;
+}
+
+export function withFirstTeamTraining(state: CareerState, booked: boolean): CareerState {
+  if (state.phase !== 'youth' || state.retired) return state;
+  const next = { ...state };
+  if (booked) next.academyPlacementBooked = true;
+  else delete next.academyPlacementBooked;
+  return next;
+}
 
 export type AcademyFocus = AllocKey;
 

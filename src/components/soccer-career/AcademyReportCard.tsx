@@ -1,7 +1,27 @@
 import {
-  academyFocusOptions, academyFocusResultLine, ACADEMY_FOCUS_RULE,
+  academyFocusOptions, academyFocusResultLine, academyPlacementOf, ACADEMY_FOCUS_RULE, PLACEMENT_SENIOR_GAMES, PLACEMENT_YOUTH_GAMES,
   type AcademyFocus, type AcademyReport,
 } from "@/lib/soccerCareerAcademy";
+import type { SeasonRecord } from "@/lib/soccerCareerEngine";
+
+export function AcademyPlacementRecord({ season }: { season: SeasonRecord }) {
+  const placement = academyPlacementOf(season);
+  const places = season.academySelectionPlaces;
+  if (placement) return (
+    <p data-academy-placement-record className="text-xs text-muted-foreground">
+      You trained with {placement.club} for {PLACEMENT_YOUTH_GAMES} academy matchdays.{' '}
+      {placement.signedWith === placement.club ? 'You stayed for a first-team place.' :
+        placement.signedWith ? `You signed for ${placement.signedWith} and gave up the place.` : 'First contract pending.'}
+    </p>
+  );
+  if (season.type !== "playing" || typeof places !== "number" || !Number.isInteger(places) ||
+    places < 0 || places > PLACEMENT_SENIOR_GAMES || !Number.isFinite(season.leagueApps)) return null;
+  return (
+    <p data-academy-placement-result className="text-xs text-muted-foreground">
+      First-team training added {places} to your planned league appearances. You played {season.leagueApps} league matches for {season.club}.
+    </p>
+  );
+}
 
 /* Round 973: the academy year's two screens.
 
