@@ -197,7 +197,7 @@ const NFLCareer = () => {
           description="Guess the mystery NFL player from progressive career clues. Draft round, college, teams, stats, and jersey numbers."
           howToPlay={[
             "Each round reveals a new clue about the mystery NFL player",
-            "Type your guess in the search bar after each clue",
+            "Guess a player or reveal the next clue. A miss and a requested clue each cost 1 point until the final clue.",
             "Clues progress: Draft → College → First Team → Stats → Teams → Jersey #",
             "The fewer clues you need, the higher your score!",
           ]}
