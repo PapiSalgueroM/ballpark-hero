@@ -95,6 +95,29 @@ describe('competitive corner training', () => {
     expect(next.season).toBe(booked.season + 1); expect(next.cornerTraining).toBeUndefined();
   });
 
+  it('records the actual cost after a congested cup match and charges neither man when one reaches the floor', () => {
+    let { career } = fixture();
+    for (let i = 0; i < 20 && career.calendar[career.week].type !== 'cup'; i++) {
+      career = seeded(5441 + i, () => playNextEntry(career, { skipHalftime: true })).result.state;
+    }
+    expect(career.calendar[career.week].type).toBe('cup');
+    const desk = cornerTrainingDesk(career, 'left');
+    const order: CornerRoutine = { flag: 'left', kind: 'short', takerId: desk.taker!.id, targetId: desk.targets[0].id };
+    career.training = { ...career.training!, intensity: 'double' };
+    career.squad.find(p => p.id === order.takerId)!.fitness = 20;
+    career.squad.find(p => p.id === order.targetId)!.fitness = 25;
+    const play = (club: CareerState, seed: number) => seeded(seed, () => playNextEntry(club, { skipHalftime: true, noCoach: true })).result.state;
+    const booked = bookCornerRoutine(career, order)!;
+    const plain = play(career, 1), trained = play(booked, 1);
+    expect([fitness(plain).get(order.takerId), fitness(plain).get(order.targetId)]).toEqual([22, 23]);
+    expect(cornerTrainingDesk(trained, 'left').paid).toEqual({ taker: 2, target: 3 });
+    expect([fitness(trained).get(order.takerId), fitness(trained).get(order.targetId)]).toEqual([20, 20]);
+    const floor = play(career, 2), refused = play(booked, 2);
+    expect(fitness(floor).get(order.takerId)).toBe(20);
+    expect(refused.cornerTraining).toBeUndefined();
+    expect(fitness(refused)).toEqual(fitness(floor));
+  });
+
   it('leaves unsupported metadata untouched and old saves bare', () => {
     const { career, order } = fixture();
     const future = { ...career, cornerTraining: { v: 9, explanation:'future' } as never };
