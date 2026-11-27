@@ -101,6 +101,7 @@ describe('actual MLB whole-roster trade access', () => {
     expect(within(panel(state.view, 'finder')).getAllByRole('button', { name: 'Accept' })).toHaveLength(offers.length);
     offers.forEach(offer => expect(panel(state.view, 'finder')).toHaveTextContent(`${offer.playerName} (${offer.playerPos})`)); quiet(state, calls);
     const expected = clone(state.base), offer = offers[0];
+    expected.league.inSeasonRatings = true;
     expect(engine.mlbTrade(expected.league.teams.BOS, expected.league.teams[offer.teamId], ownId, offer.playerId, offer.sweeten, expected.league.cap)).toBe('accepted');
     expected.seasonTradeLine = `the deal that brought ${offer.playerName} in`;
     fireEvent.click(within(panel(state.view, 'finder')).getAllByRole('button', { name: 'Accept' })[0]);
@@ -117,6 +118,7 @@ describe('actual MLB whole-roster trade access', () => {
     const card = state.view.container.querySelector('[data-trade-talks]')!;
     expect(card).toHaveAttribute('data-trade-phase', talks.phase); expect(card).toHaveTextContent(talks.counterLine); expect(card).toHaveTextContent(mine.name); expect(card).toHaveTextContent(want.name); quiet(state, calls);
     const expected = clone(state.base); expect(engine.mlbExecuteTalksTrade(expected.league.teams.BOS, expected.league.teams.NYY, mine.id, talks.pkg!.theirPlayerId, talks.pkg!.addPick, expected.league.cap)).toBe('done');
+    expected.league.inSeasonRatings = true;
     expected.seasonTradeLine = `the deal that brought ${talks.pkg!.theirPlayerName} in`;
     fireEvent.click(state.view.getByRole('button', { name: 'Shake on it' }));
     expect(state.writes).toHaveBeenCalledTimes(1); expect(read()).toEqual(expected); expect(state.random).toHaveBeenCalledTimes(calls); noBooking();
