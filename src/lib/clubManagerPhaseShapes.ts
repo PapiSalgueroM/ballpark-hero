@@ -24,6 +24,7 @@ export interface PhaseStep extends ClockPoint { order: PhaseOrder | null; positi
 export interface PhaseMove {
   id: string; phase: 'outlet' | 'recovery'; order: PhaseOrder; keeper: { name: string; generated?: true };
   actor: PhaseRow; other: { name: string; generated?: true }; lane: 'left' | 'centre' | 'right'; cover: number;
+  support?: number; screenedLane?: boolean; highPressure?: boolean;
   outcome: 'retained' | 'released' | 'intercepted' | 'screened' | 'regained' | 'bypassed'; effort: 0 | 1; spent?: 0 | 1;
 }
 export function isPhaseOrder(raw: unknown): raw is PhaseOrder {
@@ -57,9 +58,35 @@ export function isPhaseStep(v: unknown): v is PhaseStep {
 export function readPhaseHistory(v: unknown): PhaseStep[] {
   return Array.isArray(v) && v.every(isPhaseStep) ? v : [];
 }
+/** Interleave actual exits with recorded coaching changes. An optional live clock hides all future play. */
+export function phaseHistoryAt(live: LiveMatch, until?: ClockPoint): PhaseStep[] {
+  const steps = readPhaseHistory(live.phaseHistory);
+  if (!steps.length) return [];
+  const exits = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(e => e.kind === 'red');
+  const stream = [...steps.map(step => ({ at: step, step, id: undefined as string | undefined })),
+    ...[...exits,...(live.h1Injuries ?? []),...(live.h2Injuries ?? [])].map(e => ({ at:e, step:undefined, id:e.id }))]
+    .sort((a,b) => clockOrder(a.at,b.at));
+  const result: PhaseStep[] = [];
+  for (const { at, step, id } of stream) {
+    if (until && clockOrder(at,until) > 0) break;
+    if (step) { result.push(step); continue; }
+    const current = result.at(-1), pos = current?.positions;
+    if (!id || !current?.order || !pos) continue;
+    const removed = pos.rows.find(r => r.playerId === id), keeper = pos.keeper?.playerId === id ? null : pos.keeper;
+    if (!removed && keeper === pos.keeper) continue;
+    const rows = pos.rows.filter(r => r.playerId !== id);
+    result.push({ minute:at.minute, ...(at.plus ? {plus:at.plus} : {}), order:current.order, positions:{
+      ...pos, keeper, rows, available:false, reason:keeper ? 'Ten active outfield players are required.' : 'An active goalkeeper is required.',
+      missingSlots: removed ? [...pos.missingSlots,removed.slot] : pos.missingSlots,
+    } });
+  }
+  return result;
+}
 export function isPhaseMove(v: unknown): v is PhaseMove {
   return object(v) && typeof v.id === 'string' && !!v.id && isPhaseOrder(v.order) && named(v.keeper) && named(v.other)
     && phaseRow(v.actor) && (v.lane === 'left' || v.lane === 'right' || v.lane === 'centre')
+    && ((v.support === undefined && v.screenedLane === undefined && v.highPressure === undefined)
+      || (numberIn(v.support,0,9) && Number.isInteger(v.support) && typeof v.screenedLane === 'boolean' && typeof v.highPressure === 'boolean'))
     && numberIn(v.cover,0,9) && Number.isInteger(v.cover) && (v.effort === 0 || v.effort === 1)
     && (v.spent === undefined || v.spent === 0 || v.spent === 1) && typeof v.outcome === 'string'
     && (v.phase === 'outlet' ? ['retained','released','intercepted'].includes(v.outcome)
@@ -169,26 +196,29 @@ export function recordPhaseShape(state: CareerState, live: LiveMatch, at: ClockP
 export function drawPhaseMoves(live: LiveMatch, events: PlayEvent[], mineAt: (m: number) => CMPlayer[],
   theirsAt: (m: number) => OppXiLine[], fixture: string, reviewGoals: boolean) {
   const play: PlayEvent[] = [], mine: MyGoalLine[] = [], theirs: ScorerLine[] = [];
-  const order = live.phaseOrder, positions = readPhaseHistory(live.phaseHistory).at(-1)?.positions;
-  if (!isPhaseOrder(order) || !positions?.available || !positions.keeper || positions.rows.length !== 10) return { play, mine, theirs };
+  const order = live.phaseOrder, last = readPhaseHistory(live.phaseHistory).at(-1), positions = last?.positions;
+  if (!isPhaseOrder(order) || !last?.order || last.order.withBall !== order.withBall || last.order.withoutBall !== order.withoutBall
+    || last.order.outlet !== order.outlet || last.order.recovery !== order.recovery || !positions?.available || !positions.keeper) return { play, mine, theirs };
   const { keeper, rows } = positions;
   const prior = [...(live.h1Play ?? []), ...(live.h2Play ?? [])];
   const earlier = prior.flatMap(e => isPhaseMove(e.phaseMove) ? [e.phaseMove] : []);
   const chanceIds = new Set(prior.flatMap(e => e.phaseChance ? [e.phaseChance] : []));
-  const busy = new Map<number, number>();
-  for (const e of events) if (e.kind === 'shot' || e.kind === 'var') busy.set(e.minute, (busy.get(e.minute) ?? 0) + 1);
-  const ordinals = new Map<number, number>();
+  // drawSegment works on a continuous clock until foldBoard stamps every event and scorer together.
+  const clock = (e: ClockPoint) => e.plus ? e.minute + '+' + e.plus : String(e.minute);
+  const busy = new Map<string, number>();
+  for (const e of events) if (e.kind === 'shot' || e.kind === 'var') busy.set(clock(e), (busy.get(clock(e)) ?? 0) + 1);
+  const ordinals = new Map<string, number>();
   for (const e of events) {
     if (e.kind !== 'shot' || !e.on || e.goal || e.penalty || e.freeKick || e.pressChance || e.cornerChance || e.flankChance
       || e.phaseChance || e.phaseMove) continue;
-    const ordinal = ordinals.get(e.minute) ?? 0;
-    ordinals.set(e.minute, ordinal + 1);
+    const t = clock(e), ordinal = ordinals.get(t) ?? 0;
+    ordinals.set(t, ordinal + 1);
     const active = mineAt(e.minute), there = theirsAt(e.minute);
     const otherKeeper = there.filter(p => p.p === 'GK'), outfield = there.filter(p => p.p !== 'GK');
     if (!active.some(p => p.id === keeper.playerId) || !rows.every(r => active.some(p => p.id === r.playerId))
       || otherKeeper.length !== 1 || !outfield.length || new Set(there.map(p => p.n)).size !== there.length) continue;
     const outlet = e.side === 'opp';
-    const id = [fixture, 'save', e.minute, e.side, e.who, ordinal].join('/');
+    const id = [fixture, 'save', t, e.side, e.who, ordinal].join('/');
     const rand = keyedRng(id), x = [20, 50, 80][Math.floor(rand() * 3)];
     const beyond = order.outlet === 'beyond', challenge = order.recovery === 'challenge';
     const dest = outlet ? (beyond ? 32 : 61) : (challenge ? 43 : 61);
@@ -201,18 +231,23 @@ export function drawPhaseMoves(live: LiveMatch, events: PlayEvent[], mineAt: (m:
     // Travel and the spaces still covered after a sprint affect both the safe outlet and the recovery race.
     const energy = actor.fitness - Math.min(e.minute, 120) * 0.18 - actor.returnDistance * 0.32;
     const support = rows.filter(r => r !== actor && Math.hypot(r.withBall.x-actor.withBall.x,r.withBall.y-actor.withBall.y) < 33).length;
+    const inLane = (p: PhasePoint) => Math.abs(p.x-x) <= 26;
+    const deepOutlets = rows.filter(r => inLane(r.withBall) && r.withBall.y >= 67).length;
+    const wideLinks = rows.filter(r => inLane(r.withBall) && Math.abs(r.withBall.x-50) >= 29 && r.withBall.y >= 38 && r.withBall.y < 60).length;
+    const screen = rows.some(r => inLane(r.withoutBall) && r.withoutBall.y >= 58 && r.withoutBall.y < 70);
+    const high = rows.some(r => inLane(r.withoutBall) && r.withoutBall.y <= 34);
     const clampChance = (n: number) => Math.min(0.88, Math.max(0.12, n));
-    const good = rand() < clampChance(outlet ? (beyond ? 0.48 : 0.68) + 0.032 * support + (energy-70)*0.003
-      : (challenge ? 0.43 : 0.58) + cover * 0.055 + (energy-65)*0.005);
+    const good = rand() < clampChance(outlet ? (beyond ? 0.44 + 0.15*wideLinks : 0.59 + 0.09*deepOutlets) + 0.032*support + (energy-70)*0.003
+      : (challenge ? 0.35 + (high ? 0.20 : 0) : 0.53 + (screen ? 0.21 : 0)) + cover*0.055 + (energy-65)*0.005);
     const launched = outlet && good && rand() < (beyond ? 0.72 : 0.26);
     const outcome = outlet ? (good ? launched ? 'released' : 'retained' : 'intercepted')
       : good ? (challenge ? 'regained' : 'screened') : 'bypassed';
     const effort = (actor.returnDistance >= 20 || (!outlet && challenge)) && earlier.filter(m => m.actor.playerId === actor.playerId && m.effort).length < 2 ? 1 : 0;
     const them = (p: OppXiLine) => ({ name:p.n, ...(p.g ? {generated:true as const} : {}) });
     e.phaseMove = { id, order, phase: outlet ? 'outlet' : 'recovery', keeper: outlet ? keeper : them(otherKeeper[0]), actor,
-      other: them(other), lane: x < 35 ? 'left' : x > 65 ? 'right' : 'centre', cover, outcome, effort };
+      other: them(other), lane: x < 35 ? 'left' : x > 65 ? 'right' : 'centre', cover, support, screenedLane:screen, highPressure:high, outcome, effort };
     earlier.push(e.phaseMove);
-    if (outcome === 'screened' || outcome === 'retained' || chanceIds.size >= 3 || busy.get(e.minute) !== 1
+    if (outcome === 'screened' || outcome === 'retained' || chanceIds.size >= 3 || busy.get(t) !== 1
       || rand() >= (outcome === 'bypassed' && !challenge ? 0.18 : 0.34)) continue;
     chanceIds.add(id);
     const ours = outcome === 'released' || outcome === 'regained', side = ours ? 'me' : 'opp';
@@ -222,14 +257,14 @@ export function drawPhaseMoves(live: LiveMatch, events: PlayEvent[], mineAt: (m:
     const xg = outcome === 'bypassed' ? (challenge ? 0.15 : 0.10) : outcome === 'released' && beyond ? 0.15 : 0.12;
     const finish = rand(), goal = finish < xg;
     if (goal) {
-      const scorer = { name: who, minute: e.minute, phaseChance: id };
+      const scorer = { name: who, minute: e.minute, ...(e.plus ? {plus:e.plus} : {}), phaseChance: id };
       const review = reviewGoals ? settleGoalReviews([scorer], side, id) : null;
       if (review) play.push(...review.reviews.map(r => ({ ...r, phaseChance: id })));
       if (review && !review.goals.length) continue;
       if (ours) mine.push({ ...scorer, id: finisher.playerId, ...(outcome === 'released' ? { phaseAssistId: actor.playerId } : {}) });
       else theirs.push({ ...scorer, ...(outcome === 'bypassed' ? { assist: otherKeeper[0].n } : {}), ...(generated ? {gen:true} : {}) });
     }
-    play.push({ kind:'shot', side, minute:e.minute, who, phaseChance:id, xg, on: goal || finish < xg + 0.29,
+    play.push({ kind:'shot', side, minute:e.minute, ...(e.plus ? {plus:e.plus} : {}), who, phaseChance:id, xg, on: goal || finish < xg + 0.29,
       ...(goal ? {goal:true} : {}), ...(generated ? {whoGenerated:true} : {}) });
   }
   return { play, mine, theirs };

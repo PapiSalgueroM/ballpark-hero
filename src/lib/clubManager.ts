@@ -3920,7 +3920,7 @@ export interface PlayResult {
   /** Round 466: 'reached' only ever comes back to a caller that passed
    *  untilWeek, when the week pointer got there without a match to play. */
   kind: 'window' | 'match' | 'seasonOver' | 'halftime' | 'reached';
-  blocked?: 'position-state-invalid';
+  blocked?: 'position-state-invalid' | 'phase-order-unavailable';
   report?: MatchWeekReport;
   live?: LiveMatch;
 }
@@ -22170,7 +22170,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     added: live.added,
   });
   if (live.cornerRoutine && isCornerRoutine(live.cornerRoutine)) detail.cornerRoutine = { ...live.cornerRoutine };
-  if (live.phaseHistory) detail.phaseHistory = live.phaseHistory;
+  if (live.phaseHistory) detail.phaseHistory = tacticsImpl()?.phaseHistoryAt(live) ?? live.phaseHistory;
   if (live.returnPressUsed === true) detail.returnPressUsed = true;
   if (state.appearanceFees) settleAppearanceFees(state,{season:state.season,week:live.week});
 
@@ -23183,6 +23183,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * Never mutates the input state.
  */
 export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; benchOrder?: BenchOrder; flankPlan?: FlankPlan; phaseOrder?: PhaseOrder }): PlayResult {
+  if (opts?.phaseOrder != null && (career.live || opts.untilWeek !== undefined || nextFixture(career).kind !== 'match'
+    || !tacticsImpl()?.phasePositions(career, undefined, undefined, opts.phaseOrder).available)) {
+    return { state: career, kind: 'reached', blocked: 'phase-order-unavailable' };
+  }
   if (career.live?.penaltyCalls) return { state: career, kind: 'halftime', live: career.live };
   if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));

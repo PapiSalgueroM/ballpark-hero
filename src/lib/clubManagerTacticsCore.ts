@@ -63,6 +63,8 @@ export const logEverSet = (log: InstructionStep[] | undefined): boolean => (log 
 
 /** What the engine asks of the tactics module. Every call is made only off balanced. */
 export interface TacticsImpl {
+  phasePositions: typeof import('./clubManagerPhaseShapes').phasePositions;
+  phaseHistoryAt: typeof import('./clubManagerPhaseShapes').phaseHistoryAt;
   phaseMoves: typeof import('./clubManagerPhaseShapes').drawPhaseMoves;
   setPhase: typeof import('./clubManagerPhaseShapes').setPhaseOrder;
   recordPhase: typeof import('./clubManagerPhaseShapes').recordPhaseShape;
