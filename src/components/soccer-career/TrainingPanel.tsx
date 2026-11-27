@@ -334,7 +334,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
           <div className="p-4 space-y-3">
             <button onClick={() => openBoard("press")} className="w-full flex items-center gap-3 rounded-xl border border-border bg-muted/10 hover:bg-muted/25 p-3.5 text-left">
               <span className="text-3xl" aria-hidden="true">⚽</span>
-              <span className="flex-1"><span className="block text-sm font-black">Break the Press</span><span className="block text-[10px] text-muted-foreground">Pass and move past two defenders. Three practice puzzles with personal bests.</span></span>
+              <span className="flex-1"><span className="block text-sm font-black">Break the Press</span><span className="block text-[10px] text-muted-foreground">Three passing puzzles plus the Transition Cup. Attack and defend in three knockout ties.</span></span>
               <span aria-hidden="true" className="text-muted-foreground">›</span>
             </button>
             <button onClick={openReading} className="w-full flex items-center gap-3 rounded-xl border border-border bg-muted/10 hover:bg-muted/25 p-3.5 text-left">
