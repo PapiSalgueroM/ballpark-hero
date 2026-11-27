@@ -233,7 +233,10 @@ async function savedShelf() {
       await rail.waitFor();
       if (width === 390 && process.argv.includes('--covered-arrow-control')) {
         const before = await shelf.evaluate(el => getComputedStyle(el).gridTemplateColumns);
-        await shelf.evaluate(el => { el.style.gridTemplateColumns = '74px minmax(0, 1fr)'; });
+        await shelf.evaluate(el => {
+          el.style.gridTemplateColumns = '74px minmax(0, 1fr)';
+          el.querySelector('h2').parentElement.style.flexDirection = 'row';
+        });
         assert.notEqual(await shelf.evaluate(el => getComputedStyle(el).gridTemplateColumns), before);
       }
       await shelf.evaluate(el => scrollTo({ top: scrollY + el.getBoundingClientRect().top - 80, behavior: 'instant' }));
