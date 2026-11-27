@@ -12,9 +12,11 @@ import { ALL_POSITIONS } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { SecondPositionChips } from '@/components/club-manager/SquadScreen';
+import { CornerTrainingCard, type CornerTrainingActions } from './CornerTrainingCard';
 
 interface TrainingScreenProps {
   career: CareerState;
+  cornerActions?: CornerTrainingActions;
   onSetPlan: (plan: TrainingPlan) => void;
   /** Round 505: put a man to work on a second position, and call it off. */
   onRetrain: (playerId: string, to: Position, paused?: boolean, replace?: Position) => void;
@@ -252,7 +254,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
  * on Saturday, and how often somebody pulls up in a session.
  * Round 505: and the third card, a second position learned over weeks.
  */
-export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: TrainingScreenProps) {
+export function TrainingScreen({ career, cornerActions, onSetPlan, onRetrain, onStopRetrain }: TrainingScreenProps) {
   const [recoveryId, setRecoveryId] = useState('');
   const plan: TrainingPlan = career.training ?? { intensity: 'normal' as TrainingIntensity, focus: 'balanced' as TrainingFocus };
   const growing = developingPlayers(career).slice(0, 10);
@@ -264,6 +266,7 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
 
   return (
     <div className="space-y-2" style={{ overflowAnchor: 'none' }}>
+      {cornerActions && <CornerTrainingCard career={career} {...cornerActions} />}
       <div className="bg-card border border-border rounded-xl p-3">
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
           <Dumbbell className="w-3 h-3" /> How hard you work them
