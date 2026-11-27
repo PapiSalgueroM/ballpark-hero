@@ -28,8 +28,10 @@ function safeRailOffset(frame: HTMLElement, content: HTMLElement, path: string):
   const nav = content.querySelector('nav[data-site-chrome]');
   const navBottom = Math.max(frameTop, nav?.getBoundingClientRect().bottom ?? frameTop);
   const belowNav = navBottom + AD_CONTROL_GAP_PX;
-  const shelf = content.querySelector('[data-home-continue] [data-home-shelf-rail]');
-  const shelfBox = shelf && getComputedStyle(shelf).overflowX === 'auto' ? shelf.getBoundingClientRect() : null;
+  const shelfBounds = new Map<Element, DOMRect>();
+  for (const shelf of content.querySelectorAll('[data-home-shelf-rail]')) {
+    if (getComputedStyle(shelf).overflowX === 'auto') shelfBounds.set(shelf, shelf.getBoundingClientRect());
+  }
   const firstScreen = path === '/' || path === '/club-manager' || (path === '/soccer-career' && !!content.querySelector('[data-active-career-saves]'));
   // Each complete row must stay clear as its controls scroll past the rails.
   const chromeRows = firstScreen ? [...document.querySelectorAll<HTMLElement>(
@@ -56,8 +58,10 @@ function safeRailOffset(frame: HTMLElement, content: HTMLElement, path: string):
   if (lift) targets.push(...document.querySelectorAll('header[data-site-chrome] :is(a[href], button, input, select, summary, [role="button"])'));
   for (const target of targets) {
     if (!lift && target.closest('[data-site-chrome]')) continue;
-    // The whole saved-game scroller, including its scrollbar, bounds the cards a visitor can reach.
-    const box = shelfBox && shelf?.contains(target) && scrollsWithPage(target) ? shelfBox : target.getBoundingClientRect();
+    // A shelf clips its cards. The scrollbar and any fixed controls still need clearance.
+    const shelf = shelfBounds.size ? target.closest('[data-home-shelf-rail]') : null;
+    const shelfBox = shelf && shelfBounds.get(shelf);
+    const box = shelfBox && scrollsWithPage(target) ? shelfBox : target.getBoundingClientRect();
     if (box.width <= 1 || box.height <= 1 || getComputedStyle(target).visibility === 'hidden') continue;
     if (!target.closest('[data-seo-content]')) hasControl = true;
     const horizontal = Math.max(0, Math.min(box.left - left.right, right.left - box.right));

@@ -1,3 +1,11 @@
+### November 27, 2026. Wider game boards, pinned games and Budget Builder
+
+Career Quiz and the five Connect Four games center their boards between desktop ads and wrap long clues. All seven columns remain reachable after a selection. Players can pin a game from its menu and jump to their picks on Home. Horizontally scrolling pinned games and saved careers retain both Home ads when there is enough clearance.
+
+Budget Builder shows the Money XI's actual lineup, prices and formation before the final. A signing that fills the last shirt or replaces a starter previews the squad rating, savings and board points before the final. The score breakdown uses the same calculation as the leaderboard and the shared result.
+
+Google's US regulations message was published for all supported states. The footer's first-party Cookie choices control is available everywhere. The regional release was verified across 167 eligible direct entries with 41 additional consent, storage and navigation checks.
+
 ### November 27, 2026. Regional advertising, saved Club Manager and academy decisions
 
 New visitors with a confirmed country outside the EEA, UK and Switzerland can receive non-personalized ads on eligible public pages. Cloudflare's same-site country response supplies the initial default. An unknown location, unreadable storage, prior rejection or Global Privacy Control cannot grant advertising. Existing choices take priority, and Analytics stays opt-in. Cookie choices is available in the footer. A public document can initialize its publisher once even if no manual unit fits. Save management and account screens keep their exclusions.

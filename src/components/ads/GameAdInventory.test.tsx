@@ -54,7 +54,7 @@ it.each([1280, 1254])('fits the full desktop frame beside a native scrollbar at 
   expect(input).toHaveValue('in-progress guess');
 });
 
-it('respects the scrollable Continue playing shelf, including its scrollbar and clipped save cards', async () => {
+it.each(['data-home-continue', 'data-home-picks'])('respects the scrollbar and clipped game cards inside %s', async shelfType => {
   let shelfLeft = 270;
   vi.spyOn(Element.prototype, 'clientWidth', 'get').mockReturnValue(1280);
   vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
@@ -66,7 +66,7 @@ it('respects the scrollable Continue playing shelf, including its scrollbar and 
     return { left: x, top: y, right: x + width, bottom: y + height, width, height } as DOMRect;
   });
   vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
-  const view = render(<MemoryRouter><GameDesktopRails active><main><section data-home-continue="">
+  const view = render(<MemoryRouter><GameDesktopRails active><main><section {...{ [shelfType]: '' }}>
     <div data-testid="shelf" data-home-shelf-rail="" style={{ overflowX: 'auto' }}><a data-continue-card="" href="/club-manager?slot=2">Resume slot 2</a></div>
   </section></main></GameDesktopRails></MemoryRouter>);
   const shelf = view.getByTestId('shelf'), rails = () => view.container.querySelectorAll('[data-ad-rail]').length;
