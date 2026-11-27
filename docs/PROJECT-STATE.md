@@ -1,3 +1,9 @@
+### November 27, 2026. Soccer Conquest frontier campaign and Budget Builder Endurance Cup
+
+Soccer Conquest offers 96 starting clubs in a separate signed-out campaign. Win four extra regions within three away matches. A rival's territory value, the chance of winning and the borders a win would open all appear before the match. Isolated clubs have ferry opponents. The replay keeps the same starting club and rolls, so the player can compare two routes. Repeating the Everton, Leeds United and Hull City route reproduced the same wins and captured land. Opening against Coventry City instead led to elimination on that draw. Daily Conquest uses its own save and scoring.
+
+Budget Builder can enter a completed XI into a three-fixture Endurance Cup. The entry freezes the starting players, opposition, market and unspent cash. The manager can buy up to two eligible reserves and use each in one fixture. In two runs with the same XI, a reserve striker turned the third fixture from a draw into a win, lifting the club from five points to seven. In the 2015 market, a $229M XI and a $108M reserve left $173M from the original $510M cap. With the market offline, the saved cup still showed its six points and original Money XI result. Across 80 matched squads, reserve decisions improved the result for 20.
+
 ### November 27, 2026. Missing XI duels, College Grid scouting and MLB bullpens
 
 Missing XI Duel lets a player name three starters in different positions for up to 300 points, then challenge a friend to the same match and blanks in order. A phone guest and a separate desktop guest played the same side for 270 and 200 points. The archive check covered 172 eligible sides. Back and Forward can reopen the last 12 played cards in the same tab. The normal Daily and Unlimited games keep their existing progress. Incoming challenge links keep the site's existing ad exclusion for URL fragments. With analytics consent the page view sends only the public path.

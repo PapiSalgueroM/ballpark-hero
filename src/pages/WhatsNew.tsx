@@ -27,6 +27,8 @@ const WhatsNew = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">November 27, 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
+            <li>Pick a club in the <Link to="/soccer-conquest" className="text-primary hover:underline">Soccer Conquest</Link> frontier campaign. You have three away matches to capture four extra regions. Choose between a safer opponent and a bigger stretch of land. Replay the same draw to see what a different route would have earned you.</li>
+            <li>Enter the Endurance Cup with your finished <Link to="/budget-builder" className="text-primary hover:underline">Budget Builder</Link> XI. Spend your leftover transfer money on up to two reserves. A fresh defender can stop a counter and a spare striker can settle the last match. Six points in three fixtures wins the cup.</li>
             <li>Pick Duel in <Link to="/missing-xi" className="text-primary hover:underline">Missing XI</Link>. Name three missing starters, then send a friend the same lineup. Your scorecard shows who solved each blank in fewer guesses.</li>
             <li>Try the scouting challenge in <Link to="/college-grid" className="text-primary hover:underline">College Grid</Link>. Fit three former players from one school into the draft room or position room. You can scout one player before signing your class, and your daily guesses stay available.</li>
             <li>Open Round in <Link to="/mlb-front-office" className="text-primary hover:underline">MLB Front Office</Link> to book your bullpen. Save your stronger reliever for a division rival or give them the earlier game. The round report tells you who pitched each assigned matchup and who won.</li>
