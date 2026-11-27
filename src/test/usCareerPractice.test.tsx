@@ -104,6 +104,22 @@ describe('US career practice on the actual boards', () => {
     expect(localStorage.getItem('unrelated-practice-fixture')).toBe('keep this save');
   });
 
+  it.each(SPORTS)('$label keeps focus inside a newly opened drill so immediate Escape returns to practice', async row => {
+    seed(row);
+    const bytes = localStorage.getItem(row.sport.saveKey);
+    const view = mount(row), dialog = await open(view);
+    const name = row.label === 'MLB' ? /Strike Zone Corners/ : row.burst;
+    const tile = within(dialog).getByRole('button', { name });
+    tile.focus();
+    fireEvent.click(tile);
+    expect(dialog).toHaveAttribute('data-practice-screen', 'drill');
+    expect(dialog).toHaveFocus();
+    fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
+    expect(view.queryByRole('dialog')).toBeNull();
+    expect(view.getByRole('button', { name: 'Start practice' })).toHaveFocus();
+    expect(localStorage.getItem(row.sport.saveKey)).toBe(bytes);
+  });
+
   it.each(SPORTS)('$label banks played skill into the real save once and survives reload', async row => {
     const before = seed(row), bytes = localStorage.getItem(row.sport.saveKey);
     const view = mount(row), dialog = await open(view);

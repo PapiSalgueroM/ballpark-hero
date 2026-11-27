@@ -15,7 +15,7 @@
 
    Screens: "menu", "drill" (the open drill is `drill`), "result", or the id
    of an extra, so an extra may not be called any of those three. */
-import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react';
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { usePracticeClock } from '@/hooks/usePracticeClock';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { trainingScore, trainingTier, type TrainingSport } from '@/lib/careerTraining';
@@ -46,6 +46,13 @@ export default function TrainingGround<Id extends string>({ sport, available, on
   instructions?: string;
 }) {
   const [screen, setScreen] = useState<string>("menu");
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current;
+    focusDialogOnMount(dialog);
+    // Changing screens can remove the focused control and leave Escape on the page behind the dialog.
+    if (dialog && document.activeElement === document.body) dialog.focus({ preventScroll: true });
+  }, [screen]);
   const [drill, setDrill] = useState<Id>(sport.drills[0].id);
   const [score, setScore] = useState(0);
   const [banked, setBanked] = useState(false);
@@ -102,7 +109,7 @@ export default function TrainingGround<Id extends string>({ sport, available, on
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={close}>
-      <div role="dialog" aria-modal="true" aria-label={sport.label} data-practice-screen={screen} data-practice-paused={clock.paused} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={e => {
+      <div role="dialog" aria-modal="true" aria-label={sport.label} data-practice-screen={screen} data-practice-paused={clock.paused} tabIndex={-1} ref={dialogRef} onKeyDown={e => {
         escapeCloses(close)(e);
         if (!instructions || e.key !== 'Tab') return;
         const buttons = Array.from(e.currentTarget.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));
@@ -187,8 +194,8 @@ export default function TrainingGround<Id extends string>({ sport, available, on
               </button>
             )}
             {allowFreePractice && (banked || !available) && <div className="grid grid-cols-2 gap-2">
-              <button onClick={e => { e.currentTarget.closest<HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true }); openDrill(drill); }} className="min-h-11 rounded-lg border border-border text-sm font-bold">Try again</button>
-              <button onClick={e => { e.currentTarget.closest<HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true }); toMenu(); }} className="min-h-11 rounded-lg border border-border text-sm font-bold">Choose a drill</button>
+              <button onClick={() => openDrill(drill)} className="min-h-11 rounded-lg border border-border text-sm font-bold">Try again</button>
+              <button onClick={toMenu} className="min-h-11 rounded-lg border border-border text-sm font-bold">Choose a drill</button>
             </div>}
           </div>
         )}
