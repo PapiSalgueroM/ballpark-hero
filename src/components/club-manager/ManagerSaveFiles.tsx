@@ -134,7 +134,7 @@ export default function ManagerSaveFiles({ onClose, onImported, restoreFocus }: 
             <div className="break-words text-muted-foreground">{summary?.clubName ?? (damaged ? 'Unreadable save' : 'Empty slot')}</div>
           </div>
           {summary ? <div className="flex shrink-0 gap-1">
-            <Link to={`/club-manager?slot=${slot}`} className={`${fileButton} inline-flex items-center`} aria-label={`Open slot ${slot}`}>Open</Link>
+            <Link to={`/club-manager?slot=${slot}`} data-google-vignette="false" className={`${fileButton} inline-flex items-center`} aria-label={`Open slot ${slot}`}>Open</Link>
             <button type="button" className={fileButton} disabled={busy} onClick={() => download(slot)} aria-label={`Download slot ${slot}`}>Download</button>
           </div>
             : !damaged && <button type="button" className={fileButton} disabled={busy} onClick={() => choose(slot)} aria-label={`Import into slot ${slot}`}>Import</button>}

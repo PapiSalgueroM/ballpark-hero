@@ -89,6 +89,7 @@ export default function YourCareers() {
                 <li key={game.path}>
                   <Link
                     to={entry.path}
+                    data-google-vignette="false"
                     style={sportStyle(sport)}
                     data-profile-career={game.path}
                     className="group flex h-[64px] items-center gap-3 rounded-xl border border-border/60 bg-surface-1 px-3 transition-[border-color,background-color] duration-200 hover:border-tile/60 hover:bg-surface-2"

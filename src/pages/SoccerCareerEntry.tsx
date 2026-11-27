@@ -42,7 +42,7 @@ function FreshSoccerCareer({ saveKey, savesPath, onBegin }: { saveKey: string; s
         <main id="dukb-main" tabIndex={-1} className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
           <div className="mb-3 grid grid-cols-2 gap-2">
-            <Button asChild variant="outline" className="min-h-11 whitespace-normal"><Link to={savesPath}>Career saves</Link></Button>
+            <Button asChild variant="outline" className="min-h-11 whitespace-normal"><Link to={savesPath} data-google-vignette="false">Career saves</Link></Button>
             <Button ref={pastCareersTrigger} variant="outline" className="min-h-11 whitespace-normal" onClick={openPastCareers}>Past careers</Button>
           </div>
           <SoccerCareerCreator initialSupport={loaded?.getCreationSupport()} loadSupport={loadCreationSupport} onBegin={onBegin} />

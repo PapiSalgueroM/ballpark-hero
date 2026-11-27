@@ -102,7 +102,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
     <article key={game.path} data-hub-game={game.path} className={featured ? styles.featuredCard : styles.gameCard}>
       <span aria-hidden="true" className={styles.gameIcon}>{game.emoji}</span>
       <div className={styles.gameCopy}>
-        <h3><Link className={styles.gameLink} to={continuations[game.path]?.path ?? game.path}>{game.label}</Link></h3>
+        <h3><Link className={styles.gameLink} to={continuations[game.path]?.path ?? game.path} data-google-vignette="false">{game.label}</Link></h3>
         <p>{game.description}</p>
         <div className={styles.cardActions}>
           {continuations[game.path] ? (
@@ -135,7 +135,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
           <p className={styles.tagline}>{arena.line}</p>
           <p className={styles.welcome}>All {games.length} of them in one place. Every one is free with no sign-up.</p>
           <div className={styles.arenaActions}>
-            {first && <Link to={firstSaved ? continuations[firstSaved.path].path : first.path} className={styles.heroPlay}>
+            {first && <Link to={firstSaved ? continuations[firstSaved.path].path : first.path} data-google-vignette="false" className={styles.heroPlay}>
               <Gamepad2 aria-hidden="true" />{firstSaved ? `Resume ${firstSaved.label}` : `Play ${first.label}`}<ArrowUpRight aria-hidden="true" />
             </Link>}
             <button type="button" className={styles.heroBrowse} onClick={() => {
@@ -151,7 +151,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
 
       {saved.length > 0 && <section data-no-prerender aria-label="Your saved games" className={styles.saved}>
         <h2>Pick up where you left off</h2>
-        <div>{saved.map(game => <Link key={game.path} to={continuations[game.path].path} data-hub-saved={game.path}>
+        <div>{saved.map(game => <Link key={game.path} to={continuations[game.path].path} data-google-vignette="false" data-hub-saved={game.path}>
           <span aria-hidden="true">{game.emoji}</span><span><b>{game.label}</b><small>{continuations[game.path].line}</small></span><ArrowUpRight aria-hidden="true" />
         </Link>)}</div>
       </section>}

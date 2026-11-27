@@ -183,7 +183,7 @@ export default function SoccerCareerSlots({ slots, backPath }: { slots: readonly
           <p className="text-sm text-muted-foreground">Keep up to {slots.length} careers in this browser.</p>
         </div>
         <Button asChild variant="ghost" size="lg" className="shrink-0 px-3">
-          <Link to={backPath}>Back</Link>
+          <Link to={backPath} data-google-vignette="false">Back</Link>
         </Button>
       </div>
       <Button id="soccer-career-account-toggle" type="button" variant="outline" size="lg" className="w-full sm:w-auto"
@@ -222,7 +222,7 @@ export default function SoccerCareerSlots({ slots, backPath }: { slots: readonly
               </div>
               {slot.kind !== 'unavailable' && (
                 <Button asChild variant={slot.kind === 'saved' ? 'default' : 'outline'} className="mt-auto h-auto min-h-11 w-full whitespace-normal px-3 text-center">
-                <Link id={slotLinkId(number)} to={path} ref={node => {
+                <Link id={slotLinkId(number)} to={path} data-google-vignette="false" ref={node => {
                   if (node && focusImportedSlot.current === saveKey) {
                     focusImportedSlot.current = '';
                     node.focus({ preventScroll: true });
