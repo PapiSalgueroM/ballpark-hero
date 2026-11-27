@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { loanPlanRecordOf } from '@/lib/clubManagerLoanPlan';
 import type { RecruitmentCommit, RecruitmentPick } from '@/lib/clubManagerRecruitment';
+import { normalizeName } from '@/lib/playerSearch';
 import { cn } from '@/lib/utils';
 import { bannerClearance } from '@/components/club-manager/deskCue';
 /* Round 194: the nationality filter, CM-7's last open line. Per-world maps
@@ -260,7 +261,7 @@ export function TransferScreen({
   const maxAsk = maxAskTrimmed !== '' && !maxAskInvalid ? Number(maxAskTrimmed) : Infinity;
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = normalizeName(query);
     const age = AGE_BANDS.find(b => b.id === ageBand) ?? AGE_BANDS[0];
     const price = PRICE_BANDS.find(b => b.id === priceBand) ?? PRICE_BANDS[0];
     const list = market
@@ -271,7 +272,7 @@ export function TransferScreen({
       .filter(m => m.price <= maxAsk)
       .filter(m => leaguePick === 'any' || careerLeagueOf({ clubName: m.club, eraId: career.eraId }).name === leaguePick)
       .filter(m => natPick === 'any' || shownNation(career.eraId, m) === natPick)
-      .filter(m => !q || m.name.toLowerCase().includes(q) || m.club.toLowerCase().includes(q));
+      .filter(m => !q || normalizeName(m.name).includes(q) || normalizeName(m.club).includes(q));
     const sorted = [...list];
     if (sortKey === 'rating') sorted.sort((a, b) => b.rating - a.rating);
     else if (sortKey === 'value') sorted.sort((a, b) => (b.value ?? b.price) - (a.value ?? a.price));

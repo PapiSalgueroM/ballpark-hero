@@ -83,6 +83,41 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.restoreAllMocks(); localStorage.clear(); });
 
+describe('Club Manager transfer market search', () => {
+  it.each([
+    ['name', 'Martin Ødegaard', '  ODEGAARD  '],
+    ['name', 'João Félix', 'joao felix'],
+    ['club', 'Atlético Madrid', 'atletico madrid'],
+  ] as const)('finds the original market row for %s %s with a plain keyboard', (field, original, query) => {
+    const { career, pool } = fixture();
+    const target = pick(pool, p => p[field] === original, original);
+    const other = pick(pool, p => p.name !== target.name && p.club !== target.club, 'OTHER');
+    const app = mount(career, [target, other]);
+    const search = app.getByRole('textbox', { name: 'Search player or club' });
+    fireEvent.change(search, { target: { value: original } });
+    listed(app, target); absent(app, other);
+    fireEvent.change(search, { target: { value: query } });
+    listed(app, target); absent(app, other);
+    fireEvent.click(app.getByRole('button', { name: /^Talk ·/ }));
+    expect(app.talk.mock.calls[0][0]).toBe(target);
+    app.unchanged();
+  });
+
+  it('keeps separate players selectable when their names fold to the same spelling', () => {
+    const { career, pool } = fixture();
+    const keeper = pick(pool, p => p.name === 'Ederson' && p.position === 'GK', 'KEEPER');
+    const midfielder = pick(pool, p => p.name === 'Éderson' && p.position === 'CM', 'MIDFIELDER');
+    const app = mount(career, [keeper, midfielder]);
+    fireEvent.change(app.getByRole('textbox', { name: 'Search player or club' }), { target: { value: 'ederson' } });
+    listed(app, keeper, midfielder);
+    for (const player of [keeper, midfielder]) {
+      fireEvent.click(app.getByRole('button', { name: `Talk · ${moneyIn(career)(player.price)}` }));
+      expect(app.talk).toHaveBeenLastCalledWith(player);
+    }
+    app.unchanged();
+  });
+});
+
 describe('Club Manager exact maximum asking price', () => {
   it('keeps existing price presets and the default Buy results unchanged', () => {
     const { career, pool } = fixture();
