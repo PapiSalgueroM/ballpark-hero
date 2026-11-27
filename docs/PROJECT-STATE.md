@@ -1,3 +1,11 @@
+### November 27, 2026. Competitive shootouts and squad succession in Club Manager
+
+The new Play Live option lets the manager call the next taker in a deciding knockout match. Kicks survive a reload and a manager can hand the remaining kicks to the coach. A controlled 0-0 cup tie against Alavés finished 2-3 on penalties with the manager's calls or 6-5 when delegated. Another draw produced a 2-3 loss or a 4-3 win on aggregate penalties against Arsenal. Only ten available finishers could kick in that tie. The injured player was excluded. Each settlement advanced one week and recorded one result. A second tab could not add a kick over the newer save.
+
+In Transfers, Shortlist now opens Squad succession. In a Brentford career, a four-year renewal for Antoni Milambo cost £5.6m and left £64m. The alternative used the usual negotiations to sign Sergio Canales and left £65m. Canales then appeared as internal cover ahead of Fábio Carvalho, whose loan carried an £8.6m purchase option. A different starter at the same position kept his own shirt. The desk filled in these forecasts from the current squad. Reading the deals and browsing a replacement brief made zero career-save writes.
+
+The integrated candidate `index-B6ZcrCqf.js` passed 56 focused tests. Local native succession replays exercised both decisions at 320, 390 and 1366 pixels. The 320-pixel shootout help controls each have a clear 44-pixel target. A separate comparison against the preceding live release preserved every career, match report and random draw in 159 competitive cup fixtures with unattended shootouts. Deliberately changing cover eligibility and ignoring the manager's kicks failed the respective tests.
+
 ### November 27, 2026. Club Manager scouting, bench orders and Penalty Room live
 
 Lovable published merged revision `490f639b5` in deployment `ccc9015d-8e4b-4785-a977-cbc8f2a6c710`. Home, Club Manager and What's New served `index-CjQYhOEW.js`. Both changed raw HTML snapshots matched the repository. All 176 sitemap documents passed the production crawl checks. IndexNow accepted the two changed URLs.
