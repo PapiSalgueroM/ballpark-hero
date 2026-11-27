@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -262,11 +294,12 @@
 <a href="/college">College</a>
 <h1>NFL Football Games</h1>
 <p>Make the roster. Make the big calls.</p>
-<p>All 11 of them in one place. Every one is free with no sign-up.</p>
+<p>All 12 of them in one place. Every one is free with no sign-up.</p>
 <a href="/front-office">Play NFL Front Office</a>
 <h2>What are you playing?</h2>
 <p>Grid puzzles with rarity scores, career guessers and long sims. Test your player knowledge, run a front office or build an invented prospect's career.</p>
-<p>11 games</p>
+<p>Pin a game to keep it on Home.</p>
+<p>12 games</p>
 <h2>⏳ NFL career and front office sims</h2>
 <p>One is the general manager job: the cap, the trades, the draft and a dynasty if you are good enough. The other runs one player from draft night toward Canton.</p>
 <h3><a href="/front-office">NFL Front Office</a></h3>
@@ -291,6 +324,8 @@
 <p>Pick your offense five cards at a time, then survive a five round cup</p>
 <h3><a href="/perfect-season-nfl">17-0 NFL Perfect Season</a></h3>
 <p>Draft an offense across eras, run the table</p>
+<h3><a href="/two-minute-drive">Two-Minute Drive</a></h3>
+<p>Test your play calling and clock management in four drills or a three-drive playoff</p>
 <h3><a href="/nfl-connect-4">NFL Connect 4</a></h3>
 <p>Football trivia meets Connect 4</p>
 <h2>Every NFL game here, and how they differ</h2>
@@ -329,19 +364,18 @@
 <li>On the grid, a correct answer nobody else picked scores better than the obvious one.</li>
 <li>Every game explains itself before you play, and the "?" button reopens the rules at any point.</li>
 <div data-site-chrome>
-<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
-<a href="/search">Search Games</a>
 <a href="/about">About</a>
 <a href="/contact">Contact</a>
-<a href="/whats-new">What's New</a>
-<a href="/records">Record Books</a>
-<a href="/leaderboard">Leaderboard</a>
 <a href="/privacy">Privacy Policy</a>
-<a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
+<a href="/search">Search Games</a>
+<a href="/records">Record Books</a>
+<a href="/whats-new">What's New</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/cookie-policy">Cookie Policy</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<p>Ads help keep the games free. Choose whether Google AdSense may use cookies for non-personalized ads. Google Analytics measures page visits. You can play with either or both off. Where we ask first, advertising permission lasts 30 days and we remember a refusal for 180 days. Google Analytics has its own 180-day choice. <a href="/privacy">Learn more</a></p>
 </div>
 </div>
 </div>

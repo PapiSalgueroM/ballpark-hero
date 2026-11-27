@@ -3,6 +3,17 @@
 <head>
 
     <meta charset="UTF-8">
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,12 +284,13 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <h1>Search every game</h1>
-<p>All 133 of them. Type a name, a sport, or the kind of game you are after. Close enough spelling is fine.</p>
+<p>All 136 of them. Type a name, a sport, or the kind of game you are after. Close enough spelling is fine.</p>
 <p>Pin a game to keep it on Home.</p>
-<p>133 games, sport by sport. Start typing to narrow it down.</p>
-<h2>Soccer (36)</h2>
+<p>136 games, sport by sport. Start typing to narrow it down.</p>
+<h2>Soccer (37)</h2>
 <a href="/budget-builder">💵 $1B Budget Builder One billion dollars, real values, eleven slots. Spend it well</a>
 <a href="/rebuild">🔧 Rebuild Challenge Inherit a real club. Open the envelopes, spin for a shirt, keep him or sell him, answer to the board</a>
+<a href="/soccer-perfect-season">🏆 Soccer Perfect Season DAILY Draft a real XI</a>
 <a href="/dart-draft">🎯 Dart Draft Throw timed darts at a real world map: hit a country, draft its players</a>
 <a href="/career-ladder">🪜 Career Ladder Guess the player, one career stop at a time</a>
 <a href="/who-am-i">🕵️ Who Am I? Hunt the secret player with similarity scores</a>
@@ -292,10 +325,11 @@
 <a href="/search-and-discard">🔎 Search and Discard The squad duel: keep one, bin two, settle it in a season</a>
 <a href="/gauntlet-draft">⚔️ Gauntlet Draft: Soccer DAILY Pick your XI five cards at a time, then survive a five round cup</a>
 <a href="/player-stock-market">📈 Player Stock Market DAILY Open a past season, buy an XI on stats alone, then roll the years forward</a>
-<h2>Pro Football (11)</h2>
+<h2>Pro Football (12)</h2>
 <a href="/perfect-season-nfl">🏆 17-0 NFL Perfect Season Draft an offense across eras, run the table</a>
 <a href="/front-office">🏢 NFL Front Office Full GM sim with real rosters: cap, trades, drafts, dynasties</a>
 <a href="/nfl-my-career">🌟 NFL My Career Draft night to Canton. 8 positions, 100+ crossroads, and a very tempting envelope</a>
+<a href="/two-minute-drive">🏈 Two-Minute Drive Test your play calling and clock management in four drills or a three-drive playoff</a>
 <a href="/football-grid">🏈 NFL Grid DAILY 3×3 grid puzzle with rarity scores</a>
 <a href="/nfl-career">🏈 NFL Career Path DAILY Guess the NFL player from clues</a>
 <a href="/nfl-higher-lower">📊 NFL Higher or Lower DAILY Which star scored more career touchdowns?</a>
@@ -370,6 +404,8 @@
 <h2>Aussie Rules (2)</h2>
 <a href="/aussie-rules-manager">🏉 Aussie Rules Manager Run one of the 18 AFL clubs through 23 rounds, the finals and a draft into next season</a>
 <a href="/afl-higher-lower">📊 AFL Higher or Lower DAILY Which legend kicked more career goals?</a>
+<h2>Rugby League (1)</h2>
+<a href="/nrl-team-manager">🏉 NRL Team Manager Manage an NRL club across seasons of Australian rugby league. Pick your starting 13, recruit players and stay under the salary cap</a>
 <h2>NASCAR (2)</h2>
 <a href="/guess-nascar-driver">🏁 Guess The Driver DAILY Guess the mystery NASCAR driver from clues</a>
 <a href="/nascar-chain">🔗 NASCAR Chain Build a chain of Cup champions</a>
@@ -402,7 +438,10 @@
 <a href="/emoji-guess">🤔 Emoji Guess DAILY Five football riddles told entirely in emoji</a>
 <a href="/mystery-box">📦 Mystery Box DAILY Open 15 packs, keep or bin, build the best XI your luck allows</a>
 <div data-site-chrome>
-<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
 <a href="/soccer">Soccer</a>
 <a href="/pro-basketball">NBA</a>
 <a href="/hockey">NHL</a>
@@ -410,17 +449,13 @@
 <a href="/baseball">MLB</a>
 <a href="/college">College</a>
 <a href="/search">Search Games</a>
-<a href="/about">About</a>
-<a href="/contact">Contact</a>
-<a href="/whats-new">What's New</a>
 <a href="/records">Record Books</a>
+<a href="/whats-new">What's New</a>
 <a href="/leaderboard">Leaderboard</a>
-<a href="/privacy">Privacy Policy</a>
 <a href="/cookie-policy">Cookie Policy</a>
-<a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<p>Ads help keep the games free. Choose whether Google AdSense may use cookies for non-personalized ads. Google Analytics measures page visits. You can play with either or both off. Where we ask first, advertising permission lasts 30 days and we remember a refusal for 180 days. Google Analytics has its own 180-day choice. <a href="/privacy">Learn more</a></p>
 </div>
 </div>
 </div>

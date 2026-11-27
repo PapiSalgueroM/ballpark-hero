@@ -1,3 +1,11 @@
+### November 27, 2026. Two-Minute Drive, MLB pinch hitting and the hockey Cup
+
+Two-Minute Drive is a standalone football game in the Pro Football catalog and a practice option in NFL My Career. Four late-game situations teach coverage reads, clock management and field goal range. Playoff Run links a wild card, conference final and championship with one timeout for all three. Each of the 9,999 draw numbers has a verified championship path. On draw 1 the same five championship plays produce a touchdown with the timeout saved or finish on the opposing 20 if the timeout was spent in the wild card. Completed standalone possessions use the existing scoreboard. Reopening a result gives no extra credit. Run `node scripts/simTwoMinuteDrive.mjs` for all draws and set `SIM_TWO_MINUTE_CONTROL=defense` for its negative control.
+
+MLB My Career offers Pinch-Hit Series from the Training diamond for position players. Protect a two-strike count, work a walk or attack a pitch with runners on. In a matched three-appearance set, a sacrifice fly, a bases-loaded walk and a three-run homer earned five RBI. Taking every pitch earned one. Pinch-hit practice can resume during an at-bat and leaves the regular career save alone.
+
+After a Classic or Hard NHL Perfect Season, the drafted six can play a best-of-five Cup. The coach reads the opponent, chooses a defensive response and decides whether to double-shift the forwards. The same drafted team won 3 to 2 with one set of calls and lost 0 to 3 with another. Replaying the first calls reproduced the full series. Daily stays an 82-game challenge.
+
 ### November 27, 2026. Soccer Conquest frontier campaign and Budget Builder Endurance Cup
 
 Soccer Conquest offers 96 starting clubs in a separate signed-out campaign. Win four extra regions within three away matches. A rival's territory value, the chance of winning and the borders a win would open all appear before the match. Isolated clubs have ferry opponents. The replay keeps the same starting club and rolls, so the player can compare two routes. Repeating the Everton, Leeds United and Hull City route reproduced the same wins and captured land. Opening against Coventry City instead led to elimination on that draw. Daily Conquest uses its own save and scoring.

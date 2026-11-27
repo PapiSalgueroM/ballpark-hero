@@ -17,8 +17,8 @@
     "date": "2026-10-31"
   },
   "/alphabet-sprint": {
-    "hash": "5fca3b9e05212f90",
-    "date": "2026-09-30"
+    "hash": "fab0d64fd6f0ae74",
+    "date": "2026-11-27"
   },
   "/aussie-rules-manager": {
     "hash": "7683606552b41475",
@@ -185,8 +185,8 @@
     "date": "2026-11-14"
   },
   "/football-connect-4": {
-    "hash": "e94c6e5b0daaba3c",
-    "date": "2026-10-13"
+    "hash": "74086ebb1b22ecff",
+    "date": "2026-11-27"
   },
   "/football-grid": {
     "hash": "868d10925478f13e",
@@ -201,8 +201,8 @@
     "date": "2026-10-22"
   },
   "/front-office": {
-    "hash": "75e62c0c9c862ebe",
-    "date": "2026-11-16"
+    "hash": "49892cb76bda80bb",
+    "date": "2026-11-27"
   },
   "/gauntlet-draft": {
     "hash": "95942cc7b1cb64fb",
@@ -357,8 +357,8 @@
     "date": "2026-09-30"
   },
   "/nba-connect-4": {
-    "hash": "a952582602b53965",
-    "date": "2026-10-01"
+    "hash": "58da9ea71e3eb154",
+    "date": "2026-11-27"
   },
   "/nba-connections": {
     "hash": "ea212f87a550f920",
@@ -421,8 +421,8 @@
     "date": "2026-10-23"
   },
   "/nfl-my-career": {
-    "hash": "f4868137798d7bd7",
-    "date": "2026-11-15"
+    "hash": "8f8eeff4511be54b",
+    "date": "2026-11-27"
   },
   "/nfl-playoff-format-history": {
     "hash": "88c1e478862c9261",
@@ -457,8 +457,8 @@
     "date": "2026-11-16"
   },
   "/olympics": {
-    "hash": "489cdabc0c8fcccb",
-    "date": "2026-10-01"
+    "hash": "0aaf790381cbed7b",
+    "date": "2026-11-27"
   },
   "/perfect-lineup-f1": {
     "hash": "cfedb79c242d5df9",
@@ -481,8 +481,8 @@
     "date": "2026-11-15"
   },
   "/perfect-season-nfl": {
-    "hash": "26ef09594825f585",
-    "date": "2026-11-14"
+    "hash": "199cb1dad49b8195",
+    "date": "2026-11-27"
   },
   "/perfect-season-nhl": {
     "hash": "8077a3f7b24a6cdb",
@@ -505,8 +505,8 @@
     "date": "2026-11-13"
   },
   "/pro-football": {
-    "hash": "ee3ab6fd96b6e650",
-    "date": "2026-10-22"
+    "hash": "ac4407426c0f1da5",
+    "date": "2026-11-27"
   },
   "/puck-detective": {
     "hash": "5a1d48049c879162",
@@ -525,8 +525,8 @@
     "date": "2026-11-14"
   },
   "/rebuild": {
-    "hash": "a7ff995a584d7ca1",
-    "date": "2026-11-14"
+    "hash": "8a9103a6ac535bae",
+    "date": "2026-11-27"
   },
   "/records": {
     "hash": "4e03e6545fbac026",
@@ -609,16 +609,16 @@
     "date": "2026-11-27"
   },
   "/soccer-conquest": {
-    "hash": "c2c02b2757b166c2",
-    "date": "2026-10-06"
+    "hash": "d170a24574d856ff",
+    "date": "2026-11-27"
   },
   "/soccer-grid": {
     "hash": "e7a7b846f7e42bf7",
     "date": "2026-09-30"
   },
   "/soccer-perfect-season": {
-    "hash": "986266d7d7b36430",
-    "date": "2026-11-26"
+    "hash": "6976d7cce0b35803",
+    "date": "2026-11-27"
   },
   "/sports-bingo": {
     "hash": "5211190d16cb4919",
@@ -660,6 +660,10 @@
     "hash": "e3051df48fc2b2fa",
     "date": "2026-11-14"
   },
+  "/two-minute-drive": {
+    "hash": "8734428bb8e397be",
+    "date": "2026-11-27"
+  },
   "/ufc": {
     "hash": "32404de6a055ffb4",
     "date": "2026-10-06"
@@ -669,7 +673,7 @@
     "date": "2026-10-06"
   },
   "/whats-new": {
-    "hash": "4d7a2e2bb36e7e1b",
+    "hash": "372eb339051e2b6c",
     "date": "2026-11-27"
   },
   "/who-am-i": {
