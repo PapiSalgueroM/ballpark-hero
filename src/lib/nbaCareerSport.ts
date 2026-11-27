@@ -53,6 +53,7 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   gameSlug: 'nba-my-career',
   gameName: 'NBA My Career',
   practiceLabel: 'Practice gym',
+  PracticeRoom: lazy(() => import('@/components/nba-my-career/NbaClosingTime')),
   loadTraining: pos => import('@/lib/nbaCareerTraining').then(m => m.nbaTraining(pos as NbaCareerPos)),
   /* The NBA drafts 30 in round one. */
   firstRoundEnd: 30,
