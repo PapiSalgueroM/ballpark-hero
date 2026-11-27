@@ -44,7 +44,7 @@ export function PhaseShapeReview({ play, history, live = false }: {
   const title = live ? 'Latest shape change in play' : 'How the shapes played';
   return <section aria-label={title} className="space-y-2 rounded-lg border border-border bg-card p-3 text-left text-xs">
     <h3 className="text-sm font-bold">{title}</h3>
-    {!live && moves.length > 0 && <p>{counters} times through or won back · {breaks} times beaten · {moves.length - counters - breaks} held</p>}
+    {!live && moves.length > 0 && <p>{counters} through or won back · {breaks} beaten · {moves.length - counters - breaks} held</p>}
     {move && <div className="space-y-1 rounded-md border-l-2 border-primary bg-secondary/30 p-2" aria-live="polite">
       <p className="font-bold">{minuteLabel(event)} · {move.phase === 'outlet' ? 'Playing out after a save' : 'Recovering after their save'}</p>
       <p>{named(move.keeper)} saved. <MoveLine move={move} /></p>
