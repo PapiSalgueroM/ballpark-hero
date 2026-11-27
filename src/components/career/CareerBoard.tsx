@@ -45,7 +45,7 @@ function RevealedCell({ value }: { value: string }) {
 
 export function CareerBoard({ career, revealedCells, onReveal, gameOver }: CareerBoardProps) {
   return (
-    <div className="overflow-x-auto pb-4">
+    <div data-rail-play-board="" className="overflow-x-auto pb-4">
       <div style={{ minWidth: '650px' }}>
         {/* Headers */}
         <div

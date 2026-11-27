@@ -21,7 +21,7 @@ export function FootballConnect4Board({
   disabled,
 }: Props) {
   return (
-    <div className="overflow-x-auto">
+    <div data-rail-play-board="" className="overflow-x-auto">
       <div className="inline-block min-w-full">
         {/* Column headers */}
         <div className="grid gap-1" style={{ gridTemplateColumns: `120px repeat(${COLS}, 1fr)` }}>
