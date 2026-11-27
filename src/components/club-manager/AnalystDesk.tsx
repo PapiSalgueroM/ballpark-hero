@@ -34,7 +34,9 @@ function Observation({ note }: { note: AnalystObservation }) {
     <SampleTally title="Opposing throw-ins" sample={note.throws} throws />
     {note.shots && <SampleTally title="Opposing shots" sample={note.shots} />}
     {note.starters ? <details>
-      <summary className="min-h-11 cursor-pointer py-3 font-semibold">Observed starting eleven{note.formation && ` · ${note.formation}`}</summary>
+      <summary className="min-h-11 cursor-pointer py-3 font-semibold">
+        Observed starting eleven{note.formation && <> · <span className="whitespace-nowrap">{note.formation}</span></>}
+      </summary>
       <ul className="grid grid-cols-2 gap-1">
         {note.starters.map((player, slot) => <li className="break-words" key={slot}><PlayerName player={player} /> <span className="text-muted-foreground">{player.position}</span></li>)}
       </ul>
@@ -44,7 +46,7 @@ function Observation({ note }: { note: AnalystObservation }) {
 
 export function AnalystReport({ note }: { note: unknown }) {
   if (!isAnalystObservation(note)) return null;
-  return <details className="mt-3 rounded-lg border border-border bg-card px-2">
+  return <details className="mt-3 rounded-lg border border-border bg-card px-2 text-left">
     <summary className="min-h-11 cursor-pointer py-3 text-xs font-bold">Opponent observation filed</summary>
     <section aria-label="Filed opponent observation" className="space-y-2 pb-2 text-xs">
       <p>{note.club} watched {note.opponent}. Season {note.season}, week {note.week + 1}. {modeLabels[note.mode]}.</p>
