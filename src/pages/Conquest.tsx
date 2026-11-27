@@ -1,3 +1,4 @@
+import { ConquestRoadTrip } from '@/components/conquest/ConquestRoadTrip';
 import { useState, useEffect } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
@@ -70,6 +71,7 @@ const Conquest = () => {
             )}
           </div>
 
+          {mode === 'select' && <ConquestRoadTrip sport={NFL_IMPERIALISM} map={NFL_CONQUEST_MAP} league="nfl" />}
           {mode === 'select' && (
             <div className="grid gap-3 sm:grid-cols-2">
               <button

@@ -1,3 +1,4 @@
+import { ConquestRoadTrip } from '@/components/conquest/ConquestRoadTrip';
 import { useState } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -38,6 +39,7 @@ const ConquestMlb = () => {
               <HelpCircle className="w-5 h-5" />
             </button>
           </div>
+          <ConquestRoadTrip sport={MLB_IMPERIALISM} map={MLB_CONQUEST_MAP} league="mlb" />
           <ImperialismBoardShared sport={MLB_IMPERIALISM} map={MLB_CONQUEST_MAP} game={MLB_CONQUEST_GAME} helpOpen={showHelp} onHelpOpenChange={setShowHelp} />
           <GameSeoContent
           pageHasOwnH1
