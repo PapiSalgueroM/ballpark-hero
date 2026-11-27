@@ -118,7 +118,7 @@ export function ContinueRow() {
   if (saved.length === 0) return null;
 
   return (
-    <section aria-labelledby="home-continue" data-home-continue="" className={styles.continueSection}>
+    <section aria-labelledby="home-continue" data-home-continue="" className={saved.length > 1 ? `${styles.continueSection} ${styles.multipleSaves}` : styles.continueSection}>
       <div className={styles.continueHeader}><h2 id="home-continue" className={`font-display ${styles.continueHeading}`}>
         <History aria-hidden="true" />
         Continue playing
