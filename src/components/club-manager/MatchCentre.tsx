@@ -1,10 +1,11 @@
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Play, Zap } from 'lucide-react';
-import type { CareerState, MatchFacts, FormResult, TalkTone } from '@/lib/clubManager';
+import type { BenchOrder, CareerState, MatchFacts, FormResult, TalkTone } from '@/lib/clubManager';
 import { toLeague, dugoutOf } from '@/lib/clubManager';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { DUGOUT_MADE_UP_TITLE, DUGOUT_PARTIAL_TITLE } from '@/lib/realDugouts';
 import { StarterFitnessCard } from '@/components/club-manager/StarterFitnessCard';
+import { BenchOrderCard } from '@/components/club-manager/BenchOrderCard';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 import { inFixtureOrder, myClubFirst } from '@/lib/cmMatchDisplay';
 import { AI_STYLES, opponentStyle } from '@/lib/clubManagerTactics';
@@ -52,7 +53,7 @@ interface MatchCentreProps {
   talkRead: string | null;
   talkStale: boolean;
   onChangeLineup?: () => void;
-  onQuickSim: () => void;
+  onQuickSim: (order?: BenchOrder) => void;
   /** Round 158's animated viewer, which Round 472 made the one live way in. */
   onLive: () => void;
   onBack: () => void;
@@ -205,6 +206,8 @@ export function MatchCentre({
       {/* The talk, if you want one. Optional by design. */}
       <TeamTalkRow tone={tone} onTone={onTone} read={talkRead} when="before kick off" stale={talkStale} />
 
+      <BenchOrderCard key={career.season + ':' + career.week} career={career} onSim={onQuickSim} />
+
       {/* Actions. Round 472: one match, two ways through it. There used to be
           three buttons here and two of them were the same fixture with the
           theatre turned off, so Play Match and Watch Live are one thing now:
@@ -219,7 +222,7 @@ export function MatchCentre({
           <Play className="w-4 h-4" /> Play Live
         </button>
         <button
-          onClick={onQuickSim}
+          onClick={() => onQuickSim()}
           data-cm-way="quick"
           className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-sm hover:bg-secondary/70 transition-colors"
         >
