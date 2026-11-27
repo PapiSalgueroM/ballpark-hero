@@ -9,6 +9,7 @@ export interface FrontierRun {
   club: string;
   seed: number;
   games: ImpGame[];
+  previous?: ImpGame[];
 }
 
 function bordering(owners: Record<string, string>, club: string) {
@@ -71,22 +72,31 @@ export function contestFront(run: FrontierRun, rival: string): FrontierRun | nul
 export function readFrontier(raw: string | null): FrontierRun | null {
   try {
     const value = JSON.parse(raw ?? 'null');
-    if (!value || !SOCCER_CLUB_MAP.has(value.club) || !Number.isInteger(value.seed) || value.seed < 0 || value.seed > 0xffffffff ||
-      !Array.isArray(value.games) || value.games.length > MATCH_LIMIT) return null;
-    const run: FrontierRun = { club: value.club, seed: value.seed, games: [] };
-    for (const game of value.games) {
-      const before = frontierBoard(run);
-      if (!game || game.away !== run.club || !before.rivals.includes(game.home) ||
-        (game.winner !== game.home && game.winner !== game.away) ||
-        ![game.homeScore, game.awayScore].every(n => Number.isInteger(n) && n >= 0 && n <= 4) ||
-        (game.homeScore === 0 && game.awayScore === 0) ||
-        typeof game.overtime !== 'boolean' || game.overtime !== (game.homeScore === game.awayScore) ||
-        (!game.overtime && (game.homeScore > game.awayScore) !== (game.winner === game.home))) return null;
-      const lost = statesOf(before.owners, game.winner === run.club ? game.home : run.club);
-      if (!Array.isArray(game.flipped) || game.swing !== lost.length || game.flipped.length !== lost.length ||
-        !lost.every(id => game.flipped.includes(id))) return null;
-      run.games.push(game);
+    if (!value || !SOCCER_CLUB_MAP.has(value.club) || !Number.isInteger(value.seed) || value.seed < 0 || value.seed > 0xffffffff) return null;
+    const run = readGames(value.club, value.seed, value.games);
+    if (run && value.previous) {
+      const last = readGames(value.club, value.seed, value.previous);
+      if (last && frontierBoard(last).finished) run.previous = last.games;
     }
     return run;
   } catch { return null; }
+}
+
+function readGames(club: string, seed: number, games: unknown): FrontierRun | null {
+  if (!Array.isArray(games) || games.length > MATCH_LIMIT) return null;
+  const run: FrontierRun = { club, seed, games: [] };
+  for (const game of games) {
+    const before = frontierBoard(run);
+    if (!game || game.away !== run.club || !before.rivals.includes(game.home) ||
+      (game.winner !== game.home && game.winner !== game.away) ||
+      ![game.homeScore, game.awayScore].every(n => Number.isInteger(n) && n >= 0 && n <= 4) ||
+      (game.homeScore === 0 && game.awayScore === 0) ||
+      typeof game.overtime !== 'boolean' || game.overtime !== (game.homeScore === game.awayScore) ||
+      (!game.overtime && (game.homeScore > game.awayScore) !== (game.winner === game.home))) return null;
+    const lost = statesOf(before.owners, game.winner === run.club ? game.home : run.club);
+    if (!Array.isArray(game.flipped) || game.swing !== lost.length || game.flipped.length !== lost.length ||
+      !lost.every(id => game.flipped.includes(id))) return null;
+    run.games.push(game);
+  }
+  return run;
 }

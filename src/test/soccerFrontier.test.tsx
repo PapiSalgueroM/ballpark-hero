@@ -90,6 +90,39 @@ it('restores actual match receipts and rejects forged borders, scores or extra m
   }
 });
 
+it('replays a completed draw, compares only the previous route after reload, and keeps a fresh campaign separate', () => {
+  const original = play(start(), ['EVE','LEE','HUL']);
+  localStorage.setItem(FRONTIER_KEY, JSON.stringify(original));
+  const first = render(<SoccerFrontier />);
+  fireEvent.click(screen.getByText('Review frontier campaign'));
+  fireEvent.click(screen.getByText('Replay the same draw'));
+  const read = () => readFrontier(localStorage.getItem(FRONTIER_KEY))!;
+  expect(read()).toEqual({ club: original.club, seed: original.seed, games: [], previous: original.games });
+  fireEvent.click(screen.getByRole('button', { name: /Challenge Everton/ }));
+  first.unmount();
+  render(<SoccerFrontier />);
+  fireEvent.click(screen.getByText('Resume frontier campaign'));
+  expect(screen.getByRole('region', { name: 'Previous run on this draw' })).toHaveTextContent('Everton → Leeds United → Hull City');
+  fireEvent.click(screen.getByRole('button', { name: /Challenge Leeds United/ }));
+  fireEvent.click(screen.getByRole('button', { name: /Challenge Hull City/ }));
+  expect(read().games).toEqual(original.games);
+  fireEvent.click(screen.getByText('Replay the same draw'));
+  for (const name of ['Coventry City','Everton','Aston Villa']) fireEvent.click(screen.getByRole('button', { name: 'Challenge ' + name }));
+  expect(screen.getByText(/Eliminated. Your empire/)).toBeInTheDocument();
+  expect(screen.getByText('Previous run · Campaign won')).toBeInTheDocument();
+  const alternate = read().games;
+  fireEvent.click(screen.getByText('Replay the same draw'));
+  expect(read().previous).toEqual(alternate);
+  expect(screen.getByText('Previous run · Eliminated')).toBeInTheDocument();
+  expect(screen.queryByText(/Everton → Leeds United/)).not.toBeInTheDocument();
+  for (const name of ['Coventry City','Everton','Aston Villa']) fireEvent.click(screen.getByRole('button', { name: 'Challenge ' + name }));
+  vi.spyOn(Math, 'random').mockReturnValue(original.seed / 0x100000000);
+  fireEvent.click(screen.getByText('Play another campaign'));
+  fireEvent.click(screen.getByText('Start frontier campaign'));
+  expect(read().seed).not.toBe(original.seed);
+  expect(read().previous).toBeUndefined();
+});
+
 it('resumes from the chosen front, plays through elimination and starts a new campaign without writing a daily result', () => {
   vi.spyOn(Math, 'random').mockReturnValue(6 / 0x100000000);
   localStorage.setItem('dukb-conquest-soccer-daily-history', 'saved daily');
