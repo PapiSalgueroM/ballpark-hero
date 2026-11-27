@@ -16,7 +16,7 @@ export interface AnalystObservation extends AnalystWatch {
   to: ClockPoint; formation: string | null; starters: AnalystPlayer[] | null; throws: AnalystTally; shots: AnalystTally | null;
 }
 export interface AnalystNotebook { v: 1; rows: AnalystObservation[] }
-export interface AnalystLineup { previous: AnalystObservation; overlap: number; compared: number }
+export interface AnalystLineup { previous: AnalystObservation; overlap: number; compared: number; changedRole: number }
 export interface AnalystRecommendation { target: AnalystPlayer; winger: {name:string;generated?:true}; todayThrows: number; pastThrows: number; pastMeetings: number }
 export interface AnalystCurrent {
   observation: AnalystObservation; history: AnalystObservation[]; lineup: AnalystLineup | null; recommendation: AnalystRecommendation | null;
@@ -76,20 +76,22 @@ export function analystHistory(career: CareerState, opponent: string, club = car
 }
 const player = (p: OppXiLine): AnalystPlayer => ({name:p.n,position:p.p,...(p.g ? {generated:true} : {})});
 function sameFixture(career: CareerState, live: LiveMatch, w: AnalystWatch): boolean {
-  return w.club===career.clubName && w.opponent===live.opponent && w.home===live.home && w.week===live.week
+  return w.club===career.clubName && career.week===live.week && w.opponent===live.opponent && w.home===live.home && w.week===live.week
     && w.season===career.season && w.competition===career.calendar[live.week]?.type;
 }
 export function setAnalystWatch(career: CareerState, live: LiveMatch, mode: AnalystMode | null, from: ClockPoint): boolean {
   const old=live.analystWatch, comp=career.calendar[live.week]?.type;
-  if (!canUseAnalyst(career) || live.penaltyCalls || !comp || comp==='window' || !validClock(from) || career.worldRatingRunIn
-    || (old !== undefined && (!isAnalystWatch(old) || !sameFixture(career,live,old)))) return false;
+  if (!canUseAnalyst(career) || live.penaltyCalls || career.week!==live.week || !comp || comp==='window' || !validClock(from) || career.worldRatingRunIn
+    || (old !== undefined && (!isAnalystWatch(old) || !sameFixture(career,live,old) || clockOrder(from,old.from)<0))) return false;
   if (mode === null) {
     if (!old) return false;
     delete live.analystWatch; return true;
   }
   if (!isAnalystMode(mode) || old?.mode===mode) return false;
-  live.analystWatch={v:1,mode,from:{...from},club:career.clubName,opponent:live.opponent,competition:comp,
+  const next:AnalystWatch={v:1,mode,from:{...from},club:career.clubName,opponent:live.opponent,competition:comp,
     home:live.home,season:career.season,week:live.week};
+  if (!isAnalystWatch(next)) return false;
+  live.analystWatch=next;
   return true;
 }
 
@@ -123,11 +125,13 @@ function countedEvents(live: LiveMatch, watch: AnalystWatch, to: ClockPoint) {
 function observation(career: CareerState, live: LiveMatch, to: ClockPoint): AnalystObservation | null {
   const w=live.analystWatch;
   if (!isAnalystWatch(w) || !sameFixture(career,live,w) || !validClock(to) || clockOrder(to,w.from)<0) return null;
-  const starters=live.oppXi?.length===11 ? live.oppXi.map(player) : null;
+  const sheet=live.oppXi?.length===11 ? live.oppXi.map(player) : null;
+  const starters=sheet?.every(validPlayer) ? sheet : null;
   const formation=starters && live.oppFormationIndex!==undefined ? FORMATIONS[live.oppFormationIndex]?.name??null : null;
   return {...w,from:{...w.from},to:{...to},formation,starters,...countedEvents(live,w,to)};
 }
 export function analystCompare(note: AnalystObservation, history: AnalystObservation[]): AnalystLineup | null {
+  if (!isAnalystObservation(note) || !Array.isArray(history) || history.length>PER_OPPONENT || !history.every(isAnalystObservation)) return null;
   const xi=note.starters;
   const previous=history.find(r=>r.club===note.club && r.opponent===note.opponent && r.starters
     && (r.season<note.season || (r.season===note.season && r.week<note.week)));
@@ -135,12 +139,14 @@ export function analystCompare(note: AnalystObservation, history: AnalystObserva
   if (!xi || !previous || !old) return null;
   const unambiguous=(p: AnalystPlayer)=>xi.filter(r=>r.name===p.name).length===1 && old.filter(r=>r.name===p.name).length<=1;
   const known=xi.filter(unambiguous);
-  return {previous,compared:known.length,overlap:known.filter(p=>old.some(r=>signature(r)===signature(p))).length};
+  const same=(p:AnalystPlayer)=>old.find(r=>r.name===p.name && !!r.generated===!!p.generated);
+  const returning=known.filter(p=>same(p));
+  return {previous,compared:known.length,overlap:returning.length,changedRole:returning.filter(p=>same(p)?.position!==p.position).length};
 }
 export function analystCurrent(career: CareerState, live: LiveMatch, clock: ClockPoint): AnalystCurrent | null {
   const note=observation(career,live,clock);
   if (!note || !canUseAnalyst(career)) return null;
-  const history=analystHistory(career,live.opponent).filter(r=>r.season<note.season || r.week<note.week);
+  const history=analystHistory(career,live.opponent).filter(r=>r.season<note.season || (r.season===note.season && r.week<note.week));
   const targets=eligiblePressTargets(live,clock.minute,clock.plus??0);
   const afterClock=[...(live.subs??[]),...(live.formChanges??[])].some(s=>clockOrder(s,clock)>0);
   let recommendation: AnalystRecommendation | null=null;
@@ -162,7 +168,7 @@ export function fileAnalystObservation(career: CareerState, live: LiveMatch): An
   const note=observation(career,live,{minute,...(plus?{plus}:{})});
   if (!note || !isAnalystObservation(note)) return null;
   const rows=career.analystNotebook?.rows??[], existing=rows.find(r=>fixtureKey(r)===fixtureKey(note));
-  if (existing) return existing;
+  if (existing) return JSON.stringify(existing)===JSON.stringify(note) ? existing : null;
   const same=rows.filter(r=>pairKey(r)===pairKey(note));
   const oldest=same.length>=PER_OPPONENT ? same[0] : null;
   career.analystNotebook={v:1,rows:[...rows.filter(r=>r!==oldest),note].slice(-MAX_ROWS)};
