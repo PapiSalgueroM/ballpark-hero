@@ -107,7 +107,7 @@ export function AnalystDesk({ career, opponent, mode, onMode, live, clock, onPre
       {live && active && <p className="text-muted-foreground">Changing the watch starts a fresh observation from this minute.</p>}
       {current?.lineup && <p>
         {current.lineup.overlap} of {current.lineup.compared} compared starters also started the observed match in season {current.lineup.previous.season}, week {current.lineup.previous.week + 1}.
-        {current.lineup.changedRole > 0 && ` ${current.lineup.changedRole} returned in a different ${current.lineup.changedRole === 1 ? 'position' : 'set of positions'}.`}
+        {current.lineup.changedRole > 0 && ` ${current.lineup.changedRole} changed position.`}
       </p>}
       {recommendation && <div className="space-y-1 rounded-md border border-primary/50 p-2" aria-label="Pressing recommendation">
         <p><PlayerName player={recommendation.target} /> has taken {recommendation.todayThrows} watched {recommendation.todayThrows === 1 ? 'throw' : 'throws'} today{recommendation.pastThrows > 0 && ` and ${recommendation.pastThrows} across ${recommendation.pastMeetings} earlier observed ${recommendation.pastMeetings === 1 ? 'meeting' : 'meetings'}`}.</p>
