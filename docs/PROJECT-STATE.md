@@ -1,3 +1,15 @@
+### November 27, 2026. Soccer Career Transition Cup, UFC debut draws, fighter contracts and football saves
+
+Soccer Career's Training > Break the Press has a three-tie Transition Cup. Build an attack and then defend the opponent's passing move. Draws go to a playable deciding counter. Saving the recovery run in the quarterfinal can turn a semifinal equalizer into a 1-0 win. Every move resumes from separate practice storage. Both pitches track the ball and respect reduced motion.
+
+UFC Guesser's Debut Timeline draws from 93 verified fighter profiles. The player starts from two dated debuts, places five more fighters and decides when a scouting clue is worth half the points for that placement. A matched draw scored 100 with five correct placements, 80 after two scouts and zero with five wrong placements. Daily and Division keep their own scores.
+
+In Fight Career, an optional two-bout deal pays 125% of the listed purse for a win or 75% for a loss or draw, before corner fees. The offer previews take-home pay and both fight statements remain in the record. Across 636 matched simulated bouts, swapping contract terms preserved opponents and fight results. Fixed terms reproduced the previous simulation.
+
+NFL Career Path lets the player reveal the next clue for one point. The Daily save remembers purchased clues. The last clue leaves a one-point guess. Home and Pro Football can now reopen a saved Two-Minute Drive directly on the field. Multiple unfinished drives get a chooser. Home's Continue playing shelf also has keyboard and touch paging controls when its cards overflow.
+
+On a 390px phone with the cookie notice open, Home shows a playable card at y411 for a new visitor and y419 for a visitor with 21 saves. The previous public positions were y459 and y465. Both arrow controls have 44px touch targets. Use `node scripts/playAdRelease.mjs --saved-shelf` against the local production build to repeat the touch and keyboard checks.
+
 ### November 27, 2026. Saved MLB My Career on compact desktops
 
 The saved MLB hub places its Start over button beside the title at desktop widths where the outside gutter is too narrow. The button scrolls with the page. On Windows Chrome with a 15px scrollbar, the two 120px side slots cleared controls by at least 181px at 1280 and 201px at 1366 through Training, Pinch-Hit Series and the restart confirmation. The Training card remained 606px wide. Phones kept the below-content footer and the 1920px layout kept its two 160px side slots.
