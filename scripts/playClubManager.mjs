@@ -569,22 +569,29 @@ for (let step = 0; step < MAX_STEPS; step++) {
        The first version of this check reported exactly that, twice, and it was
        the harness misreading a scoreboard both times. So work out which side
        is mine from the club name rather than from the position. */
-    const sc = t.match(/([A-Za-z][A-Za-z .'-]*?)\s+(\d+)\s*-\s*(\d+)\s+([A-Za-z][A-Za-z .'-]*)/);
-    if (sc && lastHt && myClub) {
-      const homeName = sc[1].trim(), awayName = sc[4].trim();
-      const homeGoals = Number(sc[2]), awayGoals = Number(sc[3]);
-      const iAmHome = homeName.includes(myClub) || myClub.includes(homeName);
-      const iAmAway = awayName.includes(myClub) || myClub.includes(awayName);
-      if (!iAmHome && !iAmAway) {
-        note('BROKEN ', `the full time report does not name my club: "${sc[0]}"`);
-      } else {
-        const ft = { my: iAmHome ? homeGoals : awayGoals, opp: iAmHome ? awayGoals : homeGoals };
-        if (ft.my < lastHt.my || ft.opp < lastHt.opp) {
-          note('BROKEN ', `the score went backwards: half time ${lastHt.my}-${lastHt.opp}, full time ${ft.my}-${ft.opp}`);
+    // The verdict card can also contain the shootout and aggregate. Only the scoreboard
+    // has two club names flanking a standalone score.
+    const verdict = page.getByRole('heading', { level: 2, name: /^(VICTORY|DRAW|DEFEAT|THROUGH|OUT)( \((PENS|AET)\))?$/i });
+    const scoreboard = verdict.locator('..').getByText(/^\d+ - \d+$/).locator('..');
+    const sides = await scoreboard.locator(':scope > *').allInnerTexts();
+    const [homeName, score, awayName] = sides;
+    if (sides.length !== 3 || !homeName || !awayName || !/^\d+ - \d+$/.test(score)) {
+      note('BROKEN ', 'the full time scoreboard is missing a club name or the match score');
+    } else if (myClub !== homeName && myClub !== awayName) {
+      note('BROKEN ', `the full time report does not name my club: "${sides.join(' ')}"`);
+    } else {
+      if (/\bon penalties\b/i.test(t) && /\(PENS\)/.test(await verdict.innerText())) {
+        console.log(`   shootout report: ${sides.join(' ')}, ${(t.match(/(?:Through|Out) \d+-\d+ on penalties/i) || ['decided on penalties'])[0]}`);
+      }
+      if (lastHt) {
+        const [homeGoals, awayGoals] = score.split(' - ').map(Number);
+        const [mine, theirs] = myClub === homeName ? [homeGoals, awayGoals] : [awayGoals, homeGoals];
+        if (mine < lastHt.my || theirs < lastHt.opp) {
+          note('BROKEN ', `the score went backwards: half time ${lastHt.my}-${lastHt.opp}, full time ${mine}-${theirs}`);
         }
       }
-      lastHt = null;
     }
+    lastHt = null;
     if (!await tap(/continue|next|carry on|ok/i, 'continue from the report')) {
       note('BROKEN ', 'the full time report had no way forward');
       break;
@@ -597,7 +604,15 @@ for (let step = 0; step < MAX_STEPS; step++) {
      score tile, so the harness declared the season over on its very first step
      and then reported a clean run. A loose end condition is how a harness ends
      up proving nothing at all. */
-  if (/SEASON \d+ COMPLETE/i.test(t)) {
+  if (await tap(/^See Season Review$/i, 'open the season review')) {
+    await page.getByRole('heading', { level: 1, name: /^SEASON \d+ COMPLETE$/i }).waitFor({ timeout: 5000 }).catch(() => {});
+    if (!/^SEASON \d+ COMPLETE$/i.test(await heading())) {
+      note('BROKEN ', 'See Season Review did not open the season review');
+      break;
+    }
+    continue;
+  }
+  if (/^SEASON \d+ COMPLETE$/i.test(where)) {
     seasonEnd = true;
     /* Round 550: this heading IS the season review, not the screen before it.
        "SEASON n COMPLETE" is the h1 of the SEASON END block itself, the same
