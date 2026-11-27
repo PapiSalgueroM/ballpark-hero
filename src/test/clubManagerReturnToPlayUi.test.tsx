@@ -29,7 +29,10 @@ it('books and cancels a first appearance plan through the treatment room', () =>
   career = booked;
   view.rerender(<><ReturnToPlayDeskCard career={career} onCommit={commit} /><ReturnToPlayMatchCard career={career} /></>);
   expect(desk).toHaveTextContent('Awaiting clearance');
-  expect(screen.queryByText(/First appearance plan/)).toBeNull();
+  fireEvent.click(screen.getByText(/First appearance plan/));
+  const firstAppearance = screen.getByRole('region', { name: 'First appearance plan' });
+  expect(firstAppearance).toHaveTextContent('Clearance is checked again at kickoff.');
+  expect(firstAppearance).not.toHaveTextContent('the coach can bring on');
   fireEvent.click(within(desk).getByRole('button', { name: 'Switch to late cameo' }));
   view.rerender(<ReturnToPlayDeskCard career={career} onCommit={commit} />);
   expect(returnToPlayDesk(career).active?.plan).toBe('late-cameo');

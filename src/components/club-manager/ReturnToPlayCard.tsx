@@ -30,6 +30,7 @@ function ActiveReturn({ active, career, duringMatch = false }: { active: Active;
   return <div className="space-y-1">
     <p><strong>{player.name}</strong>{player.generated && <MadeUpTag className="ml-1" />} · {planName[plan]}</p>
     <p>{statusText[status]}</p>
+    {status === 'recovering' && !duringMatch && <p>Clearance is checked again at kickoff.</p>}
     {player.major && <p>{status === 'recovering' ? majorInjuryLabel(player.major) : `Original injury · ${majorInjuryLabel(player.major)}`}</p>}
     {!player.major && player.injuryWeeks > 0 && <p>{player.injuryWeeks} {player.injuryWeeks === 1 ? 'week' : 'weeks'} on the injury list</p>}
     <p>Simulated setback estimate for the target window is <strong>{forecast[0]}% to {forecast[1]}%</strong>. Added time, the next training session and an unavailable substitute can change the workload.</p>
@@ -40,7 +41,7 @@ function ActiveReturn({ active, career, duringMatch = false }: { active: Active;
     {status === 'ready' && !duringMatch && (cue
       ? <p>In Quick Sim the coach can bring on {named(cue.inId, cue.inName)} for {named(cue.outId, cue.outName)} {cue.window === 'late' ? 'between 72 and 82 minutes' : 'between 58 and 68 minutes'}. A named bench order takes priority.</p>
       : <p>Quick Sim needs a compatible change from the chosen lineup. In Play Live, use your substitutions to manage the minutes.</p>)}
-    {duringMatch && <p>Manage his minutes using your live substitutions. Extra time counts toward his workload.</p>}
+    {duringMatch && status === 'ready' && <p>Manage his minutes using your live substitutions. Extra time counts toward his workload.</p>}
     <TrainingRecord training={active.training} />
   </div>;
 }
@@ -48,7 +49,7 @@ function ActiveReturn({ active, career, duringMatch = false }: { active: Active;
 export function ReturnToPlayMatchCard({ career, duringMatch = false }: { career: CareerState; duringMatch?: boolean }) {
   if (!career.returnToPlay?.active) return null;
   const { active } = returnToPlayDesk(career);
-  if (!active || active.status !== 'ready') return null;
+  if (!active || (duringMatch && active.status !== 'ready')) return null;
   return <details className="rounded-lg border border-border bg-card px-2">
     <summary className="min-h-11 cursor-pointer py-3 text-xs font-bold">First appearance plan · {active.player.name}</summary>
     <section aria-label="First appearance plan" className="pb-2 text-xs">
