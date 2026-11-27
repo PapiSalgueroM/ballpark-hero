@@ -28,7 +28,8 @@ import { usePracticeClock } from "@/hooks/usePracticeClock";
    engine in DrillBoard. It sits beside the Round 81 tiles rather than
    replacing them, and it banks through its own rule (applyDrillResult). */
 /* Round 1032: "throughball" is the CM and CAM position drill, on its own board. */
-type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade" | "firsttouch" | "throughball" | "decisions";
+type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade" | "firsttouch" | "throughball" | "decisions" | "press";
+const BreakThePressBoard = lazy(() => import("@/components/soccer-career/BreakThePressBoard"));
 const PassingDecisionBoard = lazy(() => import("@/components/soccer-career/PassingDecisionBoard"));
 
 const CONES = [
@@ -331,6 +332,11 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
         </div>}
         {screen === "menu" && (
           <div className="p-4 space-y-3">
+            <button onClick={() => openBoard("press")} className="w-full flex items-center gap-3 rounded-xl border border-border bg-muted/10 hover:bg-muted/25 p-3.5 text-left">
+              <span className="text-3xl" aria-hidden="true">⚽</span>
+              <span className="flex-1"><span className="block text-sm font-black">Break the Press</span><span className="block text-[10px] text-muted-foreground">Pass and move past two defenders. Three practice puzzles with personal bests.</span></span>
+              <span aria-hidden="true" className="text-muted-foreground">›</span>
+            </button>
             <button onClick={openReading} className="w-full flex items-center gap-3 rounded-xl border border-border bg-muted/10 hover:bg-muted/25 p-3.5 text-left">
               <span className="text-3xl" aria-hidden="true">🧠</span>
               <span className="flex-1"><span className="block text-sm font-black">Read the pass</span><span className="block text-[10px] text-muted-foreground">Untimed decisions. Trains {drillMeta.passing.stat}. Uses the same one-season reward; practice stays free.</span></span>
@@ -387,6 +393,9 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
           </div>
         )}
 
+        {screen === "press" && <Suspense fallback={<p role="status" className="p-4 text-xs">Opening the pitch...</p>}>
+          <BreakThePressBoard onBack={toMenu} />
+        </Suspense>}
         {screen === "decisions" && <Suspense fallback={<p role="status" className="p-4 text-xs">Loading reading session...</p>}>
           <PassingDecisionBoard onComplete={points => finish("passing", points, true)} onBack={toMenu} />
         </Suspense>}
