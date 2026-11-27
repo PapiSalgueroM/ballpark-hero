@@ -49,6 +49,10 @@ export function PhaseShapeReview({ play, history, live = false }: {
       <p className="font-bold">{minuteLabel(event)} · {move.phase === 'outlet' ? 'Playing out after a save' : 'Recovering after their save'}</p>
       <p>{named(move.keeper)} saved. <MoveLine move={move} /></p>
       <p>The move went through the {move.lane} lane.</p>
+      {move.phase === 'outlet' && move.support !== undefined &&
+        <p>{move.support} nearby {move.support === 1 ? 'passing option' : 'passing options'} for {move.actor.name}.</p>}
+      {move.phase === 'recovery' && move.screenedLane && <p>A holding midfielder covered the lane.</p>}
+      {move.phase === 'recovery' && move.highPressure && <p>A forward was close enough to press high.</p>}
       <p>{move.cover} other {move.cover === 1 ? 'player was' : 'players were'} in cover. {move.actor.returnDistance} pitch units between {move.actor.name}'s two roles.</p>
       {live ? <p>{move.effort ? 'Up to one fitness point for that run' : 'Held position'}</p> :
         move.spent !== undefined && <p>{move.spent} fitness spent</p>}

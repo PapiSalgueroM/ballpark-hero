@@ -48,6 +48,7 @@ it('links a phase chance by recorded move even when another player shoots in the
   const move: PhaseMove = {
     id: 'save-to-outlet-1', phase: 'outlet', order, keeper, actor,
     other: { name: positions.rows[1].name }, outcome: 'released', lane: 'left', cover: 2, effort: 1, spent: 1,
+    support: 3, screenedLane: false, highPressure: false,
   };
   const events: PlayEvent[] = [
     { minute: 90, plus: 2, kind: 'shot', side: 'opp', who: move.other.name, on: true, phaseMove: move },
@@ -62,6 +63,7 @@ it('links a phase chance by recorded move even when another player shoots in the
   expect(screen.getByRole('region')).toHaveTextContent(`${actor.name} scored.`);
   expect(screen.getByRole('region')).not.toHaveTextContent('Unrelated finisher');
   expect(screen.getByRole('region')).toHaveTextContent('1 fitness spent');
+  expect(screen.getByRole('region')).toHaveTextContent('3 nearby passing options');
   expect(screen.getByRole('region')).toHaveTextContent("90+2'");
   view.rerender(<PhaseShapeReview play={[{ ...events[0], phaseMove: { ...move, actor: null } } as unknown as PlayEvent]} />);
   expect(screen.queryByRole('region')).toBeNull();
