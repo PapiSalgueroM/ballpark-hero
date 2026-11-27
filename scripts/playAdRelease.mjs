@@ -1,5 +1,5 @@
 /* Run against a built loopback site with BASE=http://127.0.0.1:4173.
- * --ranked, --careers or --home-search run the selected checks. HOST_TOP25 may name
+ * --ranked, --careers, --mlb-saved or --home-search run the selected checks. HOST_TOP25 may name
  * a verified host export containing exactly 25 ranked public paths, one per line.
  * The publisher script and its creative requests are intercepted local fixtures.
  * Nothing from this replay is sent to an advertising or analytics provider. */
@@ -97,7 +97,7 @@ async function excluded(page, evidence, prior, label) {
   assert.deepEqual(counts(evidence), prior, label + ' made a request');
 }
 
-async function distances(page) {
+async function distances(page, controls = selection) {
   return page.evaluate(({ slots, selection }) => {
     const viewport = { width: document.documentElement.clientWidth, height: innerHeight };
     const inView = r => r.right > 0 && r.left < viewport.width && r.bottom > 0 && r.top < viewport.height;
@@ -122,7 +122,7 @@ async function distances(page) {
       });
       return { role: el.closest('[data-dukb-manual-ad]').dataset.dukbManualAd, controls: gaps.length, inView: controls.filter(inView).length, px: gaps.length ? Math.min(...gaps) : null };
     });
-  }, { slots, selection });
+  }, { slots, selection: controls });
 }
 
 async function checkRailStart(page) {
@@ -160,6 +160,53 @@ async function checkActive(page, evidence, label) {
   assert(samples.every(sample => sample.px === null || sample.px >= 149.5), label + ': ads too close to controls ' + JSON.stringify(samples));
   await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
   console.log(JSON.stringify({ label, viewport: page.viewportSize(), roles, loaderRequests: evidence.loader, fixtureCreativeRequests: evidence.creatives.length, samples }));
+}
+
+async function savedMlb(width) {
+  const { ctx, page, evidence } = await profile(width, { returning: true });
+  const key = 'mlb-my-career-save-v1';
+  const save = (await readFile(new URL('./data/mlbActiveHitterSave.json', import.meta.url), 'utf8')).trim();
+  const roles = width === 390 ? ['public-footer'] : ['left-rail', 'public-footer', 'right-rail'];
+  const button = name => page.getByRole('button', { name, exact: true });
+  try {
+    await ctx.addInitScript(({ key, save }) => {
+      if (sessionStorage.getItem('mlb-replay-started')) return;
+      localStorage.setItem(key, save);
+      localStorage.setItem('rules-gate-seen:/mlb-my-career', '1');
+      sessionStorage.setItem('mlb-replay-started', '1');
+    }, { key, save });
+    await open(page, '/mlb-my-career');
+    await button('Plan your season').waitFor();
+    await checkActive(page, evidence, 'Saved MLB hub at ' + width);
+    const checkInventory = async () => {
+      assert.deepEqual(evidence.creatives.map(row => row.role).sort(), roles, 'Saved MLB requested placements at ' + width);
+      const mounted = await page.locator(slots).evaluateAll(els => els.map(el => el.closest('[data-dukb-manual-ad]').dataset.dukbManualAd).sort());
+      assert.deepEqual(mounted, roles, 'Saved MLB mounted placements at ' + width);
+      assert.equal(evidence.loader, 1);
+    };
+    await checkInventory();
+    for (const [opener, ready] of [['Start over', 'Keep this career'], ['Start practice', null], ['Pinch-Hit Series', 'Protect the plate']]) {
+      await button(opener).click();
+      const dialog = page.locator('[role=dialog], [role=alertdialog]').filter({ visible: true });
+      await dialog.waitFor();
+      if (ready) await button(ready).waitFor();
+      if (opener === 'Pinch-Hit Series') {
+        await button('Protect the plate').click();
+        await button('Next at-bat').waitFor();
+      }
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      const samples = await distances(page, '[role=dialog] button, [role=alertdialog] button');
+      assert(samples.every(s => s.px !== null && s.px >= 149.5), opener + ' ad clearance ' + JSON.stringify(samples));
+      await checkInventory();
+      if (opener === 'Start over') await button('Keep this career').click();
+      else await page.keyboard.press('Escape');
+      await dialog.waitFor({ state: 'hidden' });
+    }
+    await checkInventory();
+    assert.equal(await page.evaluate(key => localStorage.getItem(key), key), save, 'Saved career changed');
+    assert.deepEqual(evidence.errors, []);
+    console.log('PASS: saved MLB hub, reset cancellation, Training and Pinch-Hit Series at ' + width);
+  } finally { await ctx.close(); }
 }
 
 async function clearanceControl(page) {
@@ -426,7 +473,11 @@ async function ranked() {
   console.log('PASS: ' + search.length + ' Google and ' + host.length + ' host rankings, ' + routes.length + ' distinct routes with hubs, five widths, ' + results.length + ' direct cases.');
 }
 
-try {
+async function run() {
+  if (process.argv.includes('--mlb-saved')) {
+    for (const width of [390, 1280, 1366]) await savedMlb(width);
+    return;
+  }
   const onlySearch = process.argv.includes('--home-search');
   if (!onlySearch && !process.argv.includes('--careers')) await ranked();
   if (!onlySearch && !process.argv.includes('--ranked')) {
@@ -446,4 +497,6 @@ try {
     }
     console.log('PASS: repeat Home searches created no extra placements and the next public route received its placements.');
   }
-} finally { await guard.close(); }
+}
+
+try { await run(); } finally { await guard.close(); }
