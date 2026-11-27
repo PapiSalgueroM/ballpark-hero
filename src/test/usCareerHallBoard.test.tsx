@@ -129,6 +129,39 @@ afterEach(() => {
 });
 
 describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) => {
+  it.each([false, true])('serves an unpaid suspension and resumes the correct career screen (at retirement limit: %s)', async atLimit => {
+    const sport = getSport();
+    const { c, tq } = activeCareer(sport, 71);
+    const retirementAge = { nfl: 40, nba: 41, mlb: 42, nhl: 40 }[sport.slug];
+    if (atLimit) c.age = retirementAge - 1;
+    Object.assign(c, { ovr: 90, pot: 95, suspendedSeasons: 1, salary: 10, earnings: 40, netWorth: 12, yearlyCosts: 1 });
+    c.retirement = { declinedYears: [lastYear(c)] };
+    expect(sport.shouldRetire(c)).toBe(false);
+    save(sport, c, tq, 'season');
+    const board = mount(sport);
+    fireEvent.click(board.getByRole('button', { name: `Play the ${c.year} season` }));
+    expect(board.container.querySelector('[data-season-reveal]')?.textContent).toMatch(/suspended/i);
+
+    const after = read(sport);
+    expect(after.c.seasons).toHaveLength(c.seasons.length + 1);
+    expect(after.c.seasons.at(-1)).toMatchObject({ year: c.year, games: 0, salary: 0, teamResult: 'SUSPENDED' });
+    expect(after.c).toMatchObject({ age: c.age + 1, suspendedSeasons: 0, earnings: 40, salary: 10, contractYears: c.contractYears - 1 });
+    expect(sport.shouldRetire(after.c)).toBe(atLimit);
+    expect.soft(after.phase).toBe(atLimit ? 'retired' : 'season');
+    expect.soft(after.c.netWorth, 'The bank charges upkeep without depositing a salary.').toBe(11);
+
+    fireEvent.click(board.getByRole('button', { name: 'Continue' }));
+    const checkScreen = () => atLimit
+      ? expect(document.body.textContent).toContain(`${c.name} retires`)
+      : expect(button(`Play the ${c.year + 1} season`)).toBeTruthy();
+    await waitFor(checkScreen);
+    const bytes = localStorage.getItem(sport.saveKey);
+    board.unmount();
+    mount(sport);
+    await waitFor(checkScreen);
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+  });
+
   it('an old active save inside the rule opens on the talk, writes nothing, and a reload asks again', async () => {
     const sport = getSport();
     const { c, tq } = talkCareer(sport, 11);
@@ -243,6 +276,10 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) 
     expect(terms().every(y => y === '1'), `offer lengths after a push ${terms().join(',')}`).toBe(true);
     vi.spyOn(Math, 'random').mockImplementation(mulberry32(47));
     fireEvent.click(button('Sign')!);
+    if (sport.slug === 'nfl' || sport.slug === 'nba') {
+      expect(read(sport).c.contractYears).toBe(0);
+      fireEvent.click(button('Confirm signing')!);
+    }
     expect(read(sport).c.contractYears).toBe(1);
     fireEvent.click(button(`Play the ${c.year} season`)!);
     const after = read(sport);
@@ -484,11 +521,7 @@ describe.each(SPORTS)('%s: the calibration stamp (Round 1051)', (_slug, getSport
     expect(hallCalibrationOf(read(sport).c)).toBe(2);
   }, 20000);
 
-  /* Review of 2026-10-08, measured on basketball: tab A retires him (the save
-     is stamped), tab B still holds him live and retires him too. The second
-     write used to carry no stamp, because the disk already said retired, and
-     the career read calibration 1 on every later load. */
-  it('two tabs: retired a moment ago in another tab, this tab\'s retirement keeps the stamp that tab wrote', async () => {
+  it('a stale retirement leaves the other tab\'s saved career and Hall stamp intact', async () => {
     const sport = getSport();
     const { c, tq } = activeCareer(sport, 71);
     save(sport, c, tq, 'season');
@@ -497,9 +530,15 @@ describe.each(SPORTS)('%s: the calibration stamp (Round 1051)', (_slug, getSport
     const other = copy(c);
     other.retired = true;
     other.hallCal = HALL_CALIBRATION;
-    localStorage.setItem(sport.saveKey, JSON.stringify({ c: other, phase: 'retired', teamQuality: tq, coach: null, otherTab: true }));
+    const bytes = JSON.stringify({ c: other, phase: 'retired', teamQuality: tq, coach: null });
+    localStorage.setItem(sport.saveKey, bytes);
     await hangUp();
-    await waitFor(() => expect('otherTab' in read(sport), 'this tab has written its own save').toBe(false));
+    await waitFor(() => expect(document.body.textContent).toContain('This career changed in another tab.'));
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    cleanup();
+    mount(sport);
+    await waitFor(() => expect(document.body.textContent).toContain(`${c.name} retires`));
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
     const after = read(sport).c as UsCareerCore;
     expect(after.retired).toBe(true);
     expect(after.hallCal).toBe(HALL_CALIBRATION);

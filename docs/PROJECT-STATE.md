@@ -1,3 +1,11 @@
+### November 26, 2026. Career records, drafts and auctions
+
+Soccer Career now caps league appearances at the season total after an injury, including leagues without a simulated table. A 20-week injury that previously produced 31 league appearances in 25 matches now shows 25 on the record book, including after reload. Of 1,200 paired seasons, all 60 invalid splits were corrected and the other 1,140 careers stayed identical. Existing season records keep their saved values.
+
+In Build Your XI, switching positions during a player history check keeps the new selection and search. In Sign the Player, taking a discounted lot before a rival buys it records a single sale and opens the next lot in order. MLB, NHL, NBA and NFL My Career now deduct upkeep without paying a salary for a full-season suspension. The missed season also counts toward the normal retirement limits. A younger player can return and earn their next salary.
+
+Chrome replays covered the auction, draft, Soccer Career record book and four US career games. A separate Club Manager replay started a Crystal Palace career, saved its team talk and restored the first result after a second reload on phone and desktop. All 32 distinct pages in the [November rankings](TRAFFIC-PRIORITIES-2026-11-26.md) loaded and responded to a page control at 390, 1280 and 1366 pixels. The ranking covers the 25 Google Search landing pages and Lovable's ten most viewed pages.
+
 ### November 26, 2026. Shared display ads
 
 Eligible pages use one responsive display unit below the global footer. At desktop widths of at least 1280px the shared layout can also request two equal side units. A game keeps its natural width. Both side units are skipped when either would come within 150px of the play area or its controls. Soccer Career and Build Your XI use the footer alone at 1280px and 1366px. College Grid and NFL Career Path have room for the pair at both sizes.

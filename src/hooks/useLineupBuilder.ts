@@ -181,10 +181,11 @@ export function useLineupBuilder() {
   }, [cancelValidation, cancelEvaluation]);
 
   const selectPosition = useCallback((index: number) => {
-    if (phase !== 'building' || filledSlots.has(index)) return;
+    if (phase !== 'building' || filledSlots.has(index) || index === selectedPositionIndex) return;
+    cancelValidation();
     setSelectedPositionIndex(index);
     setValidationError(null);
-  }, [filledSlots, phase]);
+  }, [filledSlots, phase, selectedPositionIndex, cancelValidation]);
 
   const replacePick = useCallback((index: number) => {
     if (phase !== 'reviewing' || !filledSlots.has(index)) return false;

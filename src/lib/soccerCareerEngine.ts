@@ -4189,6 +4189,7 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
     apps = Math.max(1, apps - clamp(missedApps, 0, injurySevere ? 34 : 12));
   }
 
+  leagueApps = Math.min(leagueApps, apps);
   if (russiaYear >= 2026 && state?.currentLeague === "Russian Premier League") leagueApps = Math.min(leagueApps, 30, apps);
   return { apps, leagueApps, injured, injuryWeeks, injuryName, injurySevere };
 }

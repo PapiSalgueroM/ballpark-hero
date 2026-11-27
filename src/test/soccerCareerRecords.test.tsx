@@ -1,6 +1,8 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
+import { acceptOffer, advanceProSeason, FALLBACK_CLUBS, initCareer, type CareerState, type SeasonRecord } from '@/lib/soccerCareerEngine';
+import { keyedRng } from '@/lib/keyedRng';
+import { parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
 import { careerCompetitionRecords, careerRecordBook } from '@/lib/soccerCareerRecords';
 import CareerRecordsSheet from '@/components/soccer-career/CareerRecordsSheet';
 
@@ -13,9 +15,29 @@ function row(extra: Partial<SeasonRecord> = {}): SeasonRecord {
 }
 const source = (seasons: SeasonRecord[], position = 'ST') => ({ seasons, position });
 const career = (seasons: SeasonRecord[]) => source(seasons) as CareerState;
-afterEach(cleanup);
+afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('Soccer Career record book', () => {
+  it.each([
+    { scenario: 'a long injury', seed: 38, apps: 25, league: 25, injuryWeeks: 20 },
+    { scenario: 'a short injury', seed: 0, apps: 45, league: 32, injuryWeeks: 5 },
+    { scenario: 'a healthy season', seed: 1, apps: 51, league: 37, injuryWeeks: 0 },
+  ])('keeps the club appearance split after $scenario and reload', ({ seed, apps, league, injuryWeeks }) => {
+    const random = vi.spyOn(Math, 'random').mockImplementation(keyedRng('career-apps-start'));
+    const stats = { pace: 90, shooting: 90, passing: 90, dribbling: 90, defending: 90, physical: 90, reflexes: 90 };
+    const initial = initCareer('Appearance Tester', 'Brazil', 'ST', '2020s', stats, 90, 2020, FALLBACK_CLUBS, null, 99);
+    const club = FALLBACK_CLUBS.find(c => c.name === 'Real Madrid')!;
+    const signed = acceptOffer(initial, { club, contractYears: 5, wage: 400000, transferFee: 0 });
+    random.mockImplementation(keyedRng('appearance-season-' + seed));
+    const next = advanceProSeason(signed, FALLBACK_CLUBS, true);
+    const saved = parseSoccerCareerSave(serializeSoccerCareerSave(next)) as CareerState;
+    const season = saved.seasons[saved.seasons.length - 1];
+    expect(season).toMatchObject({ type: 'playing', year: 2021, apps, leagueApps: league, injuryWeeks });
+    render(<CareerRecordsSheet career={saved} onClose={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Club history' }));
+    fireEvent.click(screen.getByRole('button', { name: /Real Madrid/ }));
+    expect(screen.getByText(`${league} league apps · ${apps - league} other club apps`)).toBeVisible();
+  });
   it('counts only saved senior club stats and never academy or manager seasons', () => {
     const book = careerRecordBook(source([row({ type: 'youth', goals: 90 }), row(), row({ type: 'manager', goals: 99 }), row({ type: 'retired', goals: 99 }), row({ club: 'BANNED', clubTier: 99, clubCountry: '', apps: 0, goals: 0, assists: 0 })]));
     expect(book.totals).toEqual({ apps: 30, goals: 12, assists: 4, cleanSheets: 0 });

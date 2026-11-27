@@ -117,7 +117,7 @@ const SignThePlayer = () => {
     }
     setDecaying(false);
     setAiThinking(false);
-    window.setTimeout(() => advance(), 650);
+    timer.current = window.setTimeout(advance, 650);
   }, [lot, bidders, advance]);
 
   /* Round 327, the decay: nobody bit at list price, so the price falls a
@@ -135,7 +135,10 @@ const SignThePlayer = () => {
       setPrice(next);
       setLog(l => [`📉 No takers. The price falls to ${money(next)}.`, ...l].slice(0, 30));
       const snapper = decaySnapper(bidders, lot.player, next, slotsLeftAfter);
-      if (snapper) { window.setTimeout(() => settleLot(snapper, next), 500); return; }
+      if (snapper) {
+        timer.current = window.setTimeout(() => settleLot(snapper, next), 500);
+        return;
+      }
       timer.current = window.setTimeout(() => step(next), 950);
     };
     timer.current = window.setTimeout(() => step(fromPrice), 950);

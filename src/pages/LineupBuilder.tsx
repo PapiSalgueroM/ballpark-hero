@@ -107,8 +107,9 @@ const LineupBuilder = () => {
     }
   }, [phase, selectedPositionIndex, filledCount]);
 
-  const chooseDraftPosition = (index: number) => {
-    selectingFromPicker.current = true;
+  const chooseDraftPosition = (index: number, fromPicker: boolean) => {
+    if (index === selectedPositionIndex) return;
+    selectingFromPicker.current = fromPicker;
     inputRevision.current += 1;
     setPlayerInput('');
     setBrowsingPlayers(false);
@@ -537,9 +538,8 @@ const LineupBuilder = () => {
                   id="lineup-draft-position"
                   ref={positionPicker}
                   value={selectedPositionIndex ?? ''}
-                  onChange={event => chooseDraftPosition(Number(event.target.value))}
-                  disabled={isValidating}
-                  className="min-h-11 min-w-0 flex-1 rounded-xl border border-border bg-card px-2 text-base text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+                  onChange={event => chooseDraftPosition(Number(event.target.value), true)}
+                  className="min-h-11 min-w-0 flex-1 rounded-xl border border-border bg-card px-2 text-base text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <option value="" disabled>Choose a position</option>
                   {pickerLabels.map((label, index) => (
@@ -580,10 +580,7 @@ const LineupBuilder = () => {
                 positions={positions}
                 filledSlots={filledSlots}
                 selectedIndex={selectedPositionIndex}
-                onSelectPosition={index => {
-                  selectingFromPicker.current = false;
-                  selectPosition(index);
-                }}
+                onSelectPosition={index => chooseDraftPosition(index, false)}
               />
             </div>
 

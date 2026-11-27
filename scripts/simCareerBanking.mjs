@@ -46,7 +46,7 @@ if (CONTROL && CONTROL !== 'nobank') {
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
-const BANK_LINE = 'c.netWorth = Math.round((priorNet + c.salary * TAKE_HOME - upkeep) * 10) / 10;';
+const BANK_LINE = 'c.netWorth = Math.round((priorNet + seasonPay * TAKE_HOME - upkeep) * 10) / 10;';
 const NO_BANK = 'c.netWorth = Math.round((priorNet - upkeep) * 10) / 10;';
 
 /* Each sport names its own entry points; the four files are deliberate

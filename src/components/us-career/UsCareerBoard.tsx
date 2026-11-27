@@ -838,9 +838,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
         subHeader: `${sport.teamLabelOf(banned.team, c.eraId)} · age ${banned.age} · ${c.pos}`,
         teamResult: 'SUSPENDED', statLine: '', campNote: null, notes: [], progressNotes: banNotes,
       }));
-      /* Round 1039: a farewell or a retirement he chose ends the career even on
-         a banned year: the card said whatever the numbers say. */
-      if (endsAfterSeason(c, banned.year)) {
+      if (sport.shouldRetire(c) || endsAfterSeason(c, banned.year)) {
         c.retired = true;
         setPhase('retired');
         persist(c, 'retired', teamQuality);

@@ -100,6 +100,7 @@ export function driveCareer(sport: UsCareerSport, o: DriveOptions): DriveResult 
         c.suspendedSeasons -= 1;
         c.seasons.push(sport.suspendedLine(c));
         sport.progress(c, Math.random); see(c);
+        if (sport.shouldRetire(c)) c.retired = true;
         continue;
       }
       if (c.contractYears <= 0) {
