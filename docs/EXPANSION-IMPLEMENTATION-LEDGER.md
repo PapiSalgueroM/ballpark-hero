@@ -20,6 +20,8 @@ The manager can pay for one pair to rehearse a far-post run or a short return pa
 
 ### Where the management games set the bar
 
+The targeted throw-in press reached the custom domain in revision `3ed70de6f`. Twelve native press replays included both a 57th-minute high regain that changed the result and a 77th-minute bypass leading to an opposing goal. [Published game](https://douknowball.com/club-manager)
+
 The November 27 audit reviewed all 60 manager cards against the published corner build. Nine contained a verified playable decision with a recorded consequence, 47 had partial coverage and four core player decisions remained unverified. The audit gives the source lines and open work for each card. [Club Manager coverage inventory](audits/club-manager-masterplan-coverage-2026-11-27.md)
 
 The current career benchmarks cover different parts of the job. Transfer stages and future transfer rights, development under form and fitness, and shareable career scenarios all give a manager choices across seasons. Our scouting brief and two-summer succession desk lead to ordinary signings and renewals. Comparing those terms, and testing how later obligations settle, still needs its own audit. [EA's FC 27 career notes](https://www.ea.com/games/ea-sports-fc/fc-27/news/pitch-notes-fc27-career-mode-deep-dive)
