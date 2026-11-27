@@ -6,10 +6,10 @@ import { nbaLateClockOptions, type LateClockRead, type LateClockResult } from '.
 import { CHANGEUP_LABEL, CHANGEUP_REPS, changeupExperience, type MlbChangeupLine } from './mlbChangeup';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'two-strike-changeup' | 'playoff-checking' | 'zone-draws' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain' | LateClockRead;
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'third-down-rush' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'two-strike-changeup' | 'playoff-checking' | 'zone-draws' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain' | LateClockRead;
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'two-strike-changeup' | 'playoff-checking' | 'zone-draws' | LateClockRead;
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'third-down-rush' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'two-strike-changeup' | 'playoff-checking' | 'zone-draws' | LateClockRead;
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch' | 'alternate';
@@ -344,6 +344,11 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
         label: NFL_INSIDE_ROUTES_LABEL,
         effect: `Use shorter targets for about ${NFL_INSIDE_CATCH_GAIN}% more regular-season receptions at the same total yards. Give up about ${NFL_INSIDE_TD_COST}% of your receiving touchdowns, at least one if you score. The ${NFL_WR_REC_CAP}-reception cap applies, and if you gain no catches, you give up nothing. Camp still decides who starts.`,
       }] : []),
+      ...(sport === 'nfl' && (c.pos === 'LB' || c.pos === 'EDGE') ? [{
+        id: 'third-down-rush' as const,
+        label: 'Rush the passer on third down',
+        effect: 'Give up your usual run stop to rush the quarterback on one extra snap for every two games you play, starting with the first. A sack keeps the tackle. If the rush misses, a teammate gets that tackle instead. Better season form improves your chance.',
+      }] : []),
       ...(defence ? [{
         id: 'defend' as const,
         label: defence.label,
@@ -512,6 +517,13 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     if (played && insideRoutes && preparation?.nflInsideRoutesGain !== undefined) {
       decision.actual = preparation.nflInsideRoutesGain;
       decision.unit = 'additional receptions';
+    }
+    if (played && sport === 'nfl' && section === 'tactics' && choice === 'third-down-rush') {
+      const rush = (line as UsCareerSeason & { thirdDownRush?: { calls: number; sacks: number } }).thirdDownRush;
+      if (rush && rush.calls > 0) {
+        decision.actual = rush.sacks;
+        decision.unit = 'extra third-down sacks';
+      } else decision.outcome = 'unused';
     }
     if (played && playoffMinutes) {
       if (preparation?.nbaExtraPlayoffMinutes !== undefined) {

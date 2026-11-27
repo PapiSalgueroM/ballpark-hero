@@ -46,6 +46,10 @@ export function nflSeasonReview(s: SeasonLine, pos: CareerPos): CareerReviewStat
   }
   if ((pos === 'LB' || pos === 'CB') && recorded(s.forcedFum)) regular.push(number('Forced fumbles', s.forcedFum));
   if (pos === 'EDGE' && recorded(s.passDef)) regular.push(number('Passes defended', s.passDef));
+  const rush = s.thirdDownRush;
+  if ((pos === 'LB' || pos === 'EDGE') && rush && recorded(rush.calls) && recorded(rush.sacks)) {
+    regular.push(text('Third-down rush', `${rush.sacks} extra sacks on ${rush.calls} rushes. Tackles given up: ${rush.calls - rush.sacks}.`));
+  }
   if (pos === 'QB' && (recorded(s.rushYds) || recorded(s.rushTd))) {
     regular.push(number('Rushing yards', s.rushYds), number('Rushing touchdowns', s.rushTd));
   }

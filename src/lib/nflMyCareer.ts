@@ -1,4 +1,5 @@
 import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
+import { keyedRng } from './keyedRng';
 /**
  * NFL My Career engine (2026-08-05, the career-for-every-sport push).
  * A cradle to retirement player career: you are a fictional prospect (your name,
@@ -224,6 +225,7 @@ export interface SeasonLine {
   rec?: number; recYds?: number; recTd?: number;
   // Round 56 defense: LB, CB, EDGE
   tackles?: number; sacks?: number; picks?: number; passDef?: number; forcedFum?: number;
+  thirdDownRush?: { calls: number; sacks: number };
   // Round 56 kicker
   fgMade?: number; fgAtt?: number; longFg?: number;
   /** The team's playoff game count and the player's postseason stats for display. */
@@ -612,6 +614,14 @@ export function simSeason(
   };
   if (seasonRating) line.seasonRating = seasonRating;
   Object.assign(line, nflStatLineFor({ form, pos: c.pos, games, passingDown, designedRuns }, rng));
+  if ((c.pos === 'LB' || c.pos === 'EDGE') && programme?.plan.sport === 'nfl' && programme.plan.tactics === 'third-down-rush') {
+    const pressureRng = keyedRng(JSON.stringify(['third-down rush', c.name, c.team, c.year]));
+    const rush = applyNflThirdDownRush(line, form, pressureRng);
+    line.thirdDownRush = rush;
+    notes.push(rush.calls
+      ? `Third-down rush: ${countOf(rush.sacks, 'extra sack', 'extra sacks')} on ${countOf(rush.calls, 'rush', 'rushes')}. Teammates took ${countOf(rush.calls - rush.sacks, 'tackle', 'tackles')} you would usually make.`
+      : 'Third-down rush went unused. Your line had no room for another full sack or run stop.');
+  }
   if (c.pos === 'WR' && programme?.plan.sport === 'nfl' && programme.plan.tactics === 'inside') {
     const catches = line.rec ?? 0;
     const adjusted = Math.min(NFL_WR_REC_CAP, Math.round(catches * (1 + NFL_INSIDE_CATCH_GAIN / 100)));
@@ -819,6 +829,26 @@ export interface NflLineInput { form: number; pos: CareerPos; games: number; pas
 /** The stats of one season line, without the season around them. */
 export type NflStatLine = Pick<SeasonLine, 'passYds' | 'passTd' | 'ints' | 'rushYds' | 'rushTd' | 'rec' | 'recYds' | 'recTd' | 'tackles' | 'sacks' | 'picks' | 'passDef' | 'forcedFum' | 'fgMade' | 'fgAtt' | 'longFg'>;
 
+const NFL_SACK_CAP = 23;
+
+export function applyNflThirdDownRush(line: Pick<SeasonLine, 'games' | 'sacks' | 'tackles'>, form: number, rng: () => number) {
+  const tackles = line.tackles ?? 0;
+  const sacks = line.sacks ?? 0;
+  // Reassign ordinary tackles only. Existing sacks are already included in tackles.
+  const opportunities = Math.min(Math.ceil(line.games / 2), tackles - Math.ceil(sacks));
+  const sackRoom = Math.floor(NFL_SACK_CAP - sacks);
+  const conversion = Math.max(0.2, Math.min(0.45, 0.20 + (form - 65) / 100));
+  let calls = 0;
+  let extraSacks = 0;
+  while (calls < opportunities && extraSacks < sackRoom) {
+    calls++;
+    if (rng() < conversion) extraSacks++;
+  }
+  line.sacks = sacks + extraSacks;
+  line.tackles = tackles - calls + extraSacks;
+  return { calls, sacks: extraSacks };
+}
+
 export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine {
   const { form, pos } = x;
   const g = x.games / NFL_RATE_GAMES;
@@ -907,7 +937,7 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
        written in Round 97 when 22.5 really was the record, and the engine had
        no cap at all, so on the day somebody broke the record in real life the
        harness became both wrong and still, occasionally, right. */
-    line.sacks = Math.min(23, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 2) / 2));
+    line.sacks = Math.min(NFL_SACK_CAP, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 2) / 2));
     line.tackles = Math.round((32 + (form - 62) * 1.1 + rng() * 16) * g);
     line.forcedFum = Math.max(0, Math.round(((form - 74) * 0.06 + rng() * 3) * g));
     line.passDef = Math.max(0, Math.round((rng() * 4) * g));
