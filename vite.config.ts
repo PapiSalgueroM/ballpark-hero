@@ -120,10 +120,10 @@ const inlineSnapshotAssets = (root: string) => {
         let out = hostAnalyticsDefault && !html.includes("data-dukb-host-analytics-default")
           ? html.replace(/<head\b[^>]*>/i, head => `${head}\n    ${hostAnalyticsDefault}`)
           : html;
-        // Previously saved snapshots still carry the old expanded cookie banner copy.
+        // Saved notices predate the separate analytics choice. Keep their privacy link.
         out = out.replace(
-          "<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>",
-          "<p>Google Analytics is paused. Lovable still measures basic visits.</p>",
+          /<p>(?:Essential storage keeps games working\. Advertising is optional\.|Ads help keep DoUKnowBall free\. Accepting advertising helps support the site\. You can still play if you reject\.)( We ask again in 180 days\. <a href="\/privacy">Learn more<\/a><\/p>)(?:\r?\n<p>(?:Analytics is paused\. Google Analytics is off while we check its privacy settings\.|Google Analytics is paused\. Lovable still measures basic visits\.)<\/p>)?/g,
+          "<p>Ads help keep DoUKnowBall free. Google Analytics helps us see which pages people visit. You choose each separately and can still play if you reject both.$1",
         );
         if (entry.name !== "index.html" || !html.includes("/prerender-boot.js") || html.includes("/assets/")) {
           if (out !== html) fs.writeFileSync(f, out);

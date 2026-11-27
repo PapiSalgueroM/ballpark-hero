@@ -5,8 +5,7 @@ export const CONSENT_CHANGED_EVENT = 'dukb-consent-changed';
 export const CONSENT_OPEN_EVENT = 'dukb-consent-open';
 export const CONSENT_EFFECTIVE_CHANGED_EVENT = 'dukb-consent-effective-changed';
 export const CONSENT_MAX_AGE_MS = 180 * 24 * 60 * 60 * 1000;
-// Enable only after automatic history/form collection is verified in the GA account.
-export const ANALYTICS_READY: boolean = false;
+export const ANALYTICS_READY: boolean = true;
 
 export interface ConsentPreferences {
   version: 2;
@@ -37,7 +36,8 @@ export function parseConsentPreferences(raw: string | null, now = Date.now()): C
       || typeof value.analytics !== 'boolean' || typeof value.updatedAt !== 'number'
       || !Number.isFinite(value.updatedAt) || value.updatedAt < 0 || value.updatedAt > now
       || now - value.updatedAt >= CONSENT_MAX_AGE_MS) return null;
-    return { version: 2, advertising: value.advertising, analytics: value.analytics, updatedAt: value.updatedAt };
+    // A choice saved before the separate GA4 opt-in still controls Advertising.
+    return { version: 2, advertising: value.advertising, analytics: value.analytics && value.analyticsOptIn === 1, updatedAt: value.updatedAt };
   } catch { return null; }
 }
 
@@ -56,7 +56,7 @@ export function getEffectiveConsent(): ConsentPurposes {
   const legacyDenial = safeLocalStorage.getItem('cookie-consent') === 'essential';
   return {
     advertising: !pendingWithdrawal.advertising && !legacyDenial && value?.advertising === true && !isGlobalPrivacyControlEnabled(),
-    analytics: !pendingWithdrawal.analytics && ANALYTICS_READY && value?.analytics === true,
+    analytics: !pendingWithdrawal.analytics && !legacyDenial && ANALYTICS_READY && value?.analytics === true,
   };
 }
 
@@ -81,7 +81,7 @@ function writeConsentPreferences(purposes: ConsentPurposes): ConsentPreferences 
   // grant surviving a replacement refused by a full store. The existing seam
   // still keeps the new explicit choice for this visit if storage is blocked.
   safeLocalStorage.removeItem(CONSENT_KEY);
-  safeLocalStorage.setItem(CONSENT_KEY, JSON.stringify(next));
+  safeLocalStorage.setItem(CONSENT_KEY, JSON.stringify(next.analytics ? { ...next, analyticsOptIn: 1 } : next));
   safeLocalStorage.removeItem('cookie-consent');
   return next;
 }

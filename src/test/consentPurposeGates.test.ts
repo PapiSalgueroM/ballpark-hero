@@ -1,5 +1,6 @@
+// @vitest-environment-options {"url":"https://douknowball.com/"}
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { loadAdSense, loadAnalytics, loadConsentedScripts } from '@/lib/consentedScripts';
+import { loadAdSense, loadAnalytics, loadConsentedScripts, stopRevokedServices } from '@/lib/consentedScripts';
 import { safeLocalStorage } from '@/lib/safeStorage';
 
 const KEY = 'cookie-consent-v2';
@@ -8,7 +9,7 @@ const adScripts = () => document.querySelectorAll('script[src*="adsbygoogle.js"]
 const analyticsScripts = () => document.querySelectorAll('script[src*="googletagmanager.com/gtag/js"]');
 
 function record(advertising: boolean, analytics: boolean, updatedAt = Date.now()) {
-  return JSON.stringify({ version: 2, advertising, analytics, updatedAt });
+  return JSON.stringify({ version: 2, advertising, analytics, ...(analytics && { analyticsOptIn: 1 }), updatedAt });
 }
 
 function deliberateSlot() {
@@ -22,6 +23,8 @@ function deliberateSlot() {
 }
 
 beforeEach(() => {
+  stopRevokedServices({ advertising: false, analytics: true }, { advertising: false, analytics: false });
+  Reflect.deleteProperty(window, 'dukbGaLayer');
   safeLocalStorage.clear();
   localStorage.clear();
   document.head.innerHTML = '';
@@ -60,8 +63,8 @@ describe('each optional loader requires its own current affirmative purpose', ()
   for (const fixture of [
     { advertising: false, analytics: false, wantAds: 0, wantAnalytics: 0 },
     { advertising: true, analytics: false, wantAds: 1, wantAnalytics: 0 },
-    { advertising: false, analytics: true, wantAds: 0, wantAnalytics: 0 },
-    { advertising: true, analytics: true, wantAds: 1, wantAnalytics: 0 },
+    { advertising: false, analytics: true, wantAds: 0, wantAnalytics: 1 },
+    { advertising: true, analytics: true, wantAds: 1, wantAnalytics: 1 },
   ]) {
     // Break caught: either purpose accidentally grants the other service.
     it(`honors advertising=${fixture.advertising}, analytics=${fixture.analytics} independently`, () => {
@@ -70,12 +73,18 @@ describe('each optional loader requires its own current affirmative purpose', ()
       loadConsentedScripts();
       expect(adScripts()).toHaveLength(fixture.wantAds);
       expect(analyticsScripts()).toHaveLength(fixture.wantAnalytics);
+      analyticsScripts()[0]?.dispatchEvent(new Event('load'));
       if (!fixture.advertising) {
         expect(window.dataLayer).toBeUndefined();
         expect(window.gtag).toBeUndefined();
       }
       const commands = (window.dataLayer ?? []).map(item => Array.from(item as ArrayLike<unknown>));
       expect(commands.filter(command => command[0] === 'config' || command[0] === 'event')).toHaveLength(0);
+      for (const command of commands.filter(command => command[0] === 'consent')) {
+        expect(command[2]).toMatchObject({ analytics_storage: 'denied' });
+      }
+      const gaCommands = (window.dukbGaLayer ?? []).map(item => Array.from(item as ArrayLike<unknown>));
+      expect(gaCommands.filter(command => command[1] === 'page_view')).toHaveLength(fixture.wantAnalytics);
       if (fixture.wantAds === 0) expect(Reflect.get(window, 'adsbygoogle')).toBeUndefined();
     });
   }
@@ -159,7 +168,7 @@ describe('each optional loader requires its own current affirmative purpose', ()
     loadConsentedScripts();
     loadConsentedScripts();
     expect(adScripts()).toHaveLength(1);
-    expect(analyticsScripts()).toHaveLength(0);
+    expect(analyticsScripts()).toHaveLength(1);
     expect(Reflect.get(Reflect.get(window, 'adsbygoogle'), 'requestNonPersonalizedAds')).toBe(1);
   });
 });

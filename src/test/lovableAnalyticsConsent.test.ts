@@ -7,10 +7,14 @@ import { afterEach, expect, it } from 'vitest';
 import viteConfig from '../../vite.config';
 
 const template = readFileSync('index.html', 'utf8');
-const marker = /<script data-dukb-host-analytics-default>([\s\S]*?)<\/script>/g;
+const marker = /<script data-dukb-host-analytics-default(?:="")?>([\s\S]*?)<\/script>/g;
 const sdk = '<script defer src="/__l5e/events.fixture.js"></script>';
 const oldBanner = 'Analytics is paused. Google Analytics is off while we check its privacy settings.';
-const currentBanner = 'Google Analytics is paused. Lovable still measures basic visits.';
+const pausedBanner = 'Google Analytics is paused. Lovable still measures basic visits.';
+const oldIntro = 'Essential storage keeps games working. Advertising is optional.';
+const adIntro = 'Ads help keep DoUKnowBall free. Accepting advertising helps support the site. You can still play if you reject.';
+const readyIntro = 'Ads help keep DoUKnowBall free. Google Analytics helps us see which pages people visit. You choose each separately and can still play if you reject both.';
+const notice = (intro: string, status?: string) => `<p>${intro} We ask again in 180 days. <a href="/privacy">Learn more</a></p>${status ? '\n<p>' + status + '</p>' : ''}`;
 const temp = mkdtempSync(path.join(tmpdir(), 'dukb-host-consent-'));
 afterEach(() => rmSync(temp, { recursive: true, force: true }));
 
@@ -19,7 +23,8 @@ it('queues only denied host analytics consent before the deferred SDK on every e
     'index.html': template.replace('</head>', '<script type="module" crossorigin src="/assets/entry.js"></script>\n</head>'),
     'privacy/index.html': readFileSync('public/privacy/index.html', 'utf8'),
     'profile/index.html': readFileSync('public/profile/index.html', 'utf8'),
-    'legacy-banner/index.html': `<html><head></head><body><p>${oldBanner}</p></body></html>`,
+    'legacy-banner/index.html': `<html><head></head><body>${notice(oldIntro, oldBanner)}</body></html>`,
+    'ad-banner/index.html': `<html><head></head><body>${notice(adIntro, pausedBanner)}</body></html>`,
     'old/index.html': '<html><head><title>Retired route</title></head><body>Retired text</body></html>',
     'other.html': '<html><head><title>Another route</title></head><body>Route text</body></html>',
   };
@@ -45,7 +50,10 @@ it('queues only denied host analytics consent before the deferred SDK on every e
     const body = original.split('<body>')[1];
     const builtBody = html.split('<body>')[1];
     const priorBody = body.includes('id="dukb-boot"') ? builtBody : builtBody.replace(/\n<div id="dukb-boot"[^>]*><img[^>]+><\/div>/, '');
-    expect(priorBody, name).toBe(body.replace(oldBanner, currentBanner));
+    const expected = body.replace(notice(oldIntro, oldBanner), notice(readyIntro))
+      .replace(notice(oldIntro, pausedBanner), notice(readyIntro))
+      .replace(notice(adIntro, pausedBanner), notice(readyIntro));
+    expect(priorBody, name).toBe(expected);
     const window: { dataLayer?: unknown[]; gtag?: unknown; __DUKB_HOST_ANALYTICS_DEFAULT__?: unknown } = { dataLayer: [{ unrelated: true }] };
     vm.runInNewContext(matches[0][1], { window });
     expect(window.dataLayer?.[0]).toEqual({ unrelated: true });

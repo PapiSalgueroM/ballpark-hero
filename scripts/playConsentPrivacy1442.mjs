@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { createHash } from 'node:crypto';
 import { chromium } from './lib/playwrightLoader.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:4173';
@@ -9,23 +8,24 @@ assert.equal(new URL(BASE).hostname, '127.0.0.1', 'This suite uses the completed
 const out = process.env.LEGAL_PRIVACY_OUT || 'legal-privacy-artifacts';
 fs.mkdirSync(out, { recursive: true });
 const report = { cases: [], externalRequests: [], actualOutbound: 0, complete: false };
-const cache = new Map(JSON.parse(fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE, 'manifest.json'), 'utf8')).map(row => {
-  const body = fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE, row.file));
-  assert.equal(createHash('sha256').update(body).digest('hex'), row.sha256);
-  return [row.url, { body, contentType: row.contentType }];
-}));
+const SITE = 'https://douknowball.com';
 const key = 'cookie-consent-v2';
-const choice = (advertising, analytics) => JSON.stringify({ version: 2, advertising, analytics, updatedAt: Date.now() });
+const choice = (advertising, analytics) => JSON.stringify({ version: 2, advertising, analytics,
+  ...(analytics ? { analyticsOptIn: 1 } : {}), updatedAt: Date.now() });
 const vendors = rows => rows.filter(url => /googletagmanager|googlesyndication|google-analytics/.test(url));
 const browser = await chromium.launch({ headless: true });
 async function context(options = {}) {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, ...options });
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block', ...options });
   const requests = [];
   await ctx.route('**/*', async route => {
     const request = route.request(), url = new URL(request.url());
-    if (url.origin === new URL(BASE).origin) return route.continue();
+    if (url.origin === SITE) {
+      assert(['GET', 'HEAD'].includes(request.method()), 'Only static app resources come from the loopback build');
+      const response = await fetch(BASE + url.pathname + url.search, { method: request.method(), redirect: 'error' });
+      return route.fulfill({ status: response.status, contentType: response.headers.get('content-type') || 'application/octet-stream',
+        body: Buffer.from(await response.arrayBuffer()) });
+    }
     requests.push(url.href); report.externalRequests.push(url.href);
-    if (cache.has(url.href)) return route.fulfill({ status: 200, ...cache.get(url.href) });
     if (/googletagmanager\.com\/gtag\/js/.test(url.href)) return route.fulfill({ status: 200, contentType: 'application/javascript', body: 'window.__privacyAnalyticsFixture=true;' });
     if (/googlesyndication\.com\/pagead\/js\/adsbygoogle/.test(url.href)) return route.fulfill({ status: 200, contentType: 'application/javascript', body: 'window.__privacyAdsFixture=true;' });
     // Fixture responses prevent all database, report, AI and other external transport.
@@ -40,18 +40,18 @@ async function run(name, action) {
 }
 
 try {
-  await run('fresh choice, paused analytics and footer opening preserve the current decision', async () => {
+  await run('fresh choices start off and reopening preserves an advertising-only decision', async () => {
     const { ctx, requests } = await context();
     try {
       const page = await ctx.newPage();
-      await page.goto(BASE + '/privacy');
+      await page.goto(SITE + '/privacy');
       await region(page).waitFor();
       assert.equal(vendors(requests).length, 0);
       const advertising = region(page).getByRole('checkbox', { name: /Advertising/i });
       assert.equal(await advertising.isChecked(), false);
-      assert.equal(await region(page).getByRole('checkbox', { name: /Analytics/i }).count(), 0);
-      assert.equal(await region(page).locator('[data-analytics-paused-status]').isVisible(), true);
-      assert.match(await region(page).locator('[data-analytics-paused-status]').innerText(), /Analytics is paused\. Google Analytics is off while we check its privacy settings\./);
+      const analytics = region(page).getByRole('checkbox', { name: 'Google Analytics', exact: true });
+      assert.equal(await analytics.isEnabled(), true);
+      assert.equal(await analytics.isChecked(), false);
       await advertising.check();
       await region(page).getByRole('button', { name: 'Save choices', exact: true }).click();
       await region(page).waitFor({ state: 'hidden' });
@@ -62,8 +62,7 @@ try {
       await page.getByRole('button', { name: 'Cookie choices', exact: true }).click();
       await region(page).waitFor();
       assert.equal(await region(page).getByRole('checkbox', { name: /Advertising/i }).isChecked(), true);
-      assert.equal(await region(page).getByRole('checkbox', { name: /Analytics/i }).count(), 0);
-      assert.equal(await region(page).locator('[data-analytics-paused-status]').isVisible(), true);
+      assert.equal(await analytics.isChecked(), false);
       assert.equal(await page.evaluate(key => localStorage.getItem(key), key), before);
       assert(await region(page).getByRole('button', { name: 'Reject all', exact: true }).isVisible());
       assert(await region(page).getByRole('button', { name: 'Accept all', exact: true }).isVisible());
@@ -82,16 +81,16 @@ try {
         }
       }, { key, value: choice(true, true) });
       await ctx.addCookies([
-        { name: '_ga_FIXTURE', value: 'optional', url: BASE },
-        { name: '_gcl_au', value: 'optional', url: BASE },
-        { name: 'dukb_fixture_essential', value: 'kept', url: BASE },
+        { name: '_ga_FIXTURE', value: 'optional', url: SITE },
+        { name: '_gcl_au', value: 'optional', url: SITE },
+        { name: 'dukb_fixture_essential', value: 'kept', url: SITE },
       ]);
       const a = await ctx.newPage(), b = await ctx.newPage();
-      await a.goto(BASE + '/footle'); await b.goto(BASE + '/footle');
+      await a.goto(SITE + '/footle');
+      await a.getByRole('button', { name: "Let's Play!", exact: true }).click();
+      await b.goto(SITE + '/footle');
       for (const page of [a, b]) {
-        const play = page.getByRole('button', { name: "Let's Play!", exact: true });
-        if (await play.isVisible()) await play.click();
-        await page.waitForFunction(() => window.__privacyAdsFixture === true);
+        await page.waitForFunction(() => window.__privacyAdsFixture === true && window.__privacyAnalyticsFixture === true);
       }
       await a.getByRole('button', { name: 'Cookie choices', exact: true }).click();
       const reloadedA = a.waitForEvent('framenavigated', { predicate: frame => frame === a.mainFrame(), timeout: 15000 });
@@ -114,11 +113,29 @@ try {
     const { ctx, requests } = await context();
     try {
       await ctx.addInitScript(value => localStorage.setItem('cookie-consent', value), legacy);
-      const page = await ctx.newPage(); await page.goto(BASE + '/privacy');
+      const page = await ctx.newPage(); await page.goto(SITE + '/');
       await page.getByRole('button', { name: 'Cookie choices', exact: true }).waitFor();
       if (legacy === 'accepted') await region(page).waitFor();
       else assert.equal(await region(page).count(), 0);
       assert.equal(vendors(requests).length, 0);
+    } finally { await ctx.close(); }
+  });
+
+  await run('an older affirmative Analytics record needs a new opt-in', async () => {
+    const { ctx, requests } = await context();
+    try {
+      await ctx.addInitScript(key => localStorage.setItem(key, JSON.stringify({
+        version: 2, advertising: false, analytics: true, updatedAt: Date.now(),
+      })), key);
+      const page = await ctx.newPage(); await page.goto(SITE + '/');
+      await page.getByRole('button', { name: 'Cookie choices', exact: true }).click();
+      const analytics = region(page).getByRole('checkbox', { name: 'Google Analytics', exact: true });
+      assert.equal(await analytics.isChecked(), false);
+      assert.equal(vendors(requests).length, 0);
+      await analytics.check();
+      await region(page).getByRole('button', { name: 'Save choices', exact: true }).click();
+      await page.waitForFunction(() => window.__privacyAnalyticsFixture === true);
+      assert.equal(requests.filter(url => /adsbygoogle/.test(url)).length, 0);
     } finally { await ctx.close(); }
   });
 
@@ -127,10 +144,10 @@ try {
     try {
       await ctx.addInitScript(({ key, value }) => localStorage.setItem(key, value), { key, value: choice(false, analytics) });
       await ctx.route('**/assets/*.js', route => route.abort());
-      const page = await ctx.newPage(); await page.goto(BASE + '/privacy');
+      const page = await ctx.newPage(); await page.goto(SITE + '/footle');
       assert.equal(requests.filter(url => /googletagmanager/.test(url)).length, 0);
       assert.equal(requests.filter(url => /adsbygoogle/.test(url)).length, 0);
-      assert.match(await page.locator('#dukb-snapshot').innerText(), /Privacy/i);
+      assert.match(await page.locator('#dukb-snapshot').innerText(), /Footle/i);
     } finally { await ctx.close(); }
   });
 
@@ -138,14 +155,18 @@ try {
     const { ctx, requests } = await context();
     try {
       await ctx.addInitScript(() => Object.defineProperty(navigator, 'globalPrivacyControl', { configurable: true, value: true }));
-      const page = await ctx.newPage(); await page.goto(BASE + '/privacy'); await region(page).waitFor();
+      const page = await ctx.newPage(); await page.goto(SITE + '/privacy'); await region(page).waitFor();
       const advertising = region(page).getByRole('checkbox', { name: /Advertising/i });
       assert.equal(await advertising.isDisabled(), true);
       await region(page).getByRole('button', { name: 'Accept all', exact: true }).click();
       await region(page).waitFor({ state: 'hidden' });
-      assert.equal(requests.filter(url => /googletagmanager/.test(url)).length, 0);
+      assert.equal(vendors(requests).length, 0, 'The privacy page is excluded from Analytics');
+      await page.goto(SITE + '/footle');
+      await page.waitForFunction(() => window.__privacyAnalyticsFixture === true);
+      assert.equal(requests.filter(url => /googletagmanager/.test(url)).length, 1);
       assert.equal(requests.filter(url => /adsbygoogle/.test(url)).length, 0);
-      assert.equal(JSON.parse(await page.evaluate(key => localStorage.getItem(key), key)).advertising, false);
+      const saved = JSON.parse(await page.evaluate(key => localStorage.getItem(key), key));
+      assert.equal(saved.advertising, false); assert.equal(saved.analytics, true); assert.equal(saved.analyticsOptIn, 1);
     } finally { await ctx.close(); }
   });
   await run('account form loads on request, keeps drafts and returns focus', async () => {
@@ -155,8 +176,8 @@ try {
     try {
       const page = await ctx.newPage(), scripts = [];
       page.on('request', request => { if (request.resourceType() === 'script') scripts.push(request.url()); });
-      await page.route('**/AuthModalBody-*.js', async route => { await bodyHeld; await route.continue(); });
-      await page.goto(BASE + '/');
+      await page.route('**/AuthModalBody-*.js', async route => { await bodyHeld; await route.fallback(); });
+      await page.goto(SITE + '/');
       await region(page).waitFor();
       await region(page).getByRole('button', { name: 'Reject all', exact: true }).click();
       await region(page).waitFor({ state: 'hidden' });

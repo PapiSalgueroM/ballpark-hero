@@ -1,3 +1,4 @@
+// @vitest-environment-options {"url":"https://douknowball.com/"}
 /**
  * Round 1142: the cookie banner in a browser that will not store its answer.
  * Before this round "Reject all" threw an uncaught quota error when
@@ -53,6 +54,7 @@ afterEach(() => {
   delete (window as unknown as Record<string, unknown>).adsbygoogle;
   delete window.dataLayer;
   delete window.gtag;
+  Reflect.deleteProperty(window, 'dukbGaLayer');
 });
 
 describe.each(['blocked', 'full'] as const)('the cookie banner with storage %s', kind => {
@@ -73,17 +75,22 @@ describe.each(['blocked', 'full'] as const)('the cookie banner with storage %s',
     expect(banner()).toBeNull();
   });
 
-  it('Accept all: the banner leaves, the answer holds for the visit, while analytics stays paused', async () => {
+  it('Accept all: both choices hold for the visit and remounting keeps the same analytics tag', async () => {
     breakStorage(kind);
     const { seam, view, CookieConsent } = await mountBanner();
     expect(document.querySelector(ANALYTICS)).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Accept all' }));
     expect(banner()).toBeNull();
-    expect(JSON.parse(seam.safeLocalStorage.getItem('cookie-consent-v2')!)).toMatchObject({ version: 2, advertising: true, analytics: false });
-    expect(document.querySelector(ANALYTICS)).toBeNull();
+    expect(JSON.parse(seam.safeLocalStorage.getItem('cookie-consent-v2')!)).toMatchObject({
+      version: 2, advertising: true, analytics: true, analyticsOptIn: 1,
+    });
+    const tag = document.querySelector(ANALYTICS);
+    expect(tag).not.toBeNull();
     view.unmount();
     render(<MemoryRouter><CookieConsent /></MemoryRouter>);
     expect(banner()).toBeNull();
+    expect(document.querySelectorAll(ANALYTICS)).toHaveLength(1);
+    expect(document.querySelector(ANALYTICS)).toBe(tag);
   });
 });
 

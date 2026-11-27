@@ -1,4 +1,4 @@
-import { openConsentChoices } from '@/lib/consentPreferences';
+import { ANALYTICS_READY, openConsentChoices } from '@/lib/consentPreferences';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
@@ -17,7 +17,7 @@ const CookiePolicy = () => {
       </Link>
       <h1 className="text-3xl font-bold mb-8">Cookie Policy</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: November 13, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: November 26, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -27,8 +27,8 @@ const CookiePolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Your choices</h2>
-          <p>Advertising starts off. Google Analytics 4 stays paused. Advertising stays off if your browser exposes Global Privacy Control to the site, even if you previously turned Advertising on.</p>
-          <p className="mt-2">Reject all keeps Advertising off. Accept all turns Advertising on where available. Save choices applies your selection. We ask again after 180 days. That period applies to your cookie choice, not a promise to delete game saves or provider records after 180 days.</p>
+          <p>{ANALYTICS_READY ? 'Advertising and Google Analytics start off. You can choose either one separately.' : 'Advertising starts off. Google Analytics 4 stays paused.'} Advertising stays off if your browser exposes Global Privacy Control to the site, even if you previously turned Advertising on.</p>
+          <p className="mt-2">{ANALYTICS_READY ? 'Reject all keeps both options off. Accept all turns on both available options.' : 'Reject all keeps Advertising off. Accept all turns Advertising on where available.'} Save choices applies your selection. We ask again after 180 days. That period applies to your cookie choice, not a promise to delete game saves or provider records after 180 days.</p>
           <p className="mt-2">Open Cookie choices here or in the footer whenever you want. Opening the settings does not change your saved choice.</p>
           <button type="button" data-no-prerender="" onClick={event => openConsentChoices(event.currentTarget)}
             className="mt-2 inline-flex min-h-11 items-center rounded-md border border-border px-3 font-medium text-foreground underline hover:bg-muted focus-visible:outline-ring">

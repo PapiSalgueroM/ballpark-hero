@@ -22,15 +22,15 @@ describe('legal and story transparency', () => {
     expect(screen.getByRole('heading', { name: "AI Team's Season" })).toBeVisible();
   });
 
-  it('connects the privacy request path to the own profile and describes the paused Analytics choice', () => {
+  it('links to the visitor profile and describes the separate Google Analytics choice', () => {
     render(<MemoryRouter><PrivacyPolicy /></MemoryRouter>);
     expect(screen.getByRole('link', { name: 'your profile' })).toHaveAttribute('href', '/profile');
     expect(screen.queryByText(/There is currently no self-serve delete button/)).toBeNull();
     const section = screen.getByRole('heading', { name: /^2\. Cookies/ }).parentElement!;
     expect(within(section).getByText('Global Privacy Control')).toBeVisible();
-    expect(within(section).getByText(/Analytics is currently paused/)).toBeVisible();
+    expect(within(section).getByText(/turn Google Analytics on or off separately in Cookie choices/)).toBeVisible();
     expect(within(section).getByText(/180 days/)).toBeVisible();
-    expect(screen.getByText(/We do not load its tag/)).toBeVisible();
+    expect(screen.getByText(/If you opt in, Google Analytics 4 receives the public page address and title/)).toBeVisible();
     expect(screen.getAllByText(/30 days/)).toHaveLength(3);
   });
 });

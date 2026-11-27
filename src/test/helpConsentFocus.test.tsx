@@ -69,7 +69,8 @@ describe('pending cookie choices belong to the open help focus scope', () => {
       expect(consent.load).not.toHaveBeenCalled();
       fireEvent.click(button);
       await waitFor(() => expect(screen.queryByRole('region', { name: 'Cookie choices' })).toBeNull());
-      expect(JSON.parse(localStorage.getItem('cookie-consent-v2')!)).toMatchObject({ version: 2, advertising: choice === 'Accept all', analytics: false });
+      const accepted = choice === 'Accept all';
+      expect(JSON.parse(localStorage.getItem('cookie-consent-v2')!)).toMatchObject({ version: 2, advertising: accepted, analytics: accepted });
       expect(consent.changed).toHaveBeenCalledTimes(1);
       expect(consent.load).toHaveBeenCalledTimes(choice === 'Accept all' ? 1 : 0);
       expect(screen.getByRole('dialog')).toBe(dialog);

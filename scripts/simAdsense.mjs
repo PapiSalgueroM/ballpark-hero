@@ -48,7 +48,7 @@ const CONTROL_FAILURES = {
   'missing-slot': ['found 81 source AdBanner callers, expected exactly 82'],
   'privacy-npa-bridge': ["the privacy policy does not distinguish Google's general disclosure from this site's non-personalized ad request"],
   'delayed-consent': ['AdBanner does not read stored consent before its first render'],
-  'analytics-collection': ['paused loadAnalytics has executable collection code'],
+  'analytics-collection': ['GA4 config could send an automatic pageview alongside the manual one'],
 };
 if (CONTROL && !Object.hasOwn(CONTROL_FAILURES, CONTROL)) {
   console.error(`SIM_ADSENSE_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -89,8 +89,8 @@ let consented = read('src/lib/consentedScripts.ts');
 let preferences = read('src/lib/consentPreferences.ts');
 consented = mutateOnce(
   consented,
-  'export function loadAnalytics(): void {}',
-  'export function loadAnalytics(): void { window.dataLayer = []; }',
+  'send_page_view: false',
+  'send_page_view: true',
   'analytics-collection',
 );
 
@@ -336,14 +336,12 @@ console.log('5) the advertising disclosures, as shipped');
   }
 }
 
-/* Analytics stays paused until its account-side collection settings are verified. */
 console.log('5b) analytics stays off in the template and every saved head');
 {
   const templateScripts = [...indexHtml.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
   const marked = templateScripts.filter(match => /\bdata-dukb-consent-bootstrap(?:\s|=|$)/.test(match[1]));
   if (marked.length !== 1) fail('index.html must have exactly one marked consent bootstrap');
-  if (!/export const ANALYTICS_READY:\s*boolean\s*=\s*false/.test(codeOnly(preferences))) fail('runtime analytics readiness is not paused');
-  if (!/export function loadAnalytics\(\): void \{\}/.test(codeOnly(consented))) fail('paused loadAnalytics has executable collection code');
+  if (!/analyticsCommand\('config', GA_MEASUREMENT_ID, \{\s*\.\.\.page, send_page_view: false,/.test(codeOnly(consented))) fail('GA4 config could send an automatic pageview alongside the manual one');
   if (marked.length === 1) {
     const script = marked[0][2];
     const execute = (code, value) => {
@@ -374,7 +372,7 @@ console.log('5b) analytics stays off in the template and every saved head');
     }
   }
   if (/adsbygoogle\.js/.test(codeOnly(indexHtml))) fail('index.html loads advertising globally without a manual slot');
-  console.log('   paused readiness, all stored purpose combinations, copied request fault and every saved bootstrap verified');
+  console.log('   manual pageviews, all stored purpose combinations, copied request fault and every saved bootstrap verified');
 }
 /* ── 6: an empty ad slot is not labelled as an advertisement ──────────── */
 console.log('6) the ad component never labels an empty box');

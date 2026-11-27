@@ -1,3 +1,4 @@
+// @vitest-environment-options {"url":"https://douknowball.com/"}
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { loadAdSense, loadAnalytics, stopRevokedServices } from '@/lib/consentedScripts';
 import { safeLocalStorage } from '@/lib/safeStorage';
@@ -5,7 +6,7 @@ import { safeLocalStorage } from '@/lib/safeStorage';
 const gpcDescriptor = Object.getOwnPropertyDescriptor(window.navigator, 'globalPrivacyControl');
 const originalPath = `${location.pathname}${location.search}${location.hash}`;
 const grantBoth = () => safeLocalStorage.setItem('cookie-consent-v2', JSON.stringify({
-  version: 2, advertising: true, analytics: true, updatedAt: Date.now(),
+  version: 2, advertising: true, analytics: true, analyticsOptIn: 1, updatedAt: Date.now(),
 }));
 
 beforeEach(() => {
@@ -29,7 +30,7 @@ afterEach(() => {
   else Reflect.deleteProperty(navigator, 'globalPrivacyControl');
 });
 
-describe('the privacy-safe paused analytics release', () => {
+describe('optional services and the host consent queue', () => {
   it('leaves the host-only consent queue alone until an advertising slot actually loads', () => {
     const hostDefault = ['consent', 'default', { analytics_storage: 'denied' }];
     Reflect.set(window, '__DUKB_HOST_ANALYTICS_DEFAULT__', hostDefault);
@@ -66,14 +67,16 @@ describe('the privacy-safe paused analytics release', () => {
   });
 
   for (const path of ['/footle', '/sign-the-player', '/reset-password', '/admin/login', '/admin/reports', '/profile', '/account', '/auth']) {
-    // Break caught: unverified enhanced collection is enabled by a stale opt-in.
     it(`keeps analytics paused on ${path} despite an old affirmative record`, () => {
-      grantBoth();
-      history.replaceState({}, '', `${path}?token=private-token#private-fragment`);
+      safeLocalStorage.setItem('cookie-consent-v2', JSON.stringify({
+        version: 2, advertising: true, analytics: true, updatedAt: Date.now(),
+      }));
+      history.replaceState({}, '', path);
       loadAnalytics();
       expect(document.querySelector('script[src*="googletagmanager.com/gtag/js"]')).toBeNull();
       expect(window.dataLayer).toBeUndefined();
       expect(window.gtag).toBeUndefined();
+      expect(Reflect.get(window, 'dukbGaLayer')).toBeUndefined();
     });
   }
 

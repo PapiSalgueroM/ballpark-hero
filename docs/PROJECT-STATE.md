@@ -1,3 +1,9 @@
+### November 26, 2026. Opt-in Google Analytics page views
+
+On the production domain, visitors can choose Google Analytics separately from Advertising. The site sends one manual page view per public page visited after opt-in. Browser history, search, outbound-link, file download, scroll, video and form measurement are disabled in the GA4 stream. Previously saved choices keep their advertising preference and require a new affirmative analytics choice. Private pages and account callbacks are excluded.
+
+The browser replay uses the real public Google tag and intercepts collection locally. Home to Soccer Career and Back produced three page views, with one more on refresh. Direct visits to all 32 ranked public pages produced 32 page views with the expected page titles. Searches, PDF links, form submissions and scrolling produced no additional measurement events in the replay. The production build, type check, 186 combined tests and 16 site checks passed. Run node scripts/playGa4OptIn.mjs dist against a normal build when checking changes. The published snapshot needs a separate Lovable release before visitor reporting can be verified.
+
 ### November 26, 2026. Ranked game pages
 
 The November traffic rankings put Soccer Career, the homepage and Club Manager first. The site's 25 highest-clicked Google landing pages all appear in the index. Two of Lovable's top ten by views are missing. The site links to Stadium Tycoon in the Club Manager guide and to NFL My Career in the NFL Career Path guide. Both links are in the saved HTML that a crawler receives. [Page rankings and measurement sources](TRAFFIC-PRIORITIES-2026-11-26.md)

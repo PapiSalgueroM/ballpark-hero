@@ -58,10 +58,16 @@ describe('withdrawal cannot reload into a durable old grant or discard a held sa
     } finally { release(); }
   });
 
-  it('never saves an analytics permission while analytics is paused', () => {
-    const saved = saveConsentPreferences({ advertising: false, analytics: true });
-    expect(saved.analytics).toBe(false);
-    expect(JSON.parse(safeLocalStorage.getItem(KEY)!).analytics).toBe(false);
+  it('requires a new analytics opt-in even when a previous record contains analytics true', () => {
+    localStorage.setItem(KEY, oldGrant());
+    expect(getEffectiveConsent()).toEqual({ advertising: true, analytics: false });
+    saveConsentPreferences({ advertising: false, analytics: true });
+    expect(JSON.parse(localStorage.getItem(KEY)!)).toMatchObject({ advertising: false, analytics: true, analyticsOptIn: 1 });
+    expect(getEffectiveConsent()).toEqual({ advertising: false, analytics: true });
+    expect(canReloadAfterWithdrawal({ advertising: false, analytics: true })).toBe(false);
+    saveConsentPreferences({ advertising: false, analytics: false });
+    expect(getEffectiveConsent().analytics).toBe(false);
+    expect(canReloadAfterWithdrawal({ advertising: false, analytics: true })).toBe(true);
   });
 
   it('does not mirror the new purpose decision back into the legacy bundled grant', () => {

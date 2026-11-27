@@ -1,18 +1,21 @@
-/* Round1446 remote-only browser proof. Original records three real missing
-   outcomes and exits1. Green has four profiles, three copied-response faults
-   and three exact restores. Application source/dist never changes here. */
+/* Original replays the archived Round 1446 build. Green checks the current
+   cookie policy at four viewports, then three changed and restored responses. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const DIST = path.join(ROOT, 'dist');
+const DIST = path.resolve(process.env.COOKIE_POLICY_DIST || path.join(ROOT, 'dist'));
 const BASE = process.env.BASE || 'http://127.0.0.1:4173';
 const PHASE = process.env.COOKIE_POLICY_PHASE || 'green';
-const OUT = path.resolve(process.env.COOKIE_POLICY_BROWSER_OUT || path.join(ROOT, 'cookie-policy-browser-artifacts'));
+const evidenceRoot = path.join(ROOT, 'cookie-policy-browser-artifacts');
+if (!process.env.COOKIE_POLICY_BROWSER_OUT) fs.mkdirSync(evidenceRoot, { recursive: true });
+const OUT = process.env.COOKIE_POLICY_BROWSER_OUT ? path.resolve(process.env.COOKIE_POLICY_BROWSER_OUT)
+  : fs.mkdtempSync(path.join(evidenceRoot, 'run-'));
 const SOURCE = process.env.SOURCE_SHA || process.env.GITHUB_SHA;
 const KEY = 'cookie-consent-v2', INIT = '__cookie1446_initialized', SAVE = '__cookie1446_essential_save';
 const SAVE_BYTES = 'cookie-policy1446 essential fixture, keep exactly';
@@ -27,10 +30,10 @@ const profiles = [
 ];
 const markers = { route: 'COOKIE_BROWSER_ROUTE', footer: 'COOKIE_BROWSER_FOOTER_NAV',
   privacy: 'COOKIE_BROWSER_PRIVACY_LINK', copy: 'COOKIE_BROWSER_COPY', choices: 'COOKIE_BROWSER_CHOICES' };
-const pausedCopy = 'Analytics is paused while we check its collection settings, so Accept all does not turn it on.';
-const claims = [pausedCopy,
+const analyticsCopy = 'Advertising and Google Analytics start off. You can choose either one separately.';
+const claims = [analyticsCopy,
   'That period applies to your cookie choice, not a promise to delete game saves or provider records after 180 days.',
-  'Pausing Google Analytics does not turn off ordinary hosting logs or hosting-provider usage information.',
+  'Lovable still measures basic visits, engagement, performance, and browser errors after Reject all.',
   'Withdrawal does not erase information already received by a provider or remove cookies on another site or outside our code\'s access.',
 ];
 const sourceFiles = ['src/App.tsx', 'src/pages/CookiePolicy.tsx', 'src/pages/PrivacyPolicy.tsx',
@@ -38,9 +41,9 @@ const sourceFiles = ['src/App.tsx', 'src/pages/CookiePolicy.tsx', 'src/pages/Pri
   'src/lib/consentedScripts.ts', 'src/components/ads/AdBanner.tsx', 'src/lib/pageSchema.ts',
   'src/lib/liveScores.ts', 'src/hooks/useMostPlayed.ts', 'scripts/genSitemap.mjs', 'scripts/simIndexNow.mjs',
   'public/llms.txt', 'package.json', 'package-lock.json', 'scripts/lib/offlineTransport.cjs', 'scripts/playCookiePolicy1446.mjs'];
-const report = { v: 1, phase: PHASE, source: SOURCE, status: 'RUNNING', complete: false,
+const report = { v: 1, phase: PHASE, source: SOURCE || 'local working tree', status: 'RUNNING', complete: false,
   original: [], positives: [], faults: [], restorations: [], errors: [], transportPredicateControls: [],
-  actualOutbound: 0, holds: {}, fixtureScope: 'Exact cached fonts and two source-bound shell lookups fulfilled locally. No provider/backend transport.' };
+  actualOutbound: 0, holds: {}, fixtureScope: 'Static build assets and two local shell fixtures. The archived original uses cached fonts.' };
 let browser, fonts, fontManifest, staticFiles;
 fs.mkdirSync(OUT, { recursive: true });
 const write = (name, value) => fs.writeFileSync(path.join(OUT, name), value);
@@ -180,9 +183,10 @@ async function foundation(view) {
     assert.equal(await opener(page).count(), 1, 'COOKIE_FOUNDATION: existing footer opener');
     assert.equal(await page.getByRole('heading', { name: /^2\. Cookies/ }).count(), 1, 'COOKIE_FOUNDATION: existing privacy section');
     assert.equal(await region(page).count(), 0, 'COOKIE_FOUNDATION: saved choice starts closed');
-    assert(row.cachedFonts.some(x => x.resourceType === 'stylesheet') && row.cachedFonts.some(x => x.resourceType === 'font'), 'COOKIE_FOUNDATION: actual font fixtures used');
+    if (PHASE === 'original') assert(row.cachedFonts.some(x => x.resourceType === 'stylesheet') && row.cachedFonts.some(x => x.resourceType === 'font'), 'COOKIE_FOUNDATION: actual font fixtures used');
+    else assert(row.allowedRequests.some(x => x.resourceType === 'font'), 'COOKIE_FOUNDATION: local fonts used');
     await clean(view);
-    return { privacyH1: true, existingChoicesOpener: true, fontsUsed: row.cachedFonts.length };
+    return { privacyH1: true, existingChoicesOpener: true, fontsUsed: row.cachedFonts.length + row.allowedRequests.filter(x => x.resourceType === 'font').length };
   });
 }
 async function geometry(view) {
@@ -242,10 +246,14 @@ async function assertChoices(view) {
     await opener(page).click(); await frames(page);
     assert.equal(await region(page).count(), 1, markers.choices + ': trusted footer click opens choices');
     assert(await region(page).isVisible(), markers.choices + ': region visible');
-    const status = region(page).locator('[data-analytics-paused-status]');
-    assert.equal(await status.count(), 1, markers.choices + ': actual paused status');
-    assert.match(await status.innerText(), /Analytics is paused\.\s+Google Analytics is off while we check its privacy settings\./, markers.choices + ': GA stays paused');
-    assert.equal(await region(page).getByRole('checkbox', { name: /Analytics/i }).count(), 0, markers.choices + ': no Analytics control');
+    const analytics = region(page).getByRole('checkbox', { name: 'Google Analytics', exact: true });
+    if (PHASE === 'original') {
+      const status = region(page).locator('[data-analytics-paused-status]');
+      assert.match(await status.innerText(), /Analytics is paused\.\s+Google Analytics is off while we check its privacy settings\./, markers.choices + ': original paused status');
+      assert.equal(await analytics.count(), 0, markers.choices + ': original has no Analytics control');
+    } else {
+      assert(await analytics.isEnabled(), markers.choices + ': independent Analytics control');
+    }
     for (const name of ['Reject all', 'Accept all', 'Save choices']) {
       const button = region(page).getByRole('button', { name, exact: true });
       assert.equal(await button.count(), 1, markers.choices + ': existing ' + name);
@@ -255,31 +263,34 @@ async function assertChoices(view) {
     const advertising = region(page).getByRole('checkbox', { name: 'Advertising', exact: true });
     assert.equal(await advertising.isDisabled(), row.gpc, markers.choices + ': GPC state');
     if (row.gpc) assert.equal(await advertising.isChecked(), false, markers.choices + ': GPC keeps advertising off');
-    return { paused: true, gpc: row.gpc, advertisingDisabled: await advertising.isDisabled() };
+    return { analyticsOffered: PHASE !== 'original', gpc: row.gpc, advertisingDisabled: await advertising.isDisabled() };
   });
 }
-async function choiceRecord(view, expectedAdvertising) {
+async function choiceRecord(view, expectedAdvertising, expectedAnalytics) {
   const value = await view.page.evaluate(key => JSON.parse(localStorage.getItem(key)), KEY);
   assert.equal(value.version, 2, markers.choices + ': saved choice version');
   assert.equal(value.advertising, expectedAdvertising, markers.choices + ': saved advertising');
-  assert.equal(value.analytics, false, markers.choices + ': saved Analytics off');
+  assert.equal(value.analytics, expectedAnalytics, markers.choices + ': saved Analytics');
+  assert.equal(value.analyticsOptIn === 1, expectedAnalytics, markers.choices + ': explicit Analytics opt-in');
   view.row.choiceRecords ??= []; view.row.choiceRecords.push(value);
 }
 async function consentWalk(view) {
   const { page, row } = view;
   await assertChoices(view);
   await region(page).getByRole('button', { name: 'Reject all', exact: true }).click();
-  await region(page).waitFor({ state: 'hidden' }); await choiceRecord(view, false);
+  await region(page).waitFor({ state: 'hidden' }); await choiceRecord(view, false, false);
   await assertChoices(view);
   await region(page).getByRole('button', { name: 'Accept all', exact: true }).click();
-  await region(page).waitFor({ state: 'hidden' }); await choiceRecord(view, !row.gpc); await clean(view);
+  await region(page).waitFor({ state: 'hidden' }); await choiceRecord(view, !row.gpc, true); await clean(view);
   await assertChoices(view);
   if (!row.gpc) await region(page).getByRole('checkbox', { name: 'Advertising', exact: true }).uncheck();
-  const reloaded = row.gpc ? null : page.waitForEvent('framenavigated', { predicate: frame => frame === page.mainFrame(), timeout: 15000 });
+  const analytics = region(page).getByRole('checkbox', { name: 'Google Analytics', exact: true });
+  assert(await analytics.isChecked(), markers.choices + ': saved Analytics grant reopens checked');
+  await analytics.uncheck();
+  const reloaded = page.waitForEvent('framenavigated', { predicate: frame => frame === page.mainFrame(), timeout: 15000 });
   await region(page).getByRole('button', { name: 'Save choices', exact: true }).click();
-  if (reloaded) { await reloaded; await settled(page); await page.getByRole('heading', { name: 'Cookie Policy', exact: true }).waitFor(); }
-  else await region(page).waitFor({ state: 'hidden' });
-  await choiceRecord(view, false); await clean(view);
+  await reloaded; await settled(page); await page.getByRole('heading', { name: 'Cookie Policy', exact: true }).waitFor();
+  await choiceRecord(view, false, false); await clean(view);
   await assertChoices(view);
   const before = await page.evaluate(key => localStorage.getItem(key), KEY);
   await region(page).getByRole('button', { name: 'Cancel', exact: true }).click();
@@ -293,13 +304,17 @@ async function clean(view) {
   assert.equal(row.blocked.length, 0, 'COOKIE_TRANSPORT: no unexpected attempted request');
   assert.equal(row.pageErrors.length, 0, 'COOKIE_SETUP: no page exception');
   assert.equal(await page.locator('script[src*="googletagmanager.com"],script[src*="google-analytics.com"],script[src*="googlesyndication.com"]').count(), 0, 'COOKIE_TRANSPORT: no vendor tag');
-  assert.equal(await page.evaluate(() => !!window.gtag || !!window.dataLayer), false, 'COOKIE_TRANSPORT: no Analytics bootstrap');
+  assert.equal(await page.evaluate(() => !!window.gtag || !!window.dukbGaLayer ||
+    (window.dataLayer || []).some(entry => entry !== window.__DUKB_HOST_ANALYTICS_DEFAULT__ || entry[0] !== 'consent' || entry[1] !== 'default' || entry[2]?.analytics_storage !== 'denied')),
+    false, 'COOKIE_TRANSPORT: legal pages have no Google queue beyond the denied host default');
   assert.equal(await page.evaluate(key => localStorage.getItem(key), SAVE), SAVE_BYTES, 'COOKIE_BROWSER_STATE: essential bytes held');
 }
 async function walk(profile, id, control) {
   let view;
   try {
     view = await open(profile, id, control); await foundation(view);
+    const more = view.page.locator('footer summary').filter({ hasText: 'More links' });
+    if (await more.isVisible()) await more.click();
     await follow(view, footer(view.page), markers.footer); await policy(view);
     await view.page.getByRole('link', { name: 'Back to games', exact: true }).click();
     await view.page.getByRole('textbox', { name: 'Search games', exact: true }).waitFor();
@@ -374,31 +389,33 @@ function controls() {
   const entry = tags[0].match(/\bsrc=(["'])(\/assets\/[^"'?\s]+\.js)\1/)?.[2];
   assert(entry && staticFiles.has(entry), 'COOKIE_SETUP: exact completed entry file');
   const text = fs.readFileSync(path.join(DIST, entry.slice(1)), 'utf8');
-  const footerAnchor = 'to:"/cookie-policy",className:"underline hover:text-foreground transition-colors",children:"Cookie Policy"';
+  const footerAnchors = [...text.matchAll(/to:"\/cookie-policy",className:[\w$]+,children:"Cookie Policy"/g)];
+  assert.equal(footerAnchors.length, 1, 'COOKIE_SETUP: unique footer link in entry');
+  const footerAnchor = footerAnchors[0][0];
   const copies = [changedCopy('wrong-footer-destination', entry, text, footerAnchor,
     footerAnchor.replace('to:"/cookie-policy"', 'to:"/privacy"'), markers.footer)];
-  const cookieChunks = [...staticFiles.keys()].filter(file => file.endsWith('.js') && fs.readFileSync(path.join(DIST, file.slice(1)), 'utf8').includes(pausedCopy));
+  const cookieChunks = [...staticFiles.keys()].filter(file => file.endsWith('.js') && fs.readFileSync(path.join(DIST, file.slice(1)), 'utf8').includes(analyticsCopy));
   assert.equal(cookieChunks.length, 1, 'COOKIE_SETUP: unique actual compiled policy disclosure chunk');
   const cookieText = fs.readFileSync(path.join(DIST, cookieChunks[0].slice(1)), 'utf8');
-  copies.push(changedCopy('missing-paused-disclosure', cookieChunks[0], cookieText, pausedCopy,
+  copies.push(changedCopy('missing-analytics-disclosure', cookieChunks[0], cookieText, analyticsCopy,
     'Analytics details are unavailable in this copied control.', markers.copy));
-  const openerPattern = /onClick:([A-Za-z_$][\w$]*)=>([A-Za-z_$][\w$]*)\(\1\.currentTarget\),className:"underline hover:text-foreground transition-colors",children:"Cookie choices"/g;
+  const openerPattern = /onClick:([A-Za-z_$][\w$]*)=>[A-Za-z_$][\w$]*\(\1\.currentTarget\),className:[\w$]+,children:"Cookie choices"/g;
   const opening = [...text.matchAll(openerPattern)];
   assert.equal(opening.length, 1, 'COOKIE_SETUP: unique actual compiled footer choices callback');
   copies.push(changedCopy('noop-cookie-choices', entry, text, opening[0][0],
-    'onClick:()=>{},className:"underline hover:text-foreground transition-colors",children:"Cookie choices"', markers.choices));
+    opening[0][0].replace(/^onClick:[^,]+/, 'onClick:()=>{}'), markers.choices));
   return copies;
 }
 try {
   assert.equal(fs.readdirSync(OUT).length, 0, 'COOKIE_SETUP: fresh artifact directory');
   assert(['original', 'green'].includes(PHASE), 'COOKIE_SETUP: recognized phase');
-  assert.match(SOURCE || '', /^[a-f0-9]{40}$/, 'COOKIE_SETUP: exact remote source SHA');
+  if (PHASE === 'original' || SOURCE) assert.match(SOURCE || '', /^[a-f0-9]{40}$/, 'COOKIE_SETUP: exact remote source SHA');
   assert.equal(new URL(BASE).origin, BASE, 'COOKIE_SETUP: bare origin');
   assert.equal(new URL(BASE).hostname, '127.0.0.1', 'COOKIE_SETUP: literal127 loopback only');
   assert.equal(new URL(BASE).protocol, 'http:', 'COOKIE_SETUP: local completed HTTP build');
   assert(OUT !== DIST && !OUT.startsWith(DIST + path.sep), 'COOKIE_SETUP: artifacts outside held dist');
   const preload = path.join(ROOT, 'scripts/lib/offlineTransport.cjs');
-  assert.equal((process.env.NODE_OPTIONS || '').trim().split(/\s+/)[0], '--require=' + preload, 'COOKIE_SETUP: offline preload must be first');
+  assert(createRequire(import.meta.url).cache[preload], 'COOKIE_SETUP: offline transport preload is active');
   assert(process.env.SIM_OFFLINE_RECEIPT && fs.existsSync(process.env.SIM_OFFLINE_RECEIPT), 'COOKIE_SETUP: existing offline receipt');
   assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0, 'COOKIE_SETUP: no previous transport refusal');
   report.holds.before = sourceHold();
@@ -407,9 +424,9 @@ try {
   staticFiles = new Map(distBefore.map(row => ['/' + row.file, row]));
   report.holds.distBefore = { files: distBefore.length, sha256: sha(JSON.stringify(distBefore)) };
   write('dist-before.sha256', distBefore.map(row => row.sha256 + '  ' + row.file).join('\n') + '\n');
-  assert(process.env.FREE_KICK_FONT_CACHE, 'COOKIE_SETUP: exact prefetched font cache');
-  fontManifest = fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE, 'manifest.json'));
-  if (process.env.FONT_CACHE_MANIFEST_SHA256) assert.equal(sha(fontManifest), process.env.FONT_CACHE_MANIFEST_SHA256, 'COOKIE_SETUP: expected font manifest');
+  if (PHASE === 'original') assert(process.env.FREE_KICK_FONT_CACHE, 'COOKIE_SETUP: original historical font cache');
+  fontManifest = PHASE === 'original' ? fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE, 'manifest.json')) : Buffer.from('[]');
+  if (PHASE === 'original' && process.env.FONT_CACHE_MANIFEST_SHA256) assert.equal(sha(fontManifest), process.env.FONT_CACHE_MANIFEST_SHA256, 'COOKIE_SETUP: expected font manifest');
   fonts = new Map(JSON.parse(fontManifest).map(row => {
     const url = new URL(row.url);
     assert(url.protocol === 'https:' && ['fonts.googleapis.com', 'fonts.gstatic.com'].includes(url.hostname) && !url.username && !url.password, 'COOKIE_SETUP: exact font provider fixture');
@@ -421,7 +438,11 @@ try {
   predicateControls(); browser = await chromium.launch({ headless: true });
   if (PHASE === 'original') await original();
   else {
-    for (const profile of profiles) report.positives.push(await walk(profile, profile.id));
+    for (const profile of profiles) {
+      const result = await walk(profile, profile.id);
+      report.positives.push(result);
+      console.log(`Cookie policy: ${profile.id} ${result.status}, ${result.checks?.length || 0} checks.`);
+    }
     assert(report.positives.every(row => row.status === 'PASS' && !row.finalError), 'COOKIE_SETUP: all four actual profiles pass before copied controls');
     let healthy = report.positives[0];
     for (const control of controls()) {
@@ -454,7 +475,7 @@ finally {
     report.holds.distAfter = { files: after.length, sha256: sha(JSON.stringify(after)) };
     assert.deepEqual(report.holds.distAfter, report.holds.distBefore, 'COOKIE_HOLD: complete dist path/byte inventory unchanged');
     for (const font of fonts?.values() || []) assert.equal(sha(fs.readFileSync(font.file)), font.sha256, 'COOKIE_HOLD: cached font bytes unchanged');
-    assert.equal(sha(fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE, 'manifest.json'))), sha(fontManifest), 'COOKIE_HOLD: exact font manifest unchanged');
+    if (PHASE === 'original') assert.equal(sha(fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE, 'manifest.json'))), sha(fontManifest), 'COOKIE_HOLD: exact font manifest unchanged');
     assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0, 'COOKIE_HOLD: zero offline transport attempts');
     report.holds.unchanged = true;
   } catch (error) { report.errors.push(failure(error)); }

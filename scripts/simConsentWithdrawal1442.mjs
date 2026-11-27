@@ -1,27 +1,39 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 
 const manifest = JSON.parse(fs.readFileSync('src/test/controls/consent1442/manifest.json', 'utf8'));
 const out = path.resolve(process.env.LEGAL_PRIVACY_OUT || 'legal-privacy-artifacts', 'consent-controls');
 fs.mkdirSync(out, { recursive: true });
-const hash = value => createHash('sha256').update(value).digest('hex');
+const controls = manifest.files.map(row => {
+  if (row.name === 'expiredDraft') return { ...row,
+    old: row.old.replace('if (!saved) setAdvertising(false);',
+      'if (!saved) {\n        setAdvertising(false);\n        setAnalytics(false);\n      }'),
+  };
+  if (row.name === 'analyticsCollection') return { ...row,
+    source: 'src/lib/consentPreferences.ts', alias: '@/lib/consentPreferences',
+    old: 'value.analytics && value.analyticsOptIn === 1', new: 'value.analytics',
+    test: 'src/test/consentWithdrawal1442.test.ts',
+    testName: 'requires a new analytics opt-in even when a previous record contains analytics true',
+  };
+  return row;
+});
 const report = { cases: [], complete: false };
-for (const row of manifest.files) {
-  const original = fs.readFileSync(row.source, 'utf8'), copy = fs.readFileSync(row.copy, 'utf8');
-  assert.equal(hash(original), row.sourceSha256, row.name + ' actual source hash');
-  assert.equal(hash(copy), row.copySha256, row.name + ' copied source hash');
+for (const row of controls) {
+  const bytes = fs.readFileSync(row.source);
+  const original = bytes.toString('utf8').replace(/\r\n/g, '\n');
   assert.equal(original.split(row.old).length - 1, 1, row.name + ' exact unique fault target');
-  assert.equal(original.replace(row.old, row.new), copy, row.name + ' complete copied change');
+  const copy = original.replace(row.old, row.new);
   assert.notEqual(original, copy);
+  const controlFile = path.join(out, row.name + path.extname(row.source));
+  fs.writeFileSync(controlFile, copy);
   for (const control of [false, true]) {
     const name = row.name + (control ? '-fault' : '-actual');
     const jsonFile = path.join(out, name + '.json');
     const env = { ...process.env };
     delete env.NO_DOUBLE_SWAP;
-    if (control) env.NO_DOUBLE_SWAP = JSON.stringify({ [row.alias]: path.resolve(row.copy) });
+    if (control) env.NO_DOUBLE_SWAP = JSON.stringify({ [row.alias]: controlFile });
     const args = ['node_modules/vitest/vitest.mjs', 'run', row.test, '-t', row.testName, '--maxWorkers=1', '--minWorkers=1', '--reporter=json', '--outputFile=' + jsonFile];
     const child = spawnSync(process.execPath, args, { env, encoding: 'utf8', timeout: 150000, maxBuffer: 16 * 1024 * 1024 });
     fs.writeFileSync(path.join(out, name + '.stdout.log'), child.stdout || '');
@@ -37,7 +49,7 @@ for (const row of manifest.files) {
     report.cases.push({ name, controlledFault: control, exit: child.status, selectedStatus: selected[0].status });
     console.log(`Consent withdrawal: ${name}, expected ${selected[0].status}.`);
   }
-  assert.equal(hash(fs.readFileSync(row.source)), row.sourceSha256, 'Actual source stays unchanged');
+  assert.deepEqual(fs.readFileSync(row.source), bytes, 'Actual source stays unchanged');
 }
 report.complete = true;
 fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2) + '\n');

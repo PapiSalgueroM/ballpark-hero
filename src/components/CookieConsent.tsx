@@ -18,6 +18,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
   const [showDetails, setShowDetails] = useState(false);
   const [helpTarget, setHelpTarget] = useState<HTMLElement | null>(null);
   const [advertising, setAdvertising] = useState(false);
+  const [analytics, setAnalytics] = useState(false);
   const [gpc, setGpc] = useState(isGlobalPrivacyControlEnabled);
   const [pendingReload, setPendingReload] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -53,10 +54,14 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       setGpc(isGlobalPrivacyControlEnabled());
       setPreferences(saved);
       setVisible(!saved || explicitlyOpen.current);
-      if (!saved) setAdvertising(false);
+      if (!saved) {
+        setAdvertising(false);
+        setAnalytics(false);
+      }
       if (isGlobalPrivacyControlEnabled()) setAdvertising(false);
       if (pendingRevoked.current.advertising || pendingRevoked.current.analytics) {
         setAdvertising(next.advertising);
+        setAnalytics(next.analytics);
         stopRevokedServices(pendingRevoked.current, next);
         if (canReloadAfterWithdrawal(pendingRevoked.current)) {
           window.location.reload();
@@ -76,7 +81,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
     const legacy = migrateConsentPreferences();
     // Old analytics cookies/code can survive a previous release even when the
     // new effective analytics choice is false. Pause those without loading a vendor.
-    stopRevokedServices({ advertising: legacy === 'accepted' || isGlobalPrivacyControlEnabled(), analytics: !ANALYTICS_READY });
+    stopRevokedServices({ advertising: legacy === 'accepted' || isGlobalPrivacyControlEnabled(), analytics: !getEffectiveConsent().analytics });
     reconcile();
     const onStorage = (event: StorageEvent) => {
       if (event.key === CONSENT_KEY || event.key === 'cookie-consent' || event.key === null) {
@@ -90,6 +95,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       setShowDetails(true);
       opener.current = (event as CustomEvent<{ opener?: HTMLElement }>).detail?.opener ?? null;
       setAdvertising(effective.advertising);
+      setAnalytics(effective.analytics);
       setVisible(true);
       ref.current?.focus();
     };
@@ -205,7 +211,9 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       <div className={`max-w-3xl mx-auto ${compact ? 'space-y-2' : 'space-y-3'} text-sm text-muted-foreground`}>
         {/* Reserve the narrow inline layout's extra text line before Inter arrives. */}
         <p className={inlineNotice ? 'max-[369px]:min-h-[3.75rem]' : undefined}>
-          Ads help keep DoUKnowBall free. Accepting advertising helps support the site. You can still play if you reject. We ask again in 180 days.{' '}
+          {ANALYTICS_READY
+            ? 'Ads help keep DoUKnowBall free. Google Analytics helps us see which pages people visit. You choose each separately and can still play if you reject both.'
+            : 'Ads help keep DoUKnowBall free. Accepting advertising helps support the site. You can still play if you reject.'} We ask again in 180 days.{' '}
           <Link to="/privacy" data-google-vignette="false" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
         {!compact && <div className="flex flex-wrap gap-x-6 gap-y-2">
@@ -213,20 +221,23 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
             <input type="checkbox" checked={advertising && !gpc} disabled={gpc || pendingReload} onChange={event => setAdvertising(event.target.checked)} />
             Advertising
           </label>
-          <p data-analytics-paused-status="">
+          {ANALYTICS_READY ? <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
+            <input type="checkbox" checked={analytics} disabled={pendingReload} onChange={event => setAnalytics(event.target.checked)} />
+            Google Analytics
+          </label> : <p data-analytics-paused-status="">
             <strong>Google Analytics is paused.</strong> Lovable still measures basic visits.
-          </p>
+          </p>}
         </div>}
         {gpc && <p>Your browser's Global Privacy Control keeps advertising off.</p>}
-        {pendingReload && <p role="status">Advertising is off for this visit. Save your game or allow site storage, then choose Save choices to refresh. Already-loaded vendor code may keep running until then.</p>}
+        {pendingReload && <p role="status">{ANALYTICS_READY ? 'Your updated choices apply to this visit.' : 'Advertising is off for this visit.'} Save your game or allow site storage, then choose Save choices to refresh. Already-loaded vendor code may keep running until then.</p>}
         <div className={inlineNotice || compact
           ? `grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center ${inlineNotice ? 'max-[358px]:min-h-[3.5rem] [&>button]:break-words' : ''}`
           : 'flex flex-wrap items-center gap-2'}>
           <button type="button" onClick={() => save({ advertising: false, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Reject all</button>
-          <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Accept all</button>
+          <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: ANALYTICS_READY })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Accept all</button>
           {compact
             ? <button type="button" onClick={() => setShowDetails(true)} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Manage choices</button>
-            : <button type="button" onClick={() => save({ advertising, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity`}>Save choices</button>}
+            : <button type="button" onClick={() => save({ advertising, analytics })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity`}>Save choices</button>}
           {preferences && !pendingReload && <button type="button" onClick={cancel} className={`min-h-11 ${buttonPadding} py-2 underline hover:text-foreground`}>Cancel</button>}
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ANALYTICS_READY } from '@/lib/consentPreferences';
 import { useSiteBack } from '@/hooks/useSiteBack';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
@@ -19,7 +20,7 @@ const TermsOfService = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: November 11, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: November 26, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -48,7 +49,7 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">5. Advertising</h2>
-          <p>Advertising can help cover hosting costs and keep the Site free. The Site is set up to request Google AdSense ads in non-personalized mode. Google's advertising script loads on pages with an ad slot when you turn on Advertising in Cookie choices. Analytics is a separate purpose and is currently paused. Advertising stays off if your browser exposes a Global Privacy Control signal to the site. You can leave optional purposes off and still play. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for the full advertising disclosure and how to change your choices.</p>
+          <p>Advertising can help cover hosting costs and keep the Site free. The Site is set up to request Google AdSense ads in non-personalized mode. Google's advertising script loads on pages with an ad slot when you turn on Advertising in Cookie choices. {ANALYTICS_READY ? 'Google Analytics has a separate opt-in for measuring public page views.' : 'Analytics is a separate purpose and is currently paused.'} Advertising stays off if your browser exposes a Global Privacy Control signal to the site. You can leave optional purposes off and still play. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for the full advertising disclosure and how to change your choices.</p>
         </div>
 
         <div>
