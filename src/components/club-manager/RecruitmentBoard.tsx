@@ -6,6 +6,7 @@ import {
   type RecruitmentCommit, type RecruitmentPick, type RecruitmentTarget,
 } from '@/lib/clubManagerRecruitment';
 import { RecruitmentBriefDesk } from './RecruitmentBriefDesk';
+import { SuccessionDesk } from './SuccessionDesk';
 
 interface Props {
   career: CareerState;
@@ -20,6 +21,8 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
   const [selected, setSelected] = useState<string | null>(null);
   const [help, setHelp] = useState(false);
   const [briefOpen, setBriefOpen] = useState(false);
+  const [successionOpen, setSuccessionOpen] = useState(false);
+  const successionButton = useRef<HTMLButtonElement>(null);
   const briefButton = useRef<HTMLButtonElement>(null);
   const root = useRevealScroll<HTMLElement>(help ? 'recruitment-help' : selected ?? 'recruitment', { skipFirst: false });
   const heading = useRef<HTMLHeadingElement>(null);
@@ -48,6 +51,10 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
     setMessage(ok ? 'Target removed.' : 'Could not remove this target. Check the save notice and try again.');
     if (ok) { setSelected(null); requestAnimationFrame(() => heading.current?.focus({ preventScroll: true })); }
   };
+  if (successionOpen) return <SuccessionDesk career={career} market={market} onCommit={onCommit} onBack={() => {
+    setSuccessionOpen(false);
+    requestAnimationFrame(() => successionButton.current?.focus({ preventScroll: true }));
+  }} />;
   if (briefOpen) return <RecruitmentBriefDesk career={career} market={market} onCommit={onCommit} onBack={() => {
     setBriefOpen(false);
     setMessage('');
@@ -84,6 +91,7 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
       ) : (
         <div className="space-y-3">
           <button ref={briefButton} className={button + ' w-full'} onClick={() => setBriefOpen(true)}>Recruitment brief</button>
+          <button ref={successionButton} className={button + ' w-full'} onClick={() => setSuccessionOpen(true)}>Squad succession</button>
           {closed && <p className="text-sm text-muted-foreground">The transfer window is shut. You can compare and remove targets; Find in Buy returns when it opens.</p>}
           {!targets.length && <p className="rounded-xl border border-border p-3 text-sm">No saved targets for this club and world. Use Save beside a player on Buy.</p>}
           {overview ? <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">

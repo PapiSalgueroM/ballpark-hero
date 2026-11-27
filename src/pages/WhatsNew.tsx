@@ -28,6 +28,7 @@ const WhatsNew = () => {
           <h2 className="text-lg font-semibold text-foreground mb-2">November 27, 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li>Take charge of a shootout in the Penalty Room under <Link to="/club-manager" className="text-primary hover:underline">Club Manager</Link> Tactics. Send a starter up for each kick, try a different order on the same draw and use your tested list the next time a cup tie goes to penalties.</li>
+            <li>Open Squad succession on the Club Manager shortlist to plan the next two summers. Check who can step up, renew a deal at the quoted fee or scout a replacement for that position.</li>
             <li>Scout for a starter, affordable cover or a young successor from the Club Manager transfer shortlist. Compare the fee and wages, see who would compete for minutes and take your pick into negotiations.</li>
             <li>Call a substitution before Quick Sim in the Club Manager Match Centre. Choose who comes off, who comes on and whether the score should trigger the change. The match report records what the coach did.</li>
             <li>In <Link to="/club-manager" className="text-primary hover:underline">Club Manager</Link>, open Tactics and rehearse the final half hour against your next opponent. Try protecting a lead or chasing an equalizer with your selected eleven. You can use your final instructions at the real kickoff.</li>

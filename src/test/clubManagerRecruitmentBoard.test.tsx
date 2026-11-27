@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-li
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RecruitmentBoard } from '@/components/club-manager/RecruitmentBoard';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
-import { marketForScreen, moneyIn, startCareer, type CareerState, type MarketPlayer } from '@/lib/clubManager';
+import { marketForScreen, moneyIn, renewContract, startCareer, type CareerState, type MarketPlayer } from '@/lib/clubManager';
 import { addRecruitment, recruitmentOf, scoutBrief, type RecruitmentCommit, type RecruitmentPick } from '@/lib/clubManagerRecruitment';
 
 const noop = () => {};
@@ -44,6 +44,61 @@ function mount(initial: CareerState, market: MarketPlayer[], options: { pick?: R
   return { view, latest: () => latest, writes, find, back, talk, clause, loan };
 }
 describe('actual recruitment board and ordinary Buy return', () => {
+  function successionFixture() {
+    const { career, market } = fixture();
+    const [first, other, borrowed, short, missing, lent] = career.squad.slice(0, 6);
+    const incumbent = { ...first, position: 'CB' as const, age: 24, contractYears: 1 };
+    const partner = { ...other, position: incumbent.position, rating: 99, contractYears: 4 };
+    const reserve = { ...lent, position: incumbent.position, rating: 72, contractYears: 3 };
+    const squad = [
+      incumbent, partner, { ...borrowed, position: incumbent.position, rating: 98, onLoan: true, contractYears: 4 },
+      { ...short, position: incumbent.position, rating: 97, contractYears: 1 },
+      { ...missing, position: incumbent.position, rating: 96, contractYears: undefined },
+    ];
+    return { market, incumbent, reserve, partner, career: { ...career, squad, xiIds: [incumbent.id, partner.id],
+      loanedOut: [{ player: reserve, club: 'Loan club', fee: 0, season: 1, optionFee: 2 }], budget: 60 } };
+  }
+  it('prices a real renewal, excludes occupied shirts and expiring or borrowed cover, and charges just one deal', () => {
+    const { career, incumbent, reserve, partner, market } = successionFixture();
+    const app = mount(career, market);
+    fireEvent.click(screen.getByRole('button', { name: 'Squad succession' }));
+    expect(screen.getByLabelText('Deal to review')).toHaveValue(incumbent.id);
+    const card = screen.getByRole('article');
+    expect(card).toHaveTextContent(reserve.name);
+    expect(card).toHaveTextContent('The borrowing club has a purchase option');
+    expect(card).not.toHaveTextContent(partner.name);
+    expect(app.writes).toHaveLength(0);
+    fireEvent.click(screen.getByRole('button', { name: 'Renew for 4 years' }));
+    expect(app.latest()).toEqual(renewContract(career, incumbent.id));
+    expect(app.writes).toHaveLength(1);
+    expect(screen.getByLabelText('Deal to review')).toHaveValue('');
+    expect(screen.queryByRole('button', { name: /^Renew for/ })).toBeNull();
+    expect(screen.getByRole('status')).toHaveTextContent(incumbent.name + ' renewed');
+  });
+  it('hands the expiring position to scouting, preserves the displayed deal on Back, and does not renew on a refused write', () => {
+    const { career, incumbent, market } = successionFixture();
+    const app = mount(career, market, { refuse: true });
+    fireEvent.click(screen.getByRole('button', { name: 'Squad succession' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Scout a replacement' }));
+    expect(screen.getByLabelText('Position')).toHaveValue(incumbent.position);
+    expect(screen.getByLabelText('Squad job')).toHaveValue('starter');
+    fireEvent.click(screen.getByRole('button', { name: 'Back to succession' }));
+    expect(screen.getByLabelText('Deal to review')).toHaveValue(incumbent.id);
+    fireEvent.click(screen.getByRole('button', { name: 'Renew for 4 years' }));
+    expect(screen.getByRole('status')).toHaveTextContent('could not be saved');
+    expect(app.latest()).toBe(career);
+  });
+  it('moves the cover cutoff with the following summer and keeps an equal-length renewal off the desk', () => {
+    const { career, incumbent, reserve, market } = successionFixture();
+    career.squad[0] = { ...incumbent, age: 33, contractYears: 2 };
+    career.loanedOut[0].player = { ...reserve, contractYears: 2 };
+    const app = mount(career, market);
+    fireEvent.click(screen.getByRole('button', { name: 'Squad succession' }));
+    fireEvent.change(screen.getByLabelText('Deal to review'), { target: { value: incumbent.id } });
+    expect(screen.getByRole('article')).toHaveTextContent('No other player outside your starting eleven');
+    expect(screen.queryByRole('button', { name: /^Renew for/ })).toBeNull();
+    expect(app.writes).toHaveLength(0);
+  });
   it('shows the supplied current record, existing primary-position peers and no persisted price', () => {
     const { saved, player } = fixture();
     // Deliberately changed copied game observation, not a new imported player fact.
