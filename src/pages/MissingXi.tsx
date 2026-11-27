@@ -274,6 +274,7 @@ const MissingXi = () => {
               <section>
                 <h3 className="font-bold text-foreground mb-2">Full XI</h3>
                 <p className="text-muted-foreground">Choose a historical match and name the team in any order. Full names and unique surnames count. Tap a position for the first letter. If you find nine starters and used a hint for one, your unassisted total is eight. Each match keeps its own best.</p>
+                <p className="text-muted-foreground">For a Scouting Challenge, choose a different match from the Daily. Spend a report to choose between three starters. A miss locks that shirt. Name three players from memory to earn another report, then three more to earn the last one.</p>
               </section>
               <section>
                 <h3 className="font-bold text-foreground mb-2">Lineup Duel</h3>
@@ -312,7 +313,7 @@ const MissingXi = () => {
         }
       >
         {duel && <LineupDuel hash={duel} todayId={dailyPuzzle.lineup.id} open={openDuel} />}
-        {!duel && fullXi && <FullXiRecall />}
+        {!duel && fullXi && <FullXiRecall dailyLineup={dailyPuzzle.lineup} />}
         {!duel && !fullXi && (isLoading || !puzzle) && (
           <div className="flex justify-center py-16">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />

@@ -1,20 +1,34 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
-import { HELD_LINEUP_IDS, LINEUPS, type Lineup } from '@/lib/missingXi';
+import { HELD_LINEUP_IDS, LINEUPS, pickDailyPuzzle, type Lineup } from '@/lib/missingXi';
 import { closeRecallSheet, newRecallSheet, readRecallSheet, recallStarter, unassistedCount, type RecallSheet } from '@/lib/missingXiRecall';
 import { normalizeName } from '@/lib/playerSearch';
 import { safeLocalStorage, safeSessionStorage, safeSetItem } from '@/lib/safeStorage';
+import ScoutSheet from './ScoutSheet';
 
 const selectionKey = 'missing-xi-full-match';
 const action = 'min-h-11 rounded-xl border border-border px-4 py-2 text-sm font-semibold';
 const field = 'min-h-11 w-full min-w-0 rounded-xl border border-border bg-background px-3 text-base';
 
-export default function FullXiRecall() {
+export default function FullXiRecall({ dailyLineup }: { dailyLineup: Lineup }) {
   const [active, setActive] = useState(() => safeSessionStorage.getItem(selectionKey));
   const [query, setQuery] = useState('');
   const [selection, setSelection] = useState('');
   const available = LINEUPS.filter(l => !HELD_LINEUP_IDS.has(l.id));
-  const current = available.find(l => l.id === active);
+  const scouting = !!active?.startsWith('scout:');
+  const current = available.find(l => l.id === (scouting ? active?.slice(6) : active));
+  const scoutLauncher = useRef<HTMLButtonElement>(null);
+  const focusScout = useRef(false);
+  useEffect(() => {
+    if (active === null && focusScout.current) {
+      scoutLauncher.current?.focus({ preventScroll: true });
+      focusScout.current = false;
+    }
+  }, [active]);
+  const calendarDaily = pickDailyPuzzle().lineup;
+  const isDailyMatch = (l: Lineup) => [dailyLineup, calendarDaily].some(d =>
+    l.matchDate === d.matchDate && ((l.team === d.team && l.opponent === d.opponent)
+      || (l.team === d.opponent && l.opponent === d.team)));
   const terms = normalizeName(query).split(' ').filter(Boolean);
   const options = available.filter(l => {
     const label = normalizeName([l.dateLabel, l.team, l.opponent, l.competition, l.matchDate].join(' '));
@@ -26,7 +40,10 @@ export default function FullXiRecall() {
     else safeSessionStorage.removeItem(selectionKey);
     setActive(id);
   }
-  if (current) return <TeamSheet key={current.id} lineup={current} onBack={() => open(null)} />;
+  if (current && scouting && !isDailyMatch(current)) return <ScoutSheet key={current.id} lineup={current} onBack={() => {
+    focusScout.current = true; setSelection(current.id); open(null);
+  }} />;
+  if (current && !scouting) return <TeamSheet key={current.id} lineup={current} onBack={() => open(null)} />;
   return <section aria-label="Match archive" className="mx-auto max-w-md space-y-3">
     <h2 className="text-xl font-bold">Pick a team sheet</h2>
     <p className="text-sm text-muted-foreground">Name all eleven starters from memory. Each match keeps your best unassisted total on this device.</p>
@@ -38,6 +55,10 @@ export default function FullXiRecall() {
           {options.map(l => <option key={l.id} value={l.id}>{l.dateLabel} · {l.team} v {l.opponent}</option>)}
         </select></label>
       <button type="button" className={action + ' w-full bg-primary text-primary-foreground'} onClick={() => open(chosen.id)}>Open team sheet</button>
+      <button type="button" ref={scoutLauncher} className={action + ' w-full disabled:opacity-50'} disabled={isDailyMatch(chosen)}
+        onClick={() => open('scout:' + chosen.id)}>Scouting Challenge</button>
+      <p className="text-sm text-muted-foreground">{isDailyMatch(chosen) ? 'Pick a different match for scouting while this one is the Daily.' :
+        'Start with one scouting report. Name three starters from memory to earn another. Each report gives you three names and one pick.'}</p>
     </> : <p role="status" className="text-sm">No matches found. Try a different team or year.</p>}
   </section>;
 }
