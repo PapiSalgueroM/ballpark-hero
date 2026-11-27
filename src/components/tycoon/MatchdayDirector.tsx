@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { campaigns, forecast, openingGround, openingShift, playSeason, projects, readDirectorSeason, ticketPrices, type Campaign, type Season, type Shift } from '@/lib/matchdayDirector';
+import { campaigns, earnedContracts, forecast, openingGround, openingShift, playSeason, projects, readDirectorSeason, ticketPrices, winningScore, type Campaign, type Season, type Shift } from '@/lib/matchdayDirector';
 import { safeLocalStorage, safeSetItem } from '@/lib/safeStorage';
 
 const saveKey = 'dukb-matchday-director-v1';
@@ -38,10 +38,12 @@ export default function MatchdayDirector() {
       setShowReceipt(false);
       setNotice('Another tab played this fixture. Check the updated books.');
     } else {
-      const bytes = JSON.stringify(next);
+      const cabinet = earnedContracts(next);
+      const settled = cabinet ? { ...next, cabinet } : next;
+      const bytes = JSON.stringify(settled);
       const saved = safeSetItem(saveKey, bytes);
       if (saved) stored.current = bytes;
-      setSeason(next);
+      setSeason(settled);
       setShowReceipt(next.shifts.length > 0);
       setNotice(saved ? '' : 'Your shift is in this tab. Browser storage is unavailable.');
     }
@@ -54,6 +56,7 @@ export default function MatchdayDirector() {
   const campaign = season && campaigns[season.campaign];
   const finished = !!campaign && week === campaign.crowds.length;
   const quote = season && !finished ? forecast(season.campaign, week, ground, shift) : null;
+  const cabinet = season && earnedContracts(season);
 
   return <section aria-labelledby="director-title" className="rounded-xl border border-border bg-card p-4">
     <div className="flex items-start justify-between gap-2">
@@ -72,8 +75,13 @@ export default function MatchdayDirector() {
     </div>}
     {finished && campaign && <p role="status" className="my-2 font-bold">{ground.cash >= campaign.reserve && ground.admitted >= campaign.target
       ? 'Both targets met. Your ground wins the contract!' : 'Season complete. The contract needs both targets.'}</p>}
+    {cabinet && <details className="my-2 rounded-lg border p-2 text-sm">
+      <summary className="min-h-11 cursor-pointer py-3 font-semibold">Signed contracts</summary>
+      {cabinet.community && <p>Community attendance record <strong>{winningScore('community', cabinet.community)} fans</strong></p>}
+      {cabinet.cup && <p>Cup cash record <strong>{dollars(winningScore('cup', cabinet.cup)!)}</strong></p>}
+    </details>}
     {(!season || finished) && <div className="grid gap-2 sm:grid-cols-2">{(Object.keys(campaigns) as Campaign[]).map(id =>
-      <button type="button" key={id} className={button + ' text-left'} onClick={() => commit({ campaign: id, shifts: [] })}>
+      <button type="button" key={id} className={button + ' text-left'} onClick={() => commit({ campaign: id, shifts: [], ...(cabinet ? { cabinet } : {}) })}>
         <strong className="block">Start {campaigns[id].name}</strong>
         <span className="text-xs font-normal">{campaigns[id].target} admissions · finish with {dollars(campaigns[id].reserve)}</span>
       </button>)}</div>}

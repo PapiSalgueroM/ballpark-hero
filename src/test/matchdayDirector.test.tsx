@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, expect, it } from 'vitest';
 import MatchdayDirector from '@/components/tycoon/MatchdayDirector';
-import { campaigns, forecast, openingGround, openingShift, playSeason, readDirectorSeason, type Campaign, type Shift } from '@/lib/matchdayDirector';
+import { campaigns, earnedContracts, forecast, openingGround, openingShift, playSeason, readDirectorSeason, winningScore, type Campaign, type Shift } from '@/lib/matchdayDirector';
 
 afterEach(() => { cleanup(); localStorage.clear(); });
 
@@ -62,4 +62,58 @@ it('keeps a preview free, stores one settled fixture and adopts a newer tab befo
   expect(localStorage.getItem(key)).toEqual(JSON.stringify(ahead));
   expect(screen.getByRole('button', { name: 'Play fixture 3' })).toBeInTheDocument();
   expect(screen.getByText(/Another tab/)).toBeInTheDocument();
+});
+
+const winningOrders = (index: number) => scenarios[index][1].map(([price, gates, project]) => ({ price, gates, project }));
+
+it('keeps only the best legal winning orders per contract and ignores corrupt cabinet entries', () => {
+  const community = winningOrders(0), cup = winningOrders(1);
+  const lowerCrowd = community.map((s, i) => i === 5 ? { ...s, gates: 2 } : s);
+  const lowerCash = cup.map((s, i) => i === 4 ? { ...s, gates: 2 } : s);
+  expect(readDirectorSeason(JSON.stringify({ campaign: 'cup', shifts: lowerCash }))).not.toBeNull();
+  expect(winningScore('community', lowerCrowd)).toBeLessThan(710);
+  expect(winningScore('community', lowerCrowd)).toBeGreaterThanOrEqual(680);
+  expect(winningScore('cup', lowerCash)).toBeLessThan(1865);
+  expect(winningScore('cup', lowerCash)).toBeGreaterThanOrEqual(1700);
+  const cabinet = { community, cup };
+  expect(earnedContracts({ campaign: 'community', shifts: lowerCrowd, cabinet })).toEqual(cabinet);
+  expect(earnedContracts({ campaign: 'cup', shifts: lowerCash, cabinet })).toEqual(cabinet);
+  expect(earnedContracts({ campaign: 'community', shifts: community, cabinet: { community: lowerCrowd, cup } })).toEqual(cabinet);
+  expect(earnedContracts({ campaign: 'cup', shifts: cup, cabinet: { community, cup: lowerCash } })).toEqual(cabinet);
+  for (const bogus of [null, 9000, { admitted: 9999 }, community.slice(1), Array(6).fill(openingShift),
+    Array(6).fill({ price: 'community', project: 'gate', gates: 0 })]) {
+    const active = { campaign: 'community', shifts: community.slice(0, 3) };
+    expect(readDirectorSeason(JSON.stringify({ ...active, cabinet: { community: bogus, cup, other: cup } })))
+      .toEqual({ ...active, cabinet: { cup } });
+  }
+});
+
+it('carries an old winning season through a loss, a new Cup win and a reload', () => {
+  const key = 'dukb-matchday-director-v1';
+  const community = winningOrders(0), cup = winningOrders(1);
+  localStorage.setItem(key, JSON.stringify({ campaign: 'community', shifts: community }));
+  let view = render(<MatchdayDirector />);
+  expect(screen.getByText('710 fans')).toBeInTheDocument();
+  const play = (shifts: Shift[]) => shifts.forEach((s, i) => {
+    fireEvent.change(screen.getByLabelText('Tickets'), { target: { value: s.price } });
+    fireEvent.change(screen.getByLabelText('Crew assignment'), { target: { value: String(s.gates) } });
+    fireEvent.change(screen.getByLabelText('Ground investment'), { target: { value: s.project } });
+    fireEvent.click(screen.getByRole('button', { name: 'Play fixture ' + (i + 1) }));
+    if (i < 5) fireEvent.click(screen.getByRole('button', { name: 'Plan fixture ' + (i + 2) }));
+  });
+  fireEvent.click(screen.getByRole('button', { name: /Start Community season/ }));
+  play(Array(6).fill(openingShift));
+  expect(screen.getByText(/contract needs both targets/)).toBeInTheDocument();
+  expect(JSON.parse(localStorage.getItem(key)!).cabinet).toEqual({ community });
+  fireEvent.click(screen.getByRole('button', { name: /Start Cup run/ }));
+  play(cup);
+  expect(screen.getByText(/wins the contract/)).toBeInTheDocument();
+  expect(JSON.parse(localStorage.getItem(key)!).cabinet).toEqual({ community, cup });
+  fireEvent.click(screen.getByRole('button', { name: /Start Community season/ }));
+  view.unmount();
+  view = render(<MatchdayDirector />);
+  fireEvent.click(screen.getByText('Signed contracts'));
+  expect(screen.getByText('710 fans')).toBeVisible();
+  expect(screen.getByText('$1,865')).toBeVisible();
+  expect(screen.getByRole('button', { name: 'Play fixture 1' })).toBeInTheDocument();
 });

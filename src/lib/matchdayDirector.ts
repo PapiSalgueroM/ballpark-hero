@@ -10,7 +10,8 @@ export const projects = {
   kiosk: { label: 'Fit a food counter', cost: 160 },
 } as const;
 export type Shift = { price: keyof typeof ticketPrices; gates: number; project: keyof typeof projects };
-export type Season = { campaign: Campaign; shifts: Shift[] };
+type ContractCabinet = Partial<Record<Campaign, Shift[]>>;
+export type Season = { campaign: Campaign; shifts: Shift[]; cabinet?: ContractCabinet };
 export const openingShift: Shift = { price: 'standard', gates: 2, project: 'hold' };
 export const openingGround = { cash: 300, admitted: 0, following: 0, gates: 0, kiosks: 0 };
 const fixtures = [
@@ -51,21 +52,52 @@ export function playSeason(season: Season) {
   });
 }
 
+export function winningScore(campaign: Campaign, shifts: Shift[]): number | null {
+  const contract = campaigns[campaign];
+  if (shifts.length !== contract.crowds.length) return null;
+  const { admitted, cash } = playSeason({ campaign, shifts })[shifts.length - 1].next;
+  if (admitted < contract.target || cash < contract.reserve) return null;
+  return campaign === 'community' ? admitted : cash;
+}
+
+export function earnedContracts(season: Season): ContractCabinet | undefined {
+  const score = winningScore(season.campaign, season.shifts);
+  if (score === null) return season.cabinet;
+  const previous = season.cabinet?.[season.campaign];
+  if (previous && (winningScore(season.campaign, previous) ?? 0) >= score) return season.cabinet;
+  return { ...season.cabinet, [season.campaign]: season.shifts };
+}
+
+function readOrders(campaign: Campaign, value: unknown): Shift[] | null {
+  if (!Array.isArray(value) || value.length > campaigns[campaign].crowds.length) return null;
+  let ground = openingGround;
+  const orders: Shift[] = [];
+  for (const [week, shift] of value.entries()) {
+    if (!shift || typeof shift.price !== 'string' || typeof shift.project !== 'string'
+      || !Object.prototype.hasOwnProperty.call(ticketPrices, shift.price) || !Object.prototype.hasOwnProperty.call(projects, shift.project)
+      || !Number.isInteger(shift.gates) || shift.gates < 0 || shift.gates > 4) return null;
+    const order = { price: shift.price, gates: shift.gates, project: shift.project };
+    const result = forecast(campaign, week, ground, order);
+    if (result.cost > Math.max(ground.cash, 0)) return null;
+    orders.push(order);
+    ground = result.next;
+  }
+  return orders;
+}
+
 // Save only the orders. Rebuild every receipt from the published season rules.
 export function readDirectorSeason(bytes: string | null): Season | null {
   if (!bytes) return null;
   try {
     const s = JSON.parse(bytes);
-    if (!s || typeof s.campaign !== 'string' || !Object.prototype.hasOwnProperty.call(campaigns, s.campaign) || !Array.isArray(s.shifts) || s.shifts.length > 6) return null;
-    let ground = openingGround;
-    for (const [week, shift] of s.shifts.entries()) {
-      if (!shift || typeof shift.price !== 'string' || typeof shift.project !== 'string'
-        || !Object.prototype.hasOwnProperty.call(ticketPrices, shift.price) || !Object.prototype.hasOwnProperty.call(projects, shift.project)
-        || !Number.isInteger(shift.gates) || shift.gates < 0 || shift.gates > 4) return null;
-      const result = forecast(s.campaign, week, ground, shift);
-      if (result.cost > Math.max(ground.cash, 0)) return null;
-      ground = result.next;
+    if (!s || typeof s.campaign !== 'string' || !Object.prototype.hasOwnProperty.call(campaigns, s.campaign)) return null;
+    const shifts = readOrders(s.campaign, s.shifts);
+    if (!shifts) return null;
+    const season: Season = { campaign: s.campaign, shifts };
+    for (const campaign of Object.keys(campaigns) as Campaign[]) {
+      const orders = readOrders(campaign, s.cabinet?.[campaign]);
+      if (orders && winningScore(campaign, orders) !== null) (season.cabinet ??= {})[campaign] = orders;
     }
-    return { campaign: s.campaign, shifts: s.shifts };
+    return season;
   } catch { return null; }
 }
