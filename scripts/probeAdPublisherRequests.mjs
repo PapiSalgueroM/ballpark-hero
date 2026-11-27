@@ -105,7 +105,7 @@ async function observe(width, screen = 'lineup') {
     await page.waitForTimeout(3500);
     const beforeScroll = [...result.matchedSizes];
     await page.evaluate(() => (document.querySelector('[data-public-footer-ad] ins') ?? document.querySelector('footer[data-site-chrome]'))?.scrollIntoView({ block: 'center' }));
-    const widePair = width >= 1280 && screen !== 'active' && !baseline;
+    const widePair = width >= 1280 && !baseline;
     const expectedSizes = width === 390 ? ['320x100'] : widePair ? ['120x600','120x600','728x90'] : ['728x90'];
     const deadline = Date.now() + 18000;
     while (Date.now() < deadline && result.matchedSizes.length < expectedSizes.length) await page.waitForTimeout(200);
