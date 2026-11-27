@@ -18,6 +18,7 @@ import { ReturnPressPicker } from './ReturnPressPicker';
 import { PhaseShapePicker } from './PhaseShapePicker';
 import { phasePositions } from '@/lib/clubManagerPhaseShapes';
 import { AnalystDesk } from './AnalystDesk';
+import { ReturnToPlayMatchCard } from './ReturnToPlayCard';
 
 export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', minute, plus }: {
   career: CareerState;
@@ -49,6 +50,7 @@ export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', mi
         clock={{ minute: minute ?? 45, plus: minute === undefined ? live.added?.h1 : plus }}
         onMode={mode => onChange({ kind: 'analystWatch', mode })}
         onPress={target => onChange({ kind: 'returnPress', target })} />
+      <ReturnToPlayMatchCard career={career} duringMatch />
       <InstructionsPicker
         value={liveInstructions(live)}
         onChange={instructions => onChange({ kind: 'instructions', instructions })}

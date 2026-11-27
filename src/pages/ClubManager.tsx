@@ -1241,7 +1241,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
               )}
 
               {hubPanel === 'treatment' && (
-                <ScreenLoading><ClubManagerTreatmentPanel unavailable={unavailable} /></ScreenLoading>
+                <ScreenLoading><ClubManagerTreatmentPanel career={c} unavailable={unavailable} onCommit={g.commitClubAction} /></ScreenLoading>
               )}
 
               {/* Round 1503: two tiles, the domestic cup and the Champions League, each opening a view of its own

@@ -19,6 +19,7 @@ import { RehearsedCornerReview } from './RehearsedCornerReview';
 import { ReturnPressReview } from './ReturnPressReview';
 import { PhaseShapeReview } from './PhaseShapeReview';
 import { AnalystReport } from './AnalystDesk';
+import { ReturnToPlayReport } from './ReturnToPlayCard';
 import { inFixtureOrder, mineFirstOfReport } from '@/lib/cmMatchDisplay';
 import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
 import type { MeterTone } from '@/lib/clubManagerMeters';
@@ -523,6 +524,7 @@ export function MatchReportCard({ report, career, clubName, onContinue, noSack =
             {detail.returnPressUsed === true && <ReturnPressReview play={detail.play ?? []} />}
             {detail.phaseHistory && <PhaseShapeReview play={detail.play ?? []} history={detail.phaseHistory} />}
             {detail.analystNote && <AnalystReport note={detail.analystNote} />}
+            {detail.returnToPlay && <ReturnToPlayReport receipt={detail.returnToPlay} />}
             {detail.tactics && (
               <TacticsDayBlock
                 tactics={detail.tactics}
