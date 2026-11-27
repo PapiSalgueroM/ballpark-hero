@@ -6,6 +6,7 @@ import type { NbaFilledSlot, NbaGamePhase, StatChallenge } from '@/types/nba';
 import { NBA_POSITIONS } from '@/types/nba';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { encodeNbaStartingFiveDraft, loadNbaStartingFiveDraft, writeNbaStartingFiveDraft } from '@/lib/nbaStartingFiveDraft';
+import { exhibitionFive, type ExhibitionPlayer } from '@/lib/nbaStartingFiveExhibition';
 import { NBA_PLAYER_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
 import {
   NBA_FIVE_FRANCHISE_CODES, NBA_FIVE_HIT_SCORE, buildTeamPool, challengeByStat, findPoolEntry, isPositionEligibleForSlot,
@@ -148,18 +149,21 @@ export function loadTeamPool(team: string): Promise<NbaFiveSearchPool> {
  * the hook so scripts/simNbaStartingFive.mjs section 13 can drive it, and
  * loadTeamPool, through a stub client.
  */
-export async function scoreNbaLineup(slots: NbaFilledSlot[], challenge: StatChallenge): Promise<NbaFiveScore | null> {
+type ScoredFive = NbaFiveScore & { exhibition: ExhibitionPlayer[] | null };
+
+export async function scoreNbaLineup(slots: NbaFilledSlot[], challenge: StatChallenge): Promise<ScoredFive | null> {
   const def = challengeByStat(challenge.stat);
   if (!def) return null;
   /* The pools are the teams the picks were made from, so a five is always
      judged against the teams it was really dealt. */
   const pools = await Promise.all(slots.map(s => loadTeamPool(s.assignedTeam)));
-  return scoreFive(
+  const scored = scoreFive(
     slots.map(s => ({ team: s.assignedTeam, role: s.role, name: s.playerName })),
     pools,
     def,
     challenge.direction,
   );
+  return scored && { ...scored, exhibition: exhibitionFive(scored.perPick, pools) };
 }
 
 /**
@@ -184,7 +188,7 @@ export function useNbaLineup() {
   const [challenge, setChallenge] = useState<StatChallenge | null>(saved.draft?.challenge ?? null);
   const [filledSlots, setFilledSlots] = useState(() => saved.draft?.filledSlots ?? new Map<number, NbaFilledSlot>());
   const [teamAssignments, setTeamAssignments] = useState<NbaTeam[]>(saved.draft?.teamAssignments ?? []);
-  const [result, setResult] = useState<NbaFiveScore | null>(null);
+  const [result, setResult] = useState<ScoredFive | null>(null);
   const [selectedPosition, setSelectedPosition] = useState<number | null>(saved.draft?.selectedPosition ?? null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [evaluationError, setEvaluationError] = useState<string | null>(null);

@@ -79,6 +79,15 @@ export function NbaHowToPlay({ open, onOpenChange }: NbaHowToPlayProps) {
             </ul>
           </section>
 
+          <section>
+            <h3 className="font-bold text-foreground mb-2">Best-of-three exhibition</h3>
+            <p className="text-muted-foreground">
+              After you score a five with complete points, assists and rebounds, choose Coach this five.
+              Pick a ball handler and split 12 shots each game. Against a trap, try a strong passer and hit the cutters.
+              The defense adjusts for the next game. Win twice to take the series. Your puzzle score stays on the record.
+            </p>
+          </section>
+
           <button
             onClick={() => onOpenChange(false)}
             className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-opacity"

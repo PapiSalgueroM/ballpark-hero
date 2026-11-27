@@ -9,6 +9,7 @@ import NbaStatSpinner from '@/components/nba/NbaStatSpinner';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import type { PlayerEntity } from '@/lib/playerSearch';
 import { NbaHowToPlay } from '@/components/nba/NbaHowToPlay';
+import { NbaExhibition } from '@/components/nba/NbaExhibition';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Send, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -102,6 +103,7 @@ const NbaLineup = () => {
         {/* Challenge Phase - Stat Spinner */}
         {phase === 'challenge' && (
           <div className="max-w-lg mx-auto space-y-6">
+            <NbaExhibition />
             <NbaStatSpinner
               challenge={challenge}
               isSpinning={isStatSpinning}
@@ -415,6 +417,7 @@ const NbaLineup = () => {
                 </p>
               </div>
             </ResultScreen>
+            <NbaExhibition five={result.exhibition} />
           </div>
         )}
 
