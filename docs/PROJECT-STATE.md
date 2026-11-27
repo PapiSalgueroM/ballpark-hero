@@ -1,3 +1,9 @@
+### November 27, 2026. Monthly advertising renewal
+
+On an eligible public page in the EEA, UK or Switzerland, an older affirmative advertising choice now needs one fresh confirmation. Each new advertising permission lasts 30 days in those regions. An unknown location gets the same opt-in treatment. A recent refusal stays effective for 180 days there. US and Australian visitors with no opt-out can receive non-personalized ads without a banner. A saved opt-out in those regions and Global Privacy Control both keep advertising off.
+
+The renewal buttons affect only advertising. They leave Google's separate Analytics permission and its original 180-day clock alone. The footer still opens the full settings. The public Privacy and Cookie policies explain the new rules. Google's own regional messages retain their separate settings.
+
 ### November 27, 2026. Build Your XI replacement trials
 
 In squad review, choose Replace, then Compare before replacing to try an eligible challenger on the starter's same 38 fixtures and match draws. Nothing in the draft changes until the player signs the challenger. The official season still uses the submitted squad's own draw. Phone and desktop checks took a saved XI through a cancelled trial, a signing, two reloads and submission. All ten teammates kept their assignments.
