@@ -1,5 +1,7 @@
 # DoUKnowBall release handoff, November 27, 2026
 
+The original four-mode release was published and replayed on `index-CcQ7--q_.js`. Two subsequent Club Manager releases reached the custom domain. The latest verified application revision is `1bf51cc5c`, serving `index-DTFhNy8c.js`, with competitive shootouts and Squad succession. See [Project state](PROJECT-STATE.md) for the native results and [the expansion ledger](EXPANSION-IMPLEMENTATION-LEDGER.md) for the continuing manager work. The December 4 revenue comparison remains scheduled.
+
 ## What players can do in the candidate
 
 | Game | Where to find it | A decision to test |
