@@ -36,6 +36,18 @@ afterEach(() => {
 const mount = () => render(<MemoryRouter><CookieConsent /></MemoryRouter>);
 
 describe('consent synchronization cannot resurrect an old permission', () => {
+  it('explains ad funding and cookies before a guest chooses either optional service', () => {
+    mount();
+    const notice = screen.getByRole('region', { name: 'Cookie choices' });
+    expect(notice).toHaveTextContent('Ads help keep the games free.');
+    expect(notice).toHaveTextContent('Google AdSense may use cookies for non-personalized ads.');
+    expect(notice).toHaveTextContent('Google Analytics measures page visits.');
+    expect(screen.getByRole('checkbox', { name: 'Advertising' })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: 'Google Analytics' })).not.toBeChecked();
+    fireEvent.click(screen.getByRole('button', { name: 'Reject all' }));
+    expect(getEffectiveConsent()).toEqual({ advertising: false, analytics: false });
+  });
+
   it('replaces a full-store kept grant with the latest other-tab durable denial', () => {
     localStorage.setItem(KEY, value(true));
     const write = Storage.prototype.setItem;

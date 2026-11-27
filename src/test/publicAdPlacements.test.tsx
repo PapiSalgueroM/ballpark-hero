@@ -92,6 +92,42 @@ it('requests each mounted footer once, hides it on an in-page save screen and re
   expect(tags()[0]).toBe(firstTag);
 });
 
+it.each(['filled', 'unfilled', 'consent during search'])('keeps Home search from repeating an auction after %s', async mode => {
+  const canonical = publicAdCanonical('/');
+  const search = document.createElement('main');
+  document.body.append(search);
+  if (mode === 'consent during search') {
+    search.setAttribute('data-home-search-active', '');
+    saveConsentPreferences({ advertising: false, analytics: false });
+  }
+  render(<BrowserRouter><PublicFooterAd /></BrowserRouter>);
+  if (mode === 'consent during search') {
+    act(() => { saveConsentPreferences(defaultConsent); });
+    expect(slot()).toBeNull();
+    expect(tags()).toHaveLength(0);
+    await act(async () => { search.removeAttribute('data-home-search-active'); });
+  }
+  await waitFor(() => expect(slot()).toBeInTheDocument());
+  act(() => { tags()[0].dispatchEvent(new Event('load')); });
+  await act(async () => { slot()!.setAttribute('data-ad-status', mode === 'unfilled' ? 'unfilled' : 'filled'); });
+  expect(window.adsbygoogle).toHaveLength(1);
+  for (let i = 0; i < 2; i++) {
+    await act(async () => { search.setAttribute('data-home-search-active', ''); });
+    expect(slot()).toBeNull();
+    await act(async () => { search.removeAttribute('data-home-search-active'); });
+    expect(slot()).toBeNull();
+    expect(window.adsbygoogle).toHaveLength(1);
+  }
+  await act(async () => {
+    history.pushState({}, '', '/soccer');
+    canonical.href = 'https://douknowball.com/soccer';
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  });
+  await waitFor(() => expect(slot()).toBeInTheDocument());
+  expect(window.adsbygoogle).toHaveLength(2);
+  expect(tags()).toHaveLength(1);
+});
+
 it('keeps a slow-loading unit and a delayed fill, then labels it once', async () => {
   vi.useFakeTimers();
   publicAdCanonical();

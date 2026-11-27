@@ -17,7 +17,7 @@ const CookiePolicy = () => {
       </Link>
       <h1 className="text-3xl font-bold mb-8">Cookie Policy</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: November 26, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: November 27, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -38,12 +38,12 @@ const CookiePolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Advertising</h2>
-          <p>If you turn Advertising on and visit an eligible page, the site can request Google AdSense ads. Google may not show an ad on every visit. We request non-personalized ads. These may still use cookies and identifiers for delivery, frequency limits, measurement and fraud prevention. They are not anonymous ads. See the <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>'s advertising section and <a href="https://policies.google.com/technologies/partner-sites" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Google's linked privacy information</a> for more detail.</p>
+          <p>Ads help pay for the free games. If you turn Advertising on, the site can request Google AdSense ads on eligible public pages, including games and sports hubs. Google may not show an ad on every visit. We request non-personalized ads. These may still use cookies and identifiers for delivery, frequency limits, measurement and fraud prevention. They are not anonymous ads. See the <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>'s advertising section and <a href="https://policies.google.com/technologies/partner-sites" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Google's linked privacy information</a> for more detail.</p>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Turning advertising off</h2>
-          <p>Open Cookie choices, turn Advertising off and choose Save choices. We stop future optional loading and clear matching optional cookies our code can access. We normally reload to stop already-loaded scripts. If your choice cannot be saved or a game has unsaved progress, a notice asks you to refresh when it is safe; already-loaded code may continue until then.</p>
+          <p>Open Cookie choices, turn Advertising off and choose Save choices. We stop new advertising requests and clear matching advertising cookies our code can access. Your Google Analytics choice stays separate. We normally reload to stop already-loaded scripts. If your choice cannot be saved or a game has unsaved progress, a notice asks you to refresh when it is safe; already-loaded code may continue until then.</p>
           <p className="mt-2">Withdrawal does not erase information already received by a provider or remove cookies on another site or outside our code's access.</p>
         </div>
 

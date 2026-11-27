@@ -9,6 +9,7 @@ import {
   type ConsentPurposes,
 } from '@/lib/consentPreferences';
 import { safeLocalStorage } from '@/lib/safeStorage';
+import { ADVERTISING_ONLY_INTRO, COOKIE_CHOICE_INTRO } from '@/lib/cookieChoiceCopy';
 
 export function CookieConsent({ inline = false, compactInitial = false, waitForRulesHost = false }: {
   inline?: boolean; compactInitial?: boolean; waitForRulesHost?: boolean;
@@ -211,9 +212,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       <div className={`max-w-3xl mx-auto ${compact ? 'space-y-2' : 'space-y-3'} text-sm text-muted-foreground`}>
         {/* Reserve the narrow inline layout's extra text line before Inter arrives. */}
         <p className={inlineNotice ? 'max-[369px]:min-h-[3.75rem]' : undefined}>
-          {ANALYTICS_READY
-            ? 'Ads help keep DoUKnowBall free. Google Analytics helps us see which pages people visit. You choose each separately and can still play if you reject both.'
-            : 'Ads help keep DoUKnowBall free. Accepting advertising helps support the site. You can still play if you reject.'} We ask again in 180 days.{' '}
+          {ANALYTICS_READY ? COOKIE_CHOICE_INTRO : ADVERTISING_ONLY_INTRO} We ask again in 180 days.{' '}
           <Link to="/privacy" data-google-vignette="false" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
         {!compact && <div className="flex flex-wrap gap-x-6 gap-y-2">

@@ -44,7 +44,7 @@
 
 .game::after { content: ''; position: absolute; inset: auto 0 0; height: 3px; background: hsl(var(--tile)); }
 .game:focus-visible, .managerLaunch:focus-visible, .continueCard:focus-visible { outline: 3px solid hsl(var(--primary)); outline-offset: -3px; }
-.game:hover .title { color: hsl(var(--primary)); }
+.game:not(.lead):hover .title { color: hsl(var(--primary)); }
 .lead { grid-column: 1 / -1; min-height: 184px; }
 .art { position: absolute; top: 0; right: -8px; width: 90px; height: 78px; }
 .lead .art { inset: 0 0 0 34%; width: auto; height: auto; }
@@ -98,4 +98,73 @@
   .lead .shade { background: linear-gradient(90deg, hsl(var(--surface-1)) 0%, hsl(var(--surface-1) / 0.93) 36%, hsl(var(--surface-1) / 0.2) 100%); }
   .lead .description { max-width: 310px; font-size: 14px; }
   .game:not(.lead) .art { top: -6px; right: -10px; width: 130px; height: 98px; }
+}
+
+/* The lead card has its own night palette in both site themes. */
+.lead {
+  min-height: 208px;
+  color: #f7fbf7;
+  background: #0b1f1c;
+}
+.lead .art { inset: 0; }
+.lead .art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('../../assets/home/pitch-small.webp') 68% center / cover no-repeat;
+}
+.lead .shade {
+  background: linear-gradient(90deg, #071612f7 0%, #081a15c9 43%, #081a1526 84%),
+              linear-gradient(0deg, #07161270, transparent 48%);
+}
+.lead .copy { max-width: 72%; gap: 7px; padding: 17px; }
+.lead .kicker {
+  color: #adf4ce;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.lead .kickerGlyph { color: currentColor; }
+.lead .title { color: #fff; font-size: clamp(2rem, 4.4vw, 3.15rem); line-height: .98; }
+.lead .description { max-width: 29ch; color: #e0ebe5; }
+.lead .primaryCta {
+  gap: 9px;
+  padding-inline: 15px;
+  border-radius: 6px;
+  clip-path: none;
+  color: #062319;
+  background: #8af5b7;
+}
+.lead::after { height: 2px; background: linear-gradient(90deg, #8af5b7, transparent 80%); }
+.game:focus-visible { outline-color: #8af5b7; }
+.game:not(.lead) {
+  background: linear-gradient(155deg, hsl(var(--tile) / .17), transparent 75%), hsl(var(--surface-1));
+}
+.careerMenu { border-top: 1px solid hsl(var(--border)); }
+.careerMenu summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding-inline: 14px;
+  color: hsl(var(--foreground));
+  font-size: .875rem;
+  font-weight: 650;
+  cursor: pointer;
+  list-style: none;
+}
+.careerMenu summary::-webkit-details-marker { display: none; }
+.careerMenu summary svg { width: 16px; height: 16px; }
+.careerMenu[open] summary svg { transform: rotate(180deg); }
+.careerMenu summary:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: -3px; }
+.careerChoices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: hsl(var(--border)); }
+@media (min-width: 640px) {
+  .lead { min-height: 240px; }
+  .lead .art::after { background-image: url('../../assets/home/pitch-wide.webp'); }
+  .lead .copy { max-width: 68%; gap: 9px; padding: 22px; }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .lead .art, .game .cta svg, .managerLaunch .launchArrow { transition: transform 220ms ease-out; }
+  .lead:hover .art { transform: scale(1.025); }
+  .game:hover .cta svg, .managerLaunch:hover .launchArrow { transform: translateX(3px); }
 }

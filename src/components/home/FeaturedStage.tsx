@@ -1,6 +1,6 @@
 import { Fragment, lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ALL_GAMES, type GameDef } from '@/data/gameRegistry';
 import { HOME_STAGE, sportOf, type StageEntry } from '@/data/homeFront';
@@ -24,6 +24,7 @@ const managerLinks = [
   { path: '/nrl-team-manager', sport: 'rugby' },
   { path: '/aussie-rules-manager', sport: 'aussie' },
 ] as const;
+const moreCareerPaths = ['/nfl-my-career', '/mlb-my-career', '/nhl-my-career', '/fight-career'];
 
 function stageSaves(storage: Storage | null): string[] {
   return [...stageSaveKeys].filter(key => {
@@ -74,6 +75,22 @@ export function FeaturedStage() {
           </Fragment>
         ))}
       </div>
+      <details className={styles.careerMenu}>
+        <summary>More career games<ChevronDown aria-hidden="true" /></summary>
+        <div className={styles.careerChoices}>
+          {moreCareerPaths.map(path => {
+            const game = ALL_GAMES.find(candidate => candidate.path === path);
+            if (!game) return null;
+            const sport = sportOf(path);
+            return (
+              <Link key={path} to={path} data-google-vignette="false" style={sportStyle(sport)} className={styles.managerLaunch}>
+                <SportGlyph sport={sport} className={styles.managerGlyph} />
+                <span>{game.label}</span><ArrowRight aria-hidden="true" className={styles.launchArrow} />
+              </Link>
+            );
+          })}
+        </div>
+      </details>
     </section>
   );
 }

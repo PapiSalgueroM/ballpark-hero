@@ -3,6 +3,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { StorageNotice, isGameRoute } from "@/components/StorageNotice";
 import { PublicFooterAd } from "@/components/ads/PublicFooterAd";
 import { GameDesktopRails, isPublicDesktopRailRoute } from "@/components/ads/GameDesktopRails";
+import { protectVignetteLinks } from "@/components/ads/protectVignetteLinks";
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { loadAnalytics } from "@/lib/consentedScripts";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
@@ -371,6 +372,7 @@ function LiveTickerRail({ home }: { home: boolean }) {
 
 const AppContent = () => {
   const { pathname, search, hash } = useLocation();
+  useLayoutEffect(protectVignetteLinks, [pathname, search, hash]);
   useLayoutEffect(loadAnalytics, [pathname, search, hash]);
   const gameRoute = isGameRoute(pathname);
   const opensCareerRules = /^\/(?:nba|nfl|mlb|nhl)-my-career\/?$/.test(pathname);

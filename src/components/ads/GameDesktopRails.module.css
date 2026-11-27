@@ -7,10 +7,21 @@
 }
 
 @media (min-width: 1280px) {
-  .frame[data-desktop-room] {
+  :global(#root):has(.frame[data-desktop-room]) {
     --game-ad-rail: clamp(160px, calc((100vw - 1152px) / 2), 200px);
+    --creative-width: calc(var(--game-ad-rail) - 40px);
+    --browse-rail-space: calc(var(--creative-width) + 150px);
+  }
+
+  /* Sticky controls pass the rails on scroll. Keep their rows in the safe middle. */
+  :global(#root):has(.frame[data-desktop-room]) :is(header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child) {
+    max-width: calc(100% - var(--browse-rail-space) - var(--browse-rail-space));
+    margin-inline: auto;
+  }
+
+  .frame[data-desktop-room] {
     display: grid;
-    grid-template-columns: var(--game-ad-rail) minmax(0, 1fr) var(--game-ad-rail);
+    grid-template-columns: var(--browse-rail-space) minmax(0, 1fr) var(--browse-rail-space);
   }
 
   .frame[data-desktop-room] .game {
@@ -29,7 +40,7 @@
     display: block;
     grid-row: 1;
     align-self: start;
-    width: calc(100% - 40px);
+    width: var(--creative-width);
     min-width: 0;
     margin-top: var(--rail-start, 0px);
   }

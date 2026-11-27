@@ -1,3 +1,13 @@
+### November 27, 2026. Home, desktop ad spacing and cookie choices
+
+The Soccer Career feature on Home uses a responsive stadium photograph. More career games opens football, baseball, hockey and fight career links. The existing save-aware launch actions and the daily puzzle rail still work.
+
+On public pages, the shared layout checks the two actual rail footprints against nearby controls before requesting either ad. Wide boards keep their original width. The pair can start lower alongside a game when an upper control is in its way. A page with no clear position keeps the footer. Opening the site drawer retires the side ads for that visit. Repeated Home searches cannot issue new auctions on the same visit. The cookie notice explains how ads fund the games. The custom Build Your XI guide offers the same consent controls as the shared guides.
+
+Use `node scripts/playAdRelease.mjs` against the built site for ranked direct visits, career saves, consent, request counts and distances. `--published` checks the public domain with fixture creatives. Use `node scripts/probeAdPublisherRequests.mjs --real-publisher` for the actual Google library with auctions intercepted. An attempted request in either replay cannot count as a paid impression.
+
+The separate, unchanged Club Manager replay reports the same shootout-heading and season-review navigation findings on the pre-release build. The first career save-and-resume flows complete. Search Console supplies the 25 search landing pages, and Lovable exposes ten most-viewed pages. Use the matched AdSense and Lovable reports for sitewide revenue and reach.
+
 ### November 26, 2026. Shared display ads
 
 Eligible pages use one responsive display unit below the global footer. At desktop widths of at least 1280px the shared layout can also request two equal side units. A game keeps its natural width. Both side units are skipped when either would come within 150px of the play area or its controls. Soccer Career and Build Your XI use the footer alone at 1280px and 1366px. College Grid and NFL Career Path have room for the pair at both sizes.
