@@ -48,7 +48,7 @@ export function defense(s: DriveScenario, d: Drive): Defense {
   return d.lastCall && d.repeats >= 2 ? counter[d.lastCall] : s.looks[d.snaps % s.looks.length];
 }
 export const fieldGoalYards = (d: Drive) => 117 - d.spot;
-export const fieldPosition = (spot: number) => spot === 50 ? 'Midfield' : spot < 50 ? 'Own ' + spot : 'Opp ' + (100 - spot);
+export const fieldPosition = (spot: number) => spot === 100 ? 'End zone' : spot === 50 ? 'Midfield' : spot < 50 ? 'Own ' + spot : 'Opp ' + (100 - spot);
 export const gameClock = (seconds: number) => Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
 export function driveStep(s: DriveScenario, d: Drive, action: Action): Drive | null {
   if (d.verdict) return null;
@@ -87,4 +87,46 @@ export function replayDrive(s: DriveScenario, actions: readonly unknown[]): Driv
     d = next;
   }
   return d;
+}
+
+export type PlayoffRun = { draw: number; legs: Action[][] };
+export const playoffRounds = ['Wild card', 'Conference final', 'Championship'];
+export function playoffDrive(draw: number, round: number, timeouts: number): DriveScenario {
+  let seed = (draw + 1) * 499 + round;
+  const roll = (n: number) => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return Math.floor((seed / 4294967296) * n);
+  };
+  const coverages: Defense[] = ['press', 'pressure', 'shell', 'sideline'];
+  for (let i = coverages.length - 1; i > 0; i--) {
+    const j = roll(i + 1);
+    [coverages[i], coverages[j]] = [coverages[j], coverages[i]];
+  }
+  return { id: 'playoff-' + round, name: playoffRounds[round], spot: [36, 49, 56][round] + roll(8),
+    seconds: [54, 54, 47][round] + roll(8), timeouts, deficit: [2, 4, 5][round], down: 1, yards: 10, looks: coverages };
+}
+
+export function playoffLedger(run: PlayoffRun) {
+  const results: { scenario: DriveScenario; drive: Drive }[] = [];
+  let timeouts = 1;
+  for (let round = 0; round < playoffRounds.length; round++) {
+    const scenario = playoffDrive(run.draw, round, timeouts);
+    const drive = replayDrive(scenario, run.legs[round] ?? []);
+    if (!drive) break;
+    results.push({ scenario, drive });
+    if (drive.verdict !== 'win') break;
+    timeouts = drive.timeouts;
+  }
+  return results;
+}
+
+export function readPlayoff(raw: string | null): PlayoffRun | null {
+  if (!raw) return null;
+  try {
+    const run = JSON.parse(raw);
+    if (!Number.isInteger(run?.draw) || run.draw < 1 || run.draw > 9999 || !Array.isArray(run.legs)
+        || run.legs.length > 3 || !run.legs.every(Array.isArray)) return null;
+    if (playoffLedger(run).length < run.legs.length) return null;
+    return run;
+  } catch { return null; }
 }
