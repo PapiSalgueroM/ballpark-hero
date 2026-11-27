@@ -18,6 +18,14 @@ CM-15 now has a one-match training and competitive delivery loop. Its baseline c
 
 The manager can pay for one pair to rehearse a far-post run or a short return pass. Each recorded attempt starts with the awarded flag, its actual taker and an eligible target still on the pitch. A connected shot records its finisher and can change the score. The second delivery of a familiar routine is easier for the opposition to read. The live viewer and match report use these saved events. The manager can see the actual training cost, cancel before payment, or stand down after paying. Defensive assignments, decoys and longer-lived routines remain open.
 
+### Where the management games set the bar
+
+The current career benchmarks cover different parts of the job. Transfer stages and future transfer rights, development under form and fitness, and shareable career scenarios all give a manager choices across seasons. Our scouting brief and two-summer succession desk lead to ordinary signings and renewals. Comparing those terms, and testing how later obligations settle, still needs its own audit. [EA's FC 27 career notes](https://www.ea.com/games/ea-sports-fc/fc-27/news/pitch-notes-fc27-career-mode-deep-dive)
+
+The tactical benchmarks include separate formations with and without the ball, live changes and post-match analysis. Our flank partnerships, opponent cover shifts and rehearsed corners produce named events in the match and report. Choosing different whole-team shapes for each phase, deliberately triggering a press against a particular opponent and studying that opponent across previous matches remain open. [Football Manager formations](https://www.footballmanager.com/fm26/features/possession-out-possession-fm26s-new-tactical-evolution) and [FM27 match engine notes](https://www.footballmanager.com/fm27/features/fm27-tactical-tweaks-and-match-engine-upgrades)
+
+For CM-13, an audit of 40 ordinary simulated league fixtures found 610 opposing throw-ins. Of these, 589 identified a player in the opposition lineup and 260 were taken by wide defenders. There were multiple opposing throws at 24 of the 585 distinct throw-in times. At 120 of those times, the ordinary engine also recorded independent shots. A return-pass press needs a specific recorded throw and a named player still on the field. A same-minute shot alone cannot establish that the press created it. The potential reward is winning the ball high. The risk is leaving room behind the pressing player. This is a measured opportunity for further work.
+
 The owner wants the next rounds concentrated on managing the club. The November 26 host ranking put Club Manager third overall behind Soccer Career and Home. The manager chapter contains 60 recommendations. Check each against the current game before implementing or marking it complete.
 
 | Masterplan item | What the manager can do in this build | What remains open |
