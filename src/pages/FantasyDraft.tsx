@@ -496,7 +496,7 @@ const FantasyDraft = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="flex flex-col lg:flex-row gap-4 w-full">
+                    <div data-rail-play-board="" className="flex flex-col lg:flex-row gap-4 w-full">
                       <div className="w-full lg:w-[380px] shrink-0 order-2 lg:order-1">
                         <DraftRoster
                           userTeam={userTeam}
@@ -506,7 +506,7 @@ const FantasyDraft = () => {
                         />
                       </div>
                       {!draftComplete && (
-                        <div className="flex-1 order-1 lg:order-2">
+                        <div className="min-w-0 flex-1 order-1 lg:order-2">
                           {currentTurn === 'user' && rivalPicks !== null && userOptions.players.length > 0 && <FantasyPickPlanner key={pickIndex} userTeam={userTeam} aiTeam={aiTeam} pool={players} claimed={draftedIds} eligible={userOptions.players} rule={rule} rivalPicks={rivalPicks} scoutUserFirst={scoutRival ? userFirst : undefined} onPick={handleUserPick} />}
                           <PlayerPool
                             players={players}

@@ -157,7 +157,7 @@ function renderedRows(draftedIds, isEligible, reason) {
   const html = render(PlayerPool, { players, draftedIds, onSelect: () => {}, disabled: false, isEligible, ineligibleReason: reason });
   return html.split('<button').slice(1).filter(c => c.includes('w-full flex items-center')).map(c => {
     const tag = c.slice(0, c.indexOf('>'));
-    const m = c.match(/<p class="text-sm font-semibold truncate[^"]*">([^<]*)<\/p>/);
+    const m = c.slice(0, c.indexOf('</button>')).match(/<p\b[^>]*>([^<]*)<\/p>/);
     return { name: m ? decode(m[1]) : null, enabled: !/\sdisabled(=""|\s|$)/.test(tag) };
   });
 }

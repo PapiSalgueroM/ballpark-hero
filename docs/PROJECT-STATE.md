@@ -1,3 +1,9 @@
+### November 27, 2026. Fantasy Draft playing board
+
+Fantasy Draft keeps its 380px desktop roster beside the player pool. The playing board uses the measured room between the side ads. At 1280px and 1366px, both ads stayed at least 151px from the board through planning and drafting. Each desktop visit requested two side ads and one footer. Phones requested one footer.
+
+The two planner selectors share a row when the player names fit and stack when they need the room. Player cards wrap long names. Run `node scripts/playGameDesktopRails.mjs --fantasy-draft` with `BASE` set to a local production preview. The check searches for and drafts the longest name in the captured 200-player pool at 320, 390, 900, 1280, 1366 and 1920 pixels.
+
 ### November 27, 2026. Break the Press, matchday campaigns, coaching and draft rivals
 
 Soccer Career's Training Ground includes Break the Press. Pick passes on three small pitches. The passer advances when there is room, and two defenders shift toward the receiver. Five passes are available per attempt. The shortest verified wins take three, four and five passes. Undo and Retry are free. Each board keeps its best winning sequence separately from the career save and seasonal training reward.

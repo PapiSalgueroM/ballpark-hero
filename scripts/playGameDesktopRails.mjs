@@ -1,8 +1,10 @@
 /* Run against a built loopback site using BASE. --published reads only the
  * public site's HTML and assets and defaults to a 1366px catalog pass.
  * RAIL_WIDTHS and ONLY accept comma-separated widths and paths for replays.
+ * --fantasy-draft plays the scout planner on phones, a tablet and desktops.
  * The publisher and every fill are local fixtures in both modes. */
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { build } from 'esbuild';
 import { guardedAdBrowser, isSiteAsset, staticReply } from './lib/playwrightAdReplay.mjs';
 
@@ -255,7 +257,70 @@ async function verify(page, path, width, requiredDocks = 0) {
   return row;
 }
 
-try {
+async function verifyFantasyDraft() {
+  const pool = JSON.parse(await readFile(new URL('./data/fantasyDraftPool.json', import.meta.url), 'utf8'));
+  const longest = pool.reduce((a, b) => a.name.length > b.name.length ? a : b);
+  for (const width of [320, 390, 900, 1280, 1366, 1920]) {
+    const ctx = await context(width);
+    try {
+      const page = await ctx.newPage();
+      await page.addInitScript(() => { Math.random = () => 0.19; });
+      await page.route('**/functions/v1/fantasy-draft-daily', r => r.fulfill({ json: { criteria: 'One Nation Rule: Max 3 players from any one country' } }));
+      await page.route('**/rest/v1/fantasy_draft_players?*', r => r.fulfill({ json: pool }));
+      await page.goto(new URL('/fantasy-draft', origin).href);
+      const chooser = page.getByLabel('Opponent for a new draft');
+      await chooser.waitFor();
+      if (await page.getByRole('dialog').first().isVisible()) await page.keyboard.press('Escape');
+      await chooser.selectOption('scout');
+      const roles = width >= 1280 ? ['left-rail', 'public-footer', 'right-rail'] : ['public-footer'];
+      await page.waitForFunction(n => window.__sweepRequests?.length === n, roles.length);
+      const snapshot = () => page.evaluate(readPlacements, { key, placement, privateScreen });
+      const issued = (await snapshot()).requests;
+      await page.getByRole('button', { name: 'Start Draft', exact: true }).click();
+      await page.getByRole('button', { name: 'Plan two picks' }).click();
+      const first = page.getByLabel('First pick'), next = page.getByLabel('Next target');
+      await first.selectOption(longest.id);
+      await next.selectOption({ index: 1 });
+      await page.getByLabel('Draft forecast').waitFor();
+      const select = await first.boundingBox(), following = await next.boundingBox();
+      assert(select.height >= 44 && following.height >= 44);
+      if ([320, 390, 1280, 1366].includes(width)) assert(following.y >= select.y + select.height, 'Narrow planner should stack the player names at ' + width);
+      if (width === 900) assert.equal(following.y, select.y, 'Use the wider tablet planner for side-by-side names');
+      const fitsSelect = el => {
+        const css = getComputedStyle(el), text = document.createElement('canvas').getContext('2d');
+        text.font = css.fontWeight + ' ' + css.fontSize + ' ' + css.fontFamily;
+        const room = el.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight) - 16;
+        return text.measureText(el.selectedOptions[0].text).width <= room + 1;
+      };
+      assert(await first.evaluate(fitsSelect) && await next.evaluate(fitsSelect), 'Selected player name or position is clipped at ' + width);
+      const roster = page.locator('[data-rail-play-board] > div').filter({ has: page.locator('[data-draft-slot]') });
+      if (width >= 1280) assert.equal((await roster.boundingBox()).width, 380, 'Desktop roster width');
+      await page.getByRole('textbox', { name: 'Search players' }).fill(longest.name);
+      const name = page.getByRole('button').locator('p').filter({ hasText: longest.name });
+      await name.waitFor();
+      const fits = el => el.scrollWidth <= el.clientWidth + 1 && el.scrollHeight <= el.clientHeight + 1;
+      assert(await name.evaluate(fits), 'Player card clips ' + longest.name);
+      for (const control of [first, name]) {
+        await control.scrollIntoViewIfNeeded();
+        await page.evaluate(() => new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done))));
+        const state = await snapshot();
+        assert.deepEqual(state.placements.map(a => a.role).sort(), roles, 'Active draft allocations at ' + width);
+        assert.deepEqual(state.requests, issued, 'Draft reauction at ' + width);
+        assert(state.placements.every(a => !a.nearest || a.nearest.px >= 149.5), JSON.stringify(state.placements));
+      }
+      await page.getByRole('button', { name: 'Draft ' + longest.name, exact: true }).click();
+      const drafted = roster.getByTitle(longest.name, { exact: true });
+      await drafted.waitFor();
+      assert(await drafted.evaluate(fits), 'Roster clips ' + longest.name);
+      const final = await snapshot();
+      assert.deepEqual(final.requests, issued);
+      assert.deepEqual(final.placements.map(a => a.role).sort(), roles);
+      console.log(JSON.stringify({ width, player: longest.name, selectWidth: select.width, stacked: following.y > select.y, roles, requests: issued.length }));
+    } finally { await ctx.close(); }
+  }
+}
+
+async function verifyCatalog() {
   // Delivered publisher frames can keep a fixed width after their parent track shrinks.
   const largeHome = await context(1920);
   try {
@@ -368,6 +433,11 @@ try {
   }
   console.log('Non-game exclusions and active Soccer Career controls passed');
   assert.deepEqual(failures, []);
+}
+
+try {
+  if (process.argv.includes('--fantasy-draft')) await verifyFantasyDraft();
+  else await verifyCatalog();
 } finally {
   await guard.close();
 }

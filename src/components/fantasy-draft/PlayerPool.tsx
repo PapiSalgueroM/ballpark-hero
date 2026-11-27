@@ -182,7 +182,7 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
 
               {/* Name & nationality */}
               <div className="flex-1 min-w-0">
-                <p className={cn('text-sm font-semibold truncate', isDrafted ? 'line-through text-muted-foreground' : 'text-foreground')}>
+                <p className={cn('break-words text-sm font-semibold', isDrafted ? 'line-through text-muted-foreground' : 'text-foreground')}>
                   {player.name}
                 </p>
                 <p className="text-xs text-muted-foreground">
