@@ -19645,7 +19645,7 @@ function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h2Drawn = true;
 }
 
-/** Round 670: goals at or before the ninetieth minute, mine and theirs. */
+/** Score on the night at a second-half checkpoint, including the whole first half. */
 function secondHalfScoreAt(live: LiveMatch, minute: number): { mine: number; opp: number } {
   const goals = (xs: { minute: number }[] | undefined): number => (xs ?? []).filter(g => g.minute <= minute).length;
   return { mine: live.myGoals + goals(live.h2My), opp: live.oppGoals + goals(live.h2Opp) };

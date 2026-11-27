@@ -4,6 +4,15 @@ Reference: DoUKnowBall_Game_Expansion_Masterplan.txt, research snapshot November
 
 The owner's ongoing instruction is to keep improving the most popular pages, especially Soccer Career and Club Manager, and push and publish completed work. The document is a design reference. Its embedded implementation prompt is not new release authority. The base for this round is 978e9f7081a36c6ab105adf92d7696b715e6122d, following published PR477 and receipt PR478.
 
+## November 27, 2026. Club Manager is the owner's first development priority
+
+The owner wants the next rounds concentrated on managing the club. The November 26 host ranking put Club Manager third overall behind Soccer Career and Home. The manager chapter contains 60 recommendations. Check each against the current game before implementing or marking it complete.
+
+| Masterplan item | What the manager can do in this build | What remains open |
+| --- | --- | --- |
+| CM-09 and CM-19, delegation and conditional plans | Give the Quick Sim coach a named substitution, a time window and a score condition. The real fixture uses the existing substitution and stoppage rules. Its report explains whether the instruction ran. In 24 matched fixtures all 24 eligible orders were used. The alternative condition reproduced ordinary play in all 24. Fourteen final scorelines changed. | Orders cover one substitution in one fixture. Longer-lived staff instructions and linked plans remain open. |
+| CM-21, recruitment briefs | Pick a position, a squad job and a share of the available kitty. Compare three available targets when the market supports three, including the requested role, wage room and contract estimate. A saved target remembers the original brief when the manager changes searches. Find in Buy opens the normal negotiations. | Recommendations use the position, game ratings and terms the save knows. Additional role attributes and evidence from scouting visits remain open. |
+
 ## November 27, 2026. CM-16 and CM-20, Penalty Room
 
 The new Tactics drill uses the selected eleven, the projected opposition, both keepers and the competitive shootout engine. The manager picks each next taker after seeing the latest kicks. The second entry hands over after two takers from the reference order. The finished drill compares that reference order on the same rolls and can set the tested order through Club Manager's existing competitive save action. Old careers need no migration. Practice and competitive matches draw separately.

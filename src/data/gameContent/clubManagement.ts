@@ -46,6 +46,8 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "Match days: team sheet, Play Live or Quick Sim",
         items: [
           "Open the Penalty Room in Tactics to call each taker from your starting eleven. Both keepers and the player taking each kick affect the odds. Take over after two takers to manage the run-in, replay the same draw with a different order, or use your tested list in competitive shootouts.",
+          "In Transfers, open Shortlist and write a scouting brief. Choose a position, a job and the share of your transfer budget you can spend now. Compare the asking fee, wages, contract cost and competition for minutes. Save a player to keep the brief that found him, then open Find in Buy to make an offer.",
+          "In the Match Centre, open Quick Sim bench order to name a starter and his replacement. Choose when the coach should check the score. For example, bring on a fresh striker around the hour only if you are level or behind. Sim with this order plays the fixture and the match report explains the decision.",
           "Open Tactics and choose Rehearse the next match. Coach your selected eleven against the next opponent from 60 minutes. Protect a one-goal lead or chase an equalizer. At 75 minutes you can change the instructions. After full time, choose whether to use the final call at the actual kickoff.",
           "Before each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.",
           "Open a player in Squad to set an in-game shirt number from 1 to 99. If a teammate wears it, Swap numbers shows what each player will get. Your assignments stay with the players at this club and appear in Play Live.",

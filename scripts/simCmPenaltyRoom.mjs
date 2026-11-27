@@ -6,6 +6,7 @@ if (control) assert.equal(control, 'ignore-picks');
 const { career, fixture, best, worst, play, game } = await penaltyExample(Boolean(control));
 const saved = JSON.stringify(career);
 let reversals = 0;
+let restored = 0;
 let example;
 for (let draw = 0; draw < 512; draw++) {
   const first = play(draw, best), alternate = play(draw, worst);
@@ -16,12 +17,14 @@ for (let draw = 0; draw < 512; draw++) {
   for (const { run, score } of [first, alternate]) {
     assert.deepEqual(game.readPenaltyRun(JSON.stringify(run), fixture), run);
     assert.deepEqual(game.penaltyScore(fixture, run), score);
+    restored++;
   }
 }
 console.log(career.clubName, 'vs', fixture.opponent, '|', reversals, 'wins became losses in 512 matched shootouts.', example ?? '');
 assert.notDeepEqual(best, worst);
 assert(reversals > 0, 'Ignoring the manager must erase every matched winner reversal.');
 assert.equal(JSON.stringify(career), saved);
+console.log(restored, 'finished checkpoints restored with the same scores. Practice kept the career save intact.');
 // Follow the tested list from an actual save into a competitive cup result.
 function seeded(key, action) {
   const random = Math.random;
@@ -62,4 +65,4 @@ for (let n = 0; n < 80 && !competitive; n++) {
   competitive = true;
 }
 assert(competitive, 'No actual cup shootout reached');
-console.log('Penalty Room passed, including 1,024 finished checkpoints and a competitive shootout.');
+console.log('Penalty Room passed.');
