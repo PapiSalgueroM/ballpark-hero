@@ -1,3 +1,9 @@
+### November 27, 2026. European ad consent controls awaiting publication
+
+The separate regional release lets a player who has enabled Advertising reopen Google's European consent message from Cookie choices. The button appears when Google's loaded consent platform reports that its European rules apply. The player's saved site settings stay separate. Advertising and Google Analytics still require affirmative choices.
+
+The signed-in AdSense account lists a published European message for douknowball.com and a draft US state regulations message. Local Chrome checks exercised both phone and desktop provider responses. Delivery to a visitor in a covered region still needs live verification.
+
 ### November 27, 2026. Home, desktop ad spacing and cookie choices
 
 The Soccer Career feature on Home uses a responsive stadium photograph. More career games opens football, baseball, hockey and fight career links. The existing save-aware launch actions and the daily puzzle rail still work.
@@ -14,7 +20,7 @@ The all-page layout replay covered 172 routes at 320, 390, 1280, 1366 and 1920 p
 
 Eligible pages use one responsive display unit below the global footer. At desktop widths of at least 1280px the shared layout can also request two equal side units. A game keeps its natural width. Both side units are skipped when either would come within 150px of the play area or its controls. Soccer Career and Build Your XI use the footer alone at 1280px and 1366px. College Grid and NFL Career Path have room for the pair at both sizes.
 
-Advertising requires an affirmative advertising choice. The current document shares a single publisher tag across navigation. Public trailing-slash addresses use the same eligibility check as their canonical route. Save and recovery screens, local search, private pages and noindex documents are excluded. The AdSense account has Auto ads and Auto optimize off. The browser checks use test creatives so they can verify geometry and fill handling without creating paid impressions.
+Advertising requires an affirmative advertising choice. The current document shares a single publisher tag across navigation. Public trailing-slash addresses use the same eligibility check as their canonical route. Save and recovery screens, local search, private pages and noindex documents are excluded. Auto ads and Auto optimize were off on November 26. The owner enabled both on November 27 and kept vignettes off. The browser checks use test creatives so they can verify geometry and fill handling without creating paid impressions.
 
 The priority browser check is `node scripts/playPriorityAdLayout.mjs`. Use `--published` to test the production site. The November search ranking covers 25 pages. Lovable exposes ten in its overall page ranking. Compare AdSense and Lovable using the same complete dates in America/Detroit, the publisher's reporting time zone.
 
