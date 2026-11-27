@@ -43,10 +43,21 @@ const text = (value: unknown): value is string => typeof value === 'string' && v
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 const clamp = (value: number, low: number, high: number) => Math.min(high, Math.max(low, value));
 const loanMinimum = (choice: string | undefined): 18 | 26 | undefined => choice === 'buy_18' ? 18 : choice === 'buy_26' ? 26 : undefined;
-const loanAppsKnown = (season: SeasonRecord) => count(season.apps) && count(season.leagueApps) && season.leagueApps <= season.apps;
+const leagueAppsKnown = (season: SeasonRecord) => count(season.apps) && count(season.leagueApps) && season.leagueApps <= season.apps;
+const setPieceDuties = ['penalties', 'free_kicks', 'share_corners', 'lead_corners'];
+const cornerDuty = (choice?: string) => choice === 'share_corners' || choice === 'lead_corners';
+function passedCornerReview(season: SeasonRecord): boolean {
+  return !season.injurySevere && leagueAppsKnown(season) && season.leagueApps! >= 12 && count(season.assists) && season.assists >= 4;
+}
+function earnedLeadCorners(career: CareerState, year: number): boolean {
+  const last = career.seasons[career.seasons.length - 1];
+  const record = last?.programme;
+  return last?.year === year - 1 && last.club === career.currentClub && last.type === 'playing' && passedCornerReview(last)
+    && record?.year === last.year && record.club === last.club && record.status === 'completed' && cornerDuty(record.choices?.set_pieces);
+}
 function validChoices(value: unknown): boolean {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
-  const known: Partial<Record<ProgrammeId, string[]>> = { tactics: ['finisher', 'creator', 'cover'], set_pieces: ['penalties', 'free_kicks'], promise: ['rotation', 'starter'], bonuses: ['appearances', 'goals', 'assists'], adaptation: ['settle', 'integrate'], fitness: ['managed', 'full'], captain: ['calm', 'rally'], loan: ['buy', 'buy_18', 'buy_26'] };
+  const known: Partial<Record<ProgrammeId, string[]>> = { tactics: ['finisher', 'creator', 'cover'], set_pieces: setPieceDuties, promise: ['rotation', 'starter'], bonuses: ['appearances', 'goals', 'assists'], adaptation: ['settle', 'integrate'], fitness: ['managed', 'full'], captain: ['calm', 'rally'], loan: ['buy', 'buy_18', 'buy_26'] };
   return Object.entries(value).every(([id, choice]) => typeof choice === 'string' && IDS.includes(id as ProgrammeId) && (id === 'position' ? GROUPS.some(group => group.includes(choice)) : known[id as ProgrammeId]?.includes(choice)));
 }
 
@@ -164,13 +175,14 @@ function allowed(career: CareerState, id: ProgrammeId, choice: string, target?: 
   }
   if (career.phase !== 'playing') return 'Plan this before the next club season.';
   const choices: Partial<Record<ProgrammeId, string[]>> = {
-    tactics: ['finisher', 'creator', 'cover'], set_pieces: ['penalties', 'free_kicks'], promise: ['rotation', 'starter'],
+    tactics: ['finisher', 'creator', 'cover'], set_pieces: setPieceDuties, promise: ['rotation', 'starter'],
     bonuses: ['appearances', 'goals', 'assists'], adaptation: ['settle', 'integrate'], fitness: ['managed', 'full'], captain: ['calm', 'rally'], loan: ['buy', 'buy_18', 'buy_26'],
   };
   if (id === 'position' && choice === 'adopt') return primaryRoleReason(career);
   if (id === 'position') return compatible(career.position, choice) ? null : 'Choose another position in your current position group.';
   if (!choices[id]?.includes(choice)) return 'Choose a listed programme.';
   if (career.position === 'GK' && (id === 'set_pieces' || (id === 'tactics' && choice !== 'cover') || (id === 'bonuses' && choice !== 'appearances'))) return 'This duty is for an outfield player.';
+  if (id === 'set_pieces' && choice === 'lead_corners' && !earnedLeadCorners(career, year)) return 'Last season at this club, you needed to share or lead corners and finish with 12 league appearances and 4 club assists.';
   if (id === 'bonuses' && (!finite(career.weeklyWage) || career.weeklyWage <= 0)) return 'A paid club contract is needed.';
   if (id === 'adaptation' && (!latestSenior(career) || latestSenior(career)?.club === career.currentClub)) return 'This is for your first season after changing clubs.';
   if (id === 'fitness' && !career.seriousInjuries?.some(row => count(row.year) && row.year === year - 1)) return 'A serious injury in the last saved year is needed.';
@@ -194,6 +206,13 @@ export function programmeEffects(career: CareerState): ProgrammeEffects {
   if (pick.tactics === 'cover') { effects.cleanSheetMult *= 1.08; effects.goalMult *= 0.90; }
   if (pick.position && compatible(career.position, pick.position)) { effects.appsMult *= 0.97; effects.goalMult *= 0.97; }
   if (career.position !== 'GK' && ['penalties', 'free_kicks'].includes(pick.set_pieces ?? '')) effects.goalMult *= 1.04;
+  if (career.position !== 'GK' && cornerDuty(pick.set_pieces)) {
+    const lead = pick.set_pieces === 'lead_corners';
+    if (!lead || earnedLeadCorners(career, plan.year)) {
+      effects.assistMult *= lead ? 1.15 : 1.06;
+      effects.goalMult *= lead ? 0.92 : 0.97;
+    }
+  }
   if (pick.promise === 'rotation') effects.appsMult *= 1.04;
   if (pick.promise === 'starter') effects.appsMult *= 1.08;
   if (pick.adaptation === 'settle' && latestSenior(career) && latestSenior(career)?.club !== career.currentClub) effects.appsMult *= 0.95;
@@ -275,6 +294,8 @@ export function prepareSoccerProgramme(career: CareerState): void {
   if (!existing) return;
   const state = detach(career, existing);
   if (state.plan && !planOf(career)) delete state.plan;
+  if (state.plan && cornerDuty(state.plan.choices.set_pieces) && (career.position === 'GK'
+    || (state.plan.choices.set_pieces === 'lead_corners' && !earnedLeadCorners(career, state.plan.year)))) delete state.plan.choices.set_pieces;
   const year = nextProgrammeYear(career);
   if (state.secondaryTraining && (state.secondaryTraining.club !== career.currentClub || state.secondaryTraining.from !== career.position || state.secondaryTraining.year !== (year ?? 0) - 1)) delete state.secondaryTraining;
   if (state.secondaryPosition && (state.secondaryPosition.club !== career.currentClub || state.secondaryPosition.primary !== career.position)) delete state.secondaryPosition;
@@ -322,7 +343,13 @@ export function settleSoccerProgramme(career: CareerState, season: SeasonRecord)
   } else if (pick.position || !played) delete state.secondaryTraining;
   if (played && pick.set_pieces === 'penalties') receipt.penaltyGoals = Math.floor(season.goals * 0.20);
   if (played && pick.set_pieces === 'free_kicks') receipt.freeKickGoals = Math.floor(season.goals * 0.15);
-  if (pick.set_pieces) receipt.outcomes.set_pieces = `${receipt.penaltyGoals} penalty goals and ${receipt.freeKickGoals} free kick goals, included in your ${season.goals} recorded goals. This is the simulation's season duty allocation.`;
+  if (cornerDuty(pick.set_pieces)) {
+    const duty = pick.set_pieces === 'share_corners' ? 'Shared corners' : 'Lead corners';
+    const apps = leagueAppsKnown(season) ? `${season.leagueApps} league appearances` : 'League appearances unavailable';
+    const verdict = !played ? 'The season was interrupted. You can share corners again next year.'
+      : passedCornerReview(season) ? 'You earned lead corner duty here next season.' : 'The target was missed. You can share corners again next season.';
+    receipt.outcomes.set_pieces = `${duty}: ${apps}, ${season.assists} club assists. ${verdict}`;
+  } else if (pick.set_pieces) receipt.outcomes.set_pieces = `${receipt.penaltyGoals} penalty goals and ${receipt.freeKickGoals} free kick goals, included in your ${season.goals} recorded goals. This is the simulation's season duty allocation.`;
   if (pick.promise === 'rotation' || pick.promise === 'starter') {
     const target = pick.promise === 'starter' ? 26 : 18;
     const excuse = !played || !!season.injury || (count(season.suspensionMatches) && season.suspensionMatches > 0) || !count(season.leagueApps);
@@ -343,7 +370,7 @@ export function settleSoccerProgramme(career: CareerState, season: SeasonRecord)
     if (pick.loan === 'buy') state.loanBuy.ready = true;
     else {
       const agreed = state.loanBuy.minimumLeagueApps === minimum;
-      const known = loanAppsKnown(season);
+      const known = leagueAppsKnown(season);
       state.loanBuy.ready = agreed && known && season.leagueApps! >= minimum!;
       receipt.outcomes.loan = !agreed ? 'The saved loan condition did not match this choice. No permanent deal was completed.'
         : !known ? `The ${minimum}-appearance loan review has unavailable league data. No permanent deal was completed; the parent-club return remains.`
@@ -370,7 +397,7 @@ export function completeProgrammeLoanBuy(career: CareerState, club: ClubData): b
     if (minimum === undefined || proof.length !== 1 || proof[0].status !== 'completed'
       || proof[0].choices.loan !== choice || !last.programme || last.programme.choices?.loan !== choice
       || JSON.stringify(last.programme) !== JSON.stringify(proof[0])
-      || !loanAppsKnown(last) || last.leagueApps! < minimum) return false;
+      || !leagueAppsKnown(last) || last.leagueApps! < minimum) return false;
   }
   if (!text(club.country) || !text(club.league) || !text(club.color) || !count(club.tier) || club.tier < 1 || !finite(career.weeklyWage) || career.weeklyWage <= 0) return false;
   const state = detach(career, existing);
@@ -395,7 +422,12 @@ export function programmePromiseBroken(career: CareerState): boolean {
 const DEFINITIONS: { id: ProgrammeId; title: string; description: string; choices: [string, string, string, string][] }[] = [
   { id: 'tactics', title: 'Tactical role', description: 'Give your next season a football role with a real scoring tradeoff.', choices: [['finisher', 'Finisher', '12% more expected goals.', '10% fewer expected assists.'], ['creator', 'Creator', '12% more expected assists.', '10% fewer expected goals.'], ['cover', 'Defensive cover', '8% more expected clean sheets for a position that records them.', '10% fewer expected goals.']] },
   { id: 'position', title: 'Second position', description: 'Train a compatible second position over two consecutive played seasons here, then choose whether to adopt it as your primary role.', choices: [] },
-  { id: 'set_pieces', title: 'Set piece duty', description: 'Own a season duty. Recorded duty goals are part of your existing total.', choices: [['penalties', 'Penalty duty', '4% more expected goals. 20% of actual goals are allocated to penalties, rounded down.', 'The duty does not add goals after simulation.'], ['free_kicks', 'Free kick duty', '4% more expected goals. 15% of actual goals are allocated to free kicks, rounded down.', 'The duty does not add goals after simulation.']] },
+  { id: 'set_pieces', title: 'Set piece duty', description: 'Take the shot yourself or deliver corners for your teammates.', choices: [
+    ['penalties', 'Penalty duty', '4% more expected goals. 20% of actual goals are allocated to penalties, rounded down.', 'The duty does not add goals after simulation.'],
+    ['free_kicks', 'Free kick duty', '4% more expected goals. 15% of actual goals are allocated to free kicks, rounded down.', 'The duty does not add goals after simulation.'],
+    ['share_corners', 'Share corner duty', '6% more expected assists. Finish with 12 league appearances and 4 club assists to earn lead duty here next season.', 'Taking corners keeps you out of the box. Expected goals fall 3%.'],
+    ['lead_corners', 'Take lead corner duty', '15% more expected assists. Meet the same targets again to keep the option next season.', 'Expected goals fall 8%. This replaces any other set piece duty.'],
+  ] },
   { id: 'promise', title: 'Manager promise', description: 'Agree a league appearance target and hold the next recorded season to it.', choices: [['rotation', 'Regular rotation', '18 league appearances promised; 4% more planned appearances.', 'A fit shortfall costs 5 morale. Availability can excuse it.'], ['starter', 'Starting role', '26 league appearances promised; 8% more planned appearances.', 'A fit shortfall costs 5 morale. Availability can excuse it.']] },
   { id: 'negotiation', title: 'Contract counteroffer', description: 'Choose a permanent offer in your contract window to negotiate, once per club each year.', choices: [['wage', 'Ask for more pay', 'If accepted, the offered weekly wage rises 10%, with the same contract length.', 'The simulation accepts only with a last senior rating of at least 7.5 or overall of at least 85. A rejected ask uses your chance. Current pay changes only on signing.'], ['shorter', 'Shorter commitment', 'The offered contract loses one year.', 'The offered wage falls 5%. This pay-cut proposal is accepted; one-year offers cannot be shortened.']] },
   { id: 'bonuses', title: 'Performance bonus', description: 'Agree a bonus worth four current weekly wages, paid once on recorded results. An injury does not erase a target already earned.', choices: [['appearances', 'Appearance clause', 'Earn the quoted bonus with 24 recorded league appearances.', 'No target, no bonus.'], ['goals', 'Goal clause', 'Earn the quoted bonus with 15 recorded goals.', 'No target, no bonus.'], ['assists', 'Assist clause', 'Earn the quoted bonus with 10 recorded assists.', 'No target, no bonus.']] },

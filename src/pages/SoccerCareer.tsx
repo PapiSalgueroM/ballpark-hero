@@ -565,6 +565,8 @@ function SeasonSummaryCard({ season, position, onContinue, continueRef, appearan
   /* Round 1037: the finish is printed in the league the club was in that
      season (finishLeague), the phone's world is read by its key */
   const playedWorld = readLeagueWorldSeason(season);
+  const duty = season.programme?.choices?.set_pieces;
+  const cornerReport = (duty === 'share_corners' || duty === 'lead_corners') && season.programme?.outcomes?.set_pieces;
   const league = playedWorld?.league ?? leagueOf?.key;
   const leagueName = playedWorld?.league ?? leagueOf?.name;
   const isGK = position === "GK";
@@ -651,6 +653,7 @@ function SeasonSummaryCard({ season, position, onContinue, continueRef, appearan
       <SeasonCupExitLine season={season} />
       <SeasonAmbitionResult season={season} />
       <PreseasonPlanResult season={season} />
+      {typeof cornerReport === 'string' && <p data-corner-duty-result className="rounded-lg bg-muted/20 p-3 text-sm">{cornerReport}</p>}
       <ReducedRoleSeasonNote season={season} />
       <AcademyPlacementRecord season={season} />
       {goalMilestone && <p data-career-goal-milestone className="rounded-lg bg-emerald-500/10 p-3 text-xs">

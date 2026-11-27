@@ -86,6 +86,80 @@ describe('Soccer career programme outcomes', () => {
     const season = finish(chooseProgramme(career(), 'set_pieces', 'penalties'), { apps: 0, leagueApps: 0, goals: 0, assists: 0 });
     expect(season.programme?.penaltyGoals).toBe(0); expect(season.programme?.status).toBe('interrupted');
   });
+  it('earns lead corners from a saved trial at the same club and renews the duty by playing it', () => {
+    const first = career();
+    expect(chooseProgramme(first, 'set_pieces', 'lead_corners')).toBe(first);
+    const shared = chooseProgramme(first, 'set_pieces', 'share_corners');
+    expect(programmeEffects(shared)).toMatchObject({ goalMult: 0.97, assistMult: 1.06 });
+    expect(programmeEffects(cancelProgramme(shared, 'set_pieces'))).toEqual(neutral);
+    const trial = finish(shared, { leagueApps: 12, assists: 4, goals: 6 });
+    expect(trial.programme?.outcomes.set_pieces).toMatch(/12 league appearances.*4 club assists.*lead corner duty/i);
+    expect([trial.goals, trial.assists]).toEqual([6, 4]);
+    const reloaded = JSON.parse(JSON.stringify(shared)) as CareerState;
+    const lead = chooseProgramme(reloaded, 'set_pieces', 'lead_corners');
+    expect(programmeEffects(lead)).toMatchObject({ goalMult: 0.92, assistMult: 1.15 });
+    expect(programmeEffects(chooseProgramme(lead, 'set_pieces', 'penalties'))).toMatchObject({ goalMult: 1.04, assistMult: 1 });
+    finish(lead, { leagueApps: 18, assists: 5 });
+    expect(chooseProgramme(lead, 'set_pieces', 'lead_corners')).not.toBe(lead);
+    const renewal = chooseProgramme(lead, 'set_pieces', 'lead_corners');
+    finish(renewal, { leagueApps: 11, assists: 5 });
+    expect(chooseProgramme(renewal, 'set_pieces', 'lead_corners')).toBe(renewal);
+    const moved = { ...reloaded, currentClub: 'Another Club' };
+    expect(chooseProgramme(moved, 'set_pieces', 'lead_corners')).toBe(moved);
+  });
+  it.each([
+    { leagueApps: 11, assists: 8 },
+    { leagueApps: 18, assists: 3 },
+    { leagueApps: undefined, assists: 8 },
+    { leagueApps: 33, apps: 32, assists: 8 },
+    { leagueApps: 18, assists: 8, injurySevere: true },
+  ])('withholds the lead role for an incomplete or interrupted trial %o', patch => {
+    const state = chooseProgramme(career(), 'set_pieces', 'share_corners');
+    finish(state, patch);
+    expect(programmeOptions(state).find(view => view.id === 'set_pieces')?.choices.find(choice => choice.id === 'lead_corners')?.eligible).toBe(false);
+    expect(chooseProgramme(state, 'set_pieces', 'lead_corners')).toBe(state);
+  });
+  it('keeps keepers, unrelated duties and expired corner trials out of the lead role', () => {
+    const keeper = career({ position: 'GK' });
+    expect(chooseProgramme(keeper, 'set_pieces', 'share_corners')).toBe(keeper);
+    const freeKicks = chooseProgramme(career(), 'set_pieces', 'free_kicks');
+    finish(freeKicks);
+    expect(chooseProgramme(freeKicks, 'set_pieces', 'lead_corners')).toBe(freeKicks);
+    const stale = chooseProgramme(freeKicks, 'set_pieces', 'share_corners');
+    stale.programme!.plan!.choices.set_pieces = 'lead_corners';
+    expect(programmeEffects(stale)).toEqual(neutral);
+    prepareSoccerProgramme(stale);
+    expect(stale.programme?.plan?.choices.set_pieces).toBeUndefined();
+    const trial = chooseProgramme(career(), 'set_pieces', 'share_corners');
+    finish(trial);
+    trial.seasons.push(row({ year: nextProgrammeYear(trial)! }));
+    expect(chooseProgramme(trial, 'set_pieces', 'lead_corners')).toBe(trial);
+  });
+  it('changes actual season totals over two seasons on the same match draws', () => {
+    const saved = JSON.parse(readFileSync(resolve(process.cwd(), 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8'));
+    const start = saved.saves.find((entry: { id: string }) => entry.id === 'ere').state as CareerState;
+    const advance = (state: CareerState, seed: number) => {
+      let n = seed;
+      const rng = vi.spyOn(Math, 'random').mockImplementation(() => ((n = (Math.imul(n, 1664525) + 1013904223) >>> 0) / 4294967296));
+      try { return advanceProSeason(structuredClone(state), FALLBACK_CLUBS); }
+      finally { rng.mockRestore(); }
+    };
+    const lastSeason = (state: CareerState) => state.seasons[state.seasons.length - 1];
+    const baseline = lastSeason(advance(start, 2));
+    const shared = advance(chooseProgramme(start, 'set_pieces', 'share_corners'), 2);
+    const trial = lastSeason(shared);
+    expect(trial.leagueApps).toBe(baseline.leagueApps);
+    expect(trial.assists).toBeGreaterThan(baseline.assists);
+    expect(trial.programme?.outcomes.set_pieces).toContain('earned lead corner duty');
+    const resumed = JSON.parse(JSON.stringify(shared)) as CareerState;
+    resumed.phase = 'playing';
+    const ordinary = lastSeason(advance(resumed, 5));
+    const lead = lastSeason(advance(chooseProgramme(resumed, 'set_pieces', 'lead_corners'), 5));
+    expect(lead.leagueApps).toBe(ordinary.leagueApps);
+    expect(lead.goals).toBeLessThan(ordinary.goals);
+    expect(lead.assists).toBeGreaterThan(ordinary.assists);
+    expect(lead.programme?.outcomes.set_pieces).toContain(`${lead.assists} club assists`);
+  });
   it('promise actual league appearances meet the agreed target', () => {
     const state = chooseProgramme(career(), 'promise', 'starter'); expect(programmeEffects(state).appsMult).toBe(1.08);
     const season = finish(state, { leagueApps: 26 }); expect(season.programme?.promise).toBe('met'); expect(state.morale).toBe(53);

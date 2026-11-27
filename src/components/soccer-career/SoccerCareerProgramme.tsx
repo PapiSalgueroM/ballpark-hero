@@ -89,6 +89,7 @@ export default function SoccerCareerProgramme({ career, onChange, onClose }: {
         {mode === "help" ? <div data-programme-rules className="space-y-3">
           <p>Pick a tile, read its effect and tradeoff, then choose an available option. Each plan belongs to the club and season shown in its detail.</p>
           <p>Some choices need a transfer offer, a loan, an injury return or the captain's armband. An unavailable choice explains what is missing.</p>
+          <p>To earn lead corner duty, share corners for a season at your club. For example, 12 league appearances and 4 club assists qualify you for next year. Eleven league appearances plus a cup game fall short. A serious injury interrupts the review. Leading corners gives you more chances to supply a teammate, but fewer chances to finish in the box.</p>
           <p>Contract counteroffer lets you pick the actual offer to negotiate. Each club gets one proposal a year. Other offers keep their terms, and choosing a proposal does not sign the contract.</p>
           <p>Loyalty contract uses your selected offer too. You can hold one pending loyalty choice at a time. Choosing another offer's payout replaces that pending choice. The payout is earned only after the recorded contract seasons.</p>
           <p>A plan is not a guaranteed result. The detail shows your current choice and the outcome your career actually kept. Opening, reading or closing this screen does not change your career.</p>
