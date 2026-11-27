@@ -14,6 +14,7 @@ export interface FantasyDraftSave {
   v: 1;
   date: string;
   userFirst: boolean;
+  rival?: 'scout';
   criteria: string | null;
   picks: string[];
 }
@@ -22,6 +23,7 @@ export function parseFantasyDraft(raw: string | null, date: string): FantasyDraf
   try {
     const save = JSON.parse(raw ?? 'null');
     if (!save || save.v !== 1 || save.date !== date || typeof save.userFirst !== 'boolean'
+      || (save.rival !== undefined && save.rival !== 'scout')
       || (save.criteria !== null && typeof save.criteria !== 'string') || !Array.isArray(save.picks)
       || save.picks.length === 0 || save.picks.length >= FANTASY_TOTAL_PICKS
       || save.picks.some(id => typeof id !== 'string' || !id)

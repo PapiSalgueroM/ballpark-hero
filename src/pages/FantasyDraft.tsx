@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
@@ -7,7 +7,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Shield, Trophy, Target, Loader2, User, Bot, CheckCircle2, Zap } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { fantasyAiShortlist, rivalPicksBeforeNextTurn } from '@/lib/fantasyDraftPlan';
+import { fantasyRivalPick, rivalPicksBeforeNextTurn } from '@/lib/fantasyDraftPlan';
 import { FantasyPickPlanner } from '@/components/fantasy-draft/FantasyPickPlanner';
 import { PlayerPool, type DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
 import { DraftRoster } from '@/components/fantasy-draft/DraftRoster';
@@ -83,6 +83,7 @@ const FantasyDraft = () => {
 
   // Draft state
   const [userFirst, setUserFirst] = useState(true);
+  const [scoutRival, setScoutRival] = useState(false);
   const [pickIndex, setPickIndex] = useState(0);
   const [userTeam, setUserTeam] = useState<DraftPlayer[]>([]);
   const [aiTeam, setAiTeam] = useState<DraftPlayer[]>([]);
@@ -138,6 +139,14 @@ const FantasyDraft = () => {
   const userPickIds = new Set(userOptions.players.map(p => p.id));
   const activeOptions = currentTurn === 'user' ? userOptions : fantasyDraftCandidates(rule, aiTeam, players, draftedIds);
   const rivalPicks = rivalPicksBeforeNextTurn(pickIndex, userFirst);
+  const scoutNote = useMemo(() => {
+    const last = aiTeam[aiTeam.length - 1];
+    if (!scoutRival || !last || last.id !== lastPickId) return '';
+    const before = new Set(draftedIds);
+    before.delete(last.id);
+    const review = fantasyRivalPick(rule, aiTeam.slice(0, -1), players, before, {team: userTeam, userFirst});
+    return review.players[0]?.id === last.id ? `${last.name}. ${review.reason}` : '';
+  }, [scoutRival, lastPickId, aiTeam, userTeam, players, draftedIds, rule, userFirst]);
 
   // Fetch daily criteria
   useEffect(() => {
@@ -206,6 +215,7 @@ const FantasyDraft = () => {
     expectedSave.current = raw;
     pendingResume.current = save;
     committedPicks.current = [];
+    if (save) setScoutRival(save.rival === 'scout');
     setUserFirst(save?.userFirst ?? Math.random() < 0.5);
     setDraftCriteria(save ? save.criteria : criteria);
     setDraftNotice('');
@@ -229,7 +239,7 @@ const FantasyDraft = () => {
           setFinalRetry(null);
           setDraftNotice('');
         } else {
-          const save: FantasyDraftSave = { v: 1, date: draftDate, userFirst, criteria: draftCriteria, picks };
+          const save: FantasyDraftSave = { v: 1, date: draftDate, userFirst, criteria: draftCriteria, picks, ...(scoutRival ? { rival: 'scout' } : {}) };
           const raw = JSON.stringify(save);
           localStorage.setItem(saveKey, raw);
           expectedSave.current = raw;
@@ -248,7 +258,7 @@ const FantasyDraft = () => {
       setLastPickId(player.id);
       setPickIndex((prev) => prev + 1);
     });
-  }, [draftCriteria, draftDate, pickIndex, saveKey, userFirst]);
+  }, [draftCriteria, draftDate, pickIndex, saveKey, userFirst, scoutRival]);
 
   const handleUserPick = useCallback((player: DraftPlayer) => {
     if (currentTurn !== 'user' || draftComplete || draftedIds.has(player.id)) return;
@@ -273,14 +283,13 @@ const FantasyDraft = () => {
   useEffect(() => {
     if (draftComplete || currentTurn !== 'ai' || players.length === 0) return;
     aiTimerRef.current = window.setTimeout(() => {
-      const pool = fantasyDraftCandidates(rule, aiTeam, players, draftedIds).players;
-      const topN = fantasyAiShortlist(aiTeam, pool);
+      const topN = fantasyRivalPick(rule, aiTeam, players, draftedIds, scoutRival ? {team: userTeam, userFirst} : undefined).players;
       if (!topN.length) return;
       const pick = topN[Math.floor(Math.random() * topN.length)];
       draftPlayer(pick, 'ai');
     }, 2000);
     return () => { if (aiTimerRef.current) clearTimeout(aiTimerRef.current); };
-  }, [currentTurn, draftComplete, players, draftedIds, draftPlayer, rule, aiTeam]);
+  }, [currentTurn, draftComplete, players, draftedIds, draftPlayer, rule, aiTeam, userTeam, userFirst, scoutRival]);
 
   // Simulate season
   const handleSimulate = async () => {
@@ -391,6 +400,16 @@ const FantasyDraft = () => {
                   )}
                 </div>
                 {draftNotice && <p role="status" className="text-sm text-muted-foreground">{draftNotice}</p>}
+                <div className="mx-auto max-w-md space-y-2 text-left">
+                  <label className="block text-sm font-semibold" htmlFor="draft-rival">Opponent for a new draft</label>
+                  <select id="draft-rival" value={scoutRival ? 'scout' : 'classic'} onChange={event => setScoutRival(event.target.value === 'scout')} className="h-11 w-full rounded-lg border border-border bg-card px-3 text-sm">
+                    <option value="classic">Classic rival</option>
+                    <option value="scout">Scout rival</option>
+                  </select>
+                  <p className="text-xs text-muted-foreground">{scoutRival
+                    ? 'The scout looks at the players you can take next. If one strong defender is left and forwards are plentiful, it may secure the defender first. Both sides use the same player pool and season scoring.'
+                    : 'Classic picks from up to six of the highest-value eligible players and protects its goalkeeper spot.'}</p>
+                </div>
                 <div className="flex flex-wrap items-center justify-center gap-3">
                   {resumeAvailable && <Button type="button" onClick={() => startDraft(true)} className="min-h-11 px-6">Resume Draft</Button>}
                   <Button
@@ -433,6 +452,7 @@ const FantasyDraft = () => {
                   </div>
                 )}
 
+                {scoutRival && <p className="text-sm text-muted-foreground" aria-label="Scout rival report"><strong>Scout rival</strong>{scoutNote && ` · ${scoutNote}`}</p>}
                 {draftCriteria && (
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/60 border border-border">
                     <Target className="w-3.5 h-3.5 text-primary" />
@@ -487,7 +507,7 @@ const FantasyDraft = () => {
                       </div>
                       {!draftComplete && (
                         <div className="flex-1 order-1 lg:order-2">
-                          {currentTurn === 'user' && rivalPicks !== null && userOptions.players.length > 0 && <FantasyPickPlanner key={pickIndex} userTeam={userTeam} aiTeam={aiTeam} pool={players} claimed={draftedIds} eligible={userOptions.players} rule={rule} rivalPicks={rivalPicks} onPick={handleUserPick} />}
+                          {currentTurn === 'user' && rivalPicks !== null && userOptions.players.length > 0 && <FantasyPickPlanner key={pickIndex} userTeam={userTeam} aiTeam={aiTeam} pool={players} claimed={draftedIds} eligible={userOptions.players} rule={rule} rivalPicks={rivalPicks} scoutUserFirst={scoutRival ? userFirst : undefined} onPick={handleUserPick} />}
                           <PlayerPool
                             players={players}
                             draftedIds={draftedIds}

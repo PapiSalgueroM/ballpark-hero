@@ -6,7 +6,7 @@ import type { DraftPlayer } from './PlayerPool';
 interface PlannerProps {
   userTeam: DraftPlayer[]; aiTeam: DraftPlayer[]; pool: DraftPlayer[];
   claimed: Set<string>; eligible: DraftPlayer[]; rule: CriteriaRule | null;
-  rivalPicks: number; onPick: (player: DraftPlayer) => void;
+  rivalPicks: number; scoutUserFirst?: boolean; onPick: (player: DraftPlayer) => void;
 }
 
 export function FantasyPickPlanner(props: PlannerProps) {
@@ -17,7 +17,7 @@ export function FantasyPickPlanner(props: PlannerProps) {
   </section>;
 }
 
-function PickForecast({ userTeam, aiTeam, pool, claimed, eligible, rule, rivalPicks, onPick }: PlannerProps) {
+function PickForecast({ userTeam, aiTeam, pool, claimed, eligible, rule, rivalPicks, scoutUserFirst, onPick }: PlannerProps) {
   const [firstId, setFirstId] = useState('');
   const [nextId, setNextId] = useState('');
   const first = eligible.find(p => p.id === firstId) ?? eligible[0];
@@ -25,7 +25,8 @@ function PickForecast({ userTeam, aiTeam, pool, claimed, eligible, rule, rivalPi
   const afterFirst = new Set([...claimed, first.id]);
   const following = fantasyDraftCandidates(rule, [...userTeam, first], pool, afterFirst).players;
   const next = following.find(p => p.id === nextId) ?? following[0];
-  const chance = next ? Math.round(100 * followUpChance(next.id, rivalPicks, rule, aiTeam, pool, afterFirst)) : null;
+  const scout = scoutUserFirst === undefined ? undefined : { team: [...userTeam, first], userFirst: scoutUserFirst };
+  const chance = next ? Math.round(100 * followUpChance(next.id, rivalPicks, rule, aiTeam, pool, afterFirst, scout)) : null;
   const canReverse = next && eligible.some(p => p.id === next.id)
     && fantasyDraftCandidates(rule, [...userTeam, next], pool, new Set([...claimed, next.id])).players.some(p => p.id === first.id);
   const options = (players: DraftPlayer[]) => players.map(p => <option key={p.id} value={p.id}>{p.name} ({p.position})</option>);

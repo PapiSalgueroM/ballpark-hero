@@ -1,10 +1,35 @@
 import { expect, it } from 'vitest';
 import type { DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
-import { fantasyAiShortlist, followUpChance, rivalPicksBeforeNextTurn } from '@/lib/fantasyDraftPlan';
+import { fantasyAiShortlist, fantasyRivalPick, followUpChance, rivalPicksBeforeNextTurn } from '@/lib/fantasyDraftPlan';
 import { ruleForCriteria } from '@/lib/fantasyCriteria';
 
 const player = (id: string, position: string, value: number, age = 24): DraftPlayer => ({ id, name: id, position, market_value_millions: value, age, nationality: 'Fixture', dominant_foot: 'Right' });
 const forwards = Array.from({ length: 7 }, (_, n) => player(`forward${n}`, 'FWD', 100 - n));
+
+it('Scout protects a scarce role before the opponent can take it and the planner predicts that same pick', () => {
+  const defender = player('specialist', 'DEF', 85);
+  const field = [...forwards, defender, ...Array.from({length: 5}, (_, i) => player('cover'+i, 'DEF', 15))];
+  const yours = [player('yourmid', 'MID', 50)];
+  const ai = [player('rivalmid', 'MID', 52)];
+  const claimed = new Set([...yours, ...ai].map(p => p.id));
+  const scout = { team: yours, userFirst: true };
+  expect(fantasyRivalPick(null, ai, field, claimed).players).not.toContain(defender);
+  expect(fantasyRivalPick(null, ai, field, claimed, scout).players).toEqual([defender]);
+  expect(fantasyRivalPick(null, ai, field, claimed, scout).reason).toMatch(/DEF.*85.*15/);
+  expect(followUpChance(defender.id, 1, null, ai, field, claimed, scout)).toBe(0);
+  expect(followUpChance(defender.id, 1, null, ai, field, claimed)).toBe(1);
+  const fullDefence = Array.from({length: 4}, (_, i) => player('filled'+i, 'DEF', 20));
+  expect(fantasyRivalPick(null, ai, field, claimed, {team: fullDefence, userFirst: false}).players).toEqual([forwards[0]]);
+  expect(fantasyRivalPick(null, [], field, new Set(), {team:yours, userFirst:true}).players).toEqual([forwards[0]]);
+});
+it('Scout obeys daily eligibility and the same hard keeper and position rules', () => {
+  const old = player('old', 'MID', 200, 31);
+  const keeper = player('keeper', 'GK', 8);
+  const young = player('young', 'MID', 25);
+  const scout = {team: [], userFirst:false};
+  expect(fantasyRivalPick(ruleForCriteria('Under 25s'), [], [old, young, keeper], new Set(), scout).players).toEqual([keeper]);
+  expect(fantasyRivalPick(ruleForCriteria('Under 25s'), [keeper], [old, young, keeper], new Set([keeper.id]), scout).players).toEqual([young]);
+});
 
 it('prices the second shortlist after the first rival pick and observes both snake orders', () => {
   expect(rivalPicksBeforeNextTurn(0, true)).toBe(2);

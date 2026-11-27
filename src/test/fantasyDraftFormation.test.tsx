@@ -131,6 +131,34 @@ afterEach(() => {
 describe('Fantasy Draft unfinished receipt', () => {
   const key = () => `fantasy-draft-in-progress-${getTodayET()}`;
 
+  it('resumes a Scout draft with the actual scarce pick, its reason and the standard season verdict', async () => {
+    remote.players = fixture().map(p => ({...p, market_value_millions: p.position === 'FWD' ? 100
+      : p.id === 'fixture-DEF-0' ? 85 : p.position === 'MID' ? 60 : 15}));
+    const view = render(<FantasyDraft />);
+    await act(async () => {});
+    fireEvent.change(view.getByLabelText('Opponent for a new draft'), {target:{value:'scout'}});
+    fireEvent.click(view.getByRole('button', {name:'Start Draft'}));
+    await act(async () => {});
+    await pickPosition(view, 'GK');
+    await userTurn(view);
+    expect(roster(view, 'AI XI').map(p => p.position)).toEqual(['FWD', 'DEF']);
+    expect(view.getByLabelText('Scout rival report')).toHaveTextContent(/DEF.*85.*15/);
+    const raw = localStorage.getItem(key())!;
+    expect(JSON.parse(raw)).toMatchObject({rival:'scout', userFirst:true});
+    view.unmount();
+    const again = render(<FantasyDraft />);
+    await act(async () => {});
+    fireEvent.click(again.getByRole('button', {name:'Resume Draft'}));
+    await act(async () => {});
+    expect(again.getByLabelText('Scout rival report')).toHaveTextContent(/DEF.*85.*15/);
+    expect(localStorage.getItem(key())).toBe(raw);
+    for (const pos of ['DEF','DEF','DEF','DEF','MID','MID','MID','FWD','FWD','FWD']) await pickPosition(again, pos);
+    await finishAiTurn(again);
+    expect(settleSeason).toHaveBeenCalledTimes(1);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(key())).toBeNull();
+  });
+
   it('prices both snake orders without picking, then commits and resumes the chosen player once', async () => {
     remote.criteria = 'Under 25s: Every player must be 25 or younger';
     const view = await openDraft();
