@@ -247,6 +247,13 @@ import {
 /* ================================================================== */
 
 export type Mentality = 'defensive' | 'balanced' | 'attacking';
+export type HalftimePlan = 'protect' | 'chase' | 'both';
+interface HalftimePlanCall {
+  mentality: 'defensive' | 'attacking';
+  mine: number;
+  theirs: number;
+  aggregate?: true;
+}
 export type FormResult = 'W' | 'D' | 'L';
 /** Round 1510: 'oneOff' is a one match cup a participant plays on a night of its own (the domestic super cup,
  *  CareerState.worldComps.dsc). Round 1593: 'uel' is a Europa League night of a participant (worldComps.uel.me).*/
@@ -2266,7 +2273,7 @@ export type TimelineKind =
   /** Round 714: the committed play on the same clock. A shot off target, a
    *  shot on target that the keeper kept out, a corner, and a penalty given
    *  (its goal row or its save row follows at the same minute). */
-  | 'shot' | 'save' | 'corner' | 'penalty' | 'var';
+  | 'shot' | 'save' | 'corner' | 'penalty' | 'var' | 'halftime-plan';
 
 export interface TimelineEvent {
   minute: number;
@@ -3668,6 +3675,7 @@ export interface CareerState {
   shootoutOrder?: string[];
   /** Three club-bound tactics setups. Older saves have none; the match-plan reader validates entries. */
   matchPlans?: import('@/lib/clubManagerMatchPlans').SavedMatchPlan[];
+  halftimePlan?: HalftimePlan;
   /** Round 1331: 'base' plays the match rules from before Round 1331 (three changes with no stoppage
    *  limit everywhere, and the press asking about the fixture the old way), and since Round 1335 the
    *  season rules from before that round as well (legacySeason: the grade and its line, the offers, the
@@ -3727,6 +3735,7 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  halftimePlanCall?: HalftimePlanCall;
   positionRules?: number;
   customShape?: unknown;
   /** Simplified reviews enabled only by a new modern Club Manager kickoff. */
@@ -19610,6 +19619,12 @@ function drawSegment(
  * each half, with any legal changes determining the eleven it reads.
  */
 function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch): void {
+  const call = halftimePlanCall(state, live);
+  if (call) {
+    live.mentality = call.mentality;
+    live.halftimePlanCall = call;
+    live.shapeChanges = [...(live.shapeChanges ?? []), { minute: 46, mentality: call.mentality }];
+  }
   const fx = fixtureFor(state, entry)!;
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
@@ -19653,6 +19668,38 @@ function secondLegTonight(state: CareerState, entry: CalendarEntry): boolean {
   if (entry.type === 'uel') return uelLegTonight(state, entry) === 2;
   if (entry.type === 'promotion') return entry.round === 2;
   return !!entry.uclRound && entry.uclLeg === 2 && uclLegsFor(state.eraId, entry.uclRound) === 2;
+}
+
+export function setHalftimePlan(career: CareerState, plan: HalftimePlan | 'off'): CareerState | null {
+  if (career.live || career.sacked || career.wilderness || career.retired || career.pendingSummary) return null;
+  if (plan === 'off') {
+    const next = { ...career };
+    delete next.halftimePlan;
+    return next;
+  }
+  if (plan !== 'protect' && plan !== 'chase' && plan !== 'both') return null;
+  return { ...career, halftimePlan: plan };
+}
+
+export function halftimePlanCall(career: CareerState, live: LiveMatch): HalftimePlanCall | null {
+  const plan = career.halftimePlan;
+  if (!plan || live.h2Drawn || live.shapeChanges?.some(change => change.minute >= 46)) return null;
+  const entry = career.calendar[live.week];
+  if (!entry) return null;
+  const secondLeg = secondLegTonight(career, entry);
+  const tie = secondLeg ? secondLegContext(career, live.week, live.myGoals, live.oppGoals) : null;
+  if (secondLeg && !tie) return null;
+  const mine = tie?.aggMine ?? live.myGoals;
+  const theirs = tie?.aggTheirs ?? live.oppGoals;
+  const mentality = mine - theirs === 1 && (plan === 'protect' || plan === 'both') ? 'defensive'
+    : mine < theirs && (plan === 'chase' || plan === 'both') ? 'attacking' : null;
+  return mentality && live.mentality !== mentality
+    ? { mentality, mine, theirs, ...(tie ? { aggregate: true as const } : {}) } : null;
+}
+
+export function halftimePlanLine(call: HalftimePlanCall): string {
+  const action = call.mentality === 'defensive' ? 'Protect the lead' : 'Chase a goal';
+  return `${action} at ${call.mine}-${call.theirs}${call.aggregate ? ' on aggregate' : ''}.`;
 }
 
 /**
@@ -20361,6 +20408,7 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
  * once, here, so no screen can ever recompute a different match.
  */
 function buildMatchDetail(args: {
+  halftimePlanCall?: HalftimePlanCall;
   myGoals: number; oppGoals: number;
   lamMine: number; lamOpp: number;
   myScorers: ScorerLine[]; oppScorers: ScorerLine[];
@@ -20447,6 +20495,7 @@ function buildMatchDetail(args: {
 
   const timeline: TimelineEvent[] = [];
   timeline.push({ minute: 0, side: 'none', kind: 'kickoff', text: 'Kick off' });
+  if (args.halftimePlanCall) timeline.push({ minute: 46, side: 'me', kind: 'halftime-plan', text: halftimePlanLine(args.halftimePlanCall) });
   /* Round 714: a goal row says when it came from the spot or a free kick, off its own scorer line. */
   const setPiece = (sc: ScorerLine): Partial<TimelineEvent> => ({
     ...(sc.penalty ? { penalty: true } : {}), ...(sc.freeKick ? { freeKick: true } : {}),
@@ -20499,7 +20548,7 @@ function buildMatchDetail(args: {
      what they led to; everything else keeps the order it always had.
      Round 781: and the board after the minute, before the next one. */
   const KIND_ORDER: Record<TimelineKind, number> = {
-    kickoff: 0, var: 0.5, corner: 1, penalty: 1,
+    kickoff: 0, 'halftime-plan': 0, var: 0.5, corner: 1, penalty: 1,
     shot: 2, save: 2, goal: 2, yellow: 2, red: 2, injury: 2, sub: 2,
     halftime: 3, extratime: 3, pens: 4, fulltime: 5,
   };
@@ -21742,6 +21791,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     noteAwayTrip(state, fx.competition);
   }
   const detail = buildMatchDetail({
+    halftimePlanCall: live.halftimePlanCall,
     myGoals, oppGoals, lamMine, lamOpp,
     myScorers, oppScorers,
     cards: cardLines, injuries: injuryLines, subs: subLines,

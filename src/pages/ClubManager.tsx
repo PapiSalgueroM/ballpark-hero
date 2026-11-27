@@ -11,7 +11,7 @@ import {
   TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money,
   isAvailable, xiAverageRating, sortedTable,
   CLUB_MANAGER_START_NATIONS as NATIONS, CLUB_MANAGER_START_LEAGUES as REAL_LEAGUES,
-  playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, ordinaryClubAllowed, usesGeneratedOpeningSquad, isScopedStartLeague,
+  playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, ordinaryClubAllowed, usesGeneratedOpeningSquad, isScopedStartLeague, setHalftimePlan,
   isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
@@ -1366,6 +1366,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
             onSaveMatchPlan={g.saveMatchPlan}
             onApplyMatchPlan={g.applyMatchPlan}
             onDeleteMatchPlan={g.deleteMatchPlan}
+            onHalftimePlan={plan => g.commitClubAction(current => setHalftimePlan(current, plan))}
             openTileRequest={tacticsTile}
             onOpenTileRequestDone={() => setTacticsTile(null)}
           /></ScreenLoading>

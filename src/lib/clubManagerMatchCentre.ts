@@ -99,7 +99,7 @@ export interface TimelineRow {
 
 const ICON: Record<TimelineKind, string> = {
   kickoff: '⏱️', goal: '⚽', yellow: '🟨', red: '🟥', injury: '🩹', sub: '🔁',
-  halftime: '⏸️', fulltime: '🏁', pens: '🥅', extratime: '⏱️',
+  halftime: '⏸️', 'halftime-plan': '📋', fulltime: '🏁', pens: '🥅', extratime: '⏱️',
   shot: '💨', save: '🧤', corner: '🚩', penalty: '🎯', var: '📺',
 };
 
@@ -135,6 +135,9 @@ export function timelineRows(d: MatchDetail, view: TimelineView): TimelineRow[] 
         return;
       case 'halftime':
         out.push({ ...base, clock: addedH1, label: 'Half time', name: '' });
+        return;
+      case 'halftime-plan':
+        out.push({ ...base, clock: at, label: e.text, name: '' });
         return;
       case 'extratime':
         out.push({ ...base, clock: addedH2, label: stripBoard(e.text), name: '' });

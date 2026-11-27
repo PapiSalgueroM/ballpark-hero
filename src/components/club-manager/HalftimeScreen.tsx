@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowLeftRight, Gauge, Play } from 'lucide-react';
-import { benchFor, tiringAtHalftime, matchRuleOf, subsLeftOf, pressOf, liveGoneIds } from '@/lib/clubManager';
+import { benchFor, tiringAtHalftime, matchRuleOf, subsLeftOf, pressOf, liveGoneIds, halftimePlanCall, halftimePlanLine } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, LiveChange, Mentality, TalkTone } from '@/lib/clubManager';
 import { LiveTacticsPanel } from '@/components/club-manager/LiveTacticsPanel';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -86,6 +86,7 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf, o
   const mineFirst = myClubFirst(live.home);
   const [nameFirst, nameSecond] = inFixtureOrder(live.home, career.clubName, live.opponent);
   const [goalsFirst, goalsSecond] = inFixtureOrder(live.home, live.myGoals, live.oppGoals);
+  const planned = halftimePlanCall(career, live);
 
   return (
     <div className="space-y-3">
@@ -124,14 +125,16 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf, o
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
           <Gauge className="w-3 h-3" /> How do you want the second half
         </div>
+        {planned && <p className="mb-2 text-xs text-primary">Your halftime plan is ready. {halftimePlanLine(planned)} Choose a mentality below to override it.</p>}
         <div className="grid grid-cols-3 gap-1.5">
           {SHAPES.map(s => (
             <button
               key={s.id}
               onClick={() => onShape(s.id)}
+              aria-pressed={s.id === (planned?.mentality ?? live.mentality)}
               className={cn(
                 'rounded-lg border px-2 py-2 text-left transition-colors',
-                live.mentality === s.id
+                (planned?.mentality ?? live.mentality) === s.id
                   ? 'border-primary bg-primary/10'
                   : 'border-border hover:border-primary/40',
               )}

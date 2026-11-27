@@ -10,7 +10,7 @@ import {
   SHOOTOUT_MAX_ORDER, shootoutOrderOf, instructionsOf,
 } from '@/lib/clubManager';
 import { SET_PIECE_INFO, DUTY_INFO } from '@/lib/clubManagerUiInfo';
-import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
+import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade, HalftimePlan } from '@/lib/clubManager';
 import { instructionsSummary, opponentStyle, type TeamInstructions } from '@/lib/clubManagerTactics';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
@@ -72,6 +72,7 @@ interface TacticsScreenProps {
   onSaveMatchPlan?: (slot: number, name: string) => boolean;
   onApplyMatchPlan?: (slot: number) => boolean;
   onDeleteMatchPlan?: (slot: number) => boolean;
+  onHalftimePlan?: (plan: HalftimePlan | 'off') => boolean;
   /** Round 782: the hub's pre match card can ask for the shootout tile to be
    *  open on arrival; the screen opens it once and says so. */
   openTileRequest?: 'shootout' | null;
@@ -122,7 +123,7 @@ interface TacticsScreenProps {
  */
 export function TacticsScreen({
   career, onFormation, onMentality, onInstructions, theirOpponent, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
-  onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan, onCustomShape,
+  onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan, onHalftimePlan, onCustomShape,
 }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   /* Round 1522: the instructions tile, folded until asked for. */
@@ -888,7 +889,7 @@ export function TacticsScreen({
 
       {onSaveMatchPlan && onApplyMatchPlan && onDeleteMatchPlan && <div data-cm-tile="plans" data-cm-tile-open={openTile === 'plans' ? '1' : undefined}>
         <MatchPlansCard career={career} open={openTile === 'plans'} onToggle={() => setOpenTile(openTile === 'plans' ? null : 'plans')}
-          onSave={onSaveMatchPlan} onApply={slot => {
+          onHalftimePlan={onHalftimePlan} onSave={onSaveMatchPlan} onApply={slot => {
             if (!onApplyMatchPlan(slot)) return false;
             setSelSlot(null); setBenchPick(null); setOpenSlot(null); setDutySlot(null);
             return true;

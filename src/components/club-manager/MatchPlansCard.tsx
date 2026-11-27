@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { FORMATIONS, MENTALITIES, SET_PIECE_KEYS } from '@/lib/clubManager';
 import { SET_PIECE_INFO, DUTY_INFO } from '@/lib/clubManagerUiInfo';
-import type { CareerState } from '@/lib/clubManager';
+import type { CareerState, HalftimePlan } from '@/lib/clubManager';
 import { INSTRUCTION_INFO, INSTRUCTION_KEYS, settingLabel } from '@/lib/clubManagerTactics';
 import { MATCH_PLAN_LIMIT, MATCH_PLAN_NAME_LIMIT, canEditMatchPlans, matchPlansOf, previewMatchPlan } from '@/lib/clubManagerMatchPlans';
 
@@ -15,11 +15,12 @@ interface MatchPlansCardProps {
   onSave: (slot: number, name: string) => boolean;
   onApply: (slot: number) => boolean;
   onDelete: (slot: number) => boolean;
+  onHalftimePlan?: (plan: HalftimePlan | 'off') => boolean;
 }
 
 const REFUSED_MATCH_PLAN = 'This setup could not be changed. Reopen your active manager save and try again.';
 
-export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDelete }: MatchPlansCardProps) {
+export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDelete, onHalftimePlan }: MatchPlansCardProps) {
   const [selected, setSelected] = useState(0);
   const [name, setName] = useState('');
   const [details, setDetails] = useState(false);
@@ -60,6 +61,19 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
       </div>
       <p className="text-muted-foreground">Build and name your own setup. Choose a starting shape, use Move players, then pick a mentality and team instructions. Keep up to three plans for this club. Preview uses your squad as it stands today.</p>
       {help && <p data-cm-plan-rules className="rounded-lg bg-muted p-3 leading-relaxed">Save your formation, mentality, XI, duties, captain, set piece takers and shootout order together. For example, save your first XI, rotate on the pitch, then save a second plan. Custom positions and all four team instructions are saved too. Start from a preset, use Move players, choose your own instruction mix and give the plan a name. For example, pick High press and Patient and save it as My pressure philosophy. Apply restores those choices and the saved picks; it does not heal players or lock in a result. Preview shows who would start now, including injury or suspension replacements. Back closes this panel. A new club needs its own plans.</p>}
+      {onHalftimePlan && <div className="rounded-lg border p-3 space-y-1.5">
+        <label className="block font-semibold">Halftime score plan
+          <select value={career.halftimePlan ?? 'off'} disabled={!!(career.live || career.sacked || career.wilderness || career.retired || career.pendingSummary)}
+            onChange={e => showResult(onHalftimePlan(e.target.value as HalftimePlan | 'off'), 'Halftime plan saved.')}
+            className="mt-1 w-full min-h-[44px] rounded-lg border bg-background px-2 text-xs">
+            <option value="off">Keep my mentality</option>
+            <option value="protect">Protect a one-goal lead</option>
+            <option value="chase">Chase when behind</option>
+            <option value="both">Protect a one-goal lead or chase when behind</option>
+          </select>
+        </label>
+        <p className="text-muted-foreground">Defending a lead gives both teams fewer chances. Chasing a goal opens up both ends. At 1-0, for example, your plan can send the team out defending. Pick a mentality in the dressing room to override it. Second legs use the aggregate score. Quick matches follow the same plan.</p>
+      </div>}
       <div className="grid grid-cols-3 gap-1.5" aria-label="Plan slots">
         {Array.from({ length: MATCH_PLAN_LIMIT }, (_, slot) => {
           const saved = plans.find(p => p.slot === slot);
