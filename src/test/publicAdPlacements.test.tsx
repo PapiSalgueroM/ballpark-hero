@@ -8,6 +8,7 @@ import { PublicFooterAd } from '@/components/ads/PublicFooterAd';
 import { loadAdSense } from '@/lib/consentedScripts';
 import { saveConsentPreferences } from '@/lib/consentPreferences';
 import { mountPublicFooterSlot, publicAdCanonical } from './fixtures/publicAdSlot';
+import manifest from '../../public/manifest.json';
 
 const slot = () => document.querySelector('[data-public-footer-ad] ins.adsbygoogle');
 const tags = () => document.querySelectorAll('script[src*="adsbygoogle.js"]');
@@ -40,7 +41,22 @@ it('leaves legacy game placements empty and refuses a misplaced display unit', (
   expect(tags()).toHaveLength(0);
 });
 
-it.each(['/privacy', '/reset-password', '/admin/login', '/unknown-area', '/footle?slot=1', '/footle#shared'])(
+it.each([manifest.start_url, ...manifest.shortcuts.map(shortcut => shortcut.url)])(
+  'loads one publisher tag on the installed app launch %s', async address => {
+    history.replaceState({}, '', address);
+    publicAdCanonical();
+    render(<BrowserRouter><PublicFooterAd /></BrowserRouter>);
+    await waitFor(() => expect(slot()).toBeInTheDocument());
+    expect(tags()).toHaveLength(1);
+    act(() => { tags()[0].dispatchEvent(new Event('load')); });
+    expect(window.adsbygoogle).toHaveLength(1);
+    expect(location.pathname + location.search).toBe(address);
+  },
+);
+
+it.each(['/privacy', '/reset-password', '/admin/login', '/unknown-area', '/footle?slot=1', '/footle#shared',
+  '/footle?source=pwa', '/soccer-career?source=pwa&slot=1', '/soccer-career?source=pwa#saves',
+  '/club-manager?view=saves&source=pwa', '/?source=pwa&q=secret', '/?source=pwa&source=pwa'])(
   'refuses even a mounted approved slot on %s', address => {
     history.replaceState({}, '', address);
     publicAdCanonical(location.pathname);

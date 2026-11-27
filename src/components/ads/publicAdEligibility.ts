@@ -11,6 +11,14 @@ export function isPublicDesktopRailRoute(pathname: string): boolean {
   return routes.has(normalizeRoutePath(pathname));
 }
 
+// These four manifest launch addresses carry the same fixed public marker.
+const installedLaunchPages = new Set(['/', '/soccer-career', '/club-manager', '/face-off']);
+
+export function isPublicAdAddress(path: string, search: string, hash: string): boolean {
+  return !hash && isPublicDesktopRailRoute(path) &&
+    (!search || (search === '?source=pwa' && installedLaunchPages.has(normalizeRoutePath(path))));
+}
+
 // These screens can open without changing the address.
 export const AD_EXCLUDED_SCREEN = [
   '[data-home-search-active]', '#soccer-career-slots', '#nrl-save-slots',
@@ -19,7 +27,7 @@ export const AD_EXCLUDED_SCREEN = [
 
 export function isPublicAdDocument(): boolean {
   const path = normalizeRoutePath(location.pathname);
-  if (location.search || location.hash || !isPublicDesktopRailRoute(path) || Reflect.get(window, '__DUKB_PRERENDER__')) return false;
+  if (!isPublicAdAddress(path, location.search, location.hash) || Reflect.get(window, '__DUKB_PRERENDER__')) return false;
   if (document.documentElement.hasAttribute('data-dukb-ad-load-failed')) return false;
   if (document.querySelector('meta[name="robots"][content*="noindex" i]') || document.querySelector(AD_EXCLUDED_SCREEN)) return false;
   return Array.from(document.querySelectorAll('head link[rel="canonical"]'))

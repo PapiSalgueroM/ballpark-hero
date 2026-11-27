@@ -2,17 +2,18 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, getEffectiveConsent } from '@/lib/consentPreferences';
 import { normalizeRoutePath } from '@/lib/routePath';
-import { AD_EXCLUDED_SCREEN, isPublicAdDocument, isPublicDesktopRailRoute } from './publicAdEligibility';
+import { AD_EXCLUDED_SCREEN, isPublicAdAddress, isPublicAdDocument } from './publicAdEligibility';
 
 export function usePublicAdEligibility(mediaQuery: string): boolean {
   const { pathname, search, hash } = useLocation();
   const path = normalizeRoutePath(pathname);
+  const publicAddress = isPublicAdAddress(path, search, hash);
   const [allowedPath, setAllowedPath] = useState<string | null>(null);
   const home = useRef({ hadSlot: false, retired: false });
   useLayoutEffect(() => { home.current = { hadSlot: false, retired: false }; }, [path]);
 
   useLayoutEffect(() => {
-    if (search || hash || !isPublicDesktopRailRoute(path)) {
+    if (!publicAddress) {
       setAllowedPath(null);
       return;
     }
@@ -56,7 +57,7 @@ export function usePublicAdEligibility(mediaQuery: string): boolean {
       window.removeEventListener(CONSENT_CHANGED_EVENT, check);
       window.removeEventListener(CONSENT_EFFECTIVE_CHANGED_EVENT, check);
     };
-  }, [path, search, hash, mediaQuery]);
+  }, [path, publicAddress, mediaQuery]);
 
-  return !search && !hash && allowedPath === path;
+  return publicAddress && allowedPath === path;
 }
