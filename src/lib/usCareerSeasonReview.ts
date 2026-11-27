@@ -87,6 +87,10 @@ export function nflSeasonReview(s: SeasonLine, pos: CareerPos): CareerReviewStat
 
 export function nbaSeasonReview(s: NbaSeasonLine): CareerReviewStats {
   const regular = [number('Points per game', s.ppg), number('Rebounds per game', s.rpg), number('Assists per game', s.apg)];
+  const closing = s.lateClock;
+  if (closing && (closing.read === 'late-shot' || closing.read === 'late-pass') && recorded(closing.baskets) && recorded(closing.possessions)) {
+    regular.push(text('Late-clock plan', `${closing.read === 'late-shot' ? 'Took the shot' : 'Passed to the cutter'}: ${closing.baskets} baskets ${closing.read === 'late-shot' ? 'scored' : 'assisted'} from ${closing.possessions} late-clock sets.`));
+  }
   if (recorded(s.mpg)) regular.push(number('Minutes per game', s.mpg, 1));
   if (recorded(s.spg)) regular.push(number('Steals per game', s.spg, 1));
   if (recorded(s.bpg)) regular.push(number('Blocks per game', s.bpg, 1));

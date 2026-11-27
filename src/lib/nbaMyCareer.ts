@@ -32,6 +32,7 @@ import { getNbaCorruptionEvents } from './nbaCareerCorruption';
 import { buildFaWindow, contactFaTeam } from './usCareerFreeAgency';
 import type { FaBuildArgs, FaWindow, FaPushArgs } from './usCareerFreeAgency';
 import { keyedRng } from './keyedRng';
+import { playNbaLateClock, type LateClockResult } from './nbaLateClock';
 import { summerCareerKey } from './usCareerSummer';
 import { isFarewellSeason } from './careerRetirement';
 import { buildExtension, type ExtensionTalk, type ExtPushArgs } from './usCareerExtension';
@@ -106,6 +107,7 @@ export interface NbaSeasonLine {
   restGames?: number;
   /** Appearances from an opted-in regular-season second-unit assignment. */
   benchAppearances?: number;
+  lateClock?: LateClockResult;
   ppg: number;
   rpg: number;
   apg: number;
@@ -871,12 +873,19 @@ export function simNbaSeason(
       notes.push(`🛡️ ${label} had no scoring cost. You were already at the ${cap.toFixed(1)} ${unit} cap.`);
     }
   }
+  const read = programme?.plan.tactics;
+  const lateClock = read === 'late-shot' || read === 'late-pass' ? playNbaLateClock(c, read, games, stat) : undefined;
+  if (lateClock) {
+    const ending = read === 'late-shot' ? 'you scored instead of assisting' : 'you assisted instead of scoring';
+    notes.push(`🏀 Late-clock plan: ${lateClock.matching} of ${lateClock.possessions} looks matched your read. On ${lateClock.baskets} baskets, ${ending}. Your season line: ${stat.ppg.toFixed(1)} PPG, ${stat.apg.toFixed(1)} APG.`);
+  }
   const { ppg, rpg, apg } = stat;
   if (c.role === 'backup') notes.push('🪑 Second unit season: your numbers come in bench minutes.');
   const line: NbaSeasonLine = {
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     ppg, rpg, apg, awards: [], teamResult: '', salary: c.salary,
     mpg: stat.mpg, spg: stat.spg, bpg: stat.bpg,
+    ...(lateClock ? { lateClock } : {}),
   };
   if (secondUnit) {
     line.benchAppearances = games;

@@ -2,12 +2,13 @@ import type { UsCareerCore, UsCareerSeason } from './usCareerSport';
 import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 import { NHL_DRAW_ASSIGNMENT, NHL_DRAW_CAMP_EDGE, NHL_DRAW_CAMP_MINIMUM, NHL_DRAW_ICE_COST, type NhlDefensiveDraws } from './nhlDefensiveDraws';
+import { nbaLateClockOptions, type LateClockRead, type LateClockResult } from './nbaLateClock';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking' | 'zone-draws' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain';
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking' | 'zone-draws' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain' | LateClockRead;
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking' | 'zone-draws';
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking' | 'zone-draws' | LateClockRead;
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch' | 'alternate';
@@ -347,6 +348,7 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
         label: NBA_SECOND_UNIT_LABEL,
         effect: 'Come off the bench during the regular season. Bench roles play fewer minutes and can earn Sixth Man of the Year. Moving to the bench clears booked starter rest. If camp already assigns you to the bench, the plan goes unused.',
       }] : []),
+      ...(sport === 'nba' ? nbaLateClockOptions(c) : []),
       ...(sport === 'nba' && nbaExtraPlayoffMinutesAvailable(c) ? [{
         id: 'playoff-minutes' as const,
         label: NBA_PLAYOFF_MINUTES_LABEL,
@@ -468,6 +470,13 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
       : spotStarts ? MLB_SPOT_START_LABEL : secondUnitRequest ? NBA_SECOND_UNIT_LABEL
         : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
     const decision: ProgrammeDecision = { section, label, outcome: played ? 'completed' : 'interrupted' };
+    if (played && sport === 'nba' && section === 'tactics' && (choice === 'late-shot' || choice === 'late-pass')) {
+      const sets = (line as UsCareerSeason & { lateClock?: LateClockResult }).lateClock;
+      if (sets?.read === choice && sets.baskets > 0) {
+        decision.actual = sets.baskets;
+        decision.unit = choice === 'late-shot' ? 'late-clock baskets scored' : 'late-clock baskets assisted';
+      } else decision.outcome = 'unused';
+    }
     if (played && zoneDraws) {
       const draws = (line as UsCareerSeason & { defensiveDraws?: NhlDefensiveDraws }).defensiveDraws;
       if (draws) {
