@@ -122,6 +122,7 @@ type Panel = 'stats' | 'squad' | 'help' | 'kicks';
 interface LogLine { key: string; at: string; segs: Seg[]; }
 
 interface LiveSimScreenProps {
+  onPenaltyMode?: (enabled: boolean) => void;
   career: CareerState;
   live: LiveMatch | null;
   report: MatchWeekReport | null;
@@ -623,7 +624,7 @@ function LiveStats({ stats, counts, clubName, opponent, mineFirst }: { stats: Ma
 }
 
 export function LiveSimScreen({
-  career, live, report, clubColor, positionNotice, onSub, onShape, onTalk, onSecondHalf, onExit, onStartSecondHalf, onStartExtraTime, onChange, onMark,
+  career, live, report, clubColor, positionNotice, onSub, onShape, onTalk, onSecondHalf, onExit, onStartSecondHalf, onStartExtraTime, onChange, onMark, onPenaltyMode,
 }: LiveSimScreenProps) {
   /* The clock and the stage come off the save, so a match closed at the 30th
      minute opens again at the 30th. No randomness in here. */
@@ -2013,6 +2014,12 @@ export function LiveSimScreen({
               </div>
 
               {/* controls: equal cells, a thumb wide each */}
+              {onPenaltyMode && !report && (finished
+                ? live?.callPenalties && <button className="min-h-11 w-full rounded-lg border border-border font-bold" onClick={onSecondHalf}>Continue at the whistle</button>
+                : <label className="flex min-h-11 items-center justify-center gap-2 text-xs font-bold">
+                  <input type="checkbox" checked={live?.callPenalties === true} onChange={e => onPenaltyMode(e.target.checked)} />
+                  Choose my takers if it goes to penalties
+                </label>)}
               <div data-cm-live-controls="1" className="cm-controls">
                 <button
                   onClick={() => setPaused(p => !p)}

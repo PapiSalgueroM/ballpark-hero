@@ -15,7 +15,7 @@ import {
   matchFacts,
   changeLive, startSecondHalf, startExtraTime, markLiveMinute, setInstructions,
   setDuty, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
-  setShootoutOrder,
+  setShootoutOrder, startLivePenaltyCalls, callLivePenalty, livePenaltyEligible,
   DEFAULT_ERA_ID, ordinaryClubAllowed, isScopedStarterClub,
   releasePlayer, signFreeAgent,
   doorRefusal, loanOutRefusal,
@@ -69,7 +69,7 @@ export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'm
 /** Round 1343: where a saved career opens: a retired career on its farewell (the only phase it can reach), then a
  *  sacked one out of work, then a finished season's summary, then the hub. */
 export function phaseFor(c: CareerState): CMPhase {
-  return c.retired ? 'retired' : c.sacked ? 'sacked' : c.pendingSummary ? 'seasonEnd' : 'hub';
+  return c.retired ? 'retired' : c.sacked ? 'sacked' : c.pendingSummary ? 'seasonEnd' : c.live?.penaltyCalls ? 'halftime' : 'hub';
 }
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
@@ -425,9 +425,11 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
    */
   useEffect(() => { careerRef.current = career; }, [career]);
   const recruitmentCurrent = useRef<CareerState | null>(null);
+  const penaltyCurrent = useRef<CareerState | null>(null);
   useLayoutEffect(() => {
     recruitmentCurrent.current = phase === 'hub' ? career : null;
-    return () => { recruitmentCurrent.current = null; };
+    penaltyCurrent.current = phase === 'halftime' ? career : null;
+    return () => { recruitmentCurrent.current = null; penaltyCurrent.current = null; };
   }, [career, phase]);
 
   useEffect(() => {
@@ -1526,11 +1528,42 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
      time screen still calls it straight from the break (the whistle draws the
      second half itself), and the live viewer calls it when its clock reaches
      90 on a second half that startSecondHalfLive already drew. */
-  const secondHalf = useCallback(() => {
+  const commitLivePenalty = useCallback((make: (c: CareerState) => CareerState | null) => {
+    if (!career?.live || penaltyCurrent.current !== career || !canSettle(career)) return false;
+    const next = make(career);
+    if (!next || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [career, canSettle, persist]);
+
+  const choosePenaltyMode = (enabled: boolean) => commitLivePenalty(c => {
+    if (!c.live || c.live.penaltyCalls || !livePenaltyEligible(c)) return null;
+    const live = { ...c.live };
+    if (enabled) live.callPenalties = true; else delete live.callPenalties;
+    return { ...c, live };
+  });
+  const choosePenaltyTaker = (id: string) => commitLivePenalty(c => callLivePenalty(c, id));
+
+  const secondHalf = useCallback((finishPenalties = false) => {
     if (!career) return;
-    if (heldForTactics(() => { secondHalf(); })) return;
-    const res = resumeMatch(career);
+    if (heldForTactics(() => { secondHalf(finishPenalties); })) return;
+    const live = career.live;
+    if (finishPenalties && !live?.penaltyCalls) return;
+    if (live?.callPenalties || live?.penaltyCalls) {
+      if (penaltyCurrent.current !== career || !canSettle(career)) return;
+      if (!live.penaltyCalls && !finishPenalties) {
+        const pending = startLivePenaltyCalls(career);
+        if (pending) { commitLivePenalty(() => pending); return; }
+      }
+      if (live.penaltyCalls && !finishPenalties) return;
+    }
+    const res = resumeMatch(career, finishPenalties);
     if (res.blocked === 'position-state-invalid') { setPositionBlockedFor(career); return; }
+    if (live?.callPenalties || live?.penaltyCalls) {
+      if (!persist(res.state)) return;
+      careerRef.current = res.state;
+    }
     setCareer(res.state);
     if (res.report) {
       // Round 157: a finished match counts toward today, mid-season included.
@@ -1542,7 +1575,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     } else {
       setPhase('hub');
     }
-  }, [career]);
+  }, [career, canSettle, commitLivePenalty, persist]);
 
   /* Round 504: the second half is drawn when you send them back out, so the
      viewer walks football that is already decided and a change in the 70th
@@ -1663,7 +1696,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, commitLoanPlan: commitClubAction, commitClubAction, commitRecruitment, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, openYouthTeam, fundYouthTeam, rotateYouth, sendScout, callScoutHome, promote, release, setTraining,
-    subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
+    subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, choosePenaltyMode, choosePenaltyTaker, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,
     answer,
     applyJob, joinSummer, joinNow,
