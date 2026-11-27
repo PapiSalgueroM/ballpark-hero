@@ -15,6 +15,7 @@ import {
   MLB_ROUNDS, MLB_PROTECTED_STARTERS, MLB_ROTATION_RISK_REDUCTION, mlbRotationChoices, mlbRotationPlanned, setMlbRotationPlan,
   MLB_OCTOBER_REST_GAMES, mlbOctoberPlanMode, mlbOctoberRotationPlanned, mlbOctoberShortRestRating,
   mlbStrengthUnits, readMlbOctoberReceipt, setMlbOctoberRotation,
+  mlbBullpenPreview, setMlbBullpenCall, type MlbBullpenCall,
   mlbDevelopmentChoices, mlbDevelopmentPlan, mlbDevelopmentPreview, mlbDevelopmentUsed, readMlbDevelopmentReceipt, setMlbDevelopmentStart,
   type MlbDevelopmentReceipt,
   type MlbLeague, type MlbProspect, type MlbSeriesResult, type MlbRotationReceipt, mlbExecuteTalksTrade,
@@ -85,7 +86,7 @@ const MLB_WORDS: FoSportWords = { title: 'the World Series', playoffs: 'October'
 type Postseason = { series: MlbSeriesResult[]; champion: string; gradeLine: string | null; octoberUnavailable?: true };
 type LastRound = {
   team: string; season: number; round: number; wins: number; losses: number; notes: string[];
-  rotation?: MlbRotationReceipt; development?: MlbDevelopmentReceipt;
+  rotation?: MlbRotationReceipt; development?: MlbDevelopmentReceipt; bullpen?: string;
 };
 
 function readLastRound(value: unknown, league: MlbLeague, team: string): LastRound | null {
@@ -108,7 +109,8 @@ function readLastRound(value: unknown, league: MlbLeague, team: string): LastRou
   }
   const development = readMlbDevelopmentReceipt(row.development);
   return { team, season: league.season, round: row.round, wins: row.wins, losses: row.losses, notes: row.notes,
-    ...(rotation ? { rotation } : {}), ...(development ? { development } : {}) };
+    ...(rotation ? { rotation } : {}), ...(development ? { development } : {}),
+    ...(typeof row.bullpen === 'string' && row.bullpen.length > 0 && row.bullpen.length <= 640 ? { bullpen: row.bullpen } : {}) };
 }
 
 function rotationHeadline(row: MlbRotationReceipt): string {
@@ -120,7 +122,8 @@ function roundPlanReports(result: LastRound): string[] {
   const development = result.development;
   const lineup = development && ('unavailable' in development ? 'The development start did not count. It is still available this season.'
     : `${development.player} played in place of ${development.replaced} and gained 1 OVR (${development.before} to ${development.after}).`);
-  return [...(lineup ? [lineup] : []), ...(result.rotation ? [rotationHeadline(result.rotation)] : [])];
+  const reports = [...(lineup ? [lineup] : []), ...(result.rotation ? [rotationHeadline(result.rotation)] : [])];
+  return result.bullpen ? [...(reports.length ? [reports.join(' ')] : []), result.bullpen] : reports;
 }
 
 function roundHeadlines(result: LastRound): string[] {
@@ -191,6 +194,7 @@ export default function MlbFrontOfficeBoard() {
   const [rotationSaveError, setRotationSaveError] = useState(false);
   const [farmSaveError, setFarmSaveError] = useState(false);
   const [developmentSaveError, setDevelopmentSaveError] = useState(false);
+  const [bullpenSaveError, setBullpenSaveError] = useState(false);
   const [octoberSaveError, setOctoberSaveError] = useState(false);
   const [octoberUnavailable, setOctoberUnavailable] = useState(false);
   const [feed, setFeed] = useState<string[]>([]);
@@ -471,6 +475,7 @@ export default function MlbFrontOfficeBoard() {
     if (mlbOverLimit(my) > 0) return;
     setRotationSaveError(false);
     setDevelopmentSaveError(false);
+    setBullpenSaveError(false);
     setOctoberSaveError(false);
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
     /* Round 1020: with the desk on, the staff's edge and the trainer ride on
@@ -488,7 +493,7 @@ export default function MlbFrontOfficeBoard() {
     }
     const result: LastRound = { team: myTeam, season: lg.season, round: lg.round, wins: report.myWins, losses: report.myLosses,
       notes: [...deskLines, ...report.notes].slice(0, 4), ...(report.rotation ? { rotation: report.rotation } : {}),
-      ...(report.development ? { development: report.development } : {}) };
+      ...(report.development ? { development: report.development } : {}), ...(report.bullpen ? { bullpen: report.bullpen } : {}) };
     const keepRound = () => {
       const prior = lastRound.current;
       roundHistory.current = appendFoRoundHistory(
@@ -911,6 +916,7 @@ export default function MlbFrontOfficeBoard() {
   const rotation = tab === 'round' ? mlbRotationChoices(league, myTeam) : null;
   const development = tab === 'round' ? mlbDevelopmentChoices(league, myTeam) : null;
   const developmentPlan = tab === 'round' ? mlbDevelopmentPlan(league, myTeam) : null;
+  const bullpen = tab === 'round' ? mlbBullpenPreview(league, myTeam) : null;
   const developmentPreview = developmentPlan ? mlbDevelopmentPreview(league, myTeam) : null;
   const developmentRotation = rotation && mlbRotationPlanned(league, myTeam) ? MLB_PROTECTED_STARTERS : 3;
   const showOctoberChoice = tab === 'round' && league.round === MLB_ROUNDS && !!my.depth;
@@ -1494,6 +1500,28 @@ export default function MlbFrontOfficeBoard() {
         <>
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a week and a half of baseball across the league.</p>
+          {bullpen && <details className="mx-auto mb-3 max-w-sm rounded-xl border border-border p-3 text-left">
+            <summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold">Bullpen matchup card</summary>
+            <p className="text-sm">{bullpen.lead.name} ({bullpen.lead.ovr} OVR) and {bullpen.partner.name} ({bullpen.partner.ovr} OVR) are your top two healthy relief arms.</p>
+            <p className="my-2 text-xs text-muted-foreground">In each pair, give one game to your lead arm and the other to your partner. For example, hold your lead arm for game 2 to cover that opponent. Automatic uses their usual combined rating. If either arm drops out of the pair, the usual unit plays.</p>
+            {bullpen.calls.map((call, pair) => <label key={pair} className="mb-2 block text-xs font-semibold">
+              Games {pair * 2 + 1} and {pair * 2 + 2}
+              <span className="block font-normal text-muted-foreground">{bullpen.games.slice(pair * 2, pair * 2 + 2).map(game =>
+                game.label + ' (' + game.record + (game.divisionRival ? ', division rival' : '') + ')').join(' / ')}</span>
+              <select className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-2 text-sm" value={call} onChange={event => {
+                const next = setMlbBullpenCall(league, myTeam, pair, event.target.value as MlbBullpenCall);
+                if (next === league) return;
+                const saved = persist({}, next, myTeam);
+                setBullpenSaveError(!saved);
+                if (saved) setLeague(next);
+              }}>
+                <option value="auto">Automatic</option>
+                <option value="first">Lead arm in game {pair * 2 + 1} {bullpen.games[pair * 2].label}</option>
+                <option value="second">Lead arm in game {pair * 2 + 2} {bullpen.games[pair * 2 + 1].label}</option>
+              </select>
+            </label>)}
+            {bullpenSaveError && <p role="alert" className="text-xs text-destructive">Could not save your bullpen card. Choose the assignment again to retry.</p>}
+          </details>}
           {(development?.eligible.length > 0 || developmentPlan) && (
             <div className="mx-auto mb-3 max-w-sm text-left">
               <label className="block text-xs font-semibold">

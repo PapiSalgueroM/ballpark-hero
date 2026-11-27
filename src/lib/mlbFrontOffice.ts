@@ -102,6 +102,7 @@ export interface MlbLeague {
   round: number; // 1..MLB_ROUNDS
   champions: { season: number; team: string }[];
   rotationPlan?: { team: string; season: number; round: number };
+  bullpenCard?: { team: string; season: number; round: number; lead: string; partner: string; calls: MlbBullpenCall[] };
   octoberRotation?: { team: string; season: number; mode?: 'elimination' };
   developmentStart?: { team: string; season: number; round: number; playerId: string; replacedId: string };
   developmentStartUsed?: { team: string; season: number };
@@ -268,7 +269,7 @@ export function mlbSimReads(t: { abbr?: string; players: MlbGmPlayer[] }): strin
 }
 
 /** Strength: lineup 55%, rotation 33%, bullpen 12%. An empty slot uses the replacement rating. */
-export function mlbStrength(t: MlbGmTeam, rotationSize: number = MLB_STRENGTH_SLOTS.rot, starter?: MlbGmPlayer, battingOverride?: MlbGmPlayer[]): number {
+export function mlbStrength(t: MlbGmTeam, rotationSize: number = MLB_STRENGTH_SLOTS.rot, starter?: MlbGmPlayer, battingOverride?: MlbGmPlayer[], reliever?: MlbGmPlayer): number {
   const { bats, rot, pen } = mlbStrengthUnits(t, rotationSize);
   const average = (players: MlbGmPlayer[], counted: number) => {
     const slots = Math.max(counted, players.length, 1);
@@ -277,7 +278,48 @@ export function mlbStrength(t: MlbGmTeam, rotationSize: number = MLB_STRENGTH_SL
   };
   return average(battingOverride ?? bats, MLB_STRENGTH_SLOTS.bats) * 0.55
     + (starter?.ovr ?? average(rot, rotationSize)) * 0.33
-    + average(pen, MLB_STRENGTH_SLOTS.pen) * 0.12;
+    + (reliever?.ovr ?? average(pen, MLB_STRENGTH_SLOTS.pen)) * 0.12;
+}
+
+export type MlbBullpenCall = 'auto' | 'first' | 'second';
+
+export function mlbBullpenPreview(league: MlbLeague, team: string) {
+  const club = league.teams[team];
+  const fixtures = league.schedule?.[league.round - 1];
+  if (!club || !Array.isArray(fixtures) || league.champions.some(row => row.season === league.season)) return null;
+  const division = MLB_DIVISIONS.find(group => group.teams.includes(team));
+  const games = [];
+  for (const fixture of fixtures) {
+    if (typeof fixture !== 'string') return null;
+    const [home, away] = fixture.split('-');
+    if (home !== team && away !== team) continue;
+    const opponent = league.teams[home === team ? away : home];
+    if (!opponent || home === away) return null;
+    games.push({
+      label: (home === team ? 'vs ' : 'at ') + opponent.abbr,
+      record: opponent.wins + '-' + opponent.losses,
+      divisionRival: division?.teams.includes(opponent.abbr) ?? false,
+    });
+  }
+  if (games.length !== MLB_GAMES_PER_ROUND) return null;
+  const [lead, partner] = mlbStrengthUnits(club).pen;
+  if (!lead || !partner) return null;
+  const card = league.bullpenCard;
+  const booked = card?.team === team && card.season === league.season && card.round === league.round
+    && card.lead === lead.id && card.partner === partner.id && Array.isArray(card.calls) && card.calls.length === games.length / 2
+    && card.calls.every(call => call === 'auto' || call === 'first' || call === 'second');
+  return { games, lead, partner, calls: booked ? [...card.calls] : Array<MlbBullpenCall>(MLB_GAMES_PER_ROUND / 2).fill('auto') };
+}
+
+export function setMlbBullpenCall(league: MlbLeague, team: string, pair: number, call: MlbBullpenCall): MlbLeague {
+  const preview = mlbBullpenPreview(league, team);
+  if (!preview || !Number.isInteger(pair) || pair < 0 || pair >= preview.calls.length || preview.calls[pair] === call) return league;
+  const calls = preview.calls;
+  calls[pair] = call;
+  const next = { ...league };
+  if (calls.every(value => value === 'auto')) delete next.bullpenCard;
+  else next.bullpenCard = { team, season: league.season, round: league.round, lead: preview.lead.id, partner: preview.partner.id, calls };
+  return next;
 }
 
 export function mlbDevelopmentUsed(league: MlbLeague, team: string): boolean {
@@ -387,6 +429,7 @@ export interface MlbRoundReport {
   notes: string[];
   rotation?: MlbRotationReceipt;
   development?: MlbDevelopmentReceipt;
+  bullpen?: string;
 }
 
 /** Round 1020: what a GM desk may hand a round. Absent, the round plays exactly as it always has. */
@@ -467,20 +510,39 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
   const batting = developmentPlan ? mlbDevelopmentPreview(league, myTeam, true) : null;
   if (league.developmentStart) delete league.developmentStart;
   const openingRating = batting?.player.ovr;
+  const bookedPen = league.bullpenCard;
+  const pen = bookedPen ? mlbBullpenPreview(league, myTeam) : null;
+  delete league.bullpenCard;
+  const assigned = pen?.calls.some(call => call !== 'auto') ? pen : null;
+  const reliefLog: string[][] = [[], []];
   const plannedStrength = protectedIds || batting
     ? mlbStrength(league.teams[myTeam], protectedIds ? MLB_PROTECTED_STARTERS : 3, undefined, batting?.bats)
     : undefined;
-  const roundStrength = (team: MlbGmTeam) => team.abbr === myTeam && plannedStrength !== undefined ? plannedStrength : mlbStrength(team);
+  const roundStrength = (team: MlbGmTeam, reliever: MlbGmPlayer | null) => {
+    if (team.abbr !== myTeam) return mlbStrength(team);
+    if (reliever) return mlbStrength(team, protectedIds ? MLB_PROTECTED_STARTERS : 3, undefined, batting?.bats, reliever);
+    return plannedStrength ?? mlbStrength(team);
+  };
   /* Round 851: the round's booked games (foSchedule.ts); a league saved mid
      season before the round finishes that season the old way. */
   foPlayRound(league, abbrs, MLB_GAMES_PER_ROUND, rng, (abbr, opp) => {
     const me = league.teams[abbr];
     const them = league.teams[opp];
+    const involved = abbr === myTeam || opp === myTeam;
+    const game = myW + myL;
+    const call = involved ? assigned?.calls[Math.floor(game / 2)] : undefined;
+    const arm = assigned && call && call !== 'auto'
+      ? ((game % 2 === 0) === (call === 'first') ? assigned.lead : assigned.partner) : null;
     const p = mlbWinProbFromStrength(
-      roundStrength(me) + (opts?.edges?.[abbr] ?? 0),
-      roundStrength(them) + (opts?.edges?.[opp] ?? 0),
+      roundStrength(me, arm) + (opts?.edges?.[abbr] ?? 0),
+      roundStrength(them, arm) + (opts?.edges?.[opp] ?? 0),
     );
-    if (rng() < p) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
+    const homeWon = rng() < p;
+    if (arm && assigned) {
+      const won = homeWon === (abbr === myTeam);
+      reliefLog[arm === assigned.lead ? 0 : 1].push(`G${game + 1} ${assigned.games[game].label} ${won ? 'W' : 'L'}`);
+    }
+    if (homeWon) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
     else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
   }, () => mlbBookSeason(league, rng));
   if (league.inSeasonRatings) reviewFoRoundRatings(league, {
@@ -497,7 +559,10 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
   const rotation: MlbRotationReceipt | undefined = protectedIds ? {
     available: league.teams[myTeam].players.filter(p => protectedIds.has(p.id) && p.out === 0).length,
   } : planned ? { unavailable: true } : undefined;
-  return { myWins: myW, myLosses: myL, notes, ...(rotation ? { rotation } : {}), ...(development ? { development } : {}) };
+  const bullpen = assigned ? `Bullpen card. ${assigned.lead.name}: ${reliefLog[0].join(', ')}. ${assigned.partner.name}: ${reliefLog[1].join(', ')}.`
+    : bookedPen?.season === league.season && bookedPen.round === league.round && bookedPen.team === myTeam
+      ? 'Bullpen card unavailable. The usual relief unit covered this round.' : undefined;
+  return { myWins: myW, myLosses: myL, notes, ...(rotation ? { rotation } : {}), ...(development ? { development } : {}), ...(bullpen ? { bullpen } : {}) };
 }
 
 export function mlbStandings(league: MlbLeague, group?: string[]): MlbGmTeam[] {
