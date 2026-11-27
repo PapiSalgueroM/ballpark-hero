@@ -1,3 +1,7 @@
+### November 27, 2026. Build Your XI replacement trials
+
+In squad review, choose Replace, then Compare before replacing to try an eligible challenger on the starter's same 38 fixtures and match draws. Nothing in the draft changes until the player signs the challenger. The official season still uses the submitted squad's own draw. Phone and desktop checks took a saved XI through a cancelled trial, a signing, two reloads and submission. All ten teammates kept their assignments.
+
 ### November 27, 2026. Game discovery, third-down defense and pitch development
 
 Home lets players preview four featured games using arrows or a keyboard, with one launch link for the selected game. A saved career opens its existing slot. The art changes only on request, and the feature keeps the same space as players browse. Play Next opens with its three daily picks. Players can switch to their sport or daily games and deal three more without leaving the current game. Keyboard focus stays on the selected control. Players who prefer reduced motion get an immediate card change.
