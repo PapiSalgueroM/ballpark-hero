@@ -42,6 +42,7 @@ import {
   freeAgencyCarry, worldRatingHandover, snapshotRatingDeparture,
 } from '@/lib/clubManager';
 import type { WorldCompKey } from '@/lib/worldCompetition';
+import { returnAfterJob } from '@/lib/clubManagerReturnToPlay';
 import type { CareerState, CalendarEntry, Competition, FormResult, LeagueRatingChange, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';
 import { applyNewJobDials } from '@/lib/clubManagerDifficulty';
@@ -1125,6 +1126,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     leagueCoachBook: undefined,
     careerStats: { ...career.careerStats, clubsManaged: [...managed] },
     ...(career.analystNotebook !== undefined ? {analystNotebook:plainCopy(career.analystNotebook)} : {}),
+    ...(career.returnToPlay !== undefined ? {returnToPlay:returnAfterJob(career)} : {}),
     ...(career.appearanceFees !== undefined ? { appearanceFees:plainCopy(career.appearanceFees) } : {}),
     manager: career.manager,
     managerXp: career.managerXp,

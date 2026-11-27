@@ -15,6 +15,7 @@ import { FlankRoutePicker } from './FlankRoutePicker';
 import { PhaseShapePicker } from './PhaseShapePicker';
 import { phasePositions, type PhaseOrder } from '@/lib/clubManagerPhaseShapes';
 import { AnalystDesk } from './AnalystDesk';
+import { ReturnToPlayMatchCard } from './ReturnToPlayCard';
 import type { AnalystMode } from '@/lib/clubManagerAnalyst';
 
 /**
@@ -237,6 +238,7 @@ export function MatchCentre({
       </FlankRoutePicker>
       <PhaseShapePicker order={phaseOrder} positionsFor={order => phasePositions(career, undefined, undefined, order)} onChange={setPhaseOrder} />
       <AnalystDesk career={career} opponent={f.opponent} mode={analystMode ?? undefined} onMode={setAnalystMode} />
+      <ReturnToPlayMatchCard career={career} />
       <BenchOrderCard key={career.season + ':' + career.week} career={career} onSim={startQuick} />
 
       {/* Actions. Round 472: one match, two ways through it. There used to be

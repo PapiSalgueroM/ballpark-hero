@@ -1,11 +1,15 @@
 import { ShieldAlert } from 'lucide-react';
 import type { CareerState } from '@/lib/clubManager';
 import { majorInjuryLabel } from '@/lib/clubManagerInjuries';
+import { ReturnToPlayDeskCard } from './ReturnToPlayCard';
 
-export default function ClubManagerTreatmentPanel({ unavailable }: {
+export default function ClubManagerTreatmentPanel({ career, unavailable, onCommit }: {
+  career: CareerState;
   unavailable: CareerState['squad'];
+  onCommit: (work: (career: CareerState) => CareerState | null) => boolean;
 }) {
   return (
+    <div className="space-y-3">
                 <div className="bg-card border border-border rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
                     <ShieldAlert className="w-3 h-3" /> Treatment room
@@ -19,5 +23,7 @@ export default function ClubManagerTreatmentPanel({ unavailable }: {
                     ))}
                   </div>
                 </div>
+      <ReturnToPlayDeskCard career={career} onCommit={onCommit} />
+    </div>
   );
 }

@@ -56,6 +56,7 @@ import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade 
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
+import { bindReturn, departReturn, finishReturn, noteReturnTraining, returnAfterJob, returnCoachCue, type ReturnBook, type ReturnReceipt } from '@/lib/clubManagerReturnToPlay';
 /* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
 import { nightsDoneAt, placeNights, tickingWeeksDone, tickingWeeksIn } from '@/lib/worldNights';
 import { addDays, dateKey, daysBetween, isoDate, type CalDate } from '@/lib/calDate';
@@ -775,6 +776,7 @@ function actualRosterTransferSource(state: CareerState, player: CMPlayer, from: 
 
 function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: string, to: string | null, kind: 'permanent' | 'release' | 'retire', pack = true): CareerState {
   if (state.appearanceFees && from !== to) state = voidAppearanceFee(state,player,from);
+  if (state.returnToPlay && from !== to) state = departReturn(state,player.id,from);
   /* Release AZ, the lead's ruling Y1: a career with no world seed (every save from before this release, and a
      Hot Seat day handed over) never writes a ledger, so it plays on exactly as it did. A readable ledger alone
      turns on the same branches the seed does, so this is the one place both are kept off together.
@@ -2198,6 +2200,7 @@ export interface CardLine {
   plus?: number;
 }
 export interface SubLine {
+  returnBreak?: 'half' | 'extra';
   off: string; on: string; minute: number;
   /** Round 504: the ids behind the names, so the pitch can be rebuilt at any minute. */
   offId?: string; onId?: string;
@@ -2333,6 +2336,7 @@ export interface PlayerRatingLine {
 }
 
 export interface MatchDetail {
+  returnToPlay?: ReturnReceipt;
   analystNote?: AnalystObservation;
   phaseHistory?: PhaseStep[];
   returnPressUsed?: true;
@@ -3552,6 +3556,7 @@ export interface CareerState {
   academy?: Academy;
   /** Round 116: how the squad is being worked this week. */
   training?: TrainingPlan;
+  returnToPlay?: ReturnBook;
   cornerTraining?: CornerTraining;
   /** Round 116: how many of your own kids you have promoted, all time. */
   academyGraduates?: number;
@@ -3783,6 +3788,7 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  returnToPlay?: string;
   analystWatch?: AnalystWatch;
   phaseOrder?: PhaseOrder;
   phaseHistory?: PhaseStep[];
@@ -12888,7 +12894,7 @@ export function loanOutPlayer(
     transferLog: [...(career.transferLog ?? [])],
   };
   pushNews(state, { name: p.name, from: career.clubName, to: club, fee, loan: true });
-  return state;
+  return state.returnToPlay ? departReturn(state,playerId,career.clubName) : state;
 }
 
 /**
@@ -20520,6 +20526,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null, settledWeek
     const played = playedIds ? playedIds.has(p.id) : false;
     const hasOrder = p.id === trainedId;
     const intensity = hasOrder ? individualIntensity : plan.intensity;
+    if (state.returnToPlay?.active?.playerId === p.id) noteReturnTraining(state,p,settledWeek,intensity);
     const fitness = fitnessAfterWeek(p.fitness, played, hasOrder ? individual.recoveryMod : recoveryMod, hasOrder ? individual.flat : flat, days);
     let injuryWeeks = p.majorInjury ? p.injuryWeeks : Math.max(0, p.injuryWeeks - 1);
     if (intensity === 'double' && injuryWeeks === 0) {
@@ -22174,6 +22181,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     added: live.added,
   });
   if (live.cornerRoutine && isCornerRoutine(live.cornerRoutine)) detail.cornerRoutine = { ...live.cornerRoutine };
+  if (live.returnToPlay) {
+    const receipt = finishReturn(state,live);
+    if (receipt) detail.returnToPlay = receipt;
+  }
   if (live.analystWatch) {
     const note=tacticsImpl()?.fileAnalyst(state,live);
     if (note) detail.analystNote=note;
@@ -23482,6 +23493,7 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
     }
     delete state.cornerTraining;
   }
+  if (careerMatch && state.returnToPlay?.active) bindReturn(state,live);
   if (analyst && analyst.fixture.opponent===fx.opponent && analyst.fixture.compLabel===fx.compLabel && analyst.fixture.home===fx.home) {
     tacticsImpl()?.setAnalyst(state,live,analyst.mode,{minute:0});
   }
@@ -23779,6 +23791,8 @@ export function changeLive(
     live.subsUsed += 1;
     live.subs = [...(live.subs ?? []), {
       off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
+      ...(live.returnToPlay && (change.outId === state.returnToPlay?.active?.playerId || change.inId === state.returnToPlay?.active?.playerId)
+        && isBreakChange(live,m,p) ? {returnBreak:live.h2Drawn ? 'extra' as const : 'half' as const} : {}),
       ...plusOf({ plus: p }), ...(inPlay ? { stop: true as const } : {}),
     }];
   } else if (change.kind === 'phaseOrder') {
@@ -23975,6 +23989,8 @@ export interface BenchOrder {
 /** Quick sim coaching uses the real clock and changes, without settling the match. */
 export function coachQuickMatch(career: CareerState, order?: BenchOrder): CareerState {
   if (!career.live || !livePositionsValid(career.live)) return career;
+  let held = !order && career.live.returnToPlay ? returnCoachCue(career) : null;
+  if (held) order = {outId:held.outId,inId:held.inId,window:held.window,when:'any'};
   let state: CareerState = JSON.parse(JSON.stringify(career));
   const entry = state.calendar[state.live!.week];
   const savedMinute = state.live!.minute ?? 46;
@@ -24045,8 +24061,9 @@ export function coachQuickMatch(career: CareerState, order?: BenchOrder): Career
       .filter(x => !x.slot?.allowed.includes('GK') && x.p.position !== 'GK' && !cameOn.has(x.p.id))
       .sort((a, b) => Number(booked.has(b.p.id)) - Number(booked.has(a.p.id)) || a.p.fitness - b.p.fitness);
     for (const out of order) {
+      if (held?.outId === out.p.id) continue;
       const outFit = gradeFor(out.p.id);
-      const options = benchFor(state, out.p.id).filter(p => (outFit(p) === 'natural' || outFit(p) === 'family')
+      const options = benchFor(state, out.p.id).filter(p => p.id !== held?.inId && (outFit(p) === 'natural' || outFit(p) === 'family')
         && (p.fitness > out.p.fitness || (p.fitness === out.p.fitness && p.morale > out.p.morale)));
       /* The engine's own strength with him in that slot: no weaker, unless the match is won. */
       const noWeaker = (p: CMPlayer): boolean => (liveElevenStrength(state, at, { outId: out.p.id, inId: p.id }) ?? 0) >= now;
@@ -24065,9 +24082,9 @@ export function coachQuickMatch(career: CareerState, order?: BenchOrder): Career
     const atBreak = state.live!.subsUsed;
     for (const out of tiringAtHalftime(state)) {
       if (state.live!.subsUsed >= rule.subs - 1 || (rule.stops !== null && state.live!.subsUsed - atBreak >= 2)) break;
-      if (liveGoneIds(state.live!, 46).has(out.id)) continue;
+      if (held?.outId === out.id || liveGoneIds(state.live!, 46).has(out.id)) continue;
       const tiredFit = gradeFor(out.id);
-      const coming = benchFor(state, out.id).find(p => (tiredFit(p) === 'natural' || tiredFit(p) === 'family')
+      const coming = benchFor(state, out.id).find(p => p.id !== held?.inId && (tiredFit(p) === 'natural' || tiredFit(p) === 'family')
         && (p.fitness > out.fitness || (p.fitness === out.fitness && p.morale > out.morale)));
       if (coming) state = changeLive(state, Math.max(46, state.live!.minute ?? 46), { kind: 'sub', outId: out.id, inId: coming.id }) ?? state;
     }
@@ -24078,6 +24095,7 @@ export function coachQuickMatch(career: CareerState, order?: BenchOrder): Career
   for (const [index, at] of quickLegsMinutes(state, state.live!).entries()) {
     injuriesThrough(at);
     if (order && order.window === (index === 0 ? 'hour' : 'late')) {
+      held = null;
       const live = state.live!;
       const { mine, opp: theirs } = secondHalfScoreAt(live, at);
       const prefix = `Bench order at ${at}' (${state.clubName} ${mine}-${theirs} ${live.opponent}): `;
@@ -26478,6 +26496,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     delete state.cupByes;
   }
   updateMajorInjuryClock(state, kickoffOf(state));
+  if (clubName !== career.clubName && state.returnToPlay !== undefined) state.returnToPlay = returnAfterJob(career);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
   /* Round 1510: the season's super cup, off the season just finished (read above, before the swap), after the cup
      bracket and before the windows. The literal copied last season's map, so this key is always replaced or taken
