@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal, flushSync } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
-import { AD_EXCLUDED_SCREEN, isPublicAdDocument } from './ads/publicAdEligibility';
+import { AD_EXCLUDED_SCREEN, isPublicAdDocument } from '@/components/ads/publicAdEligibility';
 import { hasRegionalAdDefault, regionalLookupPending, resolveAdvertisingRegion } from '@/lib/advertisingRegion';
-import { GoogleAdConsentReview } from './GoogleAdConsentReview';
-import { loadConsentedScripts, stopRevokedServices } from '@/lib/consentedScripts';
+import { GoogleAdConsentReview } from '@/components/GoogleAdConsentReview';
+import { loadConsentedScripts, pausePublisherForRegion, publisherWaitingForRegion, stopRevokedServices } from '@/lib/consentedScripts';
 import {
   AD_CONFIRMATION_MAX_AGE_MS, ANALYTICS_READY, CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, CONSENT_KEY, CONSENT_MAX_AGE_MS, CONSENT_OPEN_EVENT,
   canReloadAfterWithdrawal, enforceGlobalPrivacyControl, getEffectiveConsent, getPendingConsentWithdrawal, isGlobalPrivacyControlEnabled,
@@ -66,8 +66,16 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       let next = getEffectiveConsent();
       const saved = readConsentPreferences();
       const previous = lastEffective.current;
+      const paused = publisherWaitingForRegion();
+      // An expiring grant may continue under the regional default. Pause the current
+      // publisher during that lookup so a returning visitor can stay in the game.
+      if ((previous.advertising || paused) && !next.advertising && previous.analytics === next.analytics
+        && regionalLookupPending() && mayUseRegionalDefault()) {
+        pausePublisherForRegion();
+        return;
+      }
       const revoked = {
-        advertising: previous.advertising && !next.advertising,
+        advertising: (previous.advertising || paused) && !next.advertising,
         analytics: previous.analytics && !next.analytics,
       };
 
@@ -78,7 +86,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       setPendingConsentWithdrawal(pendingRevoked.current);
       next = getEffectiveConsent();
       lastEffective.current = next;
-      if (previous.advertising !== next.advertising || previous.analytics !== next.analytics) {
+      if ((paused && next.advertising) || previous.advertising !== next.advertising || previous.analytics !== next.analytics) {
         window.dispatchEvent(new Event(CONSENT_EFFECTIVE_CHANGED_EVENT));
       }
       setGpc(isGlobalPrivacyControlEnabled());

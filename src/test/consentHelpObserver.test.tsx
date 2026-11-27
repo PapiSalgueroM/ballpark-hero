@@ -5,7 +5,7 @@ import { CookieConsent } from '@/components/CookieConsent';
 
 vi.mock('@/lib/consentedScripts', () => ({
   loadConsentedScripts: vi.fn(),
-  stopRevokedServices: vi.fn(),
+  stopRevokedServices: vi.fn(), publisherWaitingForRegion: () => false, pausePublisherForRegion: vi.fn(),
 }));
 
 const selector = '[data-dukb-help-cookie-choices]';

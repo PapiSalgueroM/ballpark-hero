@@ -46,6 +46,19 @@ export function getAdSenseScript(): HTMLScriptElement | null {
   return document.querySelector<HTMLScriptElement>(AD_LOADER);
 }
 
+export function publisherWaitingForRegion(): boolean {
+  return getAdSenseScript()?.hasAttribute('data-dukb-waiting-for-region') === true;
+}
+
+export function pausePublisherForRegion(): void {
+  const script = getAdSenseScript();
+  if (!script || publisherWaitingForRegion()) return;
+  script.dataset.dukbWaitingForRegion = '';
+  const queue = Reflect.get(window, 'adsbygoogle');
+  if (queue) queue.pauseAdRequests = 1;
+  updateGoogleConsent({ ...getEffectiveConsent(), advertising: false });
+}
+
 const PUBLIC_AD_SLOT = [
   '[data-public-footer-ad] [data-dukb-manual-ad="public-footer"]',
   '[data-ad-rail="left"] [data-dukb-manual-ad="left-rail"]',
@@ -69,7 +82,16 @@ export function loadPublicAdPublisher(): void {
 }
 
 function startAdSense(): boolean {
-  if (getAdSenseScript()) return true;
+  const script = getAdSenseScript();
+  if (script) {
+    if (script.hasAttribute('data-dukb-waiting-for-region') && getEffectiveConsent().advertising) {
+      updateGoogleConsent(getEffectiveConsent());
+      const queue = Reflect.get(window, 'adsbygoogle');
+      if (queue) queue.pauseAdRequests = 0;
+      delete script.dataset.dukbWaitingForRegion;
+    }
+    return true;
+  }
   updateGoogleConsent(getEffectiveConsent());
   const w = window as Window & { adsbygoogle?: AdSenseQueue };
   w.adsbygoogle = w.adsbygoogle || [];

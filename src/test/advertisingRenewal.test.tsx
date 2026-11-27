@@ -117,3 +117,50 @@ it.each([
   expect(screen.queryByRole('region', { name: 'Cookie choices' })).toBeNull();
   expect(document.querySelectorAll(ad)).toHaveLength(allowed ? 1 : 0);
 });
+it('keeps an open game and the same publisher when a current ad grant expires outside the opt-in area', async () => {
+  const consent = await mount('US', choice(true, true, 29, 29));
+  const tag = document.querySelector(ad);
+  const analyticsTag = document.querySelector(ga);
+  const queue = Reflect.get(window, 'adsbygoogle');
+  const { holdPendingSave } = await import('@/lib/safeStorage');
+  const release = holdPendingSave(() => false);
+  try {
+    let answer!: (response: Response) => void;
+    vi.mocked(fetch).mockImplementation(() => new Promise(resolve => { answer = resolve; }));
+    vi.setSystemTime(now + day);
+    act(() => window.dispatchEvent(new Event('focus')));
+    expect(consent.getEffectiveConsent().advertising).toBe(false);
+    expect(consent.getEffectiveConsent().analytics).toBe(true);
+    expect(queue.pauseAdRequests).toBe(1);
+    await act(async () => { answer(new Response('h=douknowball.com\nloc=US\n', { headers: { 'Content-Type': 'text/plain' } })); });
+    expect(consent.getEffectiveConsent().advertising).toBe(true);
+    expect(queue.pauseAdRequests).toBe(0);
+    expect(document.querySelector(ad)).toBe(tag);
+    expect(document.querySelector(ga)).toBe(analyticsTag);
+    expect(screen.queryByRole('region', { name: 'Cookie choices' })).toBeNull();
+  } finally { release(); }
+});
+it.each(['protected region', 'withdrawal while waiting'] as const)('never resumes a paused publisher after %s', async reason => {
+  const consent = await mount('DE', choice(true, true, 29, 29));
+  const queue = Reflect.get(window, 'adsbygoogle');
+  const { holdPendingSave } = await import('@/lib/safeStorage');
+  const release = holdPendingSave(() => false);
+  try {
+    let answer!: (response: Response) => void;
+    vi.mocked(fetch).mockImplementation(() => new Promise(resolve => { answer = resolve; }));
+    vi.setSystemTime(now + day);
+    act(() => window.dispatchEvent(new Event('focus')));
+    expect(queue.pauseAdRequests).toBe(1);
+    if (reason === 'withdrawal while waiting') {
+      const raw = JSON.stringify(choice(false, true, 29, 0));
+      localStorage.setItem(key, raw);
+      act(() => window.dispatchEvent(new StorageEvent('storage', { key, newValue: raw })));
+    }
+    const country = reason === 'protected region' ? 'DE' : 'US';
+    await act(async () => { answer(new Response('h=douknowball.com\nloc=' + country, { headers: { 'Content-Type': 'text/plain' } })); });
+    expect(consent.getEffectiveConsent()).toEqual({ advertising: false, analytics: true });
+    expect(queue.pauseAdRequests).toBe(1);
+    expect(document.querySelector(ad)).toBeNull();
+    expect(document.querySelector(ga)).not.toBeNull();
+  } finally { release(); }
+});

@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 
 vi.mock('@/lib/consentedScripts', () => ({
-  loadConsentedScripts: vi.fn(), stopRevokedServices: vi.fn(),
+  loadConsentedScripts: vi.fn(), stopRevokedServices: vi.fn(), publisherWaitingForRegion: () => false, pausePublisherForRegion: vi.fn(),
 }));
 
 const gpc = Object.getOwnPropertyDescriptor(navigator, 'globalPrivacyControl');

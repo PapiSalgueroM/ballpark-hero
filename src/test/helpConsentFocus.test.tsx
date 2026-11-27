@@ -13,7 +13,7 @@ const consent = vi.hoisted(() => ({ load: vi.fn(), changed: vi.fn() }));
 vi.mock('@/lib/consentedScripts', () => ({
   CONSENT_CHANGED_EVENT: 'dukb-consent-changed',
   loadConsentedScripts: consent.load,
-  stopRevokedServices: vi.fn(),
+  stopRevokedServices: vi.fn(), publisherWaitingForRegion: () => false, pausePublisherForRegion: vi.fn(),
 }));
 
 function Fixture({ initialOpen = true, inline = false }: { initialOpen?: boolean; inline?: boolean }) {

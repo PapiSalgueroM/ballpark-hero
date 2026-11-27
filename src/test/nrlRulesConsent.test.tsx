@@ -9,7 +9,7 @@ vi.mock('@/components/game/GameNavbar', () => ({ GameNavbar: () => null }));
 vi.mock('@/components/seo/GameSeoContent', () => ({ default: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
-vi.mock('@/lib/consentedScripts', () => ({ loadConsentedScripts: vi.fn(), stopRevokedServices: vi.fn() }));
+vi.mock('@/lib/consentedScripts', () => ({ loadConsentedScripts: vi.fn(), stopRevokedServices: vi.fn(), publisherWaitingForRegion: () => false, pausePublisherForRegion: vi.fn() }));
 
 const route = '/nrl-team-manager';
 const seenKey = `rules-gate-seen:${route}`;
