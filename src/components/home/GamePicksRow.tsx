@@ -34,7 +34,7 @@ export function GamePicksRow({ paths, onToggle, onEmpty }: {
     <section data-home-picks="" data-no-prerender="" aria-labelledby="home-personal-picks">
       <div className="mb-2 flex items-center gap-2.5">
         <Pin aria-hidden="true" className="h-5 w-5 text-gold" />
-        <h2 id="home-personal-picks" className="font-display text-lg font-bold text-foreground">Your picks</h2>
+        <h2 id="home-personal-picks" tabIndex={-1} className="scroll-mt-36 font-display text-lg font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28">Your picks</h2>
       </div>
       <ul ref={rowRef} data-home-shelf-rail="" className="flex gap-2.5 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:thin]">
         {games.map(game => {

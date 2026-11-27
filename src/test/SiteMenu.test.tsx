@@ -50,6 +50,57 @@ async function expectClosed(marker: string) {
 }
 
 describe('global top-left SiteMenu with the actual Sheet and router', () => {
+  it.each([
+    ['/footle', 'Footle'],
+    ['/soccer-career/?resume=active', 'Soccer Career'],
+  ])('pins and unpins the current game on %s without leaving play', async (url, label) => {
+    const key = 'dukb-game-picks-v1';
+    localStorage.setItem(key, JSON.stringify(['/nhl-connections']));
+    try {
+      await menuHost(url);
+      const { menu, dialog, trigger } = await openMenu();
+      const pin = menu.getByRole('button', { name: 'Pin to Your picks, ' + label });
+      fireEvent.click(pin);
+      expect(pin).toHaveAttribute('aria-pressed', 'true');
+      expect(pin).toHaveTextContent('Unpin from Your picks');
+      expect(screen.getByTestId('actual-router-location')).toHaveTextContent(url);
+      expect(JSON.parse(localStorage.getItem(key)!)).toEqual(['/nhl-connections', url.split('/?')[0]]);
+      const shelf = menu.getByRole('link', { name: 'View Your picks' });
+      expect(shelf).toHaveAttribute('href', '/#home-personal-picks');
+
+      fireEvent.keyDown(dialog, { key: 'Escape' });
+      await expectClosed('Close and continue playing');
+      await waitFor(() => expect(trigger).toHaveFocus());
+      const reopened = await openMenu();
+      fireEvent.click(reopened.menu.getByRole('button', { name: 'Unpin from Your picks, ' + label }));
+      expect(reopened.menu.getByRole('button', { name: 'Pin to Your picks, ' + label })).toHaveAttribute('aria-pressed', 'false');
+      expect(JSON.parse(localStorage.getItem(key)!)).toEqual(['/nhl-connections']);
+      fireEvent.click(reopened.menu.getByRole('link', { name: 'View Your picks' }));
+      await expectClosed('Open Home picks');
+      expect(screen.getByTestId('actual-router-location')).toHaveTextContent('/#home-personal-picks');
+    } finally { localStorage.removeItem(key); }
+  });
+
+  it('only offers the shelf link while a catalogue game is pinned', async () => {
+    await menuHost('/footle');
+    const { menu } = await openMenu();
+    expect(menu.queryByRole('link', { name: 'View Your picks' })).toBeNull();
+    expect(localStorage.getItem('dukb-game-picks-v1')).toBeNull();
+    try {
+      fireEvent.click(menu.getByRole('button', { name: 'Pin to Your picks, Footle' }));
+      expect(menu.getByRole('link', { name: 'View Your picks' })).toBeVisible();
+      fireEvent.click(menu.getByRole('button', { name: 'Unpin from Your picks, Footle' }));
+      expect(menu.queryByRole('link', { name: 'View Your picks' })).toBeNull();
+    } finally { localStorage.removeItem('dukb-game-picks-v1'); }
+  });
+
+  it.each(['/soccer', '/shirt-number'])('keeps non-catalogue pages out of picks on %s', async path => {
+    await menuHost(path);
+    const { menu } = await openMenu();
+    expect(menu.queryByRole('region', { name: 'Current game' })).toBeNull();
+    expect(localStorage.getItem('dukb-game-picks-v1')).toBeNull();
+  });
+
   it.each(['/nrl-team-manager', '/nrl-team-manager/?slot=2'])('keeps the loading menu above the NRL board on %s', async path => {
     function chrome(ready: boolean) {
       return <MemoryRouter initialEntries={[path]}><SiteMenuProvider>

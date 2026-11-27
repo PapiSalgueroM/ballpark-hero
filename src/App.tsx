@@ -274,17 +274,21 @@ export const ScrollToTop = () => {
         y = 0;
       }
       const homeAnchor = window.location.hash.slice(1);
-      if (initial && (homeAnchor === "browse-sports" || /^home-(game-picks|dailies|career-sims)$/.test(homeAnchor) || /^sport-[a-z0-9]+$/.test(homeAnchor))) {
+      const picksShelf = homeAnchor === "home-personal-picks";
+      const openShelf = picksShelf && navigationType === "PUSH";
+      const knownAnchor = picksShelf || homeAnchor === "browse-sports" || /^home-(game-picks|dailies|career-sims)$/.test(homeAnchor) || /^sport-[a-z0-9]+$/.test(homeAnchor);
+      if (openShelf || (initial && knownAnchor)) {
         const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
-        if (navigation?.type === "navigate" || (y <= 0 && navigation?.type !== "back_forward")) {
+        if (openShelf || navigation?.type === "navigate" || (y <= 0 && navigation?.type !== "back_forward")) {
           // Home may mount after this effect. Its heading carries the
           // sticky header scroll margin for each viewport.
           const root = document.getElementById("root")!;
           const pending = new AbortController();
           const reveal = () => {
-            const target = document.getElementById(homeAnchor);
+            const target = document.getElementById(homeAnchor) ?? (picksShelf && document.getElementById("browse-sports"));
             if (!target) return;
             target.scrollIntoView({ block: "start", behavior: "instant" });
+            if (picksShelf) target.focus({ preventScroll: true });
             stop();
           };
           const observer = new MutationObserver(reveal);
