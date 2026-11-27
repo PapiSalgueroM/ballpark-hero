@@ -4,7 +4,7 @@ import { acceptBid, appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, a
   offerTerms, playNextEntry, recallLoanedPlayer, resumeMatch, setTransferStatus, startCareer, startNegotiation,
   startNextSeason, type AppearanceFee, type CareerState, type DealExtras } from '@/lib/clubManager';
 import { joinClubNow } from '@/lib/clubManagerCalendar';
-import { settleAppearanceFees } from '@/lib/clubManagerAppearanceFees';
+import { addAppearanceFee, recordFeeAppearances, settleAppearanceFees } from '@/lib/clubManagerAppearanceFees';
 import { closeLedger, projectFinances } from '@/lib/clubManagerFinances';
 
 function seeded<T>(seed: number, action: () => T): T {
@@ -273,4 +273,27 @@ describe('negotiated senior league appearance fees', () => {
       expect(signed.appearanceFees).toEqual(saved);
     }
   },30000);
+
+  it('keeps an old unseeded purchase tied to its exact player and ignores a repeated or backdated match', () => {
+    const open=table();
+    delete open.worldSeed;
+    delete open.worldRoster;
+    delete open.negotiation!.player.worldRosterKey;
+    delete open.negotiation!.player.worldRosterSince;
+    const accepted=seeded(7345,()=>makeOffer(open,27.8,{addOn:5,appearanceTrigger:5}))!;
+    const signed=seeded(511,()=>offerTerms(accepted,accepted.negotiation!.terms!.want))!;
+    const row=appearanceFeeDesk(signed)[0], man=signed.squad.find(p=>p.id===row.playerId)!;
+    expect(row.worldKey).toBeUndefined();
+    expect(man.appearanceFeeId).toBe(row.id);
+    recordFeeAppearances(signed,{season:1,week:1},[{...man,appearanceFeeId:undefined}]);
+    recordFeeAppearances(signed,{season:1,week:1},[{...man,onLoan:true}]);
+    expect(appearanceFeeDesk(signed)[0].appearances).toBe(0);
+    for(const week of [2,2,1]) recordFeeAppearances(signed,{season:1,week},[man]);
+    expect(appearanceFeeDesk(signed)[0].appearances).toBe(1);
+    // A game-generated registration keeps its existing provenance when the desk records the terms.
+    const generated = {...man, id:'simulated-registration', generated:true};
+    signed.squad = [...signed.squad,generated];
+    addAppearanceFee(signed,generated,'Real Betis',5,15);
+    expect(appearanceFeeDesk(signed)[0]).toMatchObject({playerId:generated.id,generated:true});
+  });
 });
