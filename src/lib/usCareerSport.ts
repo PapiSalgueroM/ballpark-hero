@@ -288,6 +288,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   create: UsCareerCreate;
   practiceLabel: string;
   loadTraining(pos: string): Promise<TrainingSport>;
+  PracticeRoom?: ComponentType<{ career: C }>;
 
   preDraft(eraId: string): PreDraftDescriptor;
   /** Optional on one binding; no sport or data import enters the shared board. */

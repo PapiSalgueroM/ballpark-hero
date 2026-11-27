@@ -2244,6 +2244,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
               {trainingSessionOpen(career.practice?.year, career.year) ? 'Start practice' : 'View practice'}
             </button>
             <p className="mt-2 text-[10px] text-muted-foreground">One banked session each season. Your ceiling still applies.</p>
+            {phase === 'season' && sport.PracticeRoom && <Suspense fallback={null}><sport.PracticeRoom career={career} /></Suspense>}
             {practiceOpen && <Suspense fallback={<p role="status">Opening practice...</p>}>
               <UsCareerPractice sport={sport} pos={career.pos}
                 available={trainingSessionOpen(career.practice?.year, career.year)}
