@@ -4,7 +4,8 @@ import { MadeUpTag } from './SquadScreen';
 
 export function ReturnPressReview({ play, live = false }: { play: PlayEvent[]; live?: boolean }) {
   const [step, setStep] = useState(0);
-  const throws = play.filter(e => e.side === 'opp' && e.returnPress)
+  const throws = play.filter(e => e.kind === 'throwin' && e.side === 'opp' && e.returnPress
+    && ['direct', 'won', 'bypassed'].includes(e.returnPress.outcome))
     .sort((a, b) => a.minute - b.minute || (a.plus ?? 0) - (b.plus ?? 0));
   const index = live ? throws.length - 1 : Math.min(step, throws.length - 1);
   const event = throws[index], press = event?.returnPress;

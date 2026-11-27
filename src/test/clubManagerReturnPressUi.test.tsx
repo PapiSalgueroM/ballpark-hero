@@ -34,7 +34,7 @@ it('offers only the actual opposing wide defenders, shows who can close down and
 it('keeps separate throws at one clock, links only their own chances, and leaves live goal calls to the match clock', () => {
   const jump = { id: 'throw-1', wingerId: 'winger', winger: 'Winger', outlet: 'Outlet', outcome: 'won' as const, effort: 1, tired: false };
   const first: PlayEvent = { minute: 90, plus: 2, kind: 'throwin', side: 'opp', who: 'Fullback', returnPress: jump };
-  const second: PlayEvent = { ...first, returnPress: { ...jump, id: 'throw-2', outcome: 'bypassed' } };
+  const second: PlayEvent = { ...first, returnPress: { ...jump, id: 'throw-2', outcome: 'bypassed', spent: 0 } };
   const unrelated: PlayEvent = { minute: 90, plus: 2, kind: 'shot', side: 'me', who: 'Unrelated player', goal: true };
   const goal: PlayEvent = { ...unrelated, who: 'Winger', pressChance: jump.id };
   const review: PlayEvent = { minute: 90, plus: 2, kind: 'var', side: 'opp', who: 'Outlet', pressChance: 'throw-2',
@@ -47,6 +47,7 @@ it('keeps separate throws at one clock, links only their own chances, and leaves
   expect(region).not.toHaveTextContent('Unrelated player');
   fireEvent.click(within(region).getByRole('button', { name: 'Next pressing event' }));
   expect(region).toHaveTextContent('goal was ruled out');
+  expect(region).toHaveTextContent('0 fitness spent');
   view.rerender(<ReturnPressReview live play={play} />);
   region = screen.getByRole('region', { name: 'Latest return-pass press' });
   expect(region).toHaveTextContent('The move led to a chance');
