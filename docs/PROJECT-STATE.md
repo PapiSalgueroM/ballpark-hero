@@ -1,3 +1,11 @@
+### November 27, 2026. Matchday Director, halftime tactics and a scouting draft rival
+
+Open Matchday Director in Stadium Tycoon to run six home fixtures. Community season asks for 680 admissions and $250 in the bank. Cup run asks for 510 admissions and $1,700. Four crew run gates and food counters. Ticket prices change turnout and future support. Turnstiles and food counters cost cash and stay for later fixtures. The signed contracts keep the best successful Community crowd and Cup cash across seasons. The original stadium and academy keep their own saves.
+
+Club Manager can protect a one-goal lead or go after a halftime deficit, including the aggregate score in a second leg. The optional plan works in watched and quick matches and explains its decision in the match report. The manager can still give a different halftime instruction. In 100 matched simulations, 40 halftime scores triggered a change and four final results changed.
+
+In Fantasy Draft, choose Scout rival before drafting. It looks ahead to its next turn and can take a player because your available positions and the remaining cover make waiting risky. The planner uses that same opponent for its estimates. In 360 paired drafts across the six rules and both snake orders, every team completed a legal formation. Resuming a draft keeps its opponent.
+
 ### November 27, 2026. Full-width desktop scores and navigation
 
 On eligible desktops the ticker, site header and game navigation use the window width. They scroll away above the side ads. Home gives its search and sport selector a wider row above the catalogue. The catalogue and gameplay controls keep their clearance from the actual ads. The shared game boards, Club Manager and Soccer Career use spare width where it is available. The Play Next cards also fit the compact desktop corridor on Tennis Chain and NASCAR Chain.
