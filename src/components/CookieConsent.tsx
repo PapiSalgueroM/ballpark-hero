@@ -27,6 +27,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
   const ref = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLElement | null>(null);
   const explicitlyOpen = useRef(false);
+  const advertisingEdited = useRef(false);
   const lastEffective = useRef(getEffectiveConsent());
   const pendingRevoked = useRef<ConsentPurposes>(getPendingConsentWithdrawal());
 
@@ -57,10 +58,8 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       setGpc(isGlobalPrivacyControlEnabled());
       setPreferences(saved);
       setVisible((!saved && !(mayUseRegionalDefault() && (hasRegionalAdDefault() || regionalLookupPending()))) || explicitlyOpen.current);
-      if (!saved && !explicitlyOpen.current) {
-        setAdvertising(false);
-        setAnalytics(false);
-      }
+      if (!saved && !advertisingEdited.current) setAdvertising(next.advertising);
+      if (!saved && !explicitlyOpen.current) setAnalytics(false);
       if (isGlobalPrivacyControlEnabled()) setAdvertising(false);
       if (pendingRevoked.current.advertising || pendingRevoked.current.analytics) {
         setAdvertising(next.advertising);
@@ -97,6 +96,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
     const onOpen = (event: Event) => {
       const effective = getEffectiveConsent();
       explicitlyOpen.current = true;
+      advertisingEdited.current = false;
       setShowDetails(true);
       opener.current = (event as CustomEvent<{ opener?: HTMLElement }>).detail?.opener ?? null;
       setAdvertising(effective.advertising);
@@ -179,6 +179,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
 
   const save = (choice: ConsentPurposes) => {
     explicitlyOpen.current = false;
+    advertisingEdited.current = false;
     setShowDetails(false);
     setVisible(false);
     saveConsentPreferences(choice);
@@ -186,6 +187,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
   };
   const cancel = () => {
     explicitlyOpen.current = false;
+    advertisingEdited.current = false;
     setShowDetails(false);
     setVisible(false);
     opener.current?.focus({ preventScroll: !inlineNotice });
@@ -224,7 +226,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
         </p>
         {!compact && <div className="flex flex-wrap gap-x-6 gap-y-2">
           <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
-            <input type="checkbox" checked={advertising && !gpc} disabled={gpc || pendingReload} onChange={event => { explicitlyOpen.current = true; setAdvertising(event.target.checked); }} />
+            <input type="checkbox" checked={advertising && !gpc} disabled={gpc || pendingReload} onChange={event => { explicitlyOpen.current = true; advertisingEdited.current = true; setAdvertising(event.target.checked); }} />
             Advertising
           </label>
           {ANALYTICS_READY ? <label className="inline-flex min-h-11 items-center gap-2 text-foreground">

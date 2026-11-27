@@ -16,7 +16,7 @@ it.each(['IE', 'DE', 'GB', 'CH', 'NO', 'IS', 'LI', 'AX', 'GF', 'XX', 'T1', 'ZZ',
 it.each(['US','CA','AU','BR','NZ','JP','MX'])('recognizes a confirmed country outside the opt-in area: %s', code =>
   expect(allowsRegionalAds(trace(code), host)).toBe(true));
 it('rejects ambiguous or mismatched responses', () => {
-  for (const value of [trace('US') + 'loc=DE', trace('US') + 'h=elsewhere', '<html>US</html>', trace('US').replace(host, 'elsewhere')])
+  for (const value of [trace('US') + 'loc=DE', trace('US') + 'loc=unknown', trace('US') + 'h=', trace('US') + 'h=elsewhere', '<html>US</html>', trace('US').replace(host, 'elsewhere')])
     expect(allowsRegionalAds(value, host)).toBe(false);
 });
 

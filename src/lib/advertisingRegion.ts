@@ -8,9 +8,8 @@ const countries = new Set(('AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA B
   'TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW').split(' '));
 
 export function allowsRegionalAds(trace: string, host: string): boolean {
-  const location = /^loc=([A-Z]{2})$/gm;
-  const codes = [...trace.matchAll(location)];
-  const hosts = [...trace.matchAll(/^h=([^\r\n]+)$/gm)];
+  const codes = [...trace.matchAll(/^loc=([^\r\n]*)$/gm)];
+  const hosts = [...trace.matchAll(/^h=([^\r\n]*)$/gm)];
   return hosts.length === 1 && hosts[0][1] === host && codes.length === 1 &&
     countries.has(codes[0][1]) && !optInCountries.has(codes[0][1]);
 }
