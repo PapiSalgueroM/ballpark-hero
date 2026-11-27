@@ -17,7 +17,7 @@
   :global(#root):has(.frame[data-desktop-room]) :is(header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child),
   .frame[data-desktop-room]:has([data-active-career-help]) nav[data-site-chrome] > div:first-child,
   .frame[data-desktop-room] [data-active-career-help] {
-    max-width: calc(100% - var(--browse-rail-space) - var(--browse-rail-space));
+    max-width: calc(100% - var(--creative-width) - var(--creative-width) - 302px);
     margin-inline: auto;
   }
 
