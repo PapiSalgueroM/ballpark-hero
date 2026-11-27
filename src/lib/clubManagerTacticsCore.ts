@@ -15,6 +15,7 @@
  */
 import type { CareerState, LiveChange, LiveMatch, MatchDetail, MyFixture, XiSlot } from '@/lib/clubManager';
 import type { drawFlankPlay } from '@/lib/clubManagerFlank';
+import type { drawReturnPress } from '@/lib/clubManagerReturnPress';
 
 export type Setting = -1 | 0 | 1;
 export type InstructionKey = 'press' | 'tempo' | 'width' | 'line';
@@ -62,6 +63,8 @@ export const logEverSet = (log: InstructionStep[] | undefined): boolean => (log 
 
 /** What the engine asks of the tactics module. Every call is made only off balanced. */
 export interface TacticsImpl {
+  returnPress: typeof drawReturnPress;
+  pressTempo(state: CareerState, club: string): Setting;
   flank: typeof drawFlankPlay;
   ordinaryChanceShare(live: LiveMatch): number;
   /** The goal rate boosts my instructions are worth in a half against the other side's style. */

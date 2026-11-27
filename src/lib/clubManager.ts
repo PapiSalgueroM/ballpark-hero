@@ -223,6 +223,7 @@ import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
 import { cornerAssistId, resolveCornerDeliveries, type CornerDelivery } from '@/lib/clubManagerCornerDelivery';
 import type { FlankMove, FlankPlan } from '@/lib/clubManagerFlank';
+import type { ReturnPressEvent, ReturnPressOrder } from '@/lib/clubManagerReturnPress';
 /* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
    balanced, and the slot clubManagerTactics.ts fills when it loads. Every reader below is a no op on balanced
    (it adds zero or multiplies by one), and with the slot empty plays balanced, so a career that never sets one
@@ -1221,7 +1222,7 @@ function noteBookMine(
       man = p ? { n: p.n, p: p.p, r: p.r, ...(p.g ? { g: true } : {}) } : null;
     }
     if (!creditGoal(book, opp, man) || !man || line.penalty || line.freeKick) return;
-    const assist = dealAssist(`${key}|${i}`, man, there, rules);
+    const assist = line.pressChance && line.assist ? bookNamed(theirs, line.assist) : dealAssist(`${key}|${i}`, man, there, rules);
     if (assist) creditAssist(book, opp, assist);
   });
   for (let i = lines.length; i < oppGoals; i++) creditGoal(book, opp, null);
@@ -2132,6 +2133,7 @@ export function weighedTrophies(list: readonly Trophy[]): Trophy[] {
 }
 
 export interface ScorerLine {
+  pressChance?: string;
   name: string;
   minute: number;
   /** Round 169: who set it up, when somebody did. Credited at the same
@@ -2220,6 +2222,8 @@ export interface PlayEvent {
   flankChance?: 'entry' | 'counter';
   cornerDelivery?: CornerDelivery;
   cornerChance?: string;
+  returnPress?: ReturnPressEvent;
+  pressChance?: string;
   whoGenerated?: true;
   review?: CmVarDecision;
   on?: boolean;
@@ -2240,6 +2244,7 @@ export interface PlayEvent {
  *  whether it came from the spot or a free kick, in which case `id` and
  *  `name` are the assigned taker's when he was on the pitch. */
 export interface MyGoalLine {
+  pressChance?: string;
   cornerChance?: string;
   id: string;
   name: string;
@@ -2316,6 +2321,7 @@ export interface PlayerRatingLine {
 }
 
 export interface MatchDetail {
+  returnPressUsed?: true;
   cornerRoutine?: CornerRoutine;
   stats: MatchStats;
   /** My cards only. The sim tracks my discipline (suspensions are real);
@@ -3761,6 +3767,8 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  returnPress?: ReturnPressOrder;
+  returnPressUsed?: true;
   cornerRoutine?: CornerRoutine;
   flankPlan?: FlankPlan;
   flankDraw?: number;
@@ -17949,6 +17957,8 @@ function creditMyScorers(
       const id = cornerAssistId(line, cornerPlay);
       assister = state.squad.find(p => p.id === id);
     }
+    // A jump that wins the return is a solo finish.
+    if (line.pressChance) assister = null;
     if (assister && !own) {
       assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
       const aq = state.squad.find(p => p.id === assister.id);
@@ -19280,6 +19290,40 @@ const goalMinutesOf = (live: LiveMatch): Set<number> => new Set([
 
 const allOppCards = (live: LiveMatch): CardLine[] => [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])];
 
+export function isReturnPress(value: unknown): value is ReturnPressOrder {
+  const plan = value as Partial<ReturnPressOrder> | null;
+  return plan?.version === 1 && Object.keys(plan).length === 3 && typeof plan.target === 'string' && !!plan.target && typeof plan.wingerId === 'string' && !!plan.wingerId;
+}
+
+/** The defender who would be on the pitch for the next throw, including a change just made on the board. */
+export function eligiblePressTargets(live: LiveMatch, minute: number, plus = 0): OppXiLine[] {
+  const reached = playedBy(minute, plus);
+  const dismissed = new Set(allOppCards(live).filter(c => c.kind === 'red' && reached(c)).map(c => c.name));
+  const sheet = [...(live.oppXi ?? []), ...(live.oppBench ?? [])];
+  const on = oppOnPitchAt({ ...live, oppSubs: live.oppSubs?.filter(reached) }, Infinity);
+  return on.filter(p => ['LB', 'LWB', 'RB', 'RWB'].includes(p.p) && !dismissed.has(p.n) &&
+    sheet.filter(man => man.n === p.n).length === 1);
+}
+
+function nearPressWinger(pairs: XiSlot[], target: OppXiLine): CMPlayer | null {
+  const left = target.p === 'RB' || target.p === 'RWB';
+  const x = left ? 15 : 85;
+  const wide = pairs.filter(({slot}) => slot && slot.y <= 58 && (left ? slot.x <= 36 : slot.x >= 64));
+  const distance = ({slot}: XiSlot) => Math.hypot(slot!.x - x, slot!.y - 32);
+  return wide.sort((a,b) => distance(a) - distance(b))[0]?.p ?? null;
+}
+
+export function returnPressWinger(career: CareerState, target: string, minute: number, plus = 0): CMPlayer | null {
+  const live = career.live;
+  if (!live) return null;
+  const defender = eligiblePressTargets(live, minute, plus).find(p => p.n === target);
+  if (!defender) return null;
+  const gone = liveGoneIds(live, minute, plus);
+  const pairs = positionFlankPairs(livePairs(career, live), live.formationIndex ?? career.formationIndex, live.mentality,
+    live.onPitch, live.positionRules === 1 ? live.customShape : undefined);
+  return nearPressWinger(pairs.filter(({p}) => !gone.has(p.id)), defender);
+}
+
 /** The opposition on the pitch at a minute, minus anyone they have lost to a red by then. */
 function oppAt(live: LiveMatch, minute: number): OppXiLine[] | null {
   if (!live.oppXi) return null;
@@ -19430,7 +19474,7 @@ function tagOwnGoals(state: CareerState, live: LiveMatch, fx: MyFixture, half: 1
   const keyOf = (g: { minute: number; plus?: number; name: string }, side: 'me' | 'opp'): string =>
     `${match}|${g.minute + (g.plus ?? 0)}|${side}|${g.name}`;
   /* Never a goal from the spot or a direct free kick, and never a goal already tagged. */
-  const eligible = (g: { og?: unknown; penalty?: boolean; freeKick?: boolean; cornerChance?: string }): boolean => !g.og && !g.penalty && !g.freeKick && !g.cornerChance;
+  const eligible = (g: { og?: unknown; penalty?: boolean; freeKick?: boolean; cornerChance?: string; pressChance?: string }): boolean => !g.og && !g.penalty && !g.freeKick && !g.cornerChance && !g.pressChance;
   for (const g of mine) {
     if (!eligible(g)) continue;
     const key = keyOf(g, 'me');
@@ -19634,6 +19678,26 @@ function drawSegment(
     play.push(...built.plays);
     me.goals.push(...built.goals);
     if (half === 1) live.h1My!.push(...built.goals); else live.h2My!.push(...built.goals);
+  }
+  if (isReturnPress(live.returnPress)) {
+    const plan = live.returnPress;
+    const named = [...(live.oppXi ?? []), ...(live.oppBench ?? [])].filter(p => p.n === plan.target);
+    const defender = named.length === 1 ? named[0] : null;
+    const positioned = positionFlankPairs(pairs, live.formationIndex ?? state.formationIndex, live.mentality, live.onPitch,
+      live.positionRules === 1 ? live.customShape : undefined);
+    if (defender && nearPressWinger(positioned, defender)?.id === plan.wingerId) {
+      const tactics = tacticsImpl();
+      const built = tactics?.returnPress(plan, play, [...(live.h1Play ?? []), ...(live.h2Play ?? [])], mineAt,
+        m => oppAt(live, m) ?? [], [worldYear(state), state.clubName, live.week, live.opponent, half].join('/'),
+        reviewKinds.includes('goal'), tactics.pressTempo(state,live.opponent));
+      if (built) {
+        play.push(...built.play);
+        me.goals.push(...built.mine);
+        oppGoals.push(...built.theirs);
+        if (half === 1) { live.h1My!.push(...built.mine); live.h1Opp!.push(...built.theirs); }
+        else { live.h2My!.push(...built.mine); live.h2Opp!.push(...built.theirs); }
+      }
+    }
   }
   if (half === 1) live.h1Play = [...(live.h1Play ?? []), ...play];
   else live.h2Play = [...(live.h2Play ?? []), ...play];
@@ -20904,7 +20968,8 @@ function buildMatchDetail(args: {
           base + g * 0.9 + (Math.random() * 1.2 - 0.6) + (theirCleanSheet && defensive ? 0.5 : 0) + saveBonus,
           4.5, 10,
         );
-        return { name: pl.n, pos: pl.p, rating: Math.round(r * 10) / 10, goals: g, assists: 0, ...(pl.g ? { gen: true } : {}) };
+        const assists = args.oppScorers.filter(sc => sc.pressChance && sc.assist === pl.n).length;
+        return { name: pl.n, pos: pl.p, rating: Math.round(r * 10) / 10, goals: g, assists, ...(pl.g ? { gen: true } : {}) };
       }).sort((a, b) => b.rating - a.rating);
     }
   }
@@ -21220,6 +21285,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     ? { name: l.og.n, minute: l.minute, og: true, ...(l.og.g ? { gen: true } : {}), ...plusOf(l) }
     : {
         name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined,
+        ...(l.pressChance ? { pressChance: l.pressChance } : {}),
         ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}), ...plusOf(l),
       }));
   const oppScorers: ScorerLine[] = [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])];
@@ -21933,6 +21999,15 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     const played = new Set(xi.map(p => p.id));
     state.squad = state.squad.map(p => (played.has(p.id) ? { ...p, fitness: clamp(p.fitness - tacticsDay.stats.legs, 20, 100) } : p));
   }
+  if (live.returnPressUsed === true) {
+    for (const e of [...(live.h1Play ?? []), ...(live.h2Play ?? [])]) {
+      const trap = e.returnPress;
+      if (e.kind !== 'throwin' || e.side !== 'opp' || !trap) continue;
+      const winger = state.squad.find(p => p.id === trap.wingerId);
+      trap.spent = trap.effort === 1 && winger && winger.fitness >= 21 ? 1 : 0;
+      if (winger && trap.spent) winger.fitness -= trap.spent;
+    }
+  }
   /* Round 141: a window no longer slams shut the moment you play a match,
      because real windows run through the early fixtures and because the
      instant sell is gone, so listing a man needs actual weeks for offers to
@@ -22053,6 +22128,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     added: live.added,
   });
   if (live.cornerRoutine && isCornerRoutine(live.cornerRoutine)) detail.cornerRoutine = { ...live.cornerRoutine };
+  if (live.returnPressUsed === true) detail.returnPressUsed = true;
 
   const iAmHome = fx.home !== false; // neutral finals list us first
   return {
@@ -23539,6 +23615,7 @@ export function changeRoom(career: CareerState, live: LiveMatch, minute: number,
 }
 
 export type LiveChange =
+  | { kind: 'returnPress'; target: string | null }
   | { kind: 'flank'; plan: FlankPlan | null }
   | { kind: 'sub'; outId: string; inId: string }
   | { kind: 'shape'; mentality: Mentality }
@@ -23628,6 +23705,17 @@ export function changeLive(
       off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
       ...plusOf({ plus: p }), ...(inPlay ? { stop: true as const } : {}),
     }];
+  } else if (change.kind === 'returnPress') {
+    if (!tacticsImpl() || live.penaltyCalls || (live.returnPress !== undefined && !isReturnPress(live.returnPress))) return null;
+    if (change.target === null) {
+      if (!live.returnPress) return null;
+      delete live.returnPress;
+    } else {
+      const winger = returnPressWinger(state, change.target, m, p);
+      if (!winger || (live.returnPress?.target === change.target && live.returnPress.wingerId === winger.id)) return null;
+      live.returnPress = { version: 1, target: change.target, wingerId: winger.id };
+      live.returnPressUsed = true;
+    }
   } else if (change.kind === 'shape') {
     live.mentality = change.mentality;
     state.mentality = change.mentality;

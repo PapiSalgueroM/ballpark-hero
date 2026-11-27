@@ -46,6 +46,15 @@ export function ClubManagerFrame({ catalogue, children }: { catalogue: ReactNode
         reportGameType="club-manager"
       >
         <div data-cm-surface="" className="relative">
+          {/* A slow stylesheet can still be pending when a saved career becomes interactive. */}
+          <style>{`
+            html:has(link[data-dukb-app-style][media="print"]) [data-cm-surface]
+            :is(button, input, select, summary, label, a):is(.min-h-11, .h-11, [class~="min-h-[44px]"]) { min-height: 44px; }
+            html:has(link[data-dukb-app-style][media="print"]) [data-cm-surface]
+            :is(button, input, select, summary, label, a):is(.min-w-11, .w-11, [class~="min-w-[44px]"]) { min-width: 44px; }
+            html:has(link[data-dukb-app-style][media="print"]) [data-cm-surface]
+            :is(label, a):is(.min-h-11, .h-11, [class~="min-h-[44px]"]) { display: inline-block; }
+          `}</style>
           {/* Round 1328: the "?" is 44 by 44 now, pulled 8px further into the
               corner so it covers no more of the screen than the old 36px one. */}
           <HowToPlayPopover title="How to Play Club Manager" triggerSide="right" className="-mr-2 -mt-2 inline-flex min-h-[44px] min-w-[44px] items-center justify-center">

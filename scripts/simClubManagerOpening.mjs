@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { build } from 'esbuild';
+import { build, transformSync } from 'esbuild';
+import { createElement } from 'react';
+import ts from 'typescript';
 import { importBundled } from './lib/cmFixtureSources/gameBundle.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -69,25 +71,90 @@ assert(deferred.some(([, output]) => Object.keys(output.inputs).some(input => in
 assert(deferred.some(([, output]) => Object.keys(output.inputs).some(input => input.endsWith('/ClubManagerClubList.tsx'))));
 console.log('Deferred graph: the existing career boot and canonical roster catalogue remain reachable.');
 
-const framePath = path.join(root, 'src/components/club-manager/ClubManagerFrame.tsx');
-const loadingHeight = 'max-sm:min-h-svh';
-let frame = fs.readFileSync(framePath, 'utf8');
-if (process.env.CM_OPENING_CONTROL === 'short-startup') {
-  assert(frame.includes(loadingHeight), 'the control needs a reserved loading height');
-  frame = frame.replace(loadingHeight, '');
+function parsePage(file) {
+  return ts.createSourceFile(file, fs.readFileSync(path.join(root, file), 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
 }
-const startupClass = frame.replace(/\/\*[\s\S]*?\*\//g, '')
-  .match(/return <div role="status" data-cm-startup className=\{([^}]+)\}/)?.[1];
-assert(startupClass?.includes(loadingHeight), 'saved startup reserves one viewport on single-column phones');
-const entrySource = fs.readFileSync(path.join(root, entry), 'utf8');
-const runtime = fs.readFileSync(path.join(root, 'src/pages/ClubManager.tsx'), 'utf8');
-assert.match(entrySource, /fallback=\{direct\s*\? <ClubManagerStartup\b[^>]*>Loading Club Manager/);
-assert.match(runtime, /return shell\(<ClubManagerStartup\b[^>]*>Loading…<\/ClubManagerStartup>\);/);
-assert.match(runtime, /<Suspense fallback=\{<ClubManagerStartup\b[^>]*>Loading screen\.\.\.<\/ClubManagerStartup>\}>\s*<ManagerSlotsScreen\b/);
-assert(startupClass?.includes('min-h-48 py-12 text-sm'), 'the shared startup owns the tablet and desktop height');
-assert.match(entrySource, /<ClubManagerStartup>Loading Club Manager/);
-assert.match(runtime, /<ClubManagerStartup className="animate-pulse">Loading…/);
-assert.match(runtime, /<ClubManagerStartup>Loading screen/);
-assert.equal([...entrySource.matchAll(/<ClubManagerStartup\b/g)].length, 1);
-assert.equal([...runtime.matchAll(/<ClubManagerStartup\b/g)].length, 2);
-console.log('Startup layout: only direct entry, generic boot and manager-slot loading reserve the mobile viewport.');
+function matches(tree, test) {
+  const found = [];
+  function visit(node) {
+    if (test(node)) found.push(node);
+    ts.forEachChild(node, visit);
+  }
+  visit(tree);
+  return found;
+}
+const usesStartup = node => ts.isJsxElement(node) && node.openingElement.tagName.getText() === 'ClubManagerStartup';
+function initializer(tree, name) {
+  const vars = matches(tree, node => ts.isVariableDeclaration(node) && node.name.getText() === name);
+  assert.equal(vars.length, 1, name);
+  return vars[0].initializer.getText();
+}
+function evaluate(expression, scope = {}) {
+  // Compile the actual TSX expression and supply only the bindings this render uses.
+  const { code } = transformSync('return (' + expression + ');', { loader: 'tsx', jsxFactory: 'createElement' });
+  return Function('createElement', ...Object.keys(scope), code)(createElement, ...Object.values(scope));
+}
+const frame = parsePage('src/components/club-manager/ClubManagerFrame.tsx');
+const declaration = matches(frame, n => ts.isFunctionDeclaration(n) && n.name?.text === 'ClubManagerStartup');
+assert.equal(declaration.length, 1);
+let startupSource = declaration[0].getText().replace(/^export\s+/, '');
+const loadingHeight = 'max-sm:min-h-svh';
+if (process.env.CM_OPENING_CONTROL === 'short-startup') {
+  assert(startupSource.includes(loadingHeight), 'the control needs a reserved loading height');
+  startupSource = startupSource.replace(loadingHeight, '');
+}
+const ClubManagerStartup = evaluate(startupSource);
+function checkStartup(element, label, saved, pulse = false) {
+  assert.equal(element.type, ClubManagerStartup, label);
+  const status = ClubManagerStartup(element.props);
+  assert.equal(status.type, 'div');
+  assert.equal(status.props.role, 'status');
+  assert.equal(status.props.children, label);
+  assert.equal(status.props['data-cm-startup'], saved ? '' : undefined, label + ' saved-career marker');
+  const classes = new Set(status.props.className.split(/\s+/));
+  assert(classes.has(loadingHeight), 'startup reserves one viewport on single-column phones');
+  for (const name of ['min-h-48', 'py-12', 'text-sm']) assert(classes.has(name), 'startup class ' + name);
+  if (pulse) assert(classes.has('animate-pulse'), 'generic boot retains its status animation');
+}
+function suspenseFallback(node) {
+  const attribute = node.parent.parent;
+  assert(ts.isJsxAttribute(attribute) && attribute.name.getText() === 'fallback');
+  const suspense = attribute.parent.parent;
+  assert(ts.isJsxOpeningElement(suspense) && suspense.tagName.getText() === 'Suspense');
+  return suspense.parent;
+}
+const entryTree = parsePage(entry);
+const runtimeTree = parsePage('src/pages/ClubManager.tsx');
+const entryUses = matches(entryTree, usesStartup);
+const runtimeUses = matches(runtimeTree, usesStartup);
+assert.equal(entryUses.length, 1);
+assert.equal(runtimeUses.length, 2);
+const entryChoice = entryUses[0].parent;
+assert(ts.isConditionalExpression(entryChoice));
+const entryBoundary = suspenseFallback(entryChoice);
+assert(entryBoundary.children.some(child => ts.isJsxSelfClosingElement(child) && child.tagName.getText() === 'ClubManagerContents'));
+const picker = Symbol('public picker');
+const directCheck = initializer(entryTree, 'openDirect');
+for (const [direct, requestedSlot, expected] of [
+  [true, undefined, true], [false, 2, true], [false, null, true], [false, undefined, false],
+]) {
+  const openDirect = evaluate(directCheck, { direct, requestedSlot });
+  const element = evaluate(entryChoice.getText(), { openDirect, picker, ClubManagerStartup });
+  if (expected) checkStartup(element, 'Loading Club Manager...', true);
+  else assert.equal(element, picker, 'a public era pick keeps its picker during the module load');
+}
+const boot = runtimeUses.find(node => ts.isCallExpression(node.parent) && node.parent.expression.getText() === 'shell');
+assert(boot, 'generic boot status goes into the game shell');
+const publicSetupCheck = initializer(runtimeTree, 'loadingPublicSetup');
+for (const [initialEra, requestedSlot, hasData, saved] of [
+  ['now', undefined, false, false], [undefined, undefined, false, true],
+  ['now', 2, false, true], ['now', undefined, true, true],
+]) {
+  const loadingPublicSetup = evaluate(publicSetupCheck, { initialEra, requestedSlot, hasClubManagerBootData: () => hasData });
+  checkStartup(evaluate(boot.getText(), { ClubManagerStartup, loadingPublicSetup }), 'Loading…', saved, true);
+}
+const slots = runtimeUses.find(node => node !== boot);
+const slotBoundary = suspenseFallback(slots);
+assert(slotBoundary.children.some(child => ts.isJsxSelfClosingElement(child) && child.tagName.getText() === 'ManagerSlotsScreen'));
+checkStartup(evaluate(slots.getText(), { ClubManagerStartup }), 'Loading screen...', true);
+console.log('Startup layout: direct requests, public setup, saved boot and slot fallback use the correct marker and responsive height.');

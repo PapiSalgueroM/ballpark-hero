@@ -111,7 +111,7 @@ function carryAcross(state: CareerState, from: Formation, to: Formation): { xiId
    needs it before any match of it is played; until it is in, every match action below waits (does nothing), and
    the effect in the hook loads it. The screens that set instructions import it themselves. */
 const needsTactics = (c: CareerState | null | undefined): boolean =>
-  !!c && (!!c.instructions || !!c.live?.flankPlan || !!c.live?.instrLog?.length || !!c.live?.formChanges?.length);
+  !!c && (!!c.instructions || !!c.live?.flankPlan || !!c.live?.returnPress || c.live?.returnPressUsed === true || !!c.live?.instrLog?.length || !!c.live?.formChanges?.length);
 const tacticsWait = (c: CareerState | null | undefined): boolean => needsTactics(c) && tacticsImpl() === null;
 const loadTactics = (): Promise<unknown> => import('@/lib/clubManagerTactics');
 
