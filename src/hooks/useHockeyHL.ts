@@ -228,7 +228,7 @@ export function useHockeyHL() {
 
   const makeGuess = useCallback(
     (choice: 'left' | 'right') => {
-      if (!currentPair || showingResult || gameStatus !== 'playing') return;
+      if (!currentPair || showingResult || revealTimer.current !== null || gameStatus !== 'playing') return;
       // Round 848 review: another tab already decided this round; jump to it, no verdict.
       if (mode === 'daily' && takeNewerDailySave()) return;
       const [p1, p2] = currentPair;

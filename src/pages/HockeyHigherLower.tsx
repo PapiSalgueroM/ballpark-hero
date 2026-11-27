@@ -6,7 +6,7 @@ import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HigherLowerThrough } from '@/components/game/HigherLowerThrough';
 import PostGameStats from '@/components/game/PostGameStats';
-import { HIGHER_LOWER_SCORE_BUCKETS } from '@/lib/higherLowerScore';
+import { HIGHER_LOWER_SCORE_BUCKETS, higherLowerScore } from '@/lib/higherLowerScore';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -14,7 +14,13 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HelpCircle, ArrowUp, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { HockeyHLHowToPlay } from '@/components/hockey-hl/HockeyHLHowToPlay';
+import { HockeyMissPractice } from '@/components/hockey-hl/HockeyMissPractice';
 import { safeSetItem } from '@/lib/safeStorage';
+
+function roundVerdict(tie: boolean, correct: boolean, points: number) {
+  const verdict = tie ? 'Tie. Either pick counts.' : correct ? 'Correct!' : 'Missed.';
+  return points > 10 ? `${verdict} +${points} points (10 + ${points - 10} streak bonus)` : `${verdict} +${points} points`;
+}
 
 const HockeyHigherLower = () => {
   const {
@@ -145,6 +151,10 @@ const HockeyHigherLower = () => {
                 </button>
               );
             })}
+            {showingResult && <p role="status" className="col-span-2 text-center text-sm font-semibold">
+              {roundVerdict(currentPair[0].careerPoints === currentPair[1].careerPoints,
+                results[results.length - 1].correct, higherLowerScore(results) - totalScore)}
+            </p>}
           </div>
         )}
 
@@ -175,6 +185,7 @@ const HockeyHigherLower = () => {
                 isVisible={mode === 'daily'}
               />
             </ResultScreen>
+            <HockeyMissPractice key={mode} results={results} />
             <details data-no-prerender="" className="w-full max-w-sm rounded-xl border border-border bg-card px-3">
               <summary className="min-h-11 cursor-pointer rounded-sm py-3 text-sm font-semibold text-foreground focus-visible:outline-primary">
                 Review matchups
@@ -184,7 +195,10 @@ const HockeyHigherLower = () => {
                   <li key={index} className="space-y-1.5 py-2">
                     <p className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
                       <span>Round {index + 1}</span>
-                      <span className={cn('font-semibold', correct ? 'text-correct' : 'text-destructive')}>{correct ? 'Correct' : 'Missed'}</span>
+                      <span className={cn('text-right font-semibold', correct ? 'text-correct' : 'text-destructive')}>
+                        {roundVerdict(player1.careerPoints === player2.careerPoints, correct,
+                          higherLowerScore(results.slice(0, index + 1)) - higherLowerScore(results.slice(0, index)))}
+                      </span>
                     </p>
                     {[player1, player2].map(player => (
                       <div key={player.name} className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">

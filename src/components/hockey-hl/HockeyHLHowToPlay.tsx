@@ -23,6 +23,7 @@ export function HockeyHLHowToPlay({ open, onOpenChange }: Props) {
               <li>We reveal both totals right after your pick</li>
               <li>10 rounds per game</li>
               <li>After round 10, open Review matchups to see the pairs, point totals and picks you missed</li>
+              <li>Practice your misses pairs a player from each miss with a new opponent. Your original score stays put.</li>
             </ul>
           </div>
           <div className="space-y-2">
@@ -30,6 +31,7 @@ export function HockeyHLHowToPlay({ open, onOpenChange }: Props) {
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
               <li><strong>10 points</strong> per correct answer</li>
               <li><strong>+5 bonus</strong> for every consecutive correct answer</li>
+              <li>Your first three correct picks in a row earn 10, 15 and 20 points. A tie keeps the streak going whichever player you picked.</li>
             </ul>
           </div>
           <div className="space-y-2">

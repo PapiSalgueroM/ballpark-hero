@@ -3,6 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ReactNode } from 'react';
 import { useHockeyHL } from '@/hooks/useHockeyHL';
 import HockeyHigherLower from '@/pages/HockeyHigherLower';
+import { hockeyHLPlayers } from '@/data/hockeyHLPlayers';
+import { HockeyMissPractice } from '@/components/hockey-hl/HockeyMissPractice';
 
 const record = vi.hoisted(() => vi.fn());
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: vi.fn() }) }));
@@ -99,6 +101,43 @@ describe('Hockey Higher or Lower matchups after play', () => {
     expect(record).not.toHaveBeenCalled();
   });
 
+  it('settles two taps in the same reveal only once and explains the streak points', () => {
+    const hook = renderHook(useHockeyHL);
+    for (let round = 0; round < 3; round++) {
+      const [left, right] = hook.result.current.currentPair!;
+      const pick = left.careerPoints >= right.careerPoints ? 'left' : 'right';
+      const guess = hook.result.current.makeGuess;
+      act(() => { guess(pick); guess(pick); });
+      act(() => vi.advanceTimersByTime(2000));
+      expect(hook.result.current.currentRound).toBe(round + 1);
+    }
+    expect(hook.result.current.totalScore).toBe(45);
+  });
+
+  it('credits either player in a tied matchup and keeps perfect runs out of practice', () => {
+    const [first, second] = hockeyHLPlayers;
+    const perfect = [{ player1: first, player2: second, correct: true }];
+    render(<HockeyMissPractice results={perfect} />);
+    expect(screen.queryByText('Practice your misses')).toBeNull();
+    for (const side of ['left', 'right'] as const) {
+      localStorage.removeItem(saveKey);
+      const session = renderHook(useHockeyHL);
+      const [a, b] = session.result.current.currentPair!;
+      expect(a.careerPoints).not.toBe(b.careerPoints);
+      const original = b.careerPoints;
+      try {
+        b.careerPoints = a.careerPoints;
+        act(() => session.result.current.makeGuess(side));
+        act(() => vi.advanceTimersByTime(2000));
+        expect(session.result.current.totalScore).toBe(10);
+        expect(session.result.current.streak).toBe(1);
+      } finally {
+        b.careerPoints = original;
+        session.unmount();
+      }
+    }
+  });
+
   it('starts on Daily when the old practice seed names a different player pool', () => {
     const first = renderHook(useHockeyHL);
     act(() => first.result.current.switchMode('unlimited'));
@@ -161,6 +200,31 @@ describe('Hockey Higher or Lower matchups after play', () => {
       }
     };
     checkRecap();
+    const callsBeforeDrill = record.mock.calls.length;
+    const book = new Set(expected.flatMap(({ player1, player2 }) => [player1.name, player2.name]));
+    const missed = expected.filter(result => !result.correct);
+    expect(missed.length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole('button', { name: 'Practice your misses' }));
+    const dialog = within(screen.getByRole('dialog', { name: 'Practice your misses' }));
+    const fresh = new Set<string>();
+    for (const [i, miss] of missed.entries()) {
+      const cards = dialog.getAllByRole('button').filter(b => b.textContent !== 'Close');
+      expect(cards).toHaveLength(2);
+      const players = cards.map(b => hockeyHLPlayers.find(p => b.textContent!.startsWith(p.name))!);
+      const challenger = players.filter(p => !book.has(p.name));
+      expect(challenger).toHaveLength(1);
+      expect(fresh.has(challenger[0].name)).toBe(false);
+      fresh.add(challenger[0].name);
+      expect(players.filter(p => p === miss.player1 || p === miss.player2)).toHaveLength(1);
+      const winningSide = players[0].careerPoints >= players[1].careerPoints ? 0 : 1;
+      fireEvent.click(cards[winningSide]);
+      fireEvent.click(cards[1 - winningSide]);
+      for (const p of players) expect(dialog.getByText(`${p.careerPoints.toLocaleString('en-US')} pts`)).toBeInTheDocument();
+      fireEvent.click(dialog.getByRole('button', { name: i === missed.length - 1 ? 'Finish practice' : 'Next matchup' }));
+    }
+    expect(dialog.getByText(`${missed.length} of ${missed.length} practice matchups correct`)).toBeInTheDocument();
+    fireEvent.click(dialog.getByRole('button', { name: 'Back to results' }));
+    expect(record).toHaveBeenCalledTimes(callsBeforeDrill);
     expect(localStorage.getItem(saveKey)).toBe(dailySave);
     if (mode === 'daily') {
       page.unmount();
