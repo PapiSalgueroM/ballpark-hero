@@ -1,3 +1,4 @@
+import { openConsentChoices } from '@/lib/consentPreferences';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
@@ -28,12 +29,16 @@ const CookiePolicy = () => {
           <h2 className="text-lg font-semibold text-foreground mb-2">Your choices</h2>
           <p>Advertising starts off. Google Analytics 4 stays paused. Advertising stays off if your browser exposes Global Privacy Control to the site, even if you previously turned Advertising on.</p>
           <p className="mt-2">Reject all keeps Advertising off. Accept all turns Advertising on where available. Save choices applies your selection. We ask again after 180 days. That period applies to your cookie choice, not a promise to delete game saves or provider records after 180 days.</p>
-          <p className="mt-2">Open Cookie choices in the footer whenever you want to change your selection.</p>
+          <p className="mt-2">Open Cookie choices here or in the footer whenever you want. Opening the settings does not change your saved choice.</p>
+          <button type="button" data-no-prerender="" onClick={event => openConsentChoices(event.currentTarget)}
+            className="mt-2 inline-flex min-h-11 items-center rounded-md border border-border px-3 font-medium text-foreground underline hover:bg-muted focus-visible:outline-ring">
+            Open Cookie choices
+          </button>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Advertising</h2>
-          <p>If you turn Advertising on and visit a page with an ad slot, the site can request Google AdSense ads. We request non-personalized ads. These may still use cookies and identifiers for delivery, frequency limits, measurement and fraud prevention. They are not anonymous ads. See the <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>'s advertising section and <a href="https://policies.google.com/technologies/partner-sites" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Google's linked privacy information</a> for more detail.</p>
+          <p>If you turn Advertising on and visit an eligible page, the site can request Google AdSense ads. Google may not show an ad on every visit. We request non-personalized ads. These may still use cookies and identifiers for delivery, frequency limits, measurement and fraud prevention. They are not anonymous ads. See the <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>'s advertising section and <a href="https://policies.google.com/technologies/partner-sites" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Google's linked privacy information</a> for more detail.</p>
         </div>
 
         <div>
