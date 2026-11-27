@@ -93,7 +93,7 @@ const restorationFailures = o => [!o.actual.activeMatches && 'focus', o.actual.i
 const chapterFailures = o => [JSON.stringify(o.expected) !== JSON.stringify(o.actual) && 'wrong-chapter'].filter(Boolean);
 const rectanglesOverlap = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 const helpUtilityFailures = o => [o.mobile && (o.help.width < 44 || o.help.height < 44) && 'help-target', o.utilities.some(button => rectanglesOverlap(o.help, button.rect)) && 'help-overlap'].filter(Boolean);
-const TRAINING_GUIDE_FRAGMENT = 'the dumbbell button, above your player on phones or bottom right on desktop';
+const TRAINING_GUIDE_FRAGMENT = 'the dumbbell button beside Phone';
 const trainingGuideFailures = o => [!o.guide.includes(TRAINING_GUIDE_FRAGMENT) && 'guide-training'].filter(Boolean);
 const helpUtilityGuideFailures = o => [...helpUtilityFailures(o), ...trainingGuideFailures(o)];
 function detectorControl(name, before, mutate, detector, expectedFailures) {
