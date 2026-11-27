@@ -364,5 +364,6 @@ export function useCollegeGrid() {
        to show. The page still reads this, so it stays, always false. */
     dataError: false,
     keyReady: gridData !== null,
+    gridData, loadKey,
   };
 }

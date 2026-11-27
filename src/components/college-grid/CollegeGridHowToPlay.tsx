@@ -14,7 +14,7 @@ interface Props {
 export function CollegeGridHowToPlay({ open, onOpenChange }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-h-[90dvh] max-w-md overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-display">How to Play</DialogTitle>
           <DialogDescription>Fill the 3×3 grid with college football players.</DialogDescription>
@@ -45,6 +45,12 @@ export function CollegeGridHowToPlay({ open, onOpenChange }: Props) {
             <p className="text-xs">
               Each correct pick gets a rarity percentage: how many players picked the same name. Lower is better. Your final Rarity Score averages your correct cells.
             </p>
+          </div>
+          <div className="pt-2 border-t border-border">
+            <p className="font-semibold text-foreground mb-1">Scouting challenge</p>
+            <p className="text-xs">Practice with three players from a school outside the daily grid. Assign a different player to each spot.
+              For example, save your only top-ten pick for that spot if another player fits the first round. You can read one scouting
+              report, rearrange your picks and submit twice. Practice has its own save and earns no daily points.</p>
           </div>
           <p>New grid every day at midnight.</p>
         </div>

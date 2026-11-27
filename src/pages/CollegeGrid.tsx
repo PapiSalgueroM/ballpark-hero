@@ -3,6 +3,7 @@ import { useCollegeGrid } from '@/hooks/useCollegeGrid';
 import { GridBoard } from '@/components/football-grid/GridBoard';
 import { CollegeGridSearch } from '@/components/college-grid/CollegeGridSearch';
 import { CollegeGridHowToPlay } from '@/components/college-grid/CollegeGridHowToPlay';
+import { CollegeGridScouting } from '@/components/college-grid/CollegeGridScouting';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { GridBoardSkeleton } from '@/components/game/GridBoardSkeleton';
@@ -31,6 +32,7 @@ const CollegeGrid = () => {
     isLoading,
     dataError,
     missedExamples,
+    gridData, loadKey,
   } = useCollegeGrid();
 
   const [showRules, setShowRules] = useState(false);
@@ -157,6 +159,8 @@ const CollegeGrid = () => {
             )}
           </>
         )}
+
+        {!isLoading && <CollegeGridScouting puzzle={puzzle} data={gridData} loadKey={loadKey} />}
 
         <GameSeoContent
           reportControl={<ReportQuestion gameType="college-grid" gameContext={{ puzzleId: puzzle.id }} />}
