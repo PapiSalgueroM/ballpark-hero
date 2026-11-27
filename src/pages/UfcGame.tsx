@@ -5,6 +5,7 @@ import { UfcGameBoard } from '@/components/ufc/UfcGameBoard';
 import { ufcShareGrid } from '@/components/ufc/ufcClues';
 import { UfcHowToPlay } from '@/components/ufc/UfcHowToPlay';
 import UfcDivisionRun from '@/components/ufc/UfcDivisionRun';
+import UfcDebutTimeline from '@/components/ufc/UfcDebutTimeline';
 import { GameNav } from '@/components/game/GameNav';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
@@ -80,6 +81,8 @@ const UfcGame = () => {
                 </button>
               ))}
             </div>
+
+            <UfcDebutTimeline />
 
             {!division && <p className="text-sm text-muted-foreground mt-4">
               Guesses:{' '}
