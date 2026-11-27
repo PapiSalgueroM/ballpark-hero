@@ -1,3 +1,11 @@
+### November 27, 2026. Corner takers, goalie shootouts and hockey practice
+
+In Soccer Career, an outfield player can share corner duty. Make 12 league appearances and record four club assists to earn the lead job at the same club next season. Delivering corners increases expected assists and costs some chances to score. The season review records the result.
+
+NHL My Career goalies can challenge an early shooter or stay deep for a deke. A scouting report describes the expected mix. One deciding shootout per six starts can change regular-season goalie wins. Practicing a stance across at least three shootouts can help the next year. Shootouts leave the goalie's save percentage alone.
+
+Hockey Higher or Lower now shows the points and streak bonus for each pick. After a miss, the optional postgame drill pairs one player from that question with a new opponent. Each new opponent appears once in the drill. The original Daily or Unlimited score stands.
+
 ### November 27, 2026. Monthly advertising renewal
 
 On an eligible public page in the EEA, UK or Switzerland, an older affirmative advertising choice now needs one fresh confirmation. Each new advertising permission lasts 30 days in those regions. An unknown location gets the same opt-in treatment. A recent refusal stays effective for 180 days there. US and Australian visitors with no opt-out can receive non-personalized ads without a banner. A saved opt-out in those regions and Global Privacy Control both keep advertising off.
