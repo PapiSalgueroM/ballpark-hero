@@ -189,7 +189,7 @@ function PlayNext({ path, openingPicks }: { path: string; openingPicks: GameDef[
           </button>}
         </div>
         <span className="sr-only" role="status">{interacted ? nextGames.map(game => game.label).join(', ') : ''}</span>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
+        <div data-play-next-cards="" className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
           {nextGames.map(game => (
             <Link
               key={filter + game.path}

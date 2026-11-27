@@ -368,7 +368,7 @@ const readTickerDesktop = () => tickerDesktop?.matches ?? false;
 function LiveTickerRail({ home }: { home: boolean }) {
   const desktop = useSyncExternalStore(subscribeTickerDesktop, readTickerDesktop);
   return (
-    <div data-site-chrome="" className={`sticky top-0 z-50 ${home ? 'h-8' : 'hidden h-8 md:block'}`}>
+    <div data-site-chrome="" data-ticker-bar="" className={`sticky top-0 z-50 ${home ? 'h-8' : 'hidden h-8 md:block'}`}>
       {(home || desktop) && <Suspense fallback={null}><LiveTicker /></Suspense>}
     </div>
   );

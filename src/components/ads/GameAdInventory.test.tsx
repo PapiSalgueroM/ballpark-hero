@@ -81,6 +81,30 @@ it.each(['data-home-continue', 'data-home-picks'])('respects the scrollbar and c
   expect(rails()).toBe(0);
 });
 
+it('starts both Home ads below the full-width search and retires them when the masthead menu opens', async () => {
+  vi.spyOn(Element.prototype, 'clientWidth', 'get').mockReturnValue(1280);
+  vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+    const side = this.getAttribute('data-rail-edge');
+    let x = 0, y = 0, width = 1280, height = 1800;
+    if (side) { x = side === 'left' ? 0 : 1120; width = 160; }
+    else if (this.hasAttribute('data-home-heading')) { y = 96; height = 84; }
+    else if (this.tagName === 'INPUT') { x = 1000; width = 220; y = 110; height = 44; }
+    else if (this.tagName === 'BUTTON') { x = 400; width = 80; y = 340; height = 44; }
+    else if (this.parentElement?.tagName === 'HEADER') { height = 96; }
+    return { left: x, right: x + width, top: y, bottom: y + height, width, height } as DOMRect;
+  });
+  vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
+  const view = render(<MemoryRouter>
+    <header data-site-chrome=""><div><button aria-haspopup="menu" aria-expanded="false">Scores filter</button></div></header>
+    <GameDesktopRails active><main><div data-home-heading=""><input aria-label="Find a game" /></div><button>Play</button></main></GameDesktopRails>
+  </MemoryRouter>);
+  const frame = view.container.querySelector<HTMLElement>('[data-home-route]')!;
+  await waitFor(() => expect(frame.querySelectorAll('[data-ad-rail]')).toHaveLength(2));
+  expect(frame.style.getPropertyValue('--rail-start')).toBe('330px');
+  view.getByRole('button', { name: 'Scores filter' }).setAttribute('aria-expanded', 'true');
+  await waitFor(() => expect(frame.querySelectorAll('[data-ad-rail]')).toHaveLength(0));
+});
+
 it.each(['/footle', '/soccer', '/'])('measures the controls inside wide wrappers and skips both rails inside 150px on %s', async path => {
   let left = 270, right = 1010;
   let controlTop = 400;

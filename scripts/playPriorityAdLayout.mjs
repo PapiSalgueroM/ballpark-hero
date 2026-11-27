@@ -174,7 +174,7 @@ async function layout(page, path, width) {
   if (desktop) {
     const left = filled.center.left, right = filled.viewport - filled.center.right;
     assert(Math.abs(left - right) <= 1, 'Content column is off center');
-    assert(filled.playable ? left <= 1 : left >= 159, 'Unexpected width for the natural content column');
+    assert(filled.playable || path === '/' ? left <= 1 : left >= 159, 'Unexpected width for the natural content column');
     const [a, b] = filled.tracks;
     assert(a && b && a.width >= 120 && b.width >= 120 && Math.abs(a.width - b.width) <= 1, 'Unequal desktop edge tracks');
     assert(Math.abs(a.right - (filled.viewport - b.left)) <= 1, 'Unequal desktop corridors');
@@ -185,6 +185,9 @@ async function layout(page, path, width) {
     if (filled.playable) {
       assert(filled.projectedControlGap >= 150, 'Game controls only have ' + filled.projectedControlGap + 'px of rail clearance');
       if (filled.navBottom !== null) assert(Math.min(a.top, b.top) - filled.navBottom >= 149, 'Side ad too close to game navigation');
+    } else if (path === '/') {
+      const catalogue = await page.locator('[data-home-content]').boundingBox();
+      assert(catalogue && a.right <= catalogue.x && b.left >= catalogue.x + catalogue.width, 'Ad crossed the Home catalogue');
     } else assert(a.right <= filled.center.left + 1 && b.left >= filled.center.right - 1, 'Ad crossed the content edge');
     assert(a.left >= -1 && b.right <= filled.viewport + 1 && Math.abs(a.width - b.width) <= 1, 'Unequal or clipped rails');
     assert(filled.main.left >= filled.center.left - 1 && filled.main.right <= filled.center.right + 1, 'Main content exceeds its reserved column');

@@ -128,9 +128,15 @@ async function distances(page) {
 async function checkRailStart(page) {
   const rails = page.locator('[data-rail-edge]:has([data-ad-rail] ins)');
   await rails.first().waitFor({ state: 'visible' });
-  const offsets = await rails.evaluateAll(els => els.map(el =>
-    Math.round(el.getBoundingClientRect().top - el.parentElement.getBoundingClientRect().top)));
-  assert.deepEqual(offsets, [0, 0], 'Clear navigation rows should allow the two rails to start with the page content');
+  const { tops, required, firstScreen } = await rails.evaluateAll(els => {
+    const frame = els[0].parentElement.getBoundingClientRect();
+    const rows = [...document.querySelectorAll('header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child, nav[data-site-chrome] > div:first-child, [data-home-heading]')]
+      .filter(el => el.clientWidth > 0).map(el => el.getBoundingClientRect());
+    const [left, right] = els.map(el => el.getBoundingClientRect());
+    const wide = rows.filter(box => Math.min(box.left - left.right, right.left - box.right) < 150);
+    return { tops: [left.top, right.top], required: Math.max(frame.top, ...wide.map(box => box.bottom + 150)), firstScreen: frame.top + innerHeight };
+  });
+  assert(Math.abs(tops[0] - tops[1]) <= 1 && tops[0] >= required - 1 && tops[0] < firstScreen, 'Both rails must start together below the wide controls and alongside first-screen content');
 }
 
 async function checkActive(page, evidence, label) {

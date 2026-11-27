@@ -13,10 +13,17 @@
     --browse-rail-space: calc(var(--creative-width) + 150px);
   }
 
-  /* Sticky controls pass the rails on scroll. Keep their rows in the safe middle. */
-  :global(#root):has(.frame[data-desktop-room]) :is(header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child),
-  .frame[data-manager-ad-layout] nav[data-site-chrome] > div:first-child,
-  .frame[data-desktop-room]:has([data-active-career-help]) nav[data-site-chrome] > div:first-child,
+  /* The full-width desktop chrome scrolls above the paired ads. */
+  :global(#root):has(.frame[data-desktop-room]) :is(header[data-site-chrome], [data-ticker-bar]) {
+    position: relative;
+    top: auto;
+  }
+
+  :global(#root):has(.frame[data-desktop-room]) header[data-site-chrome] > div:first-child {
+    max-width: none;
+    padding-inline: clamp(1rem, 2vw, 3rem);
+  }
+
   .frame[data-desktop-room] [data-active-career-help] {
     max-width: calc(100% - var(--creative-width) - var(--creative-width) - 302px);
     margin-inline: auto;
@@ -35,7 +42,7 @@
   }
 
   .frame[data-manager-ad-layout] :is([data-cm-surface], [data-cm-job-row]) {
-    max-width: min(54rem, calc(var(--ad-frame-width) - var(--creative-width) - var(--creative-width) - 304px));
+    max-width: min(68rem, calc(var(--ad-frame-width) - var(--creative-width) - var(--creative-width) - 304px));
     margin-inline: auto;
   }
 
@@ -76,6 +83,18 @@
   /* Games keep their natural width, even when a creative fills or clears. */
   .frame[data-playable-route] .game {
     grid-column: 1 / -1;
+  }
+
+  .frame[data-desktop-room] [data-game-play-area][class~="max-w-4xl"] {
+    max-width: clamp(56rem, calc(var(--ad-frame-width) - 2 * var(--browse-rail-space)), 68rem);
+  }
+
+  .frame[data-desktop-room] [data-game-play-area][class~="max-w-2xl"] {
+    max-width: clamp(42rem, calc(var(--ad-frame-width) - 2 * var(--browse-rail-space)), 48rem);
+  }
+
+  .frame[data-desktop-room] [data-play-next-cards] {
+    max-width: min(48rem, calc(var(--ad-frame-width) - 2 * var(--creative-width) - 302px));
   }
 
   .frame[data-desktop-room] .rail {
@@ -120,7 +139,7 @@
 
   .game :is([data-active-career-saves], [data-career-player-row]) {
     padding-inline: 0.5rem;
-    max-width: 45rem;
+    max-width: clamp(45rem, calc(var(--ad-frame-width) - 2 * var(--browse-rail-space) - 2px), 64rem);
     margin-inline: auto;
   }
 
@@ -164,7 +183,7 @@
 @media (1280px <= width < 1664px), (1254px <= width < 1280px) and (hover: hover) and (pointer: fine) {
   .game [data-career-panels] {
     grid-template-columns: minmax(0, 1fr);
-    max-width: 45rem;
+    max-width: clamp(45rem, calc(var(--ad-frame-width) - 2 * var(--browse-rail-space) - 2px), 64rem);
     margin-inline: auto;
   }
 
@@ -189,6 +208,17 @@
 
 .frame[data-desktop-room][data-home-route] [data-home-content] {
   container: home / inline-size;
+}
+
+@media (min-width: 1280px), (min-width: 1254px) and (hover: hover) and (pointer: fine) {
+  .frame[data-desktop-room][data-home-route] .game {
+    grid-column: 1 / -1;
+  }
+
+  .frame[data-desktop-room][data-home-route] [data-home-content] {
+    width: calc(100% - 2 * var(--browse-rail-space));
+    max-width: 84rem;
+  }
 }
 
 .frame[data-desktop-room][data-home-route] [data-home-search-tools] {
@@ -237,6 +267,24 @@
 
 .frame[data-desktop-room][data-home-route] [data-home-dailies] select {
   min-width: min(10rem, 100%);
+}
+
+/* The heading and search sit above the ads, so they can use the full desktop. */
+@media (min-width: 1280px), (min-width: 1254px) and (hover: hover) and (pointer: fine) {
+  .frame[data-desktop-room][data-home-route] [data-home-heading] {
+    width: min(96rem, calc(var(--ad-frame-width) - 4rem));
+    margin-inline-start: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: center;
+    column-gap: 2rem;
+    padding-block: 1.5rem;
+  }
+
+  .frame[data-desktop-room][data-home-route] [data-home-search-tools] {
+    width: 100%;
+  }
 }
 
 @media (min-width: 1366px) {

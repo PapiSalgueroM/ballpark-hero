@@ -17,6 +17,7 @@ const playTargets = [
 ].join(', ');
 const menuTrigger = 'button[aria-label="Open site menu"]';
 const menuPanel = '[role="dialog"][data-site-chrome]';
+const toolbarMenu = ':is([data-site-chrome], [data-home-heading]) [aria-haspopup]';
 
 function safeRailOffset(frame: HTMLElement, content: HTMLElement, path: string): number | null {
   const left = frame.querySelector('[data-rail-edge="left"]')?.getBoundingClientRect();
@@ -33,14 +34,11 @@ function safeRailOffset(frame: HTMLElement, content: HTMLElement, path: string):
     if (getComputedStyle(shelf).overflowX === 'auto') shelfBounds.set(shelf, shelf.getBoundingClientRect());
   }
   const firstScreen = path === '/' || path === '/club-manager' || (path === '/soccer-career' && !!content.querySelector('[data-active-career-saves]'));
-  // Each complete row must stay clear as its controls scroll past the rails.
+  // The full desktop masthead and Home search scroll with the document.
   const chromeRows = firstScreen ? [...document.querySelectorAll<HTMLElement>(
-    'header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child, nav[data-site-chrome] > div:first-child'
+    'header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child, nav[data-site-chrome] > div:first-child, [data-home-heading]'
   )].filter(row => row.clientWidth > 0) : [];
-  if (chromeRows.some(row => {
-    const box = row.getBoundingClientRect();
-    return row.scrollWidth > row.clientWidth + 1 || box.left - left.right < AD_CONTROL_GAP_PX || right.left - box.right < AD_CONTROL_GAP_PX;
-  })) return null;
+  if (chromeRows.some(row => row.scrollWidth > row.clientWidth + 1)) return null;
   const lift = chromeRows.length > 0;
   let top = lift ? frameTop : belowNav;
   let hasControl = false;
@@ -55,7 +53,12 @@ function safeRailOffset(frame: HTMLElement, content: HTMLElement, path: string):
     return !pinned.get(el);
   };
   const targets = [...content.querySelectorAll(playTargets)];
-  if (lift) targets.push(...document.querySelectorAll('header[data-site-chrome] :is(a[href], button, input, select, summary, [role="button"])'));
+  for (const row of chromeRows) {
+    const box = row.getBoundingClientRect();
+    if (Math.min(box.left - left.right, right.left - box.right) >= AD_CONTROL_GAP_PX) continue;
+    if (!scrollsWithPage(row)) return null;
+    top = Math.max(top, Math.ceil(box.bottom - frameTop + AD_CONTROL_GAP_PX) + frameTop);
+  }
   for (const target of targets) {
     if (!lift && target.closest('[data-site-chrome]')) continue;
     // A shelf clips its cards. The scrollbar and any fixed controls still need clearance.
@@ -141,8 +144,9 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
     }
     const measure = (beforePaint = false) => {
       // The edge drawer covers a rail. Closing it must not buy another impression.
-      if (document.querySelector(menuTrigger + '[aria-expanded="true"]')) visit.current.retired = true;
-      const offset = visit.current.retired || document.querySelector(menuPanel) ? null : safeRailOffset(container, game, path);
+      const menuOpen = document.querySelector(`${menuPanel}, ${menuTrigger}[aria-expanded="true"], ${toolbarMenu}[aria-expanded="true"]`);
+      if (menuOpen && container.querySelector('[data-ad-rail]')) visit.current.retired = true;
+      const offset = visit.current.retired || menuOpen ? null : safeRailOffset(container, game, path);
       if (offset === null && visit.current.allocated) {
         visit.current.retired = true;
         if (beforePaint) {
@@ -180,8 +184,8 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
       }
     }
     const menu = new MutationObserver(records => {
-      if (records.some(record => (record.target instanceof Element && record.target.matches(menuTrigger)) ||
-        [...record.addedNodes, ...record.removedNodes].some(node => node instanceof Element && node.matches(menuPanel)))) measure();
+      if (records.some(record => (record.target instanceof Element && record.target.matches(menuTrigger + ', ' + toolbarMenu)) ||
+        [...record.addedNodes, ...record.removedNodes].some(node => node instanceof Element && node.matches(menuPanel)))) measure(true);
     });
     menu.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['aria-expanded'] });
     // A document scroll translates the rails and normal-flow controls together.

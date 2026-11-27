@@ -231,7 +231,7 @@ async function verify(page, path, width, requiredDocks = 0) {
   const where = `${path} at ${width}px: ${JSON.stringify(rect)}`;
   if (sideCount) {
     assert(Math.abs(rect.left - rect.right) <= 1, where);
-    assert(rect.playable ? rect.left <= 1 : rect.left >= 159, where);
+    assert(rect.playable || path === '/' ? rect.left <= 1 : rect.left >= 159, where);
     assert(rect.controls.every(([left, right]) => left >= rect.left - 1 && right <= rect.width - rect.right + 1), where);
   }
   assert(rect.documentWidth <= rect.width + 1, where);
@@ -325,7 +325,8 @@ try {
     if (width >= 1280) {
       const sizes = await active.locator('[data-career-panels]').evaluate(el =>
         [el.closest('main').getBoundingClientRect().width, el.lastElementChild.getBoundingClientRect().width]);
-      assert.deepEqual(sizes, [1024, 720], 'Career reading and skill panel widths at ' + width);
+      assert.equal(sizes[0], 1024, 'Career reading width at ' + width);
+      assert(sizes[1] >= 720 && sizes[1] <= sizes[0], 'Career skills must retain their readable width at ' + width);
     }
     const confirmClear = async stage => {
       await active.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));

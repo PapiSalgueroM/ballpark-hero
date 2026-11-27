@@ -1,3 +1,9 @@
+### November 27, 2026. Full-width desktop scores and navigation
+
+On eligible desktops the ticker, site header and game navigation use the window width. They scroll away above the side ads. Home gives its search and sport selector a wider row above the catalogue. The catalogue and gameplay controls keep their clearance from the actual ads. The shared game boards, Club Manager and Soccer Career use spare width where it is available. The Play Next cards also fit the compact desktop corridor on Tennis Chain and NASCAR Chain.
+
+At a 1280px Windows window with a 15px scrollbar, the ticker and header expanded from 643 to 1265 CSS pixels. The search input grew from 490 to 548. Two 160px advertisements still fitted on Home. The phone header keeps its sticky behavior and the phone keeps its footer placement.
+
 ### November 27, 2026. Corner takers, goalie shootouts and hockey practice
 
 In Soccer Career, an outfield player can share corner duty. Make 12 league appearances and record four club assists to earn the lead job at the same club next season. Delivering corners increases expected assists and costs some chances to score. The season review records the result.
