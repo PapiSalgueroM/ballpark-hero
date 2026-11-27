@@ -16,12 +16,13 @@ const bundle = await build({
     export { ALL_GAMES } from './src/data/gameRegistry';
     export { UNLISTED_GAME_ROUTES } from './src/components/StorageNotice';
     export { HUB_NAV } from './src/lib/sportHubNav'; export { EDITORIAL_RAIL_ROUTES } from './src/components/ads/editorialRailRoutes';
+    export { DESKTOP_RAIL_MEDIA } from './src/components/ads/publicAdEligibility';
     export { initCareer, FALLBACK_CLUBS } from './src/lib/soccerCareerEngine';
     export { serializeSoccerCareerSave } from './src/lib/soccerCareerSave';
   ` },
   bundle: true, platform: 'node', format: 'esm', write: false, logLevel: 'error',
 });
-const { ALL_GAMES, UNLISTED_GAME_ROUTES, HUB_NAV, EDITORIAL_RAIL_ROUTES, initCareer, FALLBACK_CLUBS, serializeSoccerCareerSave } =
+const { ALL_GAMES, UNLISTED_GAME_ROUTES, HUB_NAV, EDITORIAL_RAIL_ROUTES, DESKTOP_RAIL_MEDIA, initCareer, FALLBACK_CLUBS, serializeSoccerCareerSave } =
   await import('data:text/javascript;base64,' + Buffer.from(bundle.outputFiles[0].text).toString('base64'));
 const registered = new Set(ALL_GAMES.map(game => game.path));
 const all = [...new Set(['/', ...registered, ...HUB_NAV.map(hub => hub.route), ...EDITORIAL_RAIL_ROUTES, ...UNLISTED_GAME_ROUTES])];
@@ -30,6 +31,7 @@ const key = '[data-game-desktop-rails]';
 const placement = '[data-dukb-manual-ad] ins.adsbygoogle';
 const publisher = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
 const privateScreen = '#soccer-career-slots,#nrl-save-slots,[data-cm-startup],[data-testid="cm-slots"],[data-testid="cm-points"],[data-dukb-set-aside],[data-home-search-active]';
+const placementArgs = { key, placement, privateScreen, railMedia: DESKTOP_RAIL_MEDIA };
 const games = ['/soccer-career', '/club-manager', '/nba-my-career', '/nfl-my-career', '/stadium-tycoon',
   '/build-your-xi', '/soccer-perfect-season', '/world-cup-bracket', '/soccer-conquest', ...HUB_NAV.map(hub => hub.route)];
 const guard = await guardedAdBrowser();
@@ -69,8 +71,9 @@ async function context(width) {
 
 // Measure DOM rectangles independently of the app's decision. Scroll containers
 // can clip a target down to only a small part of its bounding rectangle.
-function readPlacements({ key, placement, privateScreen }) {
+function readPlacements({ key, placement, privateScreen, railMedia }) {
   const frame = document.querySelector(key), viewport = document.documentElement.clientWidth;
+  const desktopRailViewport = matchMedia(railMedia).matches;
   const left = document.querySelector('[data-rail-edge=left]')?.getBoundingClientRect();
   const right = document.querySelector('[data-rail-edge=right]')?.getBoundingClientRect();
   const targets = 'a[href],button,input,select,textarea,summary,form,table,canvas,video,svg[viewBox],[role=grid],[role=button],[role=application],[tabindex]:not([tabindex="-1"]),[contenteditable=true],[draggable=true],.cursor-pointer,[class*="aspect-"],[data-cm-pitch],[data-drill-board],[data-first-touch-board],[data-through-ball-board],[data-soccer-moment-board],[data-rail-play-board]';
@@ -107,7 +110,7 @@ function readPlacements({ key, placement, privateScreen }) {
   let reason = null;
   if (document.querySelector(privateScreen)) reason = 'excluded save, recovery or search screen';
   else if (document.querySelector('meta[name=robots][content*="noindex" i]')) reason = 'noindex';
-  else if (viewport < 1280) reason = 'compact viewport';
+  else if (!desktopRailViewport) reason = 'below desktop rail breakpoint for this pointer';
   else if (!main) reason = 'no game or reading surface';
   else if (frame.scrollWidth > frame.clientWidth + 1) reason = 'overflowing play area';
   else if (frame.querySelector('[data-game-help-pending],[data-seo-content="loading"],[aria-busy="true"]')) reason = 'content still loading';
@@ -127,7 +130,7 @@ function readPlacements({ key, placement, privateScreen }) {
   }
   const excluded = document.querySelector(privateScreen);
   return { placements, reason, excluded: excluded?.id || excluded?.getAttribute('data-testid') || (excluded ? Array.from(excluded.attributes, a=>a.name).filter(n=>n.startsWith('data-')).join(',') : null),
-    width: viewport, overflow: document.documentElement.scrollWidth - viewport,
+    width: viewport, desktopRailViewport, overflow: document.documentElement.scrollWidth - viewport,
     publisher: window.__sweepLoads ?? 0, requests: window.__sweepRequests ?? [], redirect: location.pathname };
 }
 
@@ -142,8 +145,7 @@ async function verify(page, path, width, requiredDocks = 0) {
   await page.waitForFunction(() => !document.querySelector('[data-game-desktop-rails] :is([aria-busy="true"],[data-game-help-pending],[data-seo-content="loading"])'),
     undefined, { timeout: 1200 }).catch(error => { if (error.name !== 'TimeoutError') throw error; });
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(resolve)))));
-  const args = { key, placement, privateScreen };
-  const capture = () => page.evaluate(readPlacements, args);
+  const capture = () => page.evaluate(readPlacements, placementArgs);
   let first = await capture();
   // Modal rules lock background scrolling. Check first paint, then enter the
   // playable page before scrolling down to its footer.
@@ -153,7 +155,7 @@ async function verify(page, path, width, requiredDocks = 0) {
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     first = await capture();
   }
-  if (width >= 1280 && first.placements.length === 1 && !first.reason) {
+  if (first.desktopRailViewport && first.placements.length === 1 && !first.reason) {
     await page.waitForTimeout(180);
     first = await capture();
   }
@@ -182,7 +184,7 @@ async function verify(page, path, width, requiredDocks = 0) {
   }
   assert.equal(first.publisher, noAds ? 0 : 1, path + ': publisher load count ' + JSON.stringify(first));
   assert(first.placements.every(ad=>ad.slot === '7540487748' && ad.status === 'filled'), path + ': pending or unexpected inventory');
-  if (width >= 1280 && !noAds && roles.length === 1) assert(first.reason, path + ': no measured reason for skipping the side pair');
+  if (first.desktopRailViewport && !noAds && roles.length === 1) assert(first.reason, path + ': no measured reason for skipping the side pair');
   const samples = [first];
   const afterPaint = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   if (roles.length === 3) {
@@ -217,7 +219,7 @@ async function verify(page, path, width, requiredDocks = 0) {
   }
   const reason = noAds ? kind === 'unlisted' ? 'unlisted game' : first.reason : roles.length < 3 ? first.reason : null;
   const sideCount = await page.locator('[data-ad-rail] ins.adsbygoogle').count();
-  assert(width >= 1280 ? sideCount === 0 || sideCount === 2 : sideCount === 0, path + ': incomplete or misplaced pair');
+  assert(sideCount === 0 || (first.desktopRailViewport && sideCount === 2), path + ': incomplete or misplaced pair');
   const rect = await wrapper.evaluate((el, docks) => {
     const box = el.getBoundingClientRect(), viewport = document.documentElement.clientWidth;
     return {
@@ -274,7 +276,7 @@ async function verifyFantasyDraft() {
       await chooser.selectOption('scout');
       const roles = width >= 1280 ? ['left-rail', 'public-footer', 'right-rail'] : ['public-footer'];
       await page.waitForFunction(n => window.__sweepRequests?.length === n, roles.length);
-      const snapshot = () => page.evaluate(readPlacements, { key, placement, privateScreen });
+      const snapshot = () => page.evaluate(readPlacements, placementArgs);
       const issued = (await snapshot()).requests;
       await page.getByRole('button', { name: 'Start Draft', exact: true }).click();
       await page.getByRole('button', { name: 'Plan two picks' }).click();
@@ -395,7 +397,7 @@ async function verifyCatalog() {
     }
     const confirmClear = async stage => {
       await active.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-      const snap = await active.evaluate(readPlacements, { key, placement, privateScreen });
+      const snap = await active.evaluate(readPlacements, placementArgs);
       assert.equal(snap.requests.length, initial.requests, 'A career action repeated an ad request');
       assert.deepEqual(snap.placements.map(ad => ad.role).sort(), initial.roles, stage + ': inventory changed');
       assert(snap.placements.every(ad => ad.nearest === null || ad.nearest.px >= 149.5), JSON.stringify(snap.placements));
