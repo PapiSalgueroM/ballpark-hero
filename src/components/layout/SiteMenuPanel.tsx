@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { Link } from 'react-router-dom';
+import { ALL_GAMES, type GameDef } from '@/data/gameRegistry';
+import { useGamePicks } from '@/hooks/useGamePicks';
+import { GamePickButton, GamePicksWarning } from '@/components/game/GamePickButton';
 import { isGameRoute } from '@/components/StorageNotice';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { HUB_NAV } from '@/lib/sportHubNav';
@@ -17,8 +20,26 @@ const PLAY_LINKS = [['/', 'Home'], ['/search', 'Search Games'], ['/records', 'Re
 const SITE_LINKS = [['/about', 'About'], ['/contact', 'Contact'], ['/privacy', 'Privacy Policy'],
   ['/cookie-policy', 'Cookie Policy'], ['/terms', 'Terms of Service'], ['/accessibility', 'Accessibility']] as const;
 
+function CurrentGamePick({ game }: { game: GameDef }) {
+  const picks = useGamePicks();
+  return <section aria-label="Current game" className="mb-4">
+    <h3 className="mb-1 text-sm font-semibold">{game.label}</h3>
+    <div className="flex flex-wrap items-center gap-x-2">
+      <GamePickButton game={game} pinned={picks.paths.includes(game.path)} onToggle={picks.toggle} showLabel />
+      {picks.paths.length > 0 && <SheetClose asChild>
+        <Link to="/#home-personal-picks" data-google-vignette="false"
+          className="inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-medium text-primary underline underline-offset-4 focus-visible:outline-primary">
+          View Your picks
+        </Link>
+      </SheetClose>}
+    </div>
+    {picks.storageFailed && <GamePicksWarning />}
+  </section>;
+}
+
 export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, id }: SiteMenuPanelProps) {
   const path = useRoutePath();
+  const currentGame = ALL_GAMES.find(game => game.path === path);
   const vignette = isGameRoute(path) ? "false" : undefined;
   const [query, setQuery] = useState('');
   const heading = useRef<HTMLHeadingElement>(null);
@@ -51,6 +72,7 @@ export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, id }: SiteMe
         </SheetHeader>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-6">
           <div data-dukb-help-cookie-choices="" className="mb-4 empty:hidden" />
+          {currentGame && <CurrentGamePick game={currentGame} />}
           <section aria-label="Find a game" className="mb-5">
             <label htmlFor={`${id}-search`} className="text-sm font-semibold">Find a game</label>
             <div className="mt-2 flex items-center gap-2">

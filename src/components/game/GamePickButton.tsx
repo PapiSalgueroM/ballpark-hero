@@ -3,13 +3,15 @@ import type { GameDef } from '@/data/gameRegistry';
 import { GAME_PICKS_STORAGE_WARNING } from '@/hooks/useGamePicks';
 import { cn } from '@/lib/utils';
 
-export function GamePickButton({ game, pinned, onToggle, className }: {
+export function GamePickButton({ game, pinned, onToggle, className, showLabel }: {
   game: Pick<GameDef, 'path' | 'label'>;
   pinned: boolean;
   onToggle: (path: string) => void;
   className?: string;
+  showLabel?: boolean;
 }) {
-  const label = `${pinned ? 'Unpin' : 'Pin'} ${game.label}`;
+  const action = pinned ? 'Unpin from Your picks' : 'Pin to Your picks';
+  const label = showLabel ? `${action}, ${game.label}` : `${pinned ? 'Unpin' : 'Pin'} ${game.label}`;
   return (
     <button
       type="button"
@@ -24,10 +26,12 @@ export function GamePickButton({ game, pinned, onToggle, className }: {
         pinned
           ? 'border-gold/50 bg-gold/15 text-gold hover:bg-gold/25'
           : 'border-transparent bg-surface-1 text-muted-foreground hover:border-border hover:text-foreground',
+        showLabel && 'inline-flex w-auto items-center gap-2 px-3 text-sm font-medium',
         className,
       )}
     >
       <Pin aria-hidden="true" className="h-4 w-4" fill={pinned ? 'currentColor' : 'none'} />
+      {showLabel && action}
     </button>
   );
 }
