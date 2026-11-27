@@ -36,7 +36,9 @@ it('offers only the actual opposing wide defenders, shows who can close down and
 });
 
 it('keeps separate throws at one clock, links only their own chances, and leaves live goal calls to the match clock', () => {
-  const jump = { id: 'throw-1', wingerId: 'winger', winger: 'Winger', outlet: 'Outlet', outcome: 'won' as const, effort: 1, tired: false };
+  const jump: NonNullable<PlayEvent['returnPress']> = {
+    id: 'throw-1', wingerId: 'winger', winger: 'Winger', outlet: 'Outlet', outcome: 'won', effort: 1, tired: false,
+  };
   const first: PlayEvent = { minute: 90, plus: 2, kind: 'throwin', side: 'opp', who: 'Fullback', returnPress: jump };
   const second: PlayEvent = { ...first, returnPress: { ...jump, id: 'throw-2', outcome: 'bypassed', spent: 0 } };
   const unrelated: PlayEvent = { minute: 90, plus: 2, kind: 'shot', side: 'me', who: 'Unrelated player', goal: true };
