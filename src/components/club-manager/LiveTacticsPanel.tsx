@@ -14,6 +14,7 @@ import { DUTY_INFO } from '@/lib/clubManagerUiInfo';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { opponentStyle } from '@/lib/clubManagerTactics';
 import { FlankRoutePicker } from './FlankRoutePicker';
+import { ReturnPressPicker } from './ReturnPressPicker';
 
 export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', minute, plus }: {
   career: CareerState;
@@ -36,6 +37,8 @@ export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', mi
         For this match only, from the next minute. Your standing plan stays on the Tactics tab.
       </p>
         <FlankRoutePicker title="Flank buildup" plan={live.flankPlan} onChange={plan => onChange({ kind: 'flank', plan })} />
+      <ReturnPressPicker career={career} live={live} minute={minute ?? 46} plus={plus}
+        onSelect={target => onChange({ kind: 'returnPress', target })} />
       <InstructionsPicker
         value={liveInstructions(live)}
         onChange={instructions => onChange({ kind: 'instructions', instructions })}
