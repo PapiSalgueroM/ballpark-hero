@@ -6,6 +6,7 @@ import { US_COACH_RETIRE_HELP_RULE } from '@/lib/usCoachRetirement';
 import { US_DIRTY_MONEY_HELP_RULE } from '@/lib/careerDirtyMoney';
 import { US_SHOP_HELP_RULE } from '@/lib/usCareerAnnualBenefits';
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
+import TwoMinuteDrive from '@/components/nfl-my-career/TwoMinuteDrive';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -28,6 +29,7 @@ const NflMyCareer = () => {
               Draft night to retirement speech. Every choice bends the career.
             </p>
           </div>
+          <TwoMinuteDrive />
           <NflMyCareerBoard />
           <GameSeoContent
           pageHasOwnH1
