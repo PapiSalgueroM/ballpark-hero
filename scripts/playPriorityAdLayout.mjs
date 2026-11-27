@@ -60,9 +60,21 @@ async function open(page, path) {
 
 async function requested(page, previous = 0) {
   await page.waitForFunction(() => document.querySelector('[data-public-footer-ad] ins.adsbygoogle') && window.__fixturePublisherLoads === 1);
+  if (page.viewportSize().width >= 1280 && await page.locator('[data-playable-route]').count()) {
+    // A game can fetch its guide after its footer mounts. Slow or unavailable
+    // data may intentionally leave the page in its footer-only state.
+    await page.waitForFunction(() => !document.querySelector('[data-playable-route] [data-seo-content="loading"], [data-playable-route] [aria-busy="true"]'),
+      null, { timeout: 4000 }).catch(error => { if (error.name !== 'TimeoutError') throw error; });
+  }
   // Let the hydrated board and its help panel finish their initial layout.
   // A transient ad on the loading shell still counts as a publisher request.
   await page.waitForTimeout(900);
+  if (page.viewportSize().width >= 1280) {
+    const state = await measure(page);
+    if (state.playable && state.boundedGame && !state.loadingGame && state.playOverflow <= 1 && state.projectedControlGap >= 150) {
+      await page.locator('[data-ad-rail="right"] ins.adsbygoogle').waitFor({ state: 'attached', timeout: 4000 });
+    }
+  }
   const count = await page.locator(slot).count();
   assert(count === 1 || count === 3, 'Expected a footer and an optional pair of side slots');
   const pushes = await page.evaluate(() => window.adsbygoogle?.length ?? 0);
