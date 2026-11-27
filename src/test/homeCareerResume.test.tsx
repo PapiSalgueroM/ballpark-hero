@@ -1,4 +1,4 @@
-import { act, cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ContinueRow } from '@/components/home/ContinueRow';
@@ -38,6 +38,30 @@ beforeEach(() => localStorage.clear());
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('Home career resume links', () => {
+  it('previews all four flagships in both directions and keeps each launch and saved action available', () => {
+    localStorage.setItem('dukb-club-manager-save', '{}');
+    mount();
+    const stage = screen.getByRole('region', { name: 'Main event' });
+    const next = within(stage).getByRole('button', { name: 'Next featured game' });
+    const previous = within(stage).getByRole('button', { name: 'Previous featured game' });
+    const paths = ['/soccer-career', '/club-manager', '/stadium-tycoon', '/nba-my-career'];
+    const lead = () => stage.querySelector('a[data-stage-card]');
+    next.focus();
+    for (const path of [...paths.slice(1), paths[0]]) {
+      fireEvent.keyDown(next, { key: 'ArrowRight' });
+      expect(lead()).toHaveAttribute('data-stage-card', path);
+      expect(next).toHaveFocus();
+      expect([...stage.querySelectorAll('a[data-stage-card]')].map(a => a.getAttribute('data-stage-card')).sort()).toEqual([...paths].sort());
+      if (path === '/club-manager') {
+        expect(lead()).toHaveAttribute('href', '/club-manager?resume=active');
+        expect(lead()).toHaveAccessibleName(/Club Manager.*Back to the dugout/);
+      }
+    }
+    fireEvent.click(previous);
+    expect(lead()).toHaveAttribute('data-stage-card', '/nba-my-career');
+    expect(within(stage).getByRole('status')).toHaveTextContent('NBA My Career');
+  });
+
   it('reflects a new career or deletion while Home stays open', () => {
     mount();
     const stage = screen.getByRole('link', { name: /Soccer Career.*Start your career/ });

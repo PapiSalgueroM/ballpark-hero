@@ -31,6 +31,38 @@
 .managerGlyph, .launchArrow { width: 16px; height: 16px; flex-shrink: 0; color: hsl(var(--tile)); }
 .launchArrow { margin-left: auto; }
 .games { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: hsl(var(--border)); }
+.spotlight { position: relative; grid-column: 1 / -1; min-width: 0; }
+.spotlight > .lead { display: grid; }
+.panel { position: relative; grid-area: 1 / 1; min-width: 0; min-height: inherit; visibility: hidden; }
+.panel.current { visibility: visible; }
+.spotlight .panel .art:has(> svg) { inset: 5% 2% 9% 47%; }
+.spotlightControls {
+  position: absolute;
+  z-index: 2;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  color: #e1f6e9;
+  background: #0b211cec;
+  border: 1px solid #9ae3bc64;
+  border-radius: 999px;
+}
+.spotlightControls button { display: grid; width: 44px; height: 44px; place-items: center; border-radius: 50%; }
+.spotlightControls button:hover, .spotlightControls button:focus-visible { color: #071911; background: #99f4bd; }
+.spotlightControls button:focus-visible { outline: 2px solid white; outline-offset: -3px; }
+.spotlightControls svg { width: 18px; height: 18px; }
+.spotlightControls span { font-size: 11px; font-variant-numeric: tabular-nums; }
+@media (max-width: 359px) {
+  .spotlightControls { top: 8px; bottom: auto; }
+  .spotlight .lead .kicker { min-height: 44px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .panel.reveal .art { animation: featureArtIn 320ms ease-out both; }
+  .panel.reveal .copy { animation: featureCopyIn 230ms ease-out both; }
+}
+@keyframes featureArtIn { from { opacity: .3; transform: scale(.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes featureCopyIn { from { opacity: .4; transform: translateY(5px); } to { opacity: 1; transform: none; } }
 
 .game {
   position: relative;

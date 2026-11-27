@@ -1,6 +1,6 @@
-import { Fragment, lazy, Suspense, useCallback, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ALL_GAMES, type GameDef } from '@/data/gameRegistry';
 import { HOME_STAGE, sportOf, type StageEntry } from '@/data/homeFront';
@@ -41,6 +41,8 @@ export function FeaturedStage() {
     return game ? [{ entry, game }] : [];
   }), []);
   const [saved, setSaved] = useState(() => stageSaves(homeSaveStorage()));
+  const [featured, setFeatured] = useState(0);
+  const [previewed, setPreviewed] = useState(false);
   const refresh = useCallback((storage: Storage | null) => {
     const next = stageSaves(storage);
     setSaved(previous => previous.length === next.length && previous.every((key, i) => key === next[i]) ? previous : next);
@@ -48,31 +50,64 @@ export function FeaturedStage() {
   useHomeSaveRefresh(stageSaveKeys, refresh);
   if (cards.length === 0) return null;
   const soccerResumeTo = soccerSlots.find(slot => saved.includes(slot.saveKey))?.path;
+  const picks = cards.map(card => {
+    const { entry, game } = card;
+    const resumeTo = game.path === SOCCER_CAREER_SAVE.path ? soccerResumeTo
+      : entry.saveKey && saved.includes(entry.saveKey) ? game.path : undefined;
+    const cta = resumeTo && entry.continueCta ? entry.continueCta : entry.cta;
+    const to = resumeTo && game.path === '/club-manager' ? game.path + CLUB_MANAGER_ACTIVE_RESUME_QUERY : resumeTo ?? game.path;
+    return { ...card, cta, to };
+  });
+  const current = picks[featured];
+  function browse(step: number) {
+    setPreviewed(true);
+    setFeatured(index => (index + step + picks.length) % picks.length);
+  }
 
   return (
     <section aria-labelledby="home-stage-title" data-home-stage="" className={styles.deck}>
       <h2 id="home-stage-title" className="sr-only">Main event</h2>
       <div className={styles.games}>
-        {cards.map((card, index) => (
-          <Fragment key={card.game.path}>
-            <StageCard card={card} lead={index === 0} resumeTo={card.game.path === SOCCER_CAREER_SAVE.path ? soccerResumeTo
-              : card.entry.saveKey && saved.includes(card.entry.saveKey) ? card.game.path : undefined} />
-            {index === 0 && (
-              <div className={styles.managers}>
-                {managerLinks.map(({ path, sport }) => {
-                  const game = ALL_GAMES.find(candidate => candidate.path === path);
-                  return game && (
-                    <Link key={path} to={path} style={sportStyle(sport)} data-home-manager-launch={sport}
-                      data-home-nrl-launch={sport === 'rugby' ? '' : undefined} className={styles.managerLaunch}>
-                      <SportGlyph sport={sport} className={styles.managerGlyph} />
-                      <span>{game.label}</span>
-                      <ArrowRight aria-hidden="true" className={styles.launchArrow} />
-                    </Link>
-                  );
-                })}
+        <div className={styles.spotlight}>
+          <Link to={current.to} data-google-vignette="false" data-stage-card={current.game.path}
+            className={cn(styles.game, styles.lead)}>
+            {picks.map((card, index) => (
+              <div key={card.game.path} aria-hidden={index !== featured} style={sportStyle(sportOf(card.game.path))}
+                className={cn(styles.panel, index === featured && styles.current, index === featured && previewed && styles.reveal)}>
+                <StageContent card={card} lead />
               </div>
-            )}
-          </Fragment>
+            ))}
+          </Link>
+          {picks.length > 1 && <div role="group" aria-label="Browse featured games" className={styles.spotlightControls}
+            onKeyDown={event => {
+              if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+              event.preventDefault();
+              browse(event.key === 'ArrowRight' ? 1 : -1);
+            }}>
+            <button type="button" aria-label="Previous featured game" onClick={() => browse(-1)}><ChevronLeft aria-hidden="true" /></button>
+            <span aria-hidden="true">{featured + 1}/{picks.length}</span>
+            <button type="button" aria-label="Next featured game" onClick={() => browse(1)}><ChevronRight aria-hidden="true" /></button>
+          </div>}
+          <span className="sr-only" role="status">{previewed ? current.game.label : ''}</span>
+        </div>
+        <div className={styles.managers}>
+          {managerLinks.map(({ path, sport }) => {
+            const game = ALL_GAMES.find(candidate => candidate.path === path);
+            return game && (
+              <Link key={path} to={path} style={sportStyle(sport)} data-home-manager-launch={sport}
+                data-home-nrl-launch={sport === 'rugby' ? '' : undefined} className={styles.managerLaunch}>
+                <SportGlyph sport={sport} className={styles.managerGlyph} />
+                <span>{game.label}</span>
+                <ArrowRight aria-hidden="true" className={styles.launchArrow} />
+              </Link>
+            );
+          })}
+        </div>
+        {picks.filter(card => card !== current).map(card => (
+          <Link key={card.game.path} to={card.to} data-google-vignette="false" data-stage-card={card.game.path}
+            style={sportStyle(sportOf(card.game.path))} className={styles.game}>
+            <StageContent card={card} />
+          </Link>
         ))}
       </div>
       <details className={styles.careerMenu}>
@@ -95,18 +130,14 @@ export function FeaturedStage() {
   );
 }
 
-function StageCard({ card, lead, resumeTo }: { card: Card; lead: boolean; resumeTo?: string }) {
-  const { entry, game } = card;
+function StageContent({ card, lead = false }: { card: Card & { cta: string }; lead?: boolean }) {
+  const { entry, game, cta } = card;
   const sport = sportOf(game.path);
-  const resuming = !!resumeTo && !!entry.continueCta;
-  const cta = resuming ? entry.continueCta : entry.cta;
-  const to = resuming && game.path === '/club-manager' ? game.path + CLUB_MANAGER_ACTIVE_RESUME_QUERY : resumeTo ?? game.path;
 
   return (
-    <Link to={to} data-google-vignette="false" style={sportStyle(sport)} data-stage-card={game.path}
-      className={cn(styles.game, lead && styles.lead)}>
+    <>
       <span aria-hidden="true" className={styles.art}>
-        {lead ? <picture>
+        {lead && entry.art === 'pitch' ? <picture>
           <source media="(min-width: 640px)" srcSet="/home-art/pitch-wide.webp" />
           <img src="/home-art/pitch-small.webp" width={672} height={224} alt="" />
         </picture> : <Suspense fallback={null}><HomeArt art={entry.art} /></Suspense>}
@@ -123,6 +154,6 @@ function StageCard({ card, lead, resumeTo }: { card: Card; lead: boolean; resume
           <span>{cta}</span><ArrowRight aria-hidden="true" />
         </span>
       </div>
-    </Link>
+    </>
   );
 }
