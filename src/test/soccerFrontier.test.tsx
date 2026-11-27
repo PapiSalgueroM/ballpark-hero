@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { SoccerFrontier } from '@/components/conquest/SoccerFrontier';
 import { INITIAL_TERRITORIES_SOCCER, SOCCER_ADJACENCY, SOCCER_CLUBS, SOCCER_IMPERIALISM, SOCCER_REGIONS } from '@/data/soccerConquest';
 import { homeWinProb, matchupMomentum, statesOf } from '@/lib/imperialismEngine';
@@ -121,6 +121,31 @@ it('replays a completed draw, compares only the previous route after reload, and
   fireEvent.click(screen.getByText('Start frontier campaign'));
   expect(read().seed).not.toBe(original.seed);
   expect(read().previous).toBeUndefined();
+});
+
+it('returns keyboard focus without scrolling on Back, Escape and Close after the opener changes label', async () => {
+  vi.spyOn(Math, 'random').mockReturnValue(6 / 0x100000000);
+  render(<SoccerFrontier />);
+  const opener = screen.getByRole('button', { name: 'Play frontier campaign' });
+  const focus = vi.spyOn(opener, 'focus');
+  const returned = async (label: string) => {
+    await waitFor(() => expect(opener).toHaveFocus());
+    expect(opener).toHaveAccessibleName(label);
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+    focus.mockClear();
+  };
+  fireEvent.click(opener);
+  fireEvent.change(screen.getByLabelText('Starting club'), { target: { value: 'MUN' } });
+  fireEvent.click(screen.getByText('Start frontier campaign'));
+  fireEvent.click(screen.getByText('Back to Soccer Conquest'));
+  await returned('Resume frontier campaign');
+  fireEvent.click(opener);
+  for (const name of ['Everton','Leeds United','Hull City']) fireEvent.click(screen.getByRole('button', { name: 'Challenge ' + name }));
+  fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' });
+  await returned('Review frontier campaign');
+  fireEvent.click(opener);
+  fireEvent.click(screen.getByRole('button', { name: 'Close', exact: true }));
+  await returned('Review frontier campaign');
 });
 
 it('resumes from the chosen front, plays through elimination and starts a new campaign without writing a daily result', () => {

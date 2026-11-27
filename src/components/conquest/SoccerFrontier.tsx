@@ -1,5 +1,5 @@
-import { useMemo, useState, useSyncExternalStore } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import ConquestRegionMap from '@/components/conquest/ConquestRegionMap';
 import { SOCCER_CLUB_MAP, SOCCER_CLUBS, SOCCER_CONQUEST_MAP, SOCCER_LEAGUE_OF, SOCCER_REGIONS } from '@/data/soccerConquest';
 import { safeLocalStorage } from '@/lib/safeStorage';
@@ -23,6 +23,7 @@ export function SoccerFrontier() {
   const board = useMemo(() => run && frontierBoard(run), [run]);
   const previous = useMemo(() => run?.previous && frontierBoard({ ...run, games: run.previous }), [run]);
   const [open, setOpen] = useState(false);
+  const opener = useRef<HTMLButtonElement>(null);
   const [choosing, setChoosing] = useState(false);
   const [club, setClub] = useState(SOCCER_CLUBS[0].id);
   const [mapOpen, setMapOpen] = useState(false);
@@ -38,12 +39,16 @@ export function SoccerFrontier() {
     setMapOpen(false);
   };
 
-  return <>
-    <div className="mb-3 text-center"><button className={button} onClick={() => { setChoosing(false); setOpen(true); }}>
-      {board?.finished ? 'Review frontier campaign' : run ? 'Resume frontier campaign' : 'Play frontier campaign'}
-    </button></div>
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-[90dvh] w-[calc(100%-1rem)] max-w-lg overflow-y-auto">
+  return <Dialog open={open} onOpenChange={setOpen}>
+      <div className="mb-3 text-center"><DialogTrigger asChild>
+        <button ref={opener} className={button} onClick={() => setChoosing(false)}>
+          {board?.finished ? 'Review frontier campaign' : run ? 'Resume frontier campaign' : 'Play frontier campaign'}
+        </button>
+      </DialogTrigger></div>
+      <DialogContent className="max-h-[90dvh] w-[calc(100%-1rem)] max-w-lg overflow-y-auto" onCloseAutoFocus={event => {
+        event.preventDefault();
+        opener.current?.focus({ preventScroll: true });
+      }}>
         <DialogHeader>
           <DialogTitle>Frontier campaign</DialogTitle>
           <DialogDescription>Capture {LAND_GOAL} extra regions in up to {MATCH_LIMIT} away matches. A defeat costs your entire empire.</DialogDescription>
@@ -110,6 +115,5 @@ export function SoccerFrontier() {
         </details>
         <button className={button} onClick={() => setOpen(false)}>Back to Soccer Conquest</button>
       </DialogContent>
-    </Dialog>
-  </>;
+    </Dialog>;
 }
