@@ -214,6 +214,7 @@ export function MatchCentre({
 
       <FlankRoutePicker title="Kickoff buildup" plan={flankPlan} onChange={setFlankPlan}>
         <p className="pb-2 text-xs">Choose how to start against {f.opponent}. Play Live and Quick Sim both use this call for this match.</p>
+        {flankPlan && !pair && <p className="pb-2 text-xs">This lineup has no available pair for that route.</p>}
         {pair && <dl className="grid grid-cols-2 gap-2 pb-2 text-xs" aria-label="Starting flank pair">
           {([['Fullback', pair.fullback], ['Winger', pair.winger]] as const).map(([role, player]) =>
             <div key={role} className="min-w-0 rounded-md bg-secondary/50 p-2">
