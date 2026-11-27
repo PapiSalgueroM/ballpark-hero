@@ -1,4 +1,3 @@
-import rails from "@/components/ads/HomeDesktopRails.module.css";
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, memo, Fragment, Suspense, type MouseEvent, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
@@ -149,11 +148,6 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState(gameReturn?.query ?? '');
   const [searchSport, setSearchSport] = useState<SportKey | ''>(gameReturn?.sport ?? '');
   const [sportsOpen, setSportsOpen] = useState(false);
-  // Keep one placement for the visit, including when a phone rotates.
-  const [homeAdPlacement] = useState(() => {
-    if (typeof window === 'undefined' || window.innerWidth < 320) return null;
-    return window.matchMedia?.('(max-width: 639px)').matches ? 'phone' : 'footer';
-  });
   const [expandedSports, setExpandedSports] = useState<SportKey[]>(gameReturn?.expandedSports ?? []);
   const deferredQuery = useDeferredValue(searchQuery);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -497,9 +491,8 @@ export default function Index() {
       />
       <HomeTileStyles />
       {/* Round 215: the skip link in App.tsx points here. */}
-      <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground">
-        {/* Keep Auto ads outside the home content, with matching desktop gutters. */}
-        <div google-side-rail-overlap="false" className={`max-w-6xl mx-auto px-4 pb-12 ${rails.content}`}>
+      <main id="dukb-main" tabIndex={-1} data-home-search-active={isSearching ? '' : undefined} className="min-h-screen bg-background text-foreground">
+        <div className="max-w-6xl mx-auto px-4 pb-12">
 
           {/* ─── TITLE ROW ───
               ROUND 283 took the hero down to what was carrying weight, and
@@ -699,7 +692,6 @@ export default function Index() {
           <Suspense fallback={null}>
             <HomeAbout />
           </Suspense>
-          {!isSearching && homeAdPlacement && <HomeBanner phone={homeAdPlacement === 'phone'} />}
 
           {/* Golf went live 2026-08-05 (Guess The Golfer + Golf Higher or
               Lower), so the old Coming Soon placeholder is gone; the Golf
@@ -718,17 +710,6 @@ export default function Index() {
    so React asks for it on the page's first render: no scroll, no idle, no
    observer stands between a visitor (or a renderer) and the words. */
 const HomeAbout = lazy(() => import('@/components/home/HomeAbout').then(m => ({ default: m.HomeAbout })));
-const AdBanner = lazy(() => import('@/components/ads/AdBanner'));
-
-function HomeBanner({ phone = false }: { phone?: boolean }) {
-  return (
-    <div className="-mx-4 empty:hidden sm:mx-0" data-home-ad="">
-      <Suspense fallback={null}>
-        <AdBanner slot="7540487748" format="horizontal" mobileBanner={phone} className="mx-auto w-full max-w-[728px]" />
-      </Suspense>
-    </div>
-  );
-}
 
 /** One signed-in stat, in the second row below xl and inline at xl.
     Unit words drop on phones so all three chips keep their values visible. */

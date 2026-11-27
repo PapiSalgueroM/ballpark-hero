@@ -81,6 +81,7 @@ export function GameShell({
     <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
       {showNavbar && <GameNavbar />}
       <div
+        data-game-play-area=""
         className={cn(
           /* Round 288: relative, so RulesGate's floating "?" (absolute top-0
              right-0) lands at the top right of this column beside the game's

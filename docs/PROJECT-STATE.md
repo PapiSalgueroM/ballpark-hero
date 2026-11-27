@@ -1,3 +1,11 @@
+### November 26, 2026. Shared display ads
+
+Eligible pages use one responsive display unit below the global footer. At desktop widths of at least 1280px the shared layout can also request two equal side units. A game keeps its natural width. Both side units are skipped when either would come within 150px of the play area or its controls. Soccer Career and Build Your XI use the footer alone at 1280px and 1366px. College Grid and NFL Career Path have room for the pair at both sizes.
+
+Advertising requires an affirmative advertising choice. The current document shares a single publisher tag across navigation. Public trailing-slash addresses use the same eligibility check as their canonical route. Save and recovery screens, local search, private pages and noindex documents are excluded. The AdSense account has Auto ads and Auto optimize off. The browser checks use test creatives so they can verify geometry and fill handling without creating paid impressions.
+
+The priority browser check is `node scripts/playPriorityAdLayout.mjs`. Use `--published` to test the production site. The November search ranking covers 25 pages. Lovable exposes ten in its overall page ranking. Compare AdSense and Lovable using the same complete dates in America/Detroit, the publisher's reporting time zone.
+
 ### November 26, 2026. Opt-in Google Analytics page views
 
 On the production domain, visitors can choose Google Analytics separately from Advertising. The site sends one manual page view per public page visited after opt-in. Browser history, search, outbound-link, file download, scroll, video and form measurement are disabled in the GA4 stream. Previously saved choices keep their advertising preference and require a new affirmative analytics choice. Private pages and account callbacks are excluded.

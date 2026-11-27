@@ -2,25 +2,60 @@
   display: contents;
 }
 
+.rail {
+  display: none;
+}
+
 @media (min-width: 1280px) {
-  .game {
-    --game-ad-rail: 160px;
+  .frame[data-desktop-room] {
+    --game-ad-rail: clamp(160px, calc((100vw - 1152px) / 2), 200px);
+    display: grid;
+    grid-template-columns: var(--game-ad-rail) minmax(0, 1fr) var(--game-ad-rail);
+  }
+
+  .frame[data-desktop-room] .game {
     display: block;
-    margin-inline: var(--game-ad-rail);
+    min-width: 0;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  /* Games keep their natural width, even when a creative fills or clears. */
+  .frame[data-playable-route] .game {
+    grid-column: 1 / -1;
+  }
+
+  .frame[data-desktop-room] .rail {
+    display: block;
+    grid-row: 1;
+    align-self: start;
+    width: calc(100% - 40px);
+    min-width: 0;
+    margin-top: var(--rail-start, 0px);
+  }
+
+  .rail[data-rail-edge="left"] {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .rail[data-rail-edge="right"] {
+    grid-column: 3;
+    justify-self: end;
   }
 
   /* Viewport-fixed controls do not inherit the content column's width. */
-  .game :is([data-career-utility], [data-game-rail-dock="end"]) {
+  :where(.frame[data-desktop-room]) .game :is([data-career-utility], [data-game-rail-dock="end"]) {
     right: calc(var(--game-ad-rail) + 1rem);
   }
 
   /* A kept-aside save notice must not sit in a rail or cover the career tools. */
-  .game [data-dukb-set-aside] {
+  :where(.frame[data-desktop-room]) .game [data-dukb-set-aside] {
     left: calc(var(--game-ad-rail) + 1rem);
     right: auto;
   }
 
-  .game :is([data-career-action-bar="floating"], [data-game-rail-dock="full"]) {
+  :where(.frame[data-desktop-room]) .game :is([data-career-action-bar="floating"], [data-game-rail-dock="full"]) {
     left: var(--game-ad-rail);
     right: var(--game-ad-rail);
   }

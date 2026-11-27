@@ -1,6 +1,7 @@
 // @vitest-environment-options {"url":"https://douknowball.com/"}
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { loadAdSense, loadAnalytics, stopRevokedServices } from '@/lib/consentedScripts';
+import { mountPublicFooterSlot, publicAdCanonical } from './fixtures/publicAdSlot';
 import { safeLocalStorage } from '@/lib/safeStorage';
 
 const gpcDescriptor = Object.getOwnPropertyDescriptor(window.navigator, 'globalPrivacyControl');
@@ -41,10 +42,8 @@ describe('optional services and the host consent queue', () => {
     expect(document.querySelectorAll('script')).toHaveLength(0);
 
     grantBoth();
-    const wrapper = document.createElement('div');
-    wrapper.setAttribute('data-dukb-manual-ad', '');
-    wrapper.innerHTML = '<ins class="adsbygoogle" data-ad-slot="fixture"></ins>';
-    document.body.appendChild(wrapper);
+    publicAdCanonical();
+    mountPublicFooterSlot();
     expect(loadAdSense()).toBe(true);
     expect(Array.from(window.dataLayer!.at(-1) as ArrayLike<unknown>)).toEqual(['consent', 'update', {
       ad_storage: 'granted', analytics_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
@@ -57,10 +56,8 @@ describe('optional services and the host consent queue', () => {
   it('refuses advertising under GPC even when the saved record grants both purposes', () => {
     grantBoth();
     Object.defineProperty(navigator, 'globalPrivacyControl', { configurable: true, value: true });
-    const wrapper = document.createElement('div');
-    wrapper.setAttribute('data-dukb-manual-ad', '');
-    wrapper.innerHTML = '<ins class="adsbygoogle" data-ad-slot="fixture"></ins>';
-    document.body.appendChild(wrapper);
+    publicAdCanonical();
+    mountPublicFooterSlot();
     expect(loadAdSense()).toBe(false);
     expect(document.querySelector('script[src*="adsbygoogle.js"]')).toBeNull();
     expect(window.dataLayer).toBeUndefined();

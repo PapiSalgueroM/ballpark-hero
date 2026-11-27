@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { CONSENT_CHANGED_EVENT, loadAdSense } from '@/lib/consentedScripts';
+import { CONSENT_CHANGED_EVENT, getAdSenseScript, loadAdSense } from '@/lib/consentedScripts';
 import { CONSENT_EFFECTIVE_CHANGED_EVENT, CONSENT_KEY, getEffectiveConsent } from '@/lib/consentPreferences';
 
 declare global {
@@ -10,6 +10,7 @@ declare global {
 
 interface AdBannerProps {
   slot: string;
+  placement?: 'public-footer' | 'left-rail' | 'right-rail';
   format?: 'auto' | 'fluid' | 'rectangle' | 'horizontal' | 'vertical';
   layout?: string;
   layoutKey?: string;
@@ -39,14 +40,6 @@ interface AdBannerProps {
  */
 export const AD_CONTROL_GAP_PX = 150;
 
-const MIN_HEIGHT_BY_FORMAT: Record<string, number> = {
-  horizontal: 100,
-  rectangle: 250,
-  vertical: 250,
-  auto: 100,
-  fluid: 100,
-};
-
 /* Round 274: an ad box that is never going to hold an ad must not sit there
    calling itself an advertisement.
  *
@@ -68,12 +61,7 @@ const MIN_HEIGHT_BY_FORMAT: Record<string, number> = {
  *     filled or unfilled, which is watched, and unfilled collapses it;
  *   - the word Advertisement appears only once something has actually filled,
  *     because labelling nothing an advertisement is just untrue.
- *
- * The timeout is a backstop for the case where AdSense loads and then never
- * answers at all. Eight seconds is deliberately long: the point is to be sure
- * nothing is coming, not to be quick about hiding a slot that is simply slow on
- * a phone. */
-const NO_ANSWER_MS = 8000;
+ */
 const HEAD_SETTLE_FRAMES = 2;
 
 type AdState = 'unknown' | 'filled' | 'empty';
@@ -82,7 +70,12 @@ function readStoredConsent(): boolean {
   return getEffectiveConsent().advertising;
 }
 
-const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '', mobileBanner = false }: AdBannerProps) => {
+function AdBanner(props: AdBannerProps) {
+  if (!props.placement) return null;
+  return <PublicDisplayAd {...props} placement={props.placement} />;
+}
+
+function PublicDisplayAd({ slot, placement, className = '' }: AdBannerProps & { placement: NonNullable<AdBannerProps['placement']> }) {
   const adRef = useRef<HTMLModElement>(null);
   const pushed = useRef(false);
   const [consent, setConsent] = useState<boolean>(readStoredConsent);
@@ -116,15 +109,34 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '', mo
     let cancelled = false;
     let retryFrame = 0;
     let attempts = 0;
+    let waitingOn: HTMLScriptElement | null = null;
+    const stopWaiting = () => {
+      waitingOn?.removeEventListener('load', initialize);
+      waitingOn?.removeEventListener('error', failed);
+      waitingOn = null;
+    };
+    const failed = () => {
+      stopWaiting();
+      cancelled = true;
+      setState('empty');
+    };
     const initialize = () => {
+      stopWaiting();
       if (cancelled || pushed.current) return;
-      if (!loadAdSense()) {
+      if (!loadAdSense(adRef.current)) {
         attempts += 1;
         if (attempts <= HEAD_SETTLE_FRAMES) {
           retryFrame = window.requestAnimationFrame(initialize);
           return;
         }
         setState('empty');
+        return;
+      }
+      const script = getAdSenseScript();
+      if (script?.hasAttribute('data-dukb-ad-loading')) {
+        waitingOn = script;
+        script.addEventListener('load', initialize, { once: true });
+        script.addEventListener('error', failed, { once: true });
         return;
       }
       try {
@@ -137,6 +149,7 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '', mo
     initialize();
     return () => {
       cancelled = true;
+      stopWaiting();
       if (retryFrame) window.cancelAnimationFrame(retryFrame);
     };
   }, [consent]);
@@ -153,54 +166,35 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '', mo
     read();
     const mo = new MutationObserver(read);
     mo.observe(el, { attributes: true, attributeFilter: ['data-ad-status'] });
-    const t = window.setTimeout(() => setState(s => (s === 'unknown' ? 'empty' : s)), NO_ANSWER_MS);
-    return () => { mo.disconnect(); window.clearTimeout(t); };
+    return () => mo.disconnect();
   }, [consent, state]);
 
-  // Until Accept, there is no slot, no request, and no timeout to expire.
+  // Keep pending inventory mounted until the publisher reports its outcome.
   if (!consent) return null;
   // Nothing came, and nothing is coming. Take the space back.
   if (state === 'empty') return null;
 
-  const minHeight = mobileBanner ? 100 : MIN_HEIGHT_BY_FORMAT[format] ?? 100;
+  const footer = placement === 'public-footer';
 
   return (
     <div
-      data-dukb-manual-ad=""
-      className={`ad-container flex flex-col items-center justify-center my-6 gap-1 ${className}`}
-      /* Round 506: the padding is what holds the slot away from the game's own
-         controls, and it is inline rather than a class because every one of the
-         76 mounts passes its own className and a Tailwind margin class there
-         would be a merge argument nobody can see the result of. Measured at 390
-         wide on the built site before this: the nearest control sat 104px above
-         the slot on /club-manager and 32px above it on /squad-deal, against
-         Google's 150px recommendation for a game page. Adding the gap here
-         rather than at 76 call sites means a page added next month cannot
-         reintroduce it. Fenced by playAdRoutes section 10, which measures to the
-         ins rather than to this wrapper, because the wrapper's own top has not
-         moved and a check reading it would pass forever. */
-      style={{ minHeight, paddingTop: AD_CONTROL_GAP_PX }}
+      data-dukb-manual-ad={placement}
+      className={`ad-container flex w-full flex-col items-center gap-1 ${className}`}
+      style={footer ? { paddingTop: AD_CONTROL_GAP_PX } : undefined}
     >
       {state === 'filled' && (
-        <span className="text-[10px] uppercase tracking-wide text-muted-foreground/70 select-none">
-          Advertisement
-        </span>
+        <span className="text-[10px] uppercase tracking-wide text-muted-foreground/70 select-none">Advertisement</span>
       )}
-      {/* Google's exact-size responsive example omits the automatic size attributes. */}
-      {mobileBanner && <style>{'.dukb_mobile_display{width:320px;height:100px}@media(max-width:335px){.dukb_mobile_display{width:300px}}'}</style>}
+      {footer && <style>{'.dukb-footer-display{width:100%;max-width:320px;height:100px}@media(max-width:335px){.dukb-footer-display{max-width:300px}}@media(min-width:768px){.dukb-footer-display{max-width:728px;height:90px}}'}</style>}
       <ins
         ref={adRef}
-        className={mobileBanner ? 'adsbygoogle dukb_mobile_display' : 'adsbygoogle w-full'}
-        style={{ display: 'block', minHeight: mobileBanner ? undefined : minHeight }}
+        className={footer ? 'adsbygoogle dukb-footer-display' : 'adsbygoogle'}
+        style={footer ? { display: 'block' } : { display: 'block', width: '100%', maxWidth: 160, height: 600 }}
         data-ad-client="ca-pub-2929318086316376"
         data-ad-slot={slot}
-        data-ad-format={mobileBanner ? undefined : format}
-        data-full-width-responsive={mobileBanner ? undefined : 'true'}
-        {...(layout ? { 'data-ad-layout': layout } : {})}
-        {...(layoutKey ? { 'data-ad-layout-key': layoutKey } : {})}
       />
     </div>
   );
-};
+}
 
 export default AdBanner;

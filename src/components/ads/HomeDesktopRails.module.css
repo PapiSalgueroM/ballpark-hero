@@ -1,8 +1,0 @@
-/* Reserve equal desktop ad space without changing the narrow-screen layout.
-   AdSense decides whether to fill either gutter. */
-@media (min-width: 1280px) {
-  .content[google-side-rail-overlap="false"] {
-    max-width: min(72rem, calc(100% - 320px));
-    margin-inline: auto;
-  }
-}

@@ -1,4 +1,5 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { mountPublicFooterSlot, publicAdCanonical } from './fixtures/publicAdSlot';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 let CookieConsent: typeof import('@/components/CookieConsent').CookieConsent;
@@ -27,7 +28,7 @@ beforeEach(async () => {
 afterEach(() => {
   cleanup(); release?.(); vi.restoreAllMocks(); vi.useRealTimers();
   safeLocalStorage.clear(); localStorage.clear();
-  document.querySelectorAll('script[src*="adsbygoogle.js"], script[src*="googletagmanager.com/gtag/js"], [data-dukb-manual-ad]').forEach(el => el.remove());
+  document.querySelectorAll('script[src*="adsbygoogle.js"], script[src*="googletagmanager.com/gtag/js"], [data-public-footer-ad], link[rel="canonical"]').forEach(el => el.remove());
   for (const key of ['adsbygoogle', 'gtag', 'dataLayer', '__DUKB_CONSENT_DEFAULTED__', 'ga-disable-G-KZQK2G68YC']) Reflect.deleteProperty(window, key);
   if (gpcDescriptor) Object.defineProperty(navigator, 'globalPrivacyControl', gpcDescriptor);
   else Reflect.deleteProperty(navigator, 'globalPrivacyControl');
@@ -77,10 +78,8 @@ describe('consent synchronization cannot resurrect an old permission', () => {
   });
   it('keeps a held Reject all unchecked and cannot re-grant advertising on Save choices', () => {
     localStorage.setItem(KEY, value(true));
-    const wrapper = document.createElement('div');
-    wrapper.setAttribute('data-dukb-manual-ad', '');
-    wrapper.innerHTML = '<ins class="adsbygoogle" data-ad-slot="fixture"></ins>';
-    document.body.appendChild(wrapper);
+    publicAdCanonical();
+    mountPublicFooterSlot();
     mount();
     expect(document.querySelector('script[src*="adsbygoogle.js"]')).not.toBeNull();
     act(() => openConsentChoices());
@@ -93,7 +92,6 @@ describe('consent synchronization cannot resurrect an old permission', () => {
     expect(getEffectiveConsent().advertising).toBe(false);
     expect(loadAdSense()).toBe(false);
     expect(document.querySelector('script[src*="adsbygoogle.js"]')).toBeNull();
-    wrapper.remove();
   });
 
   it('keeps withdrawal latched across a routine component remount in the same page', () => {

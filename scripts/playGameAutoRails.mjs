@@ -13,7 +13,7 @@ const result = await build({
   bundle: true, format: 'esm', platform: 'node', write: false,
 });
 const { ALL_GAMES, HUB_NAV, EDITORIAL_RAIL_ROUTES } = await import('data:text/javascript;base64,' + Buffer.from(result.outputFiles[0].text).toString('base64'));
-const paths = [...new Set([...ALL_GAMES.map(game => game.path), ...HUB_NAV.map(hub => hub.route), ...EDITORIAL_RAIL_ROUTES])];
+const paths = [...new Set(['/', ...ALL_GAMES.map(game => game.path), ...HUB_NAV.map(hub => hub.route), ...EDITORIAL_RAIL_ROUTES])];
 assert(paths.length > 100);
 const browser = await chromium.launch();
 
@@ -50,6 +50,18 @@ async function check(path, { width = 1280, advertising = true, expected = 1, gpc
       assert.deepEqual(intercepted, [publisherTag], path + ': exact publisher URL once');
       const attributes = await page.locator('script[src*="adsbygoogle.js"]').evaluate(el => ({ async: el.async, crossOrigin: el.crossOrigin }));
       assert.deepEqual(attributes, { async: true, crossOrigin: 'anonymous' }, path + ': standard publisher tag settings');
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      await page.waitForFunction(() => {
+        const slots = document.querySelectorAll('[data-dukb-manual-ad] ins.adsbygoogle').length;
+        return slots > 0 && slots === window.adsbygoogle?.length;
+      }, null, { timeout: 6000 }).catch(async error => {
+        const state = await page.evaluate(() => [window.adsbygoogle?.length, document.querySelectorAll('[data-dukb-manual-ad] ins.adsbygoogle').length]);
+        throw new Error(path + ': slot requests and actual placements disagree: ' + state, { cause: error });
+      });
+      const slots = await page.locator('[data-dukb-manual-ad] ins.adsbygoogle').count();
+      assert(width >= 1280 ? slots === 1 || slots === 3 : slots === 1, path + ': complete pair or footer alone');
+      assert.equal(await page.locator('[data-public-footer-ad] ins.adsbygoogle').count(), 1, path + ': one footer');
+      assert.equal(await page.locator('[data-ad-rail] ins.adsbygoogle').count(), slots - 1, path + ': desktop side slots');
     } else {
       // The check runs after the app and its footer have mounted, including the rail eligibility effect.
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -89,7 +101,7 @@ try {
   for (const path of ['/privacy', '/reset-password', '/admin/login', '/missing-game-rail-test']) {
     await check(path, { expected: 0 });
   }
-  console.log('Declined, pending, GPC, private, footer, query and fragment cases passed');
+  console.log('Manual placement counts, declined, pending, GPC, private, footer, query and fragment cases passed');
 } finally {
   await browser.close();
 }

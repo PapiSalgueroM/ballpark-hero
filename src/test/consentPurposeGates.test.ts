@@ -1,6 +1,7 @@
 // @vitest-environment-options {"url":"https://douknowball.com/"}
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { loadAdSense, loadAnalytics, loadConsentedScripts, stopRevokedServices } from '@/lib/consentedScripts';
+import { mountPublicFooterSlot, publicAdCanonical } from './fixtures/publicAdSlot';
 import { safeLocalStorage } from '@/lib/safeStorage';
 
 const KEY = 'cookie-consent-v2';
@@ -12,22 +13,13 @@ function record(advertising: boolean, analytics: boolean, updatedAt = Date.now()
   return JSON.stringify({ version: 2, advertising, analytics, ...(analytics && { analyticsOptIn: 1 }), updatedAt });
 }
 
-function deliberateSlot() {
-  const wrapper = document.createElement('div');
-  wrapper.setAttribute('data-dukb-manual-ad', '');
-  const slot = document.createElement('ins');
-  slot.className = 'adsbygoogle';
-  slot.setAttribute('data-ad-slot', 'fixture-slot');
-  wrapper.appendChild(slot);
-  document.body.appendChild(wrapper);
-}
-
 beforeEach(() => {
   stopRevokedServices({ advertising: false, analytics: true }, { advertising: false, analytics: false });
   Reflect.deleteProperty(window, 'dukbGaLayer');
   safeLocalStorage.clear();
   localStorage.clear();
   document.head.innerHTML = '';
+  publicAdCanonical();
   document.body.innerHTML = '';
   Reflect.deleteProperty(window, 'adsbygoogle');
   Reflect.deleteProperty(window, 'dataLayer');
@@ -47,7 +39,7 @@ afterEach(() => {
 describe('each optional loader requires its own current affirmative purpose', () => {
   // Break caught: calling a loader directly bypasses the UI consent branch.
   it('refuses a deliberate ad slot when no choice has been made', () => {
-    deliberateSlot();
+    mountPublicFooterSlot();
     expect(loadAdSense()).toBe(false);
     expect(adScripts()).toHaveLength(0);
     expect(Reflect.get(window, 'adsbygoogle')).toBeUndefined();
@@ -69,7 +61,7 @@ describe('each optional loader requires its own current affirmative purpose', ()
     // Break caught: either purpose accidentally grants the other service.
     it(`honors advertising=${fixture.advertising}, analytics=${fixture.analytics} independently`, () => {
       safeLocalStorage.setItem(KEY, record(fixture.advertising, fixture.analytics));
-      deliberateSlot();
+      mountPublicFooterSlot();
       loadConsentedScripts();
       expect(adScripts()).toHaveLength(fixture.wantAds);
       expect(analyticsScripts()).toHaveLength(fixture.wantAnalytics);
@@ -93,7 +85,7 @@ describe('each optional loader requires its own current affirmative purpose', ()
     // Break caught: the old bundled grant is silently promoted to new purposes.
     it(`does not load either service from legacy ${legacy}`, () => {
       safeLocalStorage.setItem('cookie-consent', legacy);
-      deliberateSlot();
+      mountPublicFooterSlot();
       loadConsentedScripts();
       expect(adScripts()).toHaveLength(0);
       expect(analyticsScripts()).toHaveLength(0);
@@ -116,7 +108,7 @@ describe('each optional loader requires its own current affirmative purpose', ()
     // Break caught: malformed or stale affirmative fields become permission.
     it(`keeps both services off for ${fixture.name}`, () => {
       safeLocalStorage.setItem(KEY, fixture.value);
-      deliberateSlot();
+      mountPublicFooterSlot();
       loadConsentedScripts();
       expect(adScripts()).toHaveLength(0);
       expect(analyticsScripts()).toHaveLength(0);
@@ -128,7 +120,7 @@ describe('each optional loader requires its own current affirmative purpose', ()
   // Break caught: a previously loaded script bypasses the later denied gate.
   it('refuses another manual ad after advertising is withdrawn while analytics remains allowed', () => {
     safeLocalStorage.setItem(KEY, record(true, true));
-    deliberateSlot();
+    mountPublicFooterSlot();
     expect(loadAdSense()).toBe(true);
     expect(adScripts()).toHaveLength(1);
     safeLocalStorage.setItem(KEY, record(false, true));
@@ -138,7 +130,7 @@ describe('each optional loader requires its own current affirmative purpose', ()
 
   it('refuses another manual ad when the previously granted record expires', () => {
     safeLocalStorage.setItem(KEY, record(true, false));
-    deliberateSlot();
+    mountPublicFooterSlot();
     expect(loadAdSense()).toBe(true);
     safeLocalStorage.setItem(KEY, record(true, false, Date.now() - MAX_AGE - 1000));
     expect(loadAdSense()).toBe(false);
@@ -153,7 +145,7 @@ describe('each optional loader requires its own current affirmative purpose', ()
 
   it('still refuses a deliberate slot on a noindex page', () => {
     safeLocalStorage.setItem(KEY, record(true, false));
-    deliberateSlot();
+    mountPublicFooterSlot();
     const robots = document.createElement('meta');
     robots.name = 'robots';
     robots.content = 'noindex, nofollow';
@@ -164,7 +156,7 @@ describe('each optional loader requires its own current affirmative purpose', ()
 
   it('keeps granted loaders idempotent and requests non-personalized ads', () => {
     safeLocalStorage.setItem(KEY, record(true, true));
-    deliberateSlot();
+    mountPublicFooterSlot();
     loadConsentedScripts();
     loadConsentedScripts();
     expect(adScripts()).toHaveLength(1);

@@ -36,7 +36,7 @@ const CONTROL_FAILURES = {
   ],
   'script-without-slot': ['loadAdSense does not refuse pages with no explicit manual ad slot'],
   'noindex-guard': ['loadAdSense does not refuse a deliberate slot when the page is noindexed'],
-  'slot-before-consent': ['AdBanner renders or starts its timeout before the visitor explicitly accepts consent'],
+  'slot-before-consent': ['AdBanner renders before the visitor explicitly accepts consent'],
   'loader-result': [
     'AdBanner no longer collapses when the guarded loader refuses the page',
     'AdBanner ignores the loader result and may push on an ineligible page',
@@ -44,8 +44,8 @@ const CONTROL_FAILURES = {
   'noindex-ad': ['ResetPassword.tsx is noindexed but still renders AdBanner'],
   'ad-status-behavior': ['AdBanner does not read and watch data-ad-status, so it cannot know whether an ad ever arrived'],
   'snapshot-loader': ['public/privacy/index.html contains an executable adsbygoogle.js loader'],
-  'placeholder-slot': ['src/pages/Footle.tsx uses AdBanner slot 1234567890 instead of 7540487748'],
-  'missing-slot': ['found 81 source AdBanner callers, expected exactly 82'],
+  'placeholder-slot': ['src/components/ads/PublicFooterAd.tsx uses AdBanner slot 1234567890 instead of 7540487748'],
+  'missing-slot': ['the public footer must mount its one manual display unit'],
   'privacy-npa-bridge': ["the privacy policy does not distinguish Google's general disclosure from this site's non-personalized ad request"],
   'delayed-consent': ['AdBanner does not read stored consent before its first render'],
   'analytics-collection': ['GA4 config could send an automatic pageview alongside the manual one'],
@@ -86,6 +86,7 @@ let termsSource = read('src/pages/TermsOfService.tsx');
 /* Round 285: the banner no longer carries the id itself, it calls
    src/lib/consentedScripts.ts, which is where both gated scripts live now. */
 let consented = read('src/lib/consentedScripts.ts');
+let eligibility = read('src/components/ads/publicAdEligibility.ts');
 let preferences = read('src/lib/consentPreferences.ts');
 consented = mutateOnce(
   consented,
@@ -120,14 +121,14 @@ termsSource = mutateOnce(
 );
 consented = mutateOnce(
   consented,
-  "if (!document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]')) return false;",
-  "void document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]');",
+  'if (!slot?.isConnected || !slot.matches(PUBLIC_AD_SLOT)) return false;',
+  'void slot;',
   'script-without-slot',
 );
-consented = mutateOnce(
-  consented,
-  'if (document.querySelector(\'meta[name="robots"][content*="noindex"]\')) return false;',
-  'void document.querySelector(\'meta[name="robots"][content*="noindex"]\');',
+eligibility = mutateOnce(
+  eligibility,
+  'document.querySelector(\'meta[name="robots"][content*="noindex" i]\')',
+  'false',
   'noindex-guard',
 );
 banner = mutateOnce(
@@ -138,8 +139,8 @@ banner = mutateOnce(
 );
 banner = mutateOnce(
   banner,
-  'if (!loadAdSense()) {',
-  'loadAdSense();\n    if (false) {',
+  'if (!loadAdSense(adRef.current)) {',
+  'loadAdSense(adRef.current);\n    if (false) {',
   'loader-result',
 );
 banner = mutateOnce(
@@ -385,7 +386,7 @@ if (!/getAttribute\(\s*['"]data-ad-status['"]\s*\)/.test(bannerBehavior)
 if (!/state === 'filled'/.test(bannerBehavior)) {
   fail('AdBanner does not gate the Advertisement label on a filled slot, so an empty box calls itself an advertisement');
 }
-if (!/if\s*\(\s*!loadAdSense\(\)\s*\)/.test(bannerBehavior)) {
+if (!/if\s*\(\s*!loadAdSense\(adRef\.current\)\s*\)/.test(bannerBehavior)) {
   fail('AdBanner no longer collapses when the guarded loader refuses the page');
 }
 console.log('   collapses when ineligible or unfilled, labels only what filled');
@@ -409,7 +410,7 @@ console.log('6b) same-page consent reaches an already mounted ad');
     fail('AdBanner does not subscribe and unsubscribe from the same-page consent event');
   }
   if (!/if\s*\(\s*!consent\s*\)\s*return null/.test(bannerCode)) {
-    fail('AdBanner renders or starts its timeout before the visitor explicitly accepts consent');
+    fail('AdBanner renders before the visitor explicitly accepts consent');
   }
   console.log('   either choice notifies the current page, and an ad exists only after Accept');
 }
@@ -419,24 +420,23 @@ console.log('6c) no global Auto Ads eligibility on non-content routes');
 {
   const bannerCode = codeOnly(banner);
   const sharedCode = codeOnly(consented + preferences);
-  const manualLoader = sharedCode.slice(sharedCode.indexOf('export function loadAdSense('), sharedCode.indexOf('export function loadGameSideRailAds('));
-  const noindexGuard = manualLoader.indexOf('meta[name="robots"][content*="noindex"]');
-  const slotGuard = manualLoader.indexOf('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]');
+  const manualLoader = sharedCode.slice(sharedCode.indexOf('export function loadAdSense('), sharedCode.indexOf('function startAdSense('));
+  const documentGuard = manualLoader.indexOf('if (!isPublicAdDocument()) return false;');
   const consentGuard = manualLoader.indexOf('if (!getEffectiveConsent().advertising) return false;');
   const start = manualLoader.indexOf('return startAdSense()');
-  if (!/if\s*\(\s*!document\.querySelector\(\s*['"]\[data-dukb-manual-ad\] ins\.adsbygoogle\[data-ad-slot\]['"]\s*\)\s*\)\s*return false/.test(sharedCode)) {
+  if (!manualLoader.slice(0, start).includes('if (!slot?.isConnected || !slot.matches(PUBLIC_AD_SLOT)) return false;')) {
     fail('loadAdSense does not refuse pages with no explicit manual ad slot');
   }
-  if (!/querySelector\(\s*['"]meta\[name=[\\'"]robots[\\'"]\]\[content\*=[\\'"]noindex[\\'"]\]['"]\s*\)\s*\)\s*return false/.test(sharedCode)) {
+  if (!codeOnly(eligibility).includes('document.querySelector(\'meta[name="robots"][content*="noindex" i]\')')) {
     fail('loadAdSense does not refuse a deliberate slot when the page is noindexed');
   }
-  if (consentGuard < 0 || noindexGuard < 0 || slotGuard < 0 || start < 0 || !(consentGuard < noindexGuard && noindexGuard < slotGuard && slotGuard < start)) {
+  if (consentGuard < 0 || documentGuard <= consentGuard || start <= documentGuard) {
     fail('loadAdSense does not fail closed before reusing an existing script');
   }
   if (!/data-dukb-manual-ad/.test(bannerCode)) {
     fail('AdBanner does not mark its wrapper as a deliberate manual ad slot');
   }
-  if (!/if\s*\(\s*!loadAdSense\(\)\s*\)\s*\{/.test(bannerCode)) {
+  if (!/if\s*\(\s*!loadAdSense\(adRef\.current\)\s*\)\s*\{/.test(bannerCode)) {
     fail('AdBanner ignores the loader result and may push on an ineligible page');
   }
   const pagesDir = path.join(ROOT, 'src/pages');
@@ -455,43 +455,36 @@ console.log('6c) no global Auto Ads eligibility on non-content routes');
 }
 
 /* ── 7: every manual ad uses the real display unit ────────────────────── */
-console.log('7) one production slot on every AdBanner caller');
+console.log('7) only the shared rails and footer can mount the production unit');
 const EXPECTED_SLOT = '7540487748';
-const EXPECTED_CALLERS = 82; /* Shared footer on eligible public routes: +1. */ /* Home: +1, Index.tsx using the same unit. Round 724: +1, NhlGauntletDraft.tsx (release K). Before that Round 720: +1, ContractChaos.tsx (release G). Before that Round 538: +1, MlbGauntletDraft.tsx. Before that Round 522: +2, NbaGauntletDraft.tsx and NflGauntletDraft.tsx */
 const srcDir = path.join(ROOT, 'src');
-const adCallers = [];
-const walk = d => {
-  for (const e of readdirSync(d, { withFileTypes: true })) {
-    const p = path.join(d, e.name);
-    if (e.isDirectory()) { walk(p); continue; }
-    if (!/\.tsx?$/.test(e.name)) continue;
-    const relative = `src/${path.relative(srcDir, p).split(path.sep).join('/')}`;
-    let source = readFileSync(p, 'utf8');
-    if (relative === 'src/pages/Footle.tsx') {
-      source = mutateOnce(
-        source,
-        `<AdBanner slot="${EXPECTED_SLOT}" format="horizontal" className="mt-8" />`,
-        '',
-        'missing-slot',
-      );
-      source = mutateOnce(source, `slot="${EXPECTED_SLOT}"`, 'slot="1234567890"', 'placeholder-slot');
-    }
-    for (const match of codeOnly(source).matchAll(/<AdBanner\b[\s\S]*?>/g)) {
-      const slot = match[0].match(/\bslot\s*=\s*"([^"]+)"/)?.[1] ?? '(missing or dynamic)';
-      adCallers.push({ relative, slot });
-    }
+const footerPath = 'src/components/ads/PublicFooterAd.tsx';
+const railPath = 'src/components/ads/GameDesktopRails.tsx';
+const mounts = [];
+for (const file of readdirSync(srcDir, { recursive: true })) {
+  if (!file.endsWith('.tsx') || file.split(path.sep).includes('test')) continue;
+  const relative = 'src/' + file.split(path.sep).join('/');
+  let source = codeOnly(read(relative));
+  if (relative === footerPath) {
+    source = mutateOnce(source, 'placement="public-footer"', '', 'missing-slot');
+    source = mutateOnce(source, 'slot="7540487748"', 'slot="1234567890"', 'placeholder-slot');
   }
-};
-walk(srcDir);
-if (adCallers.length === 0) fail('no shipped AdBanner callers exist');
-if (adCallers.length !== EXPECTED_CALLERS) {
-  fail(`found ${adCallers.length} source AdBanner callers, expected exactly ${EXPECTED_CALLERS}`);
+  for (const [tag] of source.matchAll(/<AdBanner\b[^>]*>/g)) {
+    if (!/\bplacement=/.test(tag)) continue;
+    mounts.push({ relative, tag });
+    const slot = tag.match(/\bslot="([^"]+)"/)?.[1];
+    if (slot !== EXPECTED_SLOT) fail(relative + ' uses AdBanner slot ' + slot + ' instead of ' + EXPECTED_SLOT);
+    if (relative !== footerPath && relative !== railPath) fail(relative + ' mounts an ad outside the shared layout');
+  }
 }
-const wrongSlotCallers = adCallers.filter(caller => caller.slot !== EXPECTED_SLOT);
-for (const caller of wrongSlotCallers) {
-  fail(`${caller.relative} uses AdBanner slot ${caller.slot} instead of ${EXPECTED_SLOT}`);
+if (mounts.filter(x => x.relative === footerPath && x.tag.includes('placement="public-footer"')).length !== 1) {
+  fail('the public footer must mount its one manual display unit');
 }
-console.log(`   ${adCallers.length} callers scanned against slot ${EXPECTED_SLOT}, ${wrongSlotCallers.length} mismatch${wrongSlotCallers.length === 1 ? '' : 'es'}`);
+if (!mounts.some(x => x.relative === railPath && x.tag.includes("'left-rail'") && x.tag.includes("'right-rail'"))) {
+  fail('the shared layout does not own both side placements');
+}
+if (!bannerBehavior.includes('if (!props.placement) return null;')) fail('a legacy page-local banner can render');
+console.log('   checked shared mounts and legacy banner suppression');
 
 console.log('');
 if (CONTROL) {

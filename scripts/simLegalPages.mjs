@@ -171,6 +171,9 @@ console.log('5) the ads claims match the ads code');
   if (CONTROL === 'adloader') {
     consented = replaceExactlyOnce(consented, 'if (!getEffectiveConsent().advertising) return false;', '', 'advertising loader control');
   }
+  if (CONTROL === 'adplacement') {
+    consented = replaceExactlyOnce(consented, ' || !slot.matches(PUBLIC_AD_SLOT)', '', 'approved manual placement control');
+  }
   if (CONTROL === 'npa') {
     consented = replaceExactlyOnce(
       consented,
@@ -219,7 +222,9 @@ document.head.appendChild(adScript);
   if (npaAssignment && (!adSenseAppend || npaAssignment.index >= adSenseAppend.index)) {
     fail('the non personalized flag is not assigned before the AdSense script is appended');
   }
-  if (!consented.includes('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]')) {
+  if (!consented.includes('if (!slot?.isConnected || !slot.matches(PUBLIC_AD_SLOT)) return false;')
+    || !['[data-public-footer-ad] [data-dukb-manual-ad="public-footer"]', '[data-ad-rail="left"] [data-dukb-manual-ad="left-rail"]',
+      '[data-ad-rail="right"] [data-dukb-manual-ad="right-rail"]', ' ins.adsbygoogle[data-ad-slot="7540487748"]'].every(selector => consented.includes(selector))) {
     fail('the AdSense loader no longer requires a deliberate page slot before loading');
   }
   if (/adsbygoogle\.js|pagead2\.googlesyndication\.com|requestNonPersonalizedAds/.test(template)) {
@@ -229,10 +234,10 @@ document.head.appendChild(adScript);
     && /import\s*\{[^}]*\bgetEffectiveConsent\b[^}]*\}\s*from ['"]@\/lib\/consentPreferences['"]/.test(adBanner)
     && /useState<boolean>\(readStoredConsent\)/.test(adBanner);
   const initializationGate = adBanner.indexOf("if (!consent) { pushed.current = false; setState('unknown'); return; }");
-  const initialization = adBanner.indexOf('if (!loadAdSense())');
+  const initialization = adBanner.indexOf('if (!loadAdSense(adRef.current))');
   const slotGate = adBanner.indexOf('if (!consent) return null;');
   const slot = adBanner.indexOf('data-dukb-manual-ad=');
-  const loaderGate = /export function loadAdSense\(\): boolean \{\s*try \{\s*if \(!getEffectiveConsent\(\)\.advertising\) return false;/.test(consented)
+  const loaderGate = /export function loadAdSense\([^)]*\): boolean \{\s*try \{\s*if \(!getEffectiveConsent\(\)\.advertising\) return false;/.test(consented)
     && /import\s*\{[^}]*\bgetEffectiveConsent\b[^}]*\}\s*from ['"]@\/lib\/consentPreferences['"]/.test(consented);
   if (!choiceReader || initializationGate < 0 || initializationGate >= initialization
     || slotGate < 0 || slotGate >= slot || !loaderGate) {
@@ -259,6 +264,7 @@ if (CONTROL) {
     adinit: 'AdBanner and its loader no longer gate explicitly on the effective advertising choice',
     adslot: 'AdBanner and its loader no longer gate explicitly on the effective advertising choice',
     adloader: 'AdBanner and its loader no longer gate explicitly on the effective advertising choice',
+    adplacement: 'the AdSense loader no longer requires a deliberate page slot before loading',
     fontnotice: 'the code talks to fonts.googleapis.com but the privacy policy never says "Google Fonts"',
     fonthost: 'the code talks to fonts.gstatic.com but the privacy policy never says "fonts.gstatic.com"',
   }[CONTROL];

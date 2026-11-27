@@ -10,7 +10,7 @@ const base = new URL(process.env.BASE ?? 'http://127.0.0.1:4173');
 assert.equal(base.protocol, 'http:', 'Use the local HTTP preview');
 assert.equal(base.hostname, '127.0.0.1', 'This replay only accepts a loopback preview');
 const loader = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-const placement = '[data-home-ad]';
+const placement = '[data-public-footer-ad]';
 const manualSlot = '[data-dukb-manual-ad] ins.adsbygoogle';
 const browser = await chromium.launch();
 
@@ -57,12 +57,11 @@ async function pendingSlot(page, requestedAds) {
   const ad = page.locator(placement);
   const slot = ad.locator(manualSlot);
   await slot.waitFor({ state: 'attached', timeout: 6000 });
-  await page.waitForFunction(() => window.__homeAdFixtureLoaded && window.adsbygoogle?.length === 1);
-  assert.equal(await page.locator(manualSlot).count(), 1, 'Expected one home slot on the page');
+  await page.waitForFunction(() => window.__homeAdFixtureLoaded && (window.adsbygoogle?.length ?? 0) >= 1);
+  assert.equal(await slot.count(), 1, 'Expected one shared footer slot');
   assert.equal(await slot.getAttribute('data-ad-slot'), '7540487748');
-  const phonePlacement = await page.evaluate(() => innerWidth <= 639);
-  assert.equal(await slot.getAttribute('data-full-width-responsive'), phonePlacement ? null : 'true');
-  assert.equal(await slot.getAttribute('data-ad-format'), phonePlacement ? null : 'horizontal');
+  assert.equal(await slot.getAttribute('data-full-width-responsive'), null);
+  assert.equal(await slot.getAttribute('data-ad-format'), null);
   assert.equal(await ad.getByText('Advertisement', { exact: true }).count(), 0, 'A pending slot claimed to have filled');
   assert.equal(requestedAds.length, 1, 'Expected exactly one intercepted loader');
   return { ad, slot };
@@ -70,14 +69,13 @@ async function pendingSlot(page, requestedAds) {
 
 async function assertPlacement(slot, width) {
   const geometry = await slot.evaluate(element => {
-    const ad = element.closest('[data-home-ad]');
+    const ad = element.closest('[data-public-footer-ad]');
     const wrapper = ad.getBoundingClientRect();
     const box = element.getBoundingClientRect();
     const about = document.querySelector('[data-home-about]').getBoundingClientRect();
     const catalogue = document.querySelector('[data-home-sport-catalogue]');
-    const firstSport = catalogue.querySelector(':scope > section[data-sport]');
     const footer = document.querySelector('footer[data-site-chrome]').getBoundingClientRect();
-    const protectedContent = document.querySelector('[google-side-rail-overlap="false"]');
+    const protectedContent = document.querySelector('[data-game-desktop-rails]');
     const controls = [...document.querySelectorAll('main :is(a[href], button, input, select, summary), footer :is(a[href], button, summary)')]
       .filter(control => !ad.contains(control) && control.checkVisibility({ contentVisibilityAuto: true, visibilityProperty: true }))
       .map(control => control.getBoundingClientRect())
@@ -91,9 +89,8 @@ async function assertPlacement(slot, width) {
       slotLeft: box.left,
       slotRight: box.right,
       protectedGames: Boolean(protectedContent?.contains(catalogue) && protectedContent.contains(document.querySelector('[data-stage-card]'))),
-      betweenSports: ad.previousElementSibling === firstSport && ad.nextElementSibling?.matches('section[data-sport]'),
       afterContent: wrapper.top >= Math.max(about.bottom, catalogue.getBoundingClientRect().bottom) - 1,
-      beforeFooter: wrapper.bottom <= footer.top + 1,
+      afterFooter: box.top >= footer.bottom + 149,
       aboveGap: Math.min(...controls.filter(rect => rect.bottom <= box.top).map(rect => box.top - rect.bottom)),
       overlapsControl: controls.some(rect => rect.bottom > box.top + 1 && rect.top < box.bottom - 1),
     };
@@ -101,11 +98,11 @@ async function assertPlacement(slot, width) {
 
   assert(geometry.protectedGames, 'Desktop rails must keep clear of the featured games and catalogue');
   if (width <= 430) {
-    assert(geometry.afterContent && geometry.beforeFooter, 'The phone ad goes below the page content and before the footer');
+    assert(geometry.afterContent && geometry.afterFooter, 'The phone ad goes below the shared footer');
     assert.equal(geometry.slotWidth, width <= 335 ? 300 : 320);
     assert.equal(geometry.slotHeight, 100);
   } else {
-    assert(geometry.afterContent && geometry.beforeFooter, 'The desktop ad goes below About and before the footer');
+    assert(geometry.afterContent && geometry.afterFooter, 'The desktop ad goes below the shared footer');
   }
   assert(geometry.pageWidth <= geometry.viewport + 1, 'The home ad caused horizontal scrolling');
   assert(geometry.slotLeft >= -1 && geometry.slotRight <= geometry.viewport + 1, 'The ad extends outside the viewport');

@@ -1,67 +1,108 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ALL_GAMES } from '@/data/gameRegistry';
-import { HUB_NAV } from '@/lib/sportHubNav';
-import { CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, getEffectiveConsent } from '@/lib/consentPreferences';
-import { loadGameSideRailAds } from '@/lib/consentedScripts';
+import { normalizeRoutePath } from '@/lib/routePath';
+import { isGameRoute } from '@/components/StorageNotice';
+import AdBanner, { AD_CONTROL_GAP_PX } from './AdBanner';
+import { usePublicAdEligibility } from './usePublicAdEligibility';
 import styles from './GameDesktopRails.module.css';
-import { EDITORIAL_RAIL_ROUTES } from './editorialRailRoutes';
+export { isPublicDesktopRailRoute } from './publicAdEligibility';
 
-export const PUBLIC_DESKTOP_RAIL_ROUTES = [
-  ...ALL_GAMES.map(game => game.path),
-  ...HUB_NAV.map(hub => hub.route),
-  ...EDITORIAL_RAIL_ROUTES,
-] as const;
-const eligiblePublicRoutes: ReadonlySet<string> = new Set(PUBLIC_DESKTOP_RAIL_ROUTES);
-export const isPublicDesktopRailRoute = (path: string): boolean => eligiblePublicRoutes.has(path);
-const desktopRails = '(min-width: 1280px)';
+const playTargets = 'canvas, [role="grid"], form, table, a[href], button, input, select, textarea, summary, [role="button"], [contenteditable="true"]';
+const outsideGame = '[data-site-chrome], [data-seo-content]';
 
-function useEligibleAutoRails(active: boolean, element: React.RefObject<HTMLDivElement>) {
-  const { pathname, search, hash } = useLocation();
-  useEffect(() => {
-    if (!active || search || hash || !isPublicDesktopRailRoute(pathname) || !element.current) return;
-    if ((window as Window & { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return;
-    const media = window.matchMedia(desktopRails);
-    let frame = 0;
-    let started = false;
-    const maybeStart = () => {
-      if (started || frame || !media.matches || !getEffectiveConsent().advertising) return;
-      frame = requestAnimationFrame(() => {
-        frame = 0;
-        if (!media.matches || !getEffectiveConsent().advertising ||
-            window.location.pathname !== pathname || window.location.search || window.location.hash) return;
-        const canonicals = [...document.querySelectorAll<HTMLLinkElement>('head link[rel="canonical"]')];
-        if (!canonicals.some(link => link.getAttribute('href') === 'https://douknowball.com' + pathname)) return;
-        if (element.current && loadGameSideRailAds(element.current)) {
-          started = true;
-          observer.disconnect();
-        }
-      });
-    };
-    const observer = new MutationObserver(maybeStart);
-    observer.observe(document.head, { subtree: true, childList: true, attributes: true, attributeFilter: ['content', 'href'] });
-    media.addEventListener('change', maybeStart);
-    window.addEventListener(CONSENT_CHANGED_EVENT, maybeStart);
-    window.addEventListener(CONSENT_EFFECTIVE_CHANGED_EVENT, maybeStart);
-    maybeStart();
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(frame);
-      media.removeEventListener('change', maybeStart);
-      window.removeEventListener(CONSENT_CHANGED_EVENT, maybeStart);
-      window.removeEventListener(CONSENT_EFFECTIVE_CHANGED_EVENT, maybeStart);
-    };
-  }, [active, element, hash, pathname, search]);
+function gameFitsBetweenRails(frame: HTMLElement, content: HTMLElement): boolean {
+  const left = frame.querySelector('[data-rail-edge="left"]')?.getBoundingClientRect();
+  const right = frame.querySelector('[data-rail-edge="right"]')?.getBoundingClientRect();
+  const main = content.querySelector('main, [role="main"], #dukb-main');
+  if (!main || !left || !right || left.width < 120 || right.width < 120 || content.scrollWidth > content.clientWidth + 1) return false;
+  if (content.querySelector('[data-seo-content="loading"], [aria-busy="true"]')) return false;
+  const clear = (box: DOMRect) => box.left - left.right >= AD_CONTROL_GAP_PX && right.left - box.right >= AD_CONTROL_GAP_PX;
+  const mainBox = main.getBoundingClientRect();
+  let bounded = mainBox.width > 1 && mainBox.width < content.clientWidth - 1;
+  if (bounded && !clear(mainBox)) return false;
+  // The Help strip already has its final width while its button is downloading.
+  for (const area of content.querySelectorAll('[data-game-play-area], .mx-auto[class*="max-w-"]')) {
+    if (area.closest(outsideGame)) continue;
+    const box = area.getBoundingClientRect();
+    if (box.width <= 1) continue;
+    bounded = true;
+    if (!clear(box)) return false;
+  }
+  if (!bounded) return false;
+  let hasControl = false;
+  for (const target of content.querySelectorAll(playTargets)) {
+    if (target.closest(outsideGame)) continue;
+    const box = target.getBoundingClientRect();
+    if (box.width <= 1 || box.height <= 1 || getComputedStyle(target).visibility === 'hidden') continue;
+    hasControl = true;
+    if (!clear(box)) return false;
+  }
+  return hasControl;
 }
 
-/** Keep the game itself and its controls out of both desktop Auto ad rails. */
 export function GameDesktopRails({ active, children }: { active: boolean; children: ReactNode }) {
+  const { pathname } = useLocation();
+  const path = normalizeRoutePath(pathname);
+  const playable = isGameRoute(path);
+  const eligible = usePublicAdEligibility('(min-width: 1280px)');
+  const frame = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
-  useEligibleAutoRails(active, content);
+  const [fits, setFits] = useState(false);
+  const [clearPath, setClearPath] = useState<string | null>(null);
+  useLayoutEffect(() => {
+    const element = frame.current;
+    if (!element || typeof ResizeObserver === 'undefined') return;
+    setFits(element.clientWidth >= 1280);
+    const observer = new ResizeObserver(([entry]) => setFits(entry.contentRect.width >= 1280));
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [active]);
+
+  useLayoutEffect(() => {
+    const container = frame.current, game = content.current;
+    if (!eligible || !fits || !playable || !container || !game) {
+      setClearPath(null);
+      return;
+    }
+    const measure = () => {
+      const nav = game.querySelector('nav[data-site-chrome]');
+      const navBottom = nav ? nav.getBoundingClientRect().bottom - container.getBoundingClientRect().top : 0;
+      container.style.setProperty('--rail-start', Math.max(0, navBottom) + AD_CONTROL_GAP_PX + 'px');
+      setClearPath(gameFitsBetweenRails(container, game) ? path : null);
+    };
+    let pending = 0;
+    const schedule = () => {
+      if (!pending) pending = requestAnimationFrame(() => { pending = 0; measure(); });
+    };
+    const resized = new ResizeObserver(schedule);
+    resized.observe(game);
+    const changed = new MutationObserver(schedule);
+    changed.observe(game, { subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'style', 'hidden', 'open', 'aria-busy', 'data-seo-content'] });
+    game.addEventListener('scroll', schedule, true);
+    measure();
+    return () => {
+      cancelAnimationFrame(pending);
+      resized.disconnect();
+      changed.disconnect();
+      game.removeEventListener('scroll', schedule, true);
+      container.style.removeProperty('--rail-start');
+    };
+  }, [eligible, fits, playable, path]);
+
   if (!active) return children;
+  const showRails = eligible && fits && (!playable || clearPath === path);
   return (
-    <div ref={content} className={styles.game} data-game-desktop-rails="" google-side-rail-overlap="false">
-      {children}
+    <div ref={frame} className={styles.frame} data-desktop-room={fits ? '' : undefined} data-playable-route={playable ? '' : undefined}>
+      <div ref={content} className={styles.game} data-game-desktop-rails="" google-side-rail-overlap="false">
+        {children}
+      </div>
+      {(['left', 'right'] as const).map(side => (
+        <div key={side} data-rail-edge={side} data-no-prerender="" className={styles.rail}>
+          {showRails && <div key={path} data-ad-rail={side}>
+            <AdBanner placement={side === 'left' ? 'left-rail' : 'right-rail'} slot="7540487748" format="vertical" />
+          </div>}
+        </div>
+      ))}
     </div>
   );
 }

@@ -77,21 +77,23 @@ describe('actual NBA Stat Line season picker', () => {
     }
   });
 
-  it('allows the original consented manual slot in setup play and results', async () => {
+  it('keeps setup, all five picks and the result free of in-game ad slots and requests', async () => {
     localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: Date.now() })); window.adsbygoogle = [];
     const view = render(frame()), menu = await view.findByRole('button', { name: /^Daily target/ });
-    const slot = view.container.querySelector('ins.adsbygoogle');
-    expect(slot).not.toBeNull(); expect(window.adsbygoogle).toHaveLength(1);
+    expect(view.container.querySelector('ins.adsbygoogle')).toBeNull();
+    expect(window.adsbygoogle).toHaveLength(0);
     click(menu as HTMLButtonElement);
-    expect(view.container.querySelector('ins.adsbygoogle')).toBe(slot);
-    for (const season of [pool[24], pool[2], pool[29], pool[5], pool[33]]) pick(view, season.key);
-    expect(view.container.querySelector('ins.adsbygoogle')).toBe(slot);
+    for (const season of [pool[24], pool[2], pool[29], pool[5], pool[33]]) {
+      pick(view, season.key);
+      expect(view.container.querySelector('ins.adsbygoogle')).toBeNull();
+      expect(window.adsbygoogle).toHaveLength(0);
+    }
     click(view.getByRole('button', { name: 'Score my line' }) as HTMLButtonElement);
-    expect(view.container.querySelector('ins.adsbygoogle')).toBe(slot); expect(window.adsbygoogle).toHaveLength(1);
+    expect(view.container.querySelector('ins.adsbygoogle')).toBeNull(); expect(window.adsbygoogle).toHaveLength(0);
     expect(recordCompletion).toHaveBeenCalledTimes(1); view.unmount();
     localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
     const essential = render(frame()); await essential.findByRole('button', { name: /^Daily target/ });
-    expect(essential.container.querySelector('[data-dukb-manual-ad]')).toBeNull(); expect(window.adsbygoogle).toHaveLength(1);
+    expect(essential.container.querySelector('[data-dukb-manual-ad]')).toBeNull(); expect(window.adsbygoogle).toHaveLength(0);
   });
 
   it('holds the original first-ten order, labeled search and quiet typing', async () => {

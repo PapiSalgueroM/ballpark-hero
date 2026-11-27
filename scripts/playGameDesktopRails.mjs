@@ -27,6 +27,7 @@ const browser = await chromium.launch();
 
 async function context(width) {
   const ctx = await browser.newContext({ viewport: { width, height: 900 }, serviceWorkers: 'block' });
+  await ctx.addInitScript(() => localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: Date.now() })));
   await ctx.route('**/*', route => {
     const req = route.request(), url = new URL(req.url());
     return url.origin === origin.origin && ['GET', 'HEAD'].includes(req.method()) ? route.continue() : route.abort();
@@ -38,13 +39,16 @@ async function verify(page, path, width, requiredDocks = 0) {
   await page.goto(new URL(path, origin).href, { waitUntil: 'domcontentloaded' });
   const wrapper = page.locator(key);
   await wrapper.waitFor({ state: 'attached' });
-  assert.equal(await wrapper.getAttribute('google-side-rail-overlap'), 'false');
+  await page.locator('#root footer[data-site-chrome]').waitFor({ state: 'attached' });
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  const sideCount = await page.locator('[data-ad-rail] ins.adsbygoogle').count();
+  assert(width >= 1280 ? sideCount === 0 || sideCount === 2 : sideCount === 0, path + ': incomplete or misplaced pair');
   const docks = '[data-career-utility],[data-career-action-bar="floating"],[data-game-rail-dock],[data-dukb-set-aside]';
   if (requiredDocks) await wrapper.locator(docks).first().waitFor({ state: 'visible' });
   const rect = await wrapper.evaluate((el, docks) => {
     const box = el.getBoundingClientRect(), viewport = document.documentElement.clientWidth;
     return {
-      display: getComputedStyle(el).display,
+      playable: !!el.closest('[data-playable-route]'),
       left: box.left, right: viewport - box.right, width: viewport,
       documentWidth: document.documentElement.scrollWidth,
       controls: [...el.querySelectorAll(docks)].filter(control => control.checkVisibility()).map(control => {
@@ -54,10 +58,11 @@ async function verify(page, path, width, requiredDocks = 0) {
     };
   }, docks);
   const where = `${path} at ${width}px: ${JSON.stringify(rect)}`;
-  if (width >= 1280) {
-    assert(Math.abs(rect.left - 160) < 1 && Math.abs(rect.right - 160) < 1, where);
-    assert(rect.controls.every(([left, right]) => left >= 159 && right <= rect.width - 159), where);
-  } else assert.equal(rect.display, 'contents', where);
+  if (sideCount) {
+    assert(Math.abs(rect.left - rect.right) <= 1, where);
+    assert(rect.playable ? rect.left <= 1 : rect.left >= 159, where);
+    assert(rect.controls.every(([left, right]) => left >= rect.left - 1 && right <= rect.width - rect.right + 1), where);
+  }
   assert(rect.documentWidth <= rect.width + 1, where);
   assert(rect.controls.length >= requiredDocks, where);
 }
@@ -76,10 +81,10 @@ try {
 
   const ctx = await context(1280);
   const page = await ctx.newPage();
-  for (const path of ['/', '/about', '/privacy', '/search', '/no-such-game-rail-check']) {
+  for (const path of ['/about', '/privacy', '/search', '/no-such-game-rail-check']) {
     await page.goto(new URL(path, origin).href);
     await page.locator('footer').waitFor();
-    assert.equal(await page.locator(key).count(), 0, 'A non-game received a game rail: ' + path);
+    assert.equal(await page.locator('[data-ad-rail] ins.adsbygoogle').count(), 0, 'An excluded page received an ad rail: ' + path);
   }
   await page.close();
   await ctx.close();
@@ -91,7 +96,6 @@ try {
     const session = await context(width);
     const active = await session.newPage();
     await active.addInitScript(save => {
-      localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
       localStorage.setItem('rules-gate-seen:/soccer-career', '1');
       localStorage.setItem('soccerCareerSave', save);
     }, bytes);

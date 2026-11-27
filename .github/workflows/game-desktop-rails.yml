@@ -7,15 +7,14 @@ on:
       - scripts/playGameDesktopRails.mjs
       - scripts/playGameAutoRails.mjs
       - scripts/playHomeAds.mjs
-      - src/components/ads/PublicFooterAd.tsx
+      - scripts/playPriorityAdLayout.mjs
+      - src/components/ads/**
       - src/components/CookieConsent.tsx
       - src/pages/Index.tsx
       - scripts/simAdsense.mjs
       - src/lib/consentedScripts.ts
       - src/lib/consentPreferences.ts
       - src/App.tsx
-      - src/components/ads/GameDesktopRails*
-      - src/components/ads/editorialRailRoutes.ts
       - src/components/StorageNotice.tsx
       - src/components/BrokenSaveRestore.tsx
       - src/components/club-manager/CustomClubForm.tsx
@@ -61,9 +60,10 @@ jobs:
           node scripts/playGameDesktopRails.mjs
           node scripts/playGameAutoRails.mjs
           node scripts/playHomeAds.mjs
+          node scripts/playPriorityAdLayout.mjs
       - name: Verify privacy and manual ad guards
         run: |
           node scripts/simAdsense.mjs
-          ADSENSE_CONTROL=script-without-slot node scripts/simAdsense.mjs
-          ADSENSE_CONTROL=noindex-guard node scripts/simAdsense.mjs
+          SIM_ADSENSE_CONTROL=script-without-slot node scripts/simAdsense.mjs
+          SIM_ADSENSE_CONTROL=noindex-guard node scripts/simAdsense.mjs
           npx vitest run src/test/consentPurposeGates.test.ts src/test/consentPrivacy1442.test.ts src/test/consentWithdrawal1442.test.ts --maxWorkers=1

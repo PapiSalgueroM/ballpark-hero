@@ -7,6 +7,7 @@
  * work in both cases, the answer has to hold for the visit, and nothing to do
  * with analytics may load unless Accept was pressed.
  */
+import { publicAdCanonical } from './fixtures/publicAdSlot';
 import { createElement } from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -49,6 +50,7 @@ afterEach(() => {
     const d = original.get(name);
     if (d) Object.defineProperty(window, name, d); else delete (window as unknown as Record<string, unknown>)[name];
   }
+  document.querySelectorAll('link[rel="canonical"]').forEach(el => el.remove());
   document.querySelectorAll(ANALYTICS).forEach(el => el.remove());
   document.querySelectorAll('script[src*="adsbygoogle.js"]').forEach(el => el.remove());
   delete (window as unknown as Record<string, unknown>).adsbygoogle;
@@ -134,12 +136,13 @@ describe.each(['blocked', 'full'] as const)('the ad slot with storage %s', kind 
   const slot = () => document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle');
   async function mountBannerAndSlot() {
     const mounted = await mountBanner();
+    publicAdCanonical();
     const { default: AdSlot } = await import('@/components/ads/AdBanner');
     /* Built with createElement and the one production slot id, on purpose:
        scripts/simAdsense.mjs counts every JSX use of the ad component in src
        as a caller on the site and pins both the count and the slot id, and a
        test is not a caller. */
-    const adSlot = () => createElement(AdSlot, { slot: '7540487748' });
+    const adSlot = () => createElement('div', { 'data-public-footer-ad': '' }, createElement(AdSlot, { slot: '7540487748', placement: 'public-footer' }));
     return { ...mounted, adSlot };
   }
 

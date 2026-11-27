@@ -2,6 +2,7 @@ import { ANALYTICS_READY, getEffectiveConsent, type ConsentPurposes } from '@/li
 import { ALL_GAMES } from '@/data/gameRegistry';
 import { HUB_NAV } from '@/lib/sportHubNav';
 import { EDITORIAL_RAIL_ROUTES } from '@/components/ads/editorialRailRoutes';
+import { isPublicAdDocument } from '@/components/ads/publicAdEligibility';
 import { normalizeRoutePath } from '@/lib/routePath';
 export { CONSENT_CHANGED_EVENT } from '@/lib/consentPreferences';
 
@@ -41,38 +42,47 @@ function updateGoogleConsent(purposes: ConsentPurposes): void {
 
 type AdSenseQueue = unknown[] & { requestNonPersonalizedAds?: number; pauseAdRequests?: number };
 const AD_LOADER = 'script[src*="adsbygoogle.js"]';
-
-export function loadAdSense(): boolean {
-  try {
-    if (!getEffectiveConsent().advertising) return false;
-    if (document.querySelector('meta[name="robots"][content*="noindex"]')) return false;
-    if (!document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]')) return false;
-    return startAdSense();
-  } catch { return false; }
+export function getAdSenseScript(): HTMLScriptElement | null {
+  return document.querySelector<HTMLScriptElement>(AD_LOADER);
 }
 
-/** Auto side rails use the publisher tag, not a hidden or duplicated manual slot. */
-export function loadGameSideRailAds(game: HTMLDivElement): boolean {
+const PUBLIC_AD_SLOT = [
+  '[data-public-footer-ad] [data-dukb-manual-ad="public-footer"]',
+  '[data-ad-rail="left"] [data-dukb-manual-ad="left-rail"]',
+  '[data-ad-rail="right"] [data-dukb-manual-ad="right-rail"]',
+].map(placement => placement + ' ins.adsbygoogle[data-ad-slot="7540487748"]').join(',');
+
+export function loadAdSense(requestedSlot?: HTMLModElement | null): boolean {
   try {
-    const consent = getEffectiveConsent();
-    if (!consent.advertising || !game.isConnected || !game.matches('[data-game-desktop-rails][google-side-rail-overlap="false"]')) return false;
-    if (document.querySelector('meta[name="robots"][content*="noindex" i]')) return false;
-    if (!game.querySelector('main, [role="main"], #dukb-main')) return false;
-    const bounds = game.getBoundingClientRect();
-    if (bounds.left < 159 || document.documentElement.clientWidth - bounds.right < 159) return false;
+    if (!getEffectiveConsent().advertising) return false;
+    if (!isPublicAdDocument()) return false;
+    const slot = requestedSlot === undefined ? document.querySelector(PUBLIC_AD_SLOT) : requestedSlot;
+    if (!slot?.isConnected || !slot.matches(PUBLIC_AD_SLOT)) return false;
+    if (window.innerWidth < (slot.closest('[data-ad-rail]') ? 1280 : 320)) return false;
     return startAdSense();
   } catch { return false; }
 }
 
 function startAdSense(): boolean {
+  if (getAdSenseScript()) return true;
   updateGoogleConsent(getEffectiveConsent());
-  if (document.querySelector(AD_LOADER)) return true;
   const w = window as Window & { adsbygoogle?: AdSenseQueue };
   w.adsbygoogle = w.adsbygoogle || [];
   w.adsbygoogle.requestNonPersonalizedAds = 1;
+  if (w.adsbygoogle.pauseAdRequests === 1) w.adsbygoogle.pauseAdRequests = 0;
   const s = document.createElement('script');
   s.async = true;
   s.crossOrigin = 'anonymous';
+  s.dataset.dukbAdLoading = '';
+  s.onload = () => {
+    delete s.dataset.dukbAdLoading;
+    s.onload = s.onerror = null;
+  };
+  s.onerror = () => {
+    if (s.isConnected) document.documentElement.setAttribute('data-dukb-ad-load-failed', '');
+    s.onload = s.onerror = null;
+    s.remove();
+  };
   s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
   document.head.appendChild(s);
   return true;
