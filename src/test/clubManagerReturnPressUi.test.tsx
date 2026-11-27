@@ -29,6 +29,10 @@ it('offers only the actual opposing wide defenders, shows who can close down and
   expect(targetButton).toHaveAttribute('aria-pressed', 'true');
   fireEvent.click(within(region).getByRole('button', { name: 'Stand down the press' }));
   expect(onSelect).toHaveBeenLastCalledWith(null);
+  const future = JSON.parse(JSON.stringify({ ...order, version: 2 }));
+  view.rerender(<ReturnPressPicker career={career} live={{ ...live, returnPress: future }} minute={46} onSelect={onSelect} />);
+  expect(region).toHaveTextContent('newer pressing instruction');
+  expect(within(region).queryByRole('button', { name: 'Stand down the press' })).toBeNull();
 });
 
 it('keeps separate throws at one clock, links only their own chances, and leaves live goal calls to the match clock', () => {

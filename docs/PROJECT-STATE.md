@@ -1,3 +1,9 @@
+### November 27, 2026. Club Manager return-pass pressing
+
+The live tactics sheet and halftime dressing room let the manager pick a named opposing fullback and see the winger assigned to press him. The order fires only at an actual throw taken by that defender while both players are on the pitch. The return can give the winger a high regain or expose the space behind. A direct release leaves the winger in position. The manager can change target or stand down. Match reports use the recorded throws, their actual fitness charge and any linked shot or review. The original career path stays compact until the manager chooses a target.
+
+In 540 matched competitive second halves, 827 targeted throws produced 274 direct releases, 388 high regains and 165 bypasses. The linked shots were 103 for the pressing team and 34 against, with 12 goals for and two conceded. Four hundred forty-three goals for and 322 against were recorded by ordinary play. On 1,000 otherwise identical opportunities, a fresh winger won 447 returns and a tired winger won 217. Patient, balanced and direct opposition styles played long on 162, 311 and 445 of those opportunities. These are simulation results. The default route matched the previous release on all 159 career/save and report comparisons and their random draw tapes. A separate comparison matched 135 complete matches and 188,714 random draws.
+
 ### November 27, 2026. Competitive corner training published in Club Manager
 
 Lovable published revision `fbe6b0305` in deployment `d112ac0b-1183-4055-9b7b-93634a6d7a93`. Home, Club Manager and What's New served `index-Cdnjm2PD.js`, SHA256 `29ade8f1a1b518f5f832ed8451ac1d0dea1b84a67679bf5fe4544c1a9d3b890c`. The two public guide snapshots matched the repository. All 176 sitemap URLs passed the live HTML audit, and IndexNow accepted both changed URLs with HTTP 200.
