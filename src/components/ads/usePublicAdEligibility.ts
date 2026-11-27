@@ -8,13 +8,14 @@ export function usePublicAdEligibility(mediaQuery: string): boolean {
   const { pathname, search, hash } = useLocation();
   const path = normalizeRoutePath(pathname);
   const publicAddress = isPublicAdAddress(path, search, hash);
-  const [allowedPath, setAllowedPath] = useState<string | null>(null);
+  const address = path + search;
+  const [allowedAddress, setAllowedAddress] = useState<string | null>(null);
   const home = useRef({ hadSlot: false, retired: false });
   useLayoutEffect(() => { home.current = { hadSlot: false, retired: false }; }, [path]);
 
   useLayoutEffect(() => {
     if (!publicAddress) {
-      setAllowedPath(null);
+      setAllowedAddress(null);
       return;
     }
     const media = window.matchMedia(mediaQuery);
@@ -30,16 +31,17 @@ export function usePublicAdEligibility(mediaQuery: string): boolean {
       watchHomeSlot = path === '/' && advertising && !home.current.hadSlot;
       rememberHomeSlot();
       if (path === '/' && home.current.hadSlot && document.querySelector('[data-home-search-active]')) home.current.retired = true;
-      setAllowedPath(!home.current.retired && media.matches && advertising && isPublicAdDocument() ? path : null);
+      setAllowedAddress(!home.current.retired && media.matches && advertising && isPublicAdDocument() ? address : null);
     };
     const head = new MutationObserver(check);
     head.observe(document.head, { childList: true, subtree: true, attributes: true, attributeFilter: ['href', 'content', 'name', 'rel'] });
+    const screenMarkers = AD_EXCLUDED_SCREEN + ',[data-cm-playing]';
     const screen = new MutationObserver(records => {
       // Preserve the first allocation even if the publisher later reports it unfilled.
       rememberHomeSlot();
       for (const record of records) {
         if (record.type === 'attributes' || [...record.addedNodes, ...record.removedNodes].some(node =>
-          node instanceof Element && (node.matches(AD_EXCLUDED_SCREEN) || node.querySelector(AD_EXCLUDED_SCREEN)))) {
+          node instanceof Element && (node.matches(screenMarkers) || node.querySelector(screenMarkers)))) {
           check();
           break;
         }
@@ -57,7 +59,7 @@ export function usePublicAdEligibility(mediaQuery: string): boolean {
       window.removeEventListener(CONSENT_CHANGED_EVENT, check);
       window.removeEventListener(CONSENT_EFFECTIVE_CHANGED_EVENT, check);
     };
-  }, [path, publicAddress, mediaQuery]);
+  }, [address, path, publicAddress, mediaQuery]);
 
-  return publicAddress && allowedPath === path;
+  return publicAddress && allowedAddress === address;
 }

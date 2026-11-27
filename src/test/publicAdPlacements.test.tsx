@@ -81,6 +81,35 @@ it.each(['/privacy', '/reset-password', '/admin/login', '/unknown-area', '/footl
   },
 );
 
+it('admits the Home resume link only after the manager has loaded and keeps save-file tools private', async () => {
+  history.replaceState({}, '', '/club-manager?resume=active');
+  publicAdCanonical();
+  render(<BrowserRouter><PublicFooterAd /></BrowserRouter>);
+  expect(slot()).toBeNull();
+  const career = document.createElement('span');
+  career.dataset.cmPlaying = '';
+  document.body.append(career);
+  await waitFor(() => expect(slot()).not.toBeNull());
+  const files = document.createElement('div');
+  files.dataset.cmSaveFiles = '';
+  document.body.append(files);
+  await waitFor(() => expect(slot()).toBeNull());
+  files.remove();
+  await waitFor(() => expect(slot()).not.toBeNull());
+  career.remove();
+  await waitFor(() => expect(slot()).toBeNull());
+});
+
+it.each(['/soccer-career?resume=active', '/club-manager?resume=active&slot=1', '/club-manager?resume=active#private',
+  '/club-manager?resume=active&source=pwa', '/club-manager?resume=1'])('rejects alternate resume addresses even during play: %s', address => {
+  history.replaceState({}, '', address);
+  publicAdCanonical();
+  const career = document.createElement('span');
+  career.dataset.cmPlaying = '';
+  document.body.append(career);
+  expect(loadAdSense(mountPublicFooterSlot())).toBe(false);
+});
+
 it('rejects a stale canonical, prerender and noindex before starting the tag', () => {
   history.replaceState({}, '', '/footle/');
   const canonical = publicAdCanonical('/');
