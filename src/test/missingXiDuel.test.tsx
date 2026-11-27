@@ -1,10 +1,11 @@
 import './dailyReload/mocks';
+import { useNavigate } from 'react-router-dom';
 import { cleanup, screen, within } from '@testing-library/react';
 import MissingXi from '@/pages/MissingXi';
 import { recordCompletion } from '@/lib/completions';
 import { click, mountPage } from './dailyReload/harness';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { drawDuel, duelPoints, duelProgress, readDuel, restoreDuel } from '@/lib/missingXiDuel';
+import { drawDuel, duelPoints, duelProgress, readDuel, restoreDuel, saveDuel } from '@/lib/missingXiDuel';
 import { LINEUPS, HELD_LINEUP_IDS } from '@/lib/missingXi';
 
 describe('Missing XI Lineup Duel', () => {
@@ -90,4 +91,47 @@ it('opens a published v1 link without leaking starters, resumes its card, and ke
   expect(recordCompletion).not.toHaveBeenCalled();
   expect(localStorage.getItem(draftKey)).toBe(older);
   expect(sessionStorage.getItem('missing-xi-full-open')).toBe('1');
+});
+
+it('keeps the original single-card save and both played cards across Back, Forward and reload', async () => {
+  const code = 'v1.cl-2011-final-barca.727fy7.eyx29s.jvznn';
+  const path = '/missing-xi#duel=' + code + '~211';
+  const previous = JSON.stringify({ code, guesses: ['Javier Mascherano'] });
+  sessionStorage.setItem('dukb-missing-xi-duel-v1', previous);
+  function History() {
+    const navigate = useNavigate();
+    return <><button onClick={() => navigate(-1)}>Browser back</button><button onClick={() => navigate(1)}>Browser forward</button></>;
+  }
+  const view = mountPage(<><History /><MissingXi /></>, path);
+  const rules = screen.queryByRole('button', { name: "Let's Play!" });
+  if (rules) await click(rules);
+  expect(screen.getByRole('heading', { name: 'Blank 2 of 3 · LB' })).toBeInTheDocument();
+  const pass = () => click(screen.getByRole('button', { name: 'Pass this blank' }));
+  await pass(); await pass();
+  await click(screen.getByRole('button', { name: 'Deal a new match' }));
+  await pass();
+  await click(screen.getByRole('button', { name: 'Browser back' }));
+  expect(screen.getByRole('heading', { name: 'Your friend won' })).toBeInTheDocument();
+  expect(screen.getByText('100/300 points')).toBeInTheDocument();
+  await click(screen.getByRole('button', { name: 'Browser forward' }));
+  expect(screen.getByRole('heading', { name: /^Blank 2 of 3/ })).toBeInTheDocument();
+  view.unmount();
+  mountPage(<MissingXi />, path);
+  expect(screen.getByRole('heading', { name: 'Your friend won' })).toBeInTheDocument();
+  expect(sessionStorage.getItem('dukb-missing-xi-duel-v1')).toBe(previous);
+});
+
+it('keeps the twelve most recently played cards and leaves other session data alone', () => {
+  const cards = LINEUPS.flatMap(lineup => {
+    const code = drawDuel([], [lineup]);
+    return code ? [readDuel('#duel=' + code)!] : [];
+  }).slice(0, 13);
+  sessionStorage.setItem('unrelated', 'keep');
+  cards.slice(0, 12).forEach(card => saveDuel(card, [null]));
+  saveDuel(cards[0], [null, null]);
+  saveDuel(cards[12], [null]);
+  expect(restoreDuel(cards[0])).toEqual([null, null]);
+  expect(restoreDuel(cards[1])).toEqual([]);
+  expect(cards.slice(2).every(card => restoreDuel(card).length === 1)).toBe(true);
+  expect(sessionStorage.getItem('unrelated')).toBe('keep');
 });

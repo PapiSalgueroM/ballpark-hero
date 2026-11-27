@@ -1,6 +1,7 @@
 import { dailyPrngSeed, shuffledRange } from '@/lib/dateUtils';
 import { guessKey, HELD_LINEUP_IDS, isCorrectGuess, LINEUPS, MAX_GUESSES, scoreForGuess, type BlankCandidate, type Lineup } from '@/lib/missingXi';
 import { normalizeName } from '@/lib/playerSearch';
+import { safeSessionStorage } from '@/lib/safeStorage';
 
 export type Duel = { lineup: Lineup; blanks: BlankCandidate[]; code: string; comparison?: string };
 export type DuelGuess = string | null;
@@ -65,10 +66,30 @@ export function duelProgress(duel: Duel, guesses: DuelGuess[]) {
   return { card, misses };
 }
 
-export function restoreDuel(duel: Duel, raw: string | null): DuelGuess[] {
+const historyKey = 'dukb-missing-xi-duel-history-v1';
+const oldDraftKey = 'dukb-missing-xi-duel-v1';
+const keptCards = 12;
+type StoredCard = { code: string; guesses: DuelGuess[] };
+
+function savedCards(raw: string | null): StoredCard[] {
   try {
     const saved = JSON.parse(raw ?? 'null');
-    return saved?.code === duel.code && Array.isArray(saved.guesses) && saved.guesses.length <= 9
-      && duelProgress(duel, saved.guesses) ? saved.guesses : [];
+    return (Array.isArray(saved) ? saved : [saved]).slice(-keptCards).filter(row =>
+      typeof row?.code === 'string' && Array.isArray(row.guesses) && row.guesses.length <= 9);
   } catch { return []; }
+}
+
+function storedHistory() {
+  return safeSessionStorage.getItem(historyKey) ?? safeSessionStorage.getItem(oldDraftKey);
+}
+
+export function restoreDuel(duel: Duel, raw = storedHistory()): DuelGuess[] {
+  const card = savedCards(raw).find(row => row.code === duel.code);
+  return card && duelProgress(duel, card.guesses) ? card.guesses : [];
+}
+
+export function saveDuel(duel: Duel, guesses: DuelGuess[]) {
+  const earlier = savedCards(storedHistory()).filter(card => card.code !== duel.code);
+  const cards = [...earlier.slice(1 - keptCards), { code: duel.code, guesses }];
+  safeSessionStorage.setItem(historyKey, JSON.stringify(cards));
 }

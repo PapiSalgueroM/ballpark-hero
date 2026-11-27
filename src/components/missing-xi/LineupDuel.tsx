@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import PlayerAutocomplete from '@/components/game/PlayerAutocomplete';
 import { hintForLevel, scoreForGuess, XI_ROSTER_NAMES, XI_SEARCH_OPTIONS, type HintLevel } from '@/lib/missingXi';
-import { drawDuel, duelPoints, duelProgress, readDuel, restoreDuel, type Duel, type DuelGuess } from '@/lib/missingXiDuel';
-import { safeSessionStorage } from '@/lib/safeStorage';
+import { drawDuel, duelPoints, duelProgress, readDuel, restoreDuel, saveDuel, type Duel, type DuelGuess } from '@/lib/missingXiDuel';
 
-const draftKey = 'dukb-missing-xi-duel-v1';
 const button = 'min-h-11 rounded-xl border border-border px-3 py-2 text-sm font-semibold';
 const primary = button + ' bg-primary text-primary-foreground';
 
@@ -25,7 +23,7 @@ export default function LineupDuel({ hash, todayId, open }: { hash: string; toda
 }
 
 function DuelBoard({ duel, deal }: { duel: Duel; deal: () => void }) {
-  const [guesses, setGuesses] = useState(() => restoreDuel(duel, safeSessionStorage.getItem(draftKey)));
+  const [guesses, setGuesses] = useState(() => restoreDuel(duel));
   const [input, setInput] = useState('');
   const [selected, setSelected] = useState('');
   const [notice, setNotice] = useState('');
@@ -41,7 +39,7 @@ function DuelBoard({ duel, deal }: { duel: Duel; deal: () => void }) {
     const progress = duelProgress(duel, next);
     if (!progress) { setNotice('You already tried that name for this blank.'); return; }
     setGuesses(next);
-    safeSessionStorage.setItem(draftKey, JSON.stringify({ code: duel.code, guesses: next }));
+    saveDuel(duel, next);
     setInput('');
     setSelected('');
     setCopy(null);
