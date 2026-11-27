@@ -2,6 +2,8 @@
 
 A 1280px desktop viewport with a 15px scrollbar supplied only 1265px to the game frame. The previous second width check suppressed the pair before it measured the game. Public desktop layouts now use the real page width for the scrollbar and check the actual space between each creative and its controls. Fine-pointer desktop windows at 1254 through 1279px can also qualify. Phones and touch-only devices in that extra band keep the footer.
 
+On the local build, Home's two side ads are 160px wide on eligible desktops below 1920 CSS pixels and 300px wide from 1920. Saved Soccer Career uses 120px on compact desktops and 160px from 1366. Each unit is 600px tall. Both can start beside the first screen when there is at least 150px of clearance from navigation, launch links and game controls. The width check accounts for fractional pixels at Windows display scales, and the Home check measures the visible part of each card when several saved games share a horizontally scrolling Continue row.
+
 The installed site's Home address and three game shortcuts have a fixed public source marker. Advertising recognizes the exact manifest URLs after an advertising choice. Extra parameters, fragments, save screens and search remain excluded. Four regression cases that previously failed now load a single publisher tag each, including the Soccer Career shortcut. The NRL team picker uses fewer columns where this keeps the club buttons full-size beside two desktop ads.
 
 ### November 27, 2026. Saved Soccer Career desktop layout
