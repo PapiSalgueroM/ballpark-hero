@@ -12543,8 +12543,9 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
   } else if (addOn > 0) {
     signed.pendingAddOns = [...(signed.pendingAddOns ?? []), { name: neg.player.name, to: neg.player.club, amount: addOn }];
   }
-  const bits: string[] = [`${money(amount)} up front`];
-  if (contingent) bits.push(`${money(contingent.amount)} after ${contingent.threshold} senior league appearances for ${signed.clubName}`);
+  const feeMoney = contingent ? moneyIn(signed) : money;
+  const bits: string[] = [`${feeMoney(amount)} up front`];
+  if (contingent) bits.push(`${feeMoney(contingent.amount)} after ${contingent.threshold} senior league appearances for ${signed.clubName}`);
   else if (addOn > 0) bits.push(`${money(addOn)} in add-ons`);
   if (sellOnPct > 0) bits.push(`a ${sellOnPct} percent sell-on`);
   if (swap) bits.push(`${swap.name} going the other way`);

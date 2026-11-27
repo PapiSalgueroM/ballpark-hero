@@ -6,6 +6,7 @@ import { acceptBid, appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, a
 import { joinClubNow } from '@/lib/clubManagerCalendar';
 import { addAppearanceFee, recordFeeAppearances, settleAppearanceFees } from '@/lib/clubManagerAppearanceFees';
 import { closeLedger, projectFinances } from '@/lib/clubManagerFinances';
+import { startOptionsOf } from '@/lib/clubManagerStart';
 
 function seeded<T>(seed: number, action: () => T): T {
   const original = Math.random;
@@ -97,6 +98,9 @@ describe('negotiated senior league appearance fees', () => {
     expect(long.negotiation!.phase).toBe('fee');
     expect(short.appearanceFees).toBeUndefined();
     expect(short.budget).toBe(open.budget);
+    const euroTable = { ...short, startOptions: { ...startOptionsOf(short), currency: 'EUR' as const } };
+    const euro = seeded(511, () => offerTerms(euroTable, euroTable.negotiation!.terms!.want))!;
+    expect(euro.negotiation!.note).toContain('€23.8m up front, €5m after 5 senior league appearances');
     for(const bad of [{addOn:0,appearanceTrigger:5},{addOn:5,appearanceTrigger:9},{addOn:4.55,appearanceTrigger:15}]) {
       expect(makeOffer(open,27.8,bad as DealExtras)).toBeNull();
     }
