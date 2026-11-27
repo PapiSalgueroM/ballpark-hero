@@ -64,7 +64,7 @@ export function ReturnToPlayReport({ receipt }: { receipt: unknown }) {
     <summary className="min-h-11 cursor-pointer py-3 text-xs font-bold">Return from injury · {receipt.name}</summary>
     <section aria-label="Return from injury" className="space-y-1 pb-2 text-xs">
       <p><strong>{receipt.name}</strong>{receipt.generated && <MadeUpTag className="ml-1" />} · {planName[receipt.plan]} against {receipt.opponent}</p>
-      <p>{receipt.started ? 'Started at kickoff' : `Came on at ${minuteLabel(receipt.entry)}`} and played until {exit}. <strong>{receipt.minutes} {receipt.minutes === 1 ? 'minute' : 'minutes'} recorded.</strong></p>
+      <p>{receipt.started ? 'Started at kickoff' : `Came on at ${minuteLabel(receipt.entry)}`} and played until {exit}. <strong>{receipt.minutes} {receipt.minutes === 1 ? 'minute' : 'minutes'} recorded.</strong> Added time on the pitch is included.</p>
       <p>Simulated setback chance with this workload was {receipt.riskPercent}%.</p>
       {receipt.outcome === 'settled' && <p className="font-semibold">Completed the return workload.</p>}
       {receipt.outcome === 'setback' && <p className="font-semibold">The return caused a setback. He needs {receipt.setbackWeeks} more {receipt.setbackWeeks === 1 ? 'recovery week' : 'recovery weeks'}.</p>}
