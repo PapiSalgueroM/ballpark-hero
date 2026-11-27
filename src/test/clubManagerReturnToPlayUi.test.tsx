@@ -30,6 +30,9 @@ it('books and cancels a first appearance plan through the treatment room', () =>
   view.rerender(<><ReturnToPlayDeskCard career={career} onCommit={commit} /><ReturnToPlayMatchCard career={career} /></>);
   expect(desk).toHaveTextContent('Awaiting clearance');
   expect(screen.queryByText(/First appearance plan/)).toBeNull();
+  fireEvent.click(within(desk).getByRole('button', { name: 'Switch to late cameo' }));
+  view.rerender(<ReturnToPlayDeskCard career={career} onCommit={commit} />);
+  expect(returnToPlayDesk(career).active?.plan).toBe('late-cameo');
   fireEvent.click(within(desk).getByRole('button', { name: 'Cancel return plan' }));
   view.rerender(<ReturnToPlayDeskCard career={career} onCommit={commit} />);
   expect(returnToPlayDesk(career).active).toBeNull();
