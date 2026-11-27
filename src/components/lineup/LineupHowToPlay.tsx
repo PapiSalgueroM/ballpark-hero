@@ -25,6 +25,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
             <li>Choose a draft mode and formation.</li>
             <li>Pick an empty position. Search for a player who fits both the team drawn and that position.</li>
             <li>Fill all 11 spots, then submit your lineup to see your finish and player stats.</li>
+            <li>To try another starter first, choose Replace and tick Compare before replacing. Both players face the same league draw. Keep your starter or use the challenger.</li>
           </ol>
           <p className="rounded-lg bg-secondary/40 px-3 py-2 text-sm">
             <strong>Example</strong> · Draw a club at goalkeeper and pick one of its keepers. In Club year draft, their club record must also match your year.

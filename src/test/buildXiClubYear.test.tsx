@@ -934,6 +934,32 @@ describe('Build Your XI unfinished draft', () => {
     legacyQuiet();
   });
 
+  it('holds a verified replacement outside the draft and refuses to apply over a newer tab', async () => {
+    const view = await startHook(2010);
+    await fillHook(view, 2010);
+    const original = api(view).filledSlots.get(0)!;
+    const bytes = localStorage.getItem(draftKey)!;
+    const name = 'Fixture trial keeper';
+    act(() => { api(view).replacePick(0); });
+    await act(async () => api(view).submitPlayer(name, meta(original.assignedTeam, 2009, 'GK', name), true));
+    expect(api(view).comparedSlot).toBeNull();
+    await act(async () => api(view).submitPlayer(name, meta(original.assignedTeam, 2010, 'GK', name), true));
+    expect(localStorage.getItem(draftKey)).toBe(bytes);
+    expect(api(view).comparedSlot?.playerName).toBe(name);
+    expect(api(view).filledSlots.get(0)).toEqual(original);
+    act(() => api(view).cancelReplacement());
+    expect(api(view).comparedSlot).toBeNull();
+    expect(localStorage.getItem(draftKey)).toBe(bytes);
+    act(() => { api(view).replacePick(0); });
+    await act(async () => api(view).submitPlayer(name, meta(original.assignedTeam, 2010, 'GK', name), true));
+    const moved = JSON.stringify({ ...JSON.parse(bytes), seasonApproach: 'protect' });
+    localStorage.setItem(draftKey, moved);
+    act(() => api(view).confirmComparedSlot());
+    expect(localStorage.getItem(draftKey)).toBe(moved);
+    expect(api(view).filledSlots.get(0)).toEqual(original);
+    expect(api(view).validationError).toBeTruthy();
+  });
+
   it('does not overwrite the selected starter when validation is canceled or another tab changes the draft', async () => {
     const view = await startHook(2010);
     await fillHook(view, 2010);
@@ -1275,7 +1301,7 @@ describe('Build Your XI Club year Browse on the real page', () => {
     expect(screen.queryByText('Season Report', { exact: true })).toBeNull();
   }, 15000);
 
-  it('uses the same recorded player picker to replace a starter and refresh the settled XI', async () => {
+  it.each([false, true])('replaces a starter and refreshes the settled XI, comparing before signing: %s', async compareFirst => {
     io.pool = 'complete'; await openPage(2026); await fillPage();
     const before = io.simulate.mock.calls[0][0] as { name: string; value: number }[];
     const originalName = before[0].name;
@@ -1297,12 +1323,23 @@ describe('Build Your XI Club year Browse on the real page', () => {
     const edit = screen.getByRole('region', { name: 'Replace a starter' });
     expect(within(edit).getByRole('combobox')).toHaveFocus();
     expect(screen.getByRole('button', { name: 'Submit Team' })).toBeDisabled();
+    const originalDraft = localStorage.getItem(draftKey);
+    if (compareFirst) fireEvent.click(within(edit).getByRole('checkbox', { name: 'Compare before replacing' }));
     fireEvent.change(within(edit).getByRole('combobox'), { target: { value: 'Target' } });
     await advance(220); await flush();
     const offered = playerOptions();
     const target = offered.find(node => node.textContent?.includes('Target Keeper'));
     expect(target, offered.map(node => node.textContent).join(' | ')).toBeDefined();
     fireEvent.click(target!); await flush();
+    if (compareFirst) {
+      const trial = within(edit).getByRole('table', { name: 'Starter comparison' });
+      expect(within(trial).getByRole('columnheader', { name: new RegExp(originalName) })).toBeVisible();
+      expect(within(trial).getByRole('columnheader', { name: /Fixture Target Keeper/ })).toBeVisible();
+      expect(within(trial).getByRole('rowheader', { name: 'League points' })).toBeVisible();
+      expect(localStorage.getItem(draftKey)).toBe(originalDraft);
+      expect(io.simulate).toHaveBeenCalledTimes(1);
+      fireEvent.click(within(edit).getByRole('button', { name: 'Use Fixture Target Keeper' })); await flush();
+    }
     expect(screen.queryByRole('region', { name: 'Replace a starter' })).toBeNull();
     expect(io.simulate).toHaveBeenCalledTimes(2);
     const after = io.simulate.mock.calls[1][0] as { name: string; value: number }[];

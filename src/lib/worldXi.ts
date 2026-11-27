@@ -859,10 +859,10 @@ export function formationMisfits(players: WxPlayer[], formationName: string): nu
 export function whatIfFinish(
   filled: WxPlayer[],
   formationName: string,
-  alt: { formation?: string; liftWeakest?: boolean; adjust?: number; approach?: WorldXiSeasonApproach; table?: 'round-robin' } = {},
+  alt: { formation?: string; liftWeakest?: boolean; adjust?: number; approach?: WorldXiSeasonApproach; table?: 'round-robin'; sameDrawAs?: WxPlayer[] } = {},
 ): { points: number; tablePosition: number } {
   const players = filled.filter((p): p is WxPlayer => p !== null);
-  const seed = squadSeed(players);
+  const seed = squadSeed(alt.sameDrawAs ?? players);
   const ratings = ratingsFor(players);
   let squadRating = squadRatingOf(ratings);
   if (alt.liftWeakest && ratings.length >= 2) {

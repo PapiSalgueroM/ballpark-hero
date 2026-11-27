@@ -28,6 +28,18 @@ it('counts the three competitions in a treble and keeps the saved achievement', 
 });
 
 describe('World XI season approach', () => {
+  it('compares equal-rated replacement players on the original fixture list and match rolls', () => {
+    const current = squad();
+    const alt = { formation: shape, adjust: 1.6, approach: 'attack', table: 'round-robin' } as const;
+    const original = whatIfFinish(current, shape, alt);
+    let differentUnmatchedDraws = 0;
+    for (let n = 0; n < 8; n++) {
+      const candidate = current.map((p, i) => i === 0 ? { ...p, name: 'Fixture challenger ' + n } : p);
+      if (whatIfFinish(candidate, shape, alt).points !== original.points) differentUnmatchedDraws++;
+      expect(whatIfFinish(candidate, shape, { ...alt, sameDrawAs: current })).toEqual(original);
+    }
+    expect(differentUnmatchedDraws).toBeGreaterThan(0);
+  });
   it('replays a riskier fixture, preserves expected points and reconciles home and away points', () => {
     for (const players of [squad(), squad().map(p => ({ ...p, value: 0 })), squad().map(p => ({ ...p, value: 1_000_000_000 }))]) {
       const balanced = worldXiMatchOdds(players, 'balanced');

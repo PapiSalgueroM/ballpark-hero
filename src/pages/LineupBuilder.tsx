@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
-import { FORMATIONS, lastRecordedYear, recordedYearsLabel, type Formation, type DraftChoice, type AIVerdict } from '@/types/lineupBuilder';
+import { FORMATIONS, lastRecordedYear, recordedYearsLabel, type Formation, type DraftChoice, type AIVerdict, type FilledSlot } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
 import { FlagImg } from '@/components/FlagImg';
 import { GameShell } from '@/components/game/GameShell';
@@ -22,13 +22,23 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { supabase } from '@/integrations/supabase/client';
 import { StatTile } from '@/components/game/StatTile';
 import { normalizePosition, playerRating } from '@/lib/squadDeal';
-import { ordinal, simulateWorldXiSeason, xiTrophyCount, type WxPlayer } from '@/lib/worldXi';
+import { ordinal, simulateWorldXiSeason, whatIfFinish, xiTrophyCount, type WxPlayer } from '@/lib/worldXi';
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 import { lineupFitSlots, seasonAdjust, xiFitBreakdown, type XiFitSlot } from '@/lib/xiFit';
 import { XiFitBreakdown, XiFitWorth } from '@/components/lineup/XiFitBreakdown';
 import { safeSetItem } from '@/lib/safeStorage';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
+function seasonSquad(slots: FilledSlot[]): WxPlayer[] {
+  return slots.map(slot => ({
+    name: buildXiReportName(slot, slots),
+    country: slot.pick?.nationality ?? '',
+    position: slot.pick?.position ?? slot.role,
+    club: slot.pick?.club ?? '',
+    value: slot.pick?.value ?? 0,
+    age: slot.pick?.age,
+  }));
+}
 const leagueApproaches = {
   balanced: { label: 'Balanced', hint: 'Play for the usual mix of wins, draws and defeats.' },
   protect: { label: 'Protect the point', hint: 'Trade some wins and defeats for more draws.' },
@@ -60,6 +70,7 @@ const LineupBuilder = () => {
     resetGame,
     undoLastPick,
     replacingSlot,
+    comparedSlot, confirmComparedSlot,
     replacePick,
     cancelReplacement,
     finishSpin,
@@ -74,6 +85,7 @@ const LineupBuilder = () => {
   const [setupYear, setSetupYear] = useState(draftChoice.mode === 'club-year' ? draftChoice.year : 2026);
   const [setupEra, setSetupEra] = useState(draftChoice.mode === 'club-era' ? draftChoice.year : 2022);
   const [browsingPlayers, setBrowsingPlayers] = useState(false);
+  const [compareFirst, setCompareFirst] = useState(false);
   const [browseActivation, setBrowseActivation] = useState(0);
   const inputOwner = useRef<HTMLDivElement>(null);
   const focusPickInput = useRef(false);
@@ -126,6 +138,7 @@ const LineupBuilder = () => {
 
   const openReplacement = (index: number) => {
     if (!replacePick(index)) return;
+    setCompareFirst(false);
     inputRevision.current += 1;
     setPlayerInput('');
     setBrowsingPlayers(false);
@@ -258,7 +271,7 @@ const LineupBuilder = () => {
       age: typeof entity.meta.age === 'number' ? entity.meta.age : undefined,
       year: typeof entity.meta.year === 'number' ? entity.meta.year : undefined,
       recordId: typeof recordId === 'number' && Number.isSafeInteger(recordId) && recordId > 0 ? recordId : undefined,
-    });
+    }, compareFirst);
     if (inputRevision.current === revision) setPlayerInput('');
   };
 
@@ -351,16 +364,30 @@ const LineupBuilder = () => {
     if (phase === 'result') return savedSeason;
     if (phase !== 'reviewing' || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)
       || (isClubYear && ratedXi.some((r) => r.rating === null))) return null;
-    const squad: WxPlayer[] = ratedXi.map(({ slot, value }) => ({
-      name: buildXiReportName(slot, filledSlotsArray),
-      country: slot.pick?.nationality ?? '',
-      position: slot.pick?.position ?? slot.role,
-      club: slot.pick?.club ?? '',
-      value,
-      age: slot.pick?.age,
-    }));
+    const squad = seasonSquad(filledSlotsArray);
     return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown), seasonApproach, 'round-robin');
   }, [phase, savedSeason, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear, seasonApproach]);
+
+  const comparison = useMemo(() => {
+    if (!comparedSlot || selectedPositionIndex === null || !formation) return null;
+    const proposed = new Map(filledSlots).set(selectedPositionIndex, comparedSlot);
+    const nextFit = seasonAdjust(xiFitBreakdown(lineupFitSlots(positions, proposed)));
+    const currentFit = seasonAdjust(fitBreakdown);
+    const rows = [
+      { label: 'Role fit', current: currentFit.roleFit, next: nextFit.roleFit },
+      { label: 'Chemistry', current: currentFit.chemistry, next: nextFit.chemistry },
+      { label: 'Balance', current: currentFit.balance, next: nextFit.balance },
+    ];
+    const pick = comparedSlot.pick;
+    if (seasonReport && pick?.value && Number.isFinite(pick.value) && pick.value > 0 && (!isClubYear || Number.isFinite(pick.age))) {
+      const trial = whatIfFinish(seasonSquad(positions.map((_, i) => proposed.get(i)!)), formation, {
+        adjust: nextFit.roleFit + nextFit.chemistry + nextFit.balance,
+        approach: seasonApproach, table: 'round-robin', sameDrawAs: seasonSquad(filledSlotsArray),
+      });
+      rows.push({ label: 'League points', current: seasonReport.points, next: trial.points });
+    }
+    return rows;
+  }, [comparedSlot, selectedPositionIndex, formation, filledSlots, positions, fitBreakdown, seasonReport, isClubYear, seasonApproach, filledSlotsArray]);
 
   const recordedYearVerdict = useMemo<AIVerdict | null>(() => {
     if (recordedYear === null) return null;
@@ -613,7 +640,24 @@ const LineupBuilder = () => {
                   <p className="text-sm font-semibold">Replace {replacingSlot.playerName} at {replacingSlot.label}</p>
                   <button type="button" onClick={closeReplacement} className="min-h-11 px-2 text-sm font-semibold text-muted-foreground hover:text-foreground">Keep current pick</button>
                 </div>
-                {pickSearch}
+                {comparedSlot && comparison ? <div className="space-y-3">
+                  <table className="w-full table-fixed text-left text-xs" aria-label="Starter comparison">
+                    <thead><tr><th scope="col" className="w-1/3 py-2">Measure</th>
+                      {[replacingSlot, comparedSlot].map((slot, i) => <th key={i} scope="col" className="break-words px-1">
+                        {slot.playerName}{slot.pick?.year && <span className="block font-normal">{slot.pick.year}</span>}
+                      </th>)}</tr></thead>
+                    <tbody>{comparison.map(row => <tr key={row.label} className="border-t border-border">
+                      <th scope="row" className="py-2 font-medium">{row.label}</th><td className="px-1">{row.current}</td><td className="px-1">{row.next}</td>
+                    </tr>)}</tbody>
+                  </table>
+                  <p className="text-xs text-muted-foreground">{comparison.some(row => row.label === 'League points')
+                    ? 'Both XIs replay the current starter’s 38 fixtures and match rolls. Your submitted XI plays its own seeded season.'
+                    : 'League points need enough recorded data to rate both XIs.'}</p>
+                  <button type="button" onClick={confirmComparedSlot} className="min-h-11 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground">Use {comparedSlot.playerName}</button>
+                </div> : <>
+                  <label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" checked={compareFirst} disabled={isValidating} onChange={event => setCompareFirst(event.target.checked)} />Compare before replacing</label>
+                  {pickSearch}
+                </>}
               </section>}
               <div className="space-y-2">
                 {filledSlotsArray.map((slot, i) => (
@@ -798,6 +842,7 @@ const LineupBuilder = () => {
             "Use Browse players in either club draft to see the records available for that club and period",
             "Check the role fit, chemistry and balance tiles under the pitch: the season sim plays all three",
             "In review, replace any starter with another eligible player from the same draw before you submit",
+            "Tick Compare before replacing to replay both options on the same league draw, then keep the current starter or use the challenger",
             "Choose your league approach before submitting a rated XI. You can play for more draws or risk defeats to chase wins.",
             "Submit your full XI. Mixed uses its scouting evaluation. Club drafts use your selected records for a fictional season report",
           ]}

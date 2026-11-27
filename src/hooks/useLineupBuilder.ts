@@ -136,10 +136,12 @@ export function useLineupBuilder() {
      that follows it. */
   const validatorCall = useRef<AbortController | null>(null);
   const pickRun = useRef(0);
+  const [comparedSlot, setComparedSlot] = useState<FilledSlot | null>(null);
   const cancelValidation = useCallback(() => {
     pickRun.current += 1;
     validatorCall.current?.abort();
     setIsValidating(false);
+    setComparedSlot(null);
   }, []);
   useEffect(() => cancelValidation, [cancelValidation]);
 
@@ -265,8 +267,27 @@ export function useLineupBuilder() {
     return true;
   }, [filledCount, phase, filledSlots, cancelValidation, cancelEvaluation]);
 
+  const saveSlot = useCallback((index: number, slot: FilledSlot) => {
+    const next = new Map(filledSlots);
+    next.set(index, slot);
+    const draft = JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...next], ...savedApproach });
+    setIsValidating(false);
+    if (!persistDraft(draft)) {
+      setValidationError(STALE_DRAFT_MESSAGE);
+      return false;
+    }
+    setFilledSlots(next);
+    setSelectedPositionIndex(null);
+    setComparedSlot(null);
+    return true;
+  }, [filledSlots, formation, draftChoice, teamAssignments, savedApproach, persistDraft]);
+
+  const confirmComparedSlot = () => {
+    if (comparedSlot && replacingSlot && selectedPositionIndex !== null) saveSlot(selectedPositionIndex, comparedSlot);
+  };
+
   const submitPlayer = useCallback(
-    async (inputName: string, pickMeta?: PickMeta) => {
+    async (inputName: string, pickMeta?: PickMeta, compareFirst = false) => {
       let playerName = inputName;
       if (selectedPositionIndex === null || !currentTeam) return;
       if (replacingSlot) cancelValidation();
@@ -425,27 +446,20 @@ export function useLineupBuilder() {
         ...(pickMeta ? { pick: played.length > 0 ? { ...pickMeta, played } : pickMeta } : {}),
       };
 
-      const next = new Map(filledSlots);
-      next.set(selectedPositionIndex, slot);
-      const draft = JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...next], ...savedApproach });
-      if (!persistDraft(draft)) {
+      if (compareFirst && replacingSlot) {
         setIsValidating(false);
-        setValidationError(STALE_DRAFT_MESSAGE);
+        if (isCurrentBuildXiDraft(storedDraft.current)) setComparedSlot(slot);
+        else setValidationError(STALE_DRAFT_MESSAGE);
         return;
       }
-      setFilledSlots(next);
-
-      setSelectedPositionIndex(null);
-      setIsValidating(false);
-
-      if (replacingSlot) return;
+      if (!saveSlot(selectedPositionIndex, slot) || replacingSlot) return;
       if (filledCount + 1 >= 11) {
         setPhase('reviewing');
       } else {
         startSpin();
       }
     },
-    [selectedPositionIndex, currentTeam, positions, filledSlots, filledCount, startSpin, draftChoice, replacingSlot, cancelValidation, formation, teamAssignments, persistDraft, savedApproach]
+    [selectedPositionIndex, currentTeam, positions, filledSlots, filledCount, startSpin, draftChoice, replacingSlot, cancelValidation, saveSlot]
   );
 
   const filledSlotsArray = useMemo(() => {
@@ -583,7 +597,7 @@ export function useLineupBuilder() {
        deletes both of those and then this line. */
     checkingDown: false,
     selectFormation, selectPosition, submitPlayer, evaluateTeam, completeRecordedYearDraft, resetGame, undoLastPick,
-    replacingSlot, replacePick, cancelReplacement,
+    replacingSlot, replacePick, cancelReplacement, comparedSlot, confirmComparedSlot,
     startSpin, finishSpin, rerollTeam, teamAssignments, cancelValidation,
   };
 }
