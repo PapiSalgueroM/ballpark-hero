@@ -25,6 +25,7 @@ import {
 import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib/clubManager';
 import type { FlankPlan } from '@/lib/clubManagerFlank';
+import { bookCornerRoutine, cancelCornerRoutine, type CornerRoutine } from '@/lib/clubManager';
 import { tacticsImpl, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
 import { carryShape } from '@/lib/clubManagerCarry';
 import type { Position } from '@/types/game';
@@ -1435,6 +1436,11 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     return true;
   }, [phase, holdsActiveSlot, movedOn, persist]);
 
+  const bookCornerTraining = useCallback((order: CornerRoutine, expected: CareerState) =>
+    commitClubAction(c => c === expected ? bookCornerRoutine(c, order) : null), [commitClubAction]);
+  const cancelCornerTraining = useCallback((expected: CareerState) =>
+    commitClubAction(c => c === expected ? cancelCornerRoutine(c) : null), [commitClubAction]);
+
   const commitRecruitment = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
     if (phase !== 'hub' || !holdsActiveSlot() || movedOn()) return false;
     const now = recruitmentCurrent.current;
@@ -1696,7 +1702,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,
-    setStatus, loanOut, commitLoanPlan: commitClubAction, commitClubAction, commitRecruitment, renew, renewWithClause, terminate, signFree, setRole,
+    setStatus, loanOut, commitLoanPlan: commitClubAction, commitClubAction, commitRecruitment, bookCornerTraining, cancelCornerTraining, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, openYouthTeam, fundYouthTeam, rotateYouth, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, choosePenaltyMode, choosePenaltyTaker, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,

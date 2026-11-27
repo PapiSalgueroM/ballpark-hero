@@ -3525,6 +3525,7 @@ export interface CareerState {
   academy?: Academy;
   /** Round 116: how the squad is being worked this week. */
   training?: TrainingPlan;
+  cornerTraining?: CornerTraining;
   /** Round 116: how many of your own kids you have promoted, all time. */
   academyGraduates?: number;
   /**
@@ -3706,6 +3707,22 @@ export interface CareerState {
 
 export type SetPieceKey = 'captain' | 'cornersLeft' | 'cornersRight' | 'freeKicks' | 'penalties';
 
+export interface CornerRoutine {
+  flag: 'left' | 'right';
+  kind: 'far-post' | 'short';
+  takerId: string;
+  targetId: string;
+}
+export interface CornerTraining {
+  v: 1;
+  club: string;
+  season: number;
+  bookedWeek: number;
+  readyWeek?: number;
+  paid?: { taker: number; target: number };
+  order: CornerRoutine;
+}
+
 /**
  * Player ids, or null for "pick for me". One truth: the id lives here and
  * nowhere else, a sale, a release or a loan out clears every job naming the
@@ -3739,6 +3756,7 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  cornerRoutine?: CornerRoutine;
   flankPlan?: FlankPlan;
   flankDraw?: number;
   callPenalties?: true;
@@ -20261,6 +20279,67 @@ export function trainingFitnessIfRested(state: CareerState, fitness: number, int
   return fitnessAfterWeek(fitness, false, recoveryMod, flat, fitnessDaysAfter(state, state.week));
 }
 
+const CORNER_FITNESS_COST = 3;
+
+export function isCornerRoutine(value: unknown): value is CornerRoutine {
+  if (!value || typeof value !== 'object') return false;
+  const r = value as Partial<CornerRoutine>;
+  return Object.keys(r).length === 4 && (r.flag === 'left' || r.flag === 'right') && (r.kind === 'far-post' || r.kind === 'short')
+    && typeof r.takerId === 'string' && r.takerId.length > 0 && typeof r.targetId === 'string' && r.targetId.length > 0 && r.takerId !== r.targetId;
+}
+
+function readCornerTraining(value: unknown): CornerTraining | null {
+  if (!value || typeof value !== 'object') return null;
+  const t = value as CornerTraining;
+  const hasReady = Object.prototype.hasOwnProperty.call(t, 'readyWeek');
+  const cost = (n: unknown): boolean => typeof n === 'number' && Number.isFinite(n) && n > 0 && n <= CORNER_FITNESS_COST;
+  const paid = t.paid;
+  return t.v === 1 && Object.keys(t).length === (hasReady ? 7 : 5) && typeof t.club === 'string' && t.club.length > 0
+    && Number.isSafeInteger(t.season) && Number.isSafeInteger(t.bookedWeek) && t.bookedWeek >= 0
+    && (!hasReady || (Number.isSafeInteger(t.readyWeek) && t.readyWeek! >= t.bookedWeek && paid
+      && Object.keys(paid).length === 2 && cost(paid.taker) && cost(paid.target))) && isCornerRoutine(t.order) ? t : null;
+}
+
+function ownsCornerTraining(career: CareerState, t: CornerTraining) {
+  return t.club === career.clubName && t.season === career.season && t.bookedWeek <= career.week;
+}
+
+function cornerPlayers(career: CareerState, flag: CornerRoutine['flag'], xi: CMPlayer[]) {
+  const eligible = xi.filter(p => p.position !== 'GK' && isAvailable(p));
+  const assigned = career.setPieces?.[flag === 'left' ? 'cornersLeft' : 'cornersRight'];
+  const taker = eligible.find(p => p.id === assigned) ?? null;
+  return { taker, targets: eligible.filter(p => p.id !== assigned) };
+}
+
+function cornerPairReady(career: CareerState, order: CornerRoutine, xi: CMPlayer[]) {
+  const { taker, targets } = cornerPlayers(career, order.flag, xi);
+  return taker?.id === order.takerId && targets.some(p => p.id === order.targetId);
+}
+
+export function cornerTrainingDesk(career: CareerState, flag: CornerRoutine['flag']) {
+  const raw = career.cornerTraining, saved = readCornerTraining(raw);
+  const current = saved && ownsCornerTraining(career, saved) ? saved : null;
+  const status: 'open' | 'pending' | 'ready' | 'unsupported' = raw !== undefined && !saved ? 'unsupported'
+    : !current ? 'open' : current.readyWeek === undefined ? 'pending' : 'ready';
+  const players = cornerPlayers(career, flag, effectiveXIWithSlots(career).map(x => x.p));
+  return { status, order: current?.order ?? null, ...players, fitnessCost: CORNER_FITNESS_COST, paid: current?.paid };
+}
+
+export function bookCornerRoutine(career: CareerState, order: CornerRoutine): CareerState | null {
+  if (career.live || career.retired || career.sacked || career.wilderness || career.week >= career.calendar.length || !isCornerRoutine(order)) return null;
+  const desk = cornerTrainingDesk(career, order.flag);
+  if (desk.status !== 'open' || desk.taker?.id !== order.takerId || !desk.targets.some(p => p.id === order.targetId)) return null;
+  return { ...career, cornerTraining: { v: 1, club: career.clubName, season: career.season, bookedWeek: career.week, order: { ...order } } };
+}
+
+export function cancelCornerRoutine(career: CareerState): CareerState | null {
+  const t = readCornerTraining(career.cornerTraining);
+  if (!t || !ownsCornerTraining(career, t) || career.live || career.retired || career.sacked || career.wilderness) return null;
+  const next = { ...career };
+  delete next.cornerTraining;
+  return next;
+}
+
 /**
  * Round 1510 (ruling 2b): what a NIGHT does to the squad in place of tickWeek. The recovery and the match cost a
  * European midweek gets from its own tick, and nothing else: no knock risk, no injury or retraining countdown, no
@@ -20275,6 +20354,9 @@ function nightSquadTick(state: CareerState, playedIds: Set<string>): void {
 }
 
 function tickWeek(state: CareerState, playedIds: Set<string> | null, settledWeek = state.week): void {
+  const corner = state.cornerTraining && readCornerTraining(state.cornerTraining);
+  const rehearsing = corner && ownsCornerTraining(state, corner) && corner.readyWeek === undefined
+    && settledWeek >= corner.bookedWeek && cornerPairReady(state, corner.order, state.squad);
   const days = fitnessDaysAfter(state, settledWeek);
   recoverOutgoingLoans(state, days);
   /* Round 619: a settlement counts down HERE, in the same function that charges
@@ -20355,6 +20437,16 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null, settledWeek
   // Round 467: the dressing room's recovery and the week's books.
   tickFacilities(state);
   tickBooks(state);
+  if (corner && !ownsCornerTraining(state, corner)) delete state.cornerTraining;
+  else if (corner && corner.readyWeek === undefined && settledWeek >= corner.bookedWeek) {
+    const taker = state.squad.find(p => p.id === corner.order.takerId), target = state.squad.find(p => p.id === corner.order.targetId);
+    if (rehearsing && taker && target && isAvailable(taker) && isAvailable(target) && taker.fitness > 20 && target.fitness > 20) {
+      const paid = { taker: Math.min(CORNER_FITNESS_COST, taker.fitness - 20), target: Math.min(CORNER_FITNESS_COST, target.fitness - 20) };
+      taker.fitness -= paid.taker;
+      target.fitness -= paid.target;
+      state.cornerTraining = { ...corner, readyWeek: settledWeek, paid };
+    } else delete state.cornerTraining;
+  }
   /* Round 619: EVERY call that charges a week counts one week off, with no
      guard. A second draft keyed the countdown on state.week to stop a "week
      counted twice", and that double count was never real: it came from
@@ -23223,6 +23315,13 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
      with them: cards, an injury, every chance, corner, foul and throw in,
      with minutes, through the one segment draw every half uses. */
   const target = flankOrder?.fixture;
+  const prepared = state.cornerTraining && readCornerTraining(state.cornerTraining);
+  if (prepared && (!ownsCornerTraining(state, prepared) || prepared.readyWeek !== undefined)) {
+    if (ownsCornerTraining(state, prepared) && prepared.readyWeek! < state.week && cornerPairReady(state, prepared.order, men(xi))) {
+      live.cornerRoutine = { ...prepared.order };
+    }
+    delete state.cornerTraining;
+  }
   if (flankOrder && target?.opponent === fx.opponent && target.compLabel === fx.compLabel && target.home === fx.home) {
     tacticsImpl()?.change(state, live, { kind: 'flank', plan: flankOrder.plan }, 0, 0);
   }
@@ -26070,6 +26169,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      money lands in the new season's ledger. */
   rolloverFacilities(state, career, moving);
   rolloverBooks(state, career, moving);
+  if (readCornerTraining(state.cornerTraining)) delete state.cornerTraining;
   /* Round 471: and the staff, who belong to the club too. Stay and they
      carry a year better where there was room, with the matches reset; move
      and the new club hands you its own. */
