@@ -56,12 +56,26 @@ try {
       assert(box);
       await summary.tap({ position: { x: Math.floor(box.width / 2), y: Math.floor(box.height) - 2 } });
       assert(await summary.evaluate(el => window.trustedTargetTap && el.parentElement.open), 'A real tap near the lower edge must open the disclosure');
+      const rules = page.getByRole('button', { name: 'Corner routine rules' });
+      let icon;
+      if (title === 'Corner routines') {
+        icon = await rules.boundingBox();
+        assert(icon);
+        await rules.tap({ position: { x: Math.floor(icon.width) - 3, y: Math.floor(icon.height / 2) } });
+        assert.equal(await rules.getAttribute('aria-expanded'), 'true');
+      }
       release();
       await page.locator('link[data-dukb-app-style][media="all"]').waitFor({ state: 'attached' });
       const styled = (await summary.boundingBox()).height;
       console.log(`${title}: ${firstHeight}px at insertion, ${box.height}px at trusted tap, ${styled}px after CSS`);
       assert(styled >= 44);
       assert(baseline ? firstHeight < 44 && box.height < 44 : firstHeight >= 44 && box.height >= 44);
+      if (icon) {
+        const after = await rules.boundingBox();
+        console.log(`Corner routine rules: ${icon.width}x${icon.height}px before CSS, ${after.width}x${after.height}px after CSS`);
+        assert(after.width >= 44 && after.height >= 44);
+        assert(baseline ? icon.width < 44 : icon.width >= 44 && icon.height >= 44);
+      }
     } finally {
       release();
       await context.close();
