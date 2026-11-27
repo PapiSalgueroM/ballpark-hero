@@ -1,4 +1,8 @@
-### November 27, 2026. Club Manager scouting, bench orders and penalties ready for publication
+### November 27, 2026. Club Manager scouting, bench orders and Penalty Room live
+
+Lovable published merged revision `490f639b5` in deployment `ccc9015d-8e4b-4785-a977-cbc8f2a6c710`. Home, Club Manager and What's New served `index-CjQYhOEW.js`. Both changed raw HTML snapshots matched the repository. All 176 sitemap documents passed the production crawl checks. IndexNow accepted the two changed URLs.
+
+On the custom domain, native play at 320, 390 and 1366 pixels signed both recruitment recommendations, settled and reloaded nine fixtures with and without a bench order, and played both Penalty Room outcomes. All 80 ad layout checks passed at five widths in the new panels. The closest desktop control clearance was 152 pixels. Home, Club Manager and Back produced three eligible GA4 page views while actions within all three panels produced none. An independent comparison against the preceding four-game engine preserved complete careers, reports and random draws in 159 competitive cup fixtures. All ten deliberately altered comparisons failed.
 
 Transfers now lets the manager write a scouting brief and sign a recommended player through the usual negotiations. On the same £69m Brentford budget, a starting centre-back brief signed a player for £14.4m plus a £2.1m bonus. The cover brief signed a player for £3.6m plus £0.8m. The shortlisted player kept the brief that found him after the search changed.
 

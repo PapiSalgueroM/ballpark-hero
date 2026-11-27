@@ -6,6 +6,8 @@ The owner's ongoing instruction is to keep improving the most popular pages, esp
 
 ## November 27, 2026. Club Manager is the owner's first development priority
 
+The scouting brief, Quick Sim bench order and Penalty Room are live in `490f639b5`. The published entry was `index-CjQYhOEW.js`. Phone and desktop replays are recorded in Project state.
+
 The owner wants the next rounds concentrated on managing the club. The November 26 host ranking put Club Manager third overall behind Soccer Career and Home. The manager chapter contains 60 recommendations. Check each against the current game before implementing or marking it complete.
 
 | Masterplan item | What the manager can do in this build | What remains open |
