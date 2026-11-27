@@ -1,10 +1,12 @@
 /* Run against a built loopback site with BASE=http://127.0.0.1:4173.
- * --ranked, --careers, --mlb-saved or --home-search run the selected checks. HOST_TOP25 may name
+ * --ranked, --careers, --mlb-saved, --saved-shelf or --home-search run the selected checks. HOST_TOP25 may name
  * a verified host export containing exactly 25 ranked public paths, one per line.
  * The publisher script and its creative requests are intercepted local fixtures.
  * Nothing from this replay is sent to an advertising or analytics provider. */
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { answerConsent } from './lib/answerConsent.mjs';
 import { guardedAdBrowser, isSiteAsset, soccerCareerReplaySave, staticReply } from './lib/playwrightAdReplay.mjs';
 
@@ -207,6 +209,66 @@ async function savedMlb(width) {
     assert.deepEqual(evidence.errors, []);
     console.log('PASS: saved MLB hub, reset cancellation, Training and Pinch-Hit Series at ' + width);
   } finally { await ctx.close(); }
+}
+
+async function savedShelf() {
+  const { buildRealSaves } = await import('./lib/realSaves.mjs');
+  const folder = await mkdtemp(join(tmpdir(), 'dukb-home-shelf-'));
+  let fleet;
+  try { ({ fleet } = await buildRealSaves({ root: process.cwd(), tmpDir: folder, seeds: [0] })); }
+  finally { await rm(folder, { recursive: true, force: true }); }
+  const saves = { soccerCareerSave: fleet['/soccer-career'][0], stadiumTycoonSaveV1: fleet['/stadium-tycoon'][0],
+    wonderkidFactoryV1: fleet['/wonderkid-factory'][0], 'rebuild-table': fleet['/rebuild'][0], 'front-office-save-v1': fleet['/front-office'][0],
+    'dukb-two-minute-v1:range': JSON.stringify({ actions: ['draw'], best: null }) };
+  for (const width of [390, 1366]) {
+    const { ctx, page, evidence } = await profile(width);
+    try {
+      await ctx.addInitScript(saves => {
+        for (const [key, value] of Object.entries(saves)) localStorage.setItem(key, value);
+        localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
+      }, saves);
+      await open(page, '/');
+      const shelf = page.getByRole('region', { name: 'Continue playing' });
+      const rail = shelf.locator('[data-home-shelf-rail]');
+      await rail.waitFor();
+      if (width === 390 && process.argv.includes('--covered-arrow-control')) {
+        const before = await shelf.evaluate(el => getComputedStyle(el).gridTemplateColumns);
+        await shelf.evaluate(el => { el.style.gridTemplateColumns = '74px minmax(0, 1fr)'; });
+        assert.notEqual(await shelf.evaluate(el => getComputedStyle(el).gridTemplateColumns), before);
+      }
+      await shelf.evaluate(el => scrollTo({ top: scrollY + el.getBoundingClientRect().top - 80, behavior: 'instant' }));
+      const pageY = await page.evaluate(() => scrollY);
+      const read = () => rail.evaluate(el => ({ x: el.scrollLeft, max: el.scrollWidth - el.clientWidth }));
+      assert((await read()).max > 0, 'Fixture must overflow the saved shelf');
+      for (const direction of ['Next', 'Previous']) {
+        const button = shelf.getByRole('button', { name: direction + ' saved games' });
+        const cards = await rail.locator('li').count();
+        for (let i = 0; i <= cards; i++) {
+          const before = await read(), box = await button.boundingBox();
+          assert(box && box.height >= 44 && box.width >= 44);
+          assert(await button.evaluate(el => { const r = el.getBoundingClientRect(); return el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); }),
+            direction + ' arrow center is covered at ' + width);
+          const end = await button.getAttribute('aria-disabled') === 'true';
+          if (width === 390) await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+          else if (i === 1) await button.press('Enter');
+          else await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+          if (!end) await page.waitForFunction(x => document.querySelector('[data-home-continue] [data-home-shelf-rail]').scrollLeft !== x, before.x, { timeout: 2000 });
+          await page.evaluate(() => new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done))));
+          const after = await read();
+          assert.equal(new URL(page.url()).pathname, '/');
+          assert(Math.abs((await page.evaluate(() => scrollY)) - pageY) <= 1, 'Paging moved the document');
+          if (end) { assert(Math.abs(after.x - before.x) <= 1); break; }
+          assert(direction === 'Next' ? after.x > before.x : after.x < before.x);
+        }
+        const last = await read();
+        assert(Math.abs(last.x - (direction === 'Next' ? last.max : 0)) <= 1, direction + ' end clamp');
+        assert.equal(await button.getAttribute('aria-disabled'), 'true');
+      }
+      assert.deepEqual(evidence.errors, []);
+      assert.deepEqual(counts(evidence), [0, 0]);
+      console.log('PASS: saved shelf arrows reach both ends and keep page scroll at ' + width + 'px.');
+    } finally { await ctx.close(); }
+  }
 }
 
 async function clearanceControl(page) {
@@ -474,6 +536,7 @@ async function ranked() {
 }
 
 async function run() {
+  if (process.argv.includes('--saved-shelf')) return savedShelf();
   if (process.argv.includes('--mlb-saved')) {
     for (const width of [390, 1280, 1366]) await savedMlb(width);
     return;
