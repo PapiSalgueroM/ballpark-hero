@@ -150,7 +150,7 @@ describe('actual recruitment board and ordinary Buy return', () => {
     expect(first.terms.total).toBeGreaterThan(cover.terms.total);
     const open = async () => {
       fireEvent.click(screen.getByRole('button', { name: 'Shortlist' }));
-      fireEvent.click(await screen.findByRole('button', { name: 'Recruitment brief', exact: true }));
+      fireEvent.click(await screen.findByRole('button', { name: 'Recruitment brief' }));
     };
     const marketRows = [first.player, cover.player];
     const app = mount(career, marketRows, { transfer: true });
