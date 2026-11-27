@@ -8,7 +8,7 @@ import { ChevronRight, ChevronLeft, Trophy, Briefcase } from 'lucide-react';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { HubTab } from '@/hooks/useClubManager';
 import {
-  TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money,
+  TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money, livePenaltyEligible,
   isAvailable, xiAverageRating, sortedTable,
   CLUB_MANAGER_START_NATIONS as NATIONS, CLUB_MANAGER_START_LEAGUES as REAL_LEAGUES,
   playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, ordinaryClubAllowed, usesGeneratedOpeningSquad, isScopedStartLeague, setHalftimePlan,
@@ -122,6 +122,7 @@ const SavePointsScreen = lazy(() => import('@/components/club-manager/SavePoints
 const PressScreen = lazy(() => import('@/components/club-manager/PressScreen').then(m => ({ default: m.PressScreen })));
 const MatchCentre = lazy(() => import('@/components/club-manager/MatchCentre').then(m => ({ default: m.MatchCentre })));
 const LiveSimScreen = lazy(() => import('@/components/club-manager/LiveSimScreen').then(m => ({ default: m.LiveSimScreen })));
+const LiveShootoutPanel = lazy(() => import('@/components/club-manager/LiveShootoutPanel').then(m => ({ default: m.LiveShootoutPanel })));
 
 function WorldEditorTile({ movedCount, onOpen }: { movedCount: number; onOpen: () => void }) {
   return (
@@ -698,6 +699,10 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
      room below settles its talk at the whistle, after the football it was
      meant to change, so leaving the viewer mid second half must land back
      in the viewer. */
+  if (g.phase === 'halftime' && g.career?.live?.penaltyCalls) {
+    return shell(<div ref={revealRef}><ScreenLoading><LiveShootoutPanel career={g.career}
+      onKick={g.choosePenaltyTaker} onFinish={() => g.secondHalf(true)} /></ScreenLoading></div>);
+  }
   if (g.career && (watchMode || g.career.live?.h2Drawn) && (g.phase === 'halftime' || g.phase === 'matchResult')) {
     const liveClub = clubDefFor(g.career.clubName);
     return shell(
@@ -714,7 +719,8 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
           onSub={g.subAtHalftime}
           onShape={g.shapeAtHalftime}
           onTalk={g.halftimeTalk}
-          onSecondHalf={g.secondHalf}
+          onSecondHalf={() => g.secondHalf()}
+          onPenaltyMode={livePenaltyEligible(g.career) ? g.choosePenaltyMode : undefined}
           onStartSecondHalf={g.startSecondHalfLive}
           onStartExtraTime={g.startExtraTimeLive}
           onChange={g.changeAt}
@@ -738,7 +744,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
           onShape={g.shapeAtHalftime}
           onChange={g.changeAtHalftime}
           onTalk={g.halftimeTalk}
-          onSecondHalf={g.secondHalf}
+          onSecondHalf={() => g.secondHalf()}
         /></ScreenLoading>
       </div>
     );

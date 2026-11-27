@@ -3735,6 +3735,8 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  callPenalties?: true;
+  penaltyCalls?: { fixture: string; draw: number; picks: string[] };
   halftimePlanCall?: HalftimePlanCall;
   benchOrderReport?: string;
   positionRules?: number;
@@ -18623,6 +18625,10 @@ export function setShootoutOrder(career: CareerState, ids: readonly string[]): C
 function settleShootout(
   state: CareerState, live: LiveMatch, fx: MyFixture, finished: XiSlot[], mine: number, oppS: number, end: number,
 ): { won: boolean; detail?: ShootoutDetail } {
+  if (live.penaltyCalls) {
+    const called = livePenaltyProgress(state, live);
+    if (called) return { won: called.full.mine > called.full.theirs, detail: called.full };
+  }
   const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
   const order = shootoutOrderOf(state);
   const roll = order ? null : Math.random();
@@ -19669,6 +19675,99 @@ function secondLegTonight(state: CareerState, entry: CalendarEntry): boolean {
   if (entry.type === 'uel') return uelLegTonight(state, entry) === 2;
   if (entry.type === 'promotion') return entry.round === 2;
   return !!entry.uclRound && entry.uclLeg === 2 && uclLegsFor(state.eraId, entry.uclRound) === 2;
+}
+
+/** Shares the rules used at settlement, including first legs and continental league phases. */
+function shootoutFormat(state: CareerState, entry: CalendarEntry, fx: MyFixture): 'first' | 'aggregate' | 'single' | null {
+  if (secondLegTonight(state, entry)) return 'aggregate';
+  if ((fx.competition === 'uclKo' && entry.uclRound && entry.uclLeg === 1 && uclLegsFor(state.eraId, entry.uclRound) === 2)
+    || (fx.competition === 'uel' && uelLegTonight(state, entry) === 1)
+    || (entry.type === 'promotion' && entry.round === 1)) return 'first';
+  if (fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff' || fx.competition === 'promotion'
+    || (fx.competition === 'uel' && playsExtraTime(state, entry))) return 'single';
+  return null;
+}
+
+export function livePenaltyEligible(career: CareerState): boolean {
+  const live = career.live, entry = live && career.calendar[live.week], fx = entry && fixtureFor(career, entry);
+  if (!fx || !entry) return false;
+  const format = shootoutFormat(career, entry, fx);
+  return format === 'single' || format === 'aggregate';
+}
+
+function livePenaltyTie(career: CareerState, live: LiveMatch): string | null {
+  if (career.week !== live.week || !live.h2Drawn || !livePositionsValid(live)) return null;
+  const entry = career.calendar[live.week], fx = entry && fixtureFor(career, entry);
+  if (!fx || fx.opponent !== live.opponent || extraTimeDue(career, entry, live)) return null;
+  const format = shootoutFormat(career, entry, fx);
+  const myGoals = live.myGoals + (live.h2My ?? []).length, oppGoals = live.oppGoals + (live.h2Opp ?? []).length;
+  const due = format === 'aggregate' ? secondLegOutcomeTonight(career, entry, myGoals, oppGoals).out.winner === null
+    : format === 'single' && myGoals === oppGoals;
+  return due ? [career.clubName, career.season, live.week, entry.type, live.opponent, myGoals, oppGoals].join('|') : null;
+}
+
+export function startLivePenaltyCalls(career: CareerState): CareerState | null {
+  const live = career.live;
+  if (!live?.callPenalties || live.penaltyCalls) return null;
+  const fixture = livePenaltyTie(career, live);
+  if (!fixture) return null;
+  const penaltyCalls = { fixture, draw: Math.floor(Math.random() * 0x100000000), picks: [] };
+  const next = { ...career, live: { ...live, minute: live.et?.to ?? 90, penaltyCalls } };
+  return livePenaltyProgress(next, next.live) ? next : null;
+}
+
+/** Replay the committed choices on one draw. The screen only shows the kicks before its next decision. */
+export function livePenaltyProgress(career: CareerState, live = career.live) {
+  const run = live?.penaltyCalls;
+  if (!live?.callPenalties || !run || typeof run.fixture !== 'string' || run.fixture !== livePenaltyTie(career, live)
+    || !Number.isSafeInteger(run.draw) || run.draw < 0 || run.draw > 0xffffffff
+    || !Array.isArray(run.picks) || run.picks.length > SHOOTOUT_MAX_ROUNDS) return null;
+  const gone = offPitchIds(live);
+  const finished = livePairs(career, live).filter(x => !gone.has(x.p.id));
+  if (!finished.length) return null;
+  const players = finished.map(x => x.p);
+  const keeper = finished.find(x => x.slot?.allowed.includes('GK'))?.p ?? finished.find(x => !x.slot && x.p.position === 'GK')?.p;
+  const designated = assignedOnPitch(career.setPieces, 'penalties', players);
+  const coach = shootoutOrderOf(career) ?? [
+    ...(designated ? [designated.id] : []),
+    ...players.filter(p => p.id !== keeper?.id).sort((a, b) => b.rating - a.rating).map(p => p.id),
+  ];
+  const order = shootoutTakerOrder(coach, players.map(p => p.id), keeper?.id ?? null);
+  const byId = new Map(players.map(p => [p.id, p]));
+  let available = [...order];
+  const takers: ShootoutSide['takers'] = [];
+  let options = [...order];
+  for (let index = 0; index < SHOOTOUT_MAX_ROUNDS; index++) {
+    if (!available.length) available = [...order];
+    if (index === run.picks.length) options = [...available];
+    const id = index < run.picks.length ? run.picks[index] : available[0];
+    const slot = available.indexOf(id);
+    if (slot < 0) return null;
+    available.splice(slot, 1);
+    const p = byId.get(id)!;
+    takers.push({ name: p.name, rating: p.rating, ...(p.generated ? { gen: true } : {}) });
+  }
+  const strength = oppStrengthVsMe(career, live.opponent);
+  const onPitch = oppAt(live, live.et?.to ?? 90);
+  const opponents = onPitch?.length ? onPitch : shootoutRosterSide(oppRosterFor(career, live.opponent), strength);
+  const { theirs } = shootoutSides(career, [], finished, opponents, strength);
+  const random = keyedRng('cm-live-penalties/' + run.draw);
+  const full = runShootout({ mine: { takers, keeperRating: keeper?.rating ?? null }, theirs, myFirst: random() < 0.5 }, random);
+  if (run.picks.length > full.kicks.filter(k => k.side === 'me').length) return null;
+  let called = 0;
+  const next = full.kicks.findIndex(k => k.side === 'me' && called++ === run.picks.length);
+  const kicks = next < 0 ? full.kicks : full.kicks.slice(0, next);
+  const last = kicks.at(-1);
+  return { full, kicks, done: next < 0, keeperRating: theirs.keeperRating, options: options.map(id => byId.get(id)!),
+    mine: next < 0 ? full.mine : last?.mine ?? 0, theirs: next < 0 ? full.theirs : last?.theirs ?? 0 };
+}
+
+export function callLivePenalty(career: CareerState, id: string): CareerState | null {
+  const live = career.live, run = live?.penaltyCalls;
+  if (!live || !run) return null;
+  const progress = livePenaltyProgress(career, live);
+  if (!progress || progress.done || !progress.options.some(p => p.id === id)) return null;
+  return { ...career, live: { ...live, penaltyCalls: { ...run, picks: [...run.picks, id] } } };
 }
 
 export function setHalftimePlan(career: CareerState, plan: HalftimePlan | 'off'): CareerState | null {
@@ -20793,13 +20892,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
         twoLegs: uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg,
       }
     : null;
-  /* Round 1593: tonight's leg of a two legged Europa League tie (0 for the league phase and the final). */
-  const uelLeg = fx.competition === 'uel' ? uelLegTonight(state, entry) : 0;
-  const promotionLeg = entry.type === 'promotion' ? entry.round : -1;
-  const firstLegTonight = (!!uclLeg && uclLeg.twoLegs && uclLeg.leg === 1) || uelLeg === 1 || promotionLeg === 1;
-  /* Round 1510: a one match cup's night settles the cup or its semi final, so a draw goes to the shootout.
-     Round 1593: and a Europa League night that settles a tie (never a league phase night). */
-  const isKnockout = (fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff' || fx.competition === 'promotion' || (fx.competition === 'uel' && playsExtraTime(state, entry))) && !firstLegTonight;
+  const penaltyFormat = shootoutFormat(state, entry, fx);
 
   const suspendedNow = state.squad.filter(p => p.suspendedMatches > 0).map(p => p.id);
   /* Round 127: who could actually have played today, taken before the match
@@ -20891,7 +20984,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      semi finals, and the report should say both of those things.
      Round 670: tonight includes any extra time, so the tie is read after it,
      with away goals in extra time counting in the eras that counted them. */
-  if ((uclLeg && uclLeg.twoLegs && uclLeg.leg === 2) || uelLeg === 2 || promotionLeg === 2) {
+  if (penaltyFormat === 'aggregate') {
     const { iAmHome, out } = secondLegOutcomeTonight(state, entry, myGoals, oppGoals);
     /* Round 781: the first leg in my orientation, so the report can print it
        beside the aggregate. Leg one was played at tie.home's ground. */
@@ -20929,11 +21022,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       if (etPlayed) decidedBy = 'aet';
     }
     tieLine = { ...tieLine, through: advanced };
-  } else if (firstLegTonight) {
+  } else if (penaltyFormat === 'first') {
     /* Round 781: a first leg says so, with tonight as the aggregate so far,
        so the report can say the tie is still open and where it is settled. */
     tieLine = { leg: 1, aggMine: myGoals, aggTheirs: oppGoals };
-  } else if (isKnockout && drawn) {
+  } else if (penaltyFormat === 'single' && drawn) {
     decidedBy = 'pens';
     /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch.
        Round 782: or, with a shootout order set, it goes kick by kick. */
@@ -22824,6 +22917,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * Never mutates the input state.
  */
 export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; benchOrder?: BenchOrder }): PlayResult {
+  if (career.live?.penaltyCalls) return { state: career, kind: 'halftime', live: career.live };
   if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));
   /* Release AL: `noCoach` plays a quick sim the way it was played before
@@ -23680,7 +23774,8 @@ export function coachQuickMatch(career: CareerState, order?: BenchOrder): Career
 }
 
 /** Play the second half and finish the match. */
-export function resumeMatch(career: CareerState): PlayResult {
+export function resumeMatch(career: CareerState, finishPenalties = false): PlayResult {
+  if (career.live?.penaltyCalls && !finishPenalties) return { state: career, kind: 'halftime', live: career.live };
   if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const live = state.live;

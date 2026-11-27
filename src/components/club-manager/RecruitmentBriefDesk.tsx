@@ -10,12 +10,13 @@ import {
 const field = 'min-h-11 w-full rounded-lg border border-border bg-card px-2 text-sm';
 const button = 'min-h-11 rounded-lg border border-border px-3 py-2 text-sm font-bold';
 
-export function RecruitmentBriefDesk({ career, market, onCommit, onBack }: {
+export function RecruitmentBriefDesk({ career, market, onCommit, onBack, initialDraft }: {
   career: CareerState; market: MarketPlayer[]; onCommit: RecruitmentCommit; onBack: () => void;
+  initialDraft?: RecruitmentBrief;
 }) {
   const recruitment = recruitmentOf(career);
   const active = validBrief(recruitment?.brief) ? recruitment.brief : undefined;
-  const [draft, setDraft] = useState<RecruitmentBrief>(active ?? { position: 'CB', job: 'starter', budgetShare: 50 });
+  const [draft, setDraft] = useState<RecruitmentBrief>(initialDraft ?? active ?? { position: 'CB', job: 'starter', budgetShare: 50 });
   const [reportIndex, setReportIndex] = useState(0);
   const [help, setHelp] = useState(false);
   const [message, setMessage] = useState('');
@@ -45,7 +46,7 @@ export function RecruitmentBriefDesk({ career, market, onCommit, onBack }: {
   return (
     <section ref={root} aria-labelledby="cm-brief-title" className="min-w-0 space-y-3">
       <header className="flex items-center justify-between gap-2">
-        <button className={button} onClick={onBack}>Back to shortlist</button>
+        <button className={button} onClick={onBack}>{initialDraft ? 'Back to succession' : 'Back to shortlist'}</button>
         <h3 ref={heading} tabIndex={-1} id="cm-brief-title" className="text-lg font-black">Recruitment brief</h3>
         <button className={button + ' min-w-11'} aria-label="Recruitment brief help" aria-expanded={help} onClick={() => setHelp(!help)}>?</button>
       </header>

@@ -6,6 +6,8 @@ The owner's ongoing instruction is to keep improving the most popular pages, esp
 
 ## November 27, 2026. Club Manager is the owner's first development priority
 
+The scouting brief, Quick Sim bench order and Penalty Room are live in `490f639b5`. The published entry was `index-CjQYhOEW.js`. Phone and desktop replays are recorded in Project state.
+
 The owner wants the next rounds concentrated on managing the club. The November 26 host ranking put Club Manager third overall behind Soccer Career and Home. The manager chapter contains 60 recommendations. Check each against the current game before implementing or marking it complete.
 
 | Masterplan item | What the manager can do in this build | What remains open |
@@ -14,6 +16,10 @@ The owner wants the next rounds concentrated on managing the club. The November 
 | CM-21, recruitment briefs | Pick a position, a squad job and a share of the available kitty. Compare three available targets when the market supports three, including the requested role, wage room and contract estimate. A saved target remembers the original brief when the manager changes searches. Find in Buy opens the normal negotiations. | Recommendations use the position, game ratings and terms the save knows. Additional role attributes and evidence from scouting visits remain open. |
 
 ## November 27, 2026. CM-16 and CM-20, Penalty Room
+
+CM-16 and CM-19 also cover the competitive knockout viewer. Opt in during a deciding match to choose takers from the finishing team. The kick, both scores and the remaining choices survive a reload. Delegation uses the current score and any calls already made. Electing to call kicks is optional. Group-stage games and first legs retain their usual results.
+
+CM-30 now connects the contracts and scouting desks through Squad succession. The manager reviews either of the next two summers, sees eligible primary-position cover outside the starting eleven and checks any purchase option on an outgoing loan. A plain renewal spends the quoted fee. A replacement brief opens for the selected player's position and leads to the normal buying desk. The view reads the current squad and deals at every visit. Players' intentions and longer-range retirement forecasts remain open.
 
 The new Tactics drill uses the selected eleven, the projected opposition, both keepers and the competitive shootout engine. The manager picks each next taker after seeing the latest kicks. The second entry hands over after two takers from the reference order. The finished drill compares that reference order on the same rolls and can set the tested order through Club Manager's existing competitive save action. Old careers need no migration. Practice and competitive matches draw separately.
 
