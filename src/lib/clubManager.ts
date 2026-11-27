@@ -221,6 +221,7 @@ import {
 import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
+import { resolveCornerDeliveries, type CornerDelivery } from '@/lib/clubManagerCornerDelivery';
 import type { FlankMove, FlankPlan } from '@/lib/clubManagerFlank';
 /* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
    balanced, and the slot clubManagerTactics.ts fills when it loads. Every reader below is a no op on balanced
@@ -2217,6 +2218,8 @@ export interface PlayEvent {
   who: string;
   flankMove?: FlankMove;
   flankChance?: 'entry' | 'counter';
+  cornerDelivery?: CornerDelivery;
+  cornerChance?: string;
   whoGenerated?: true;
   review?: CmVarDecision;
   on?: boolean;
@@ -2237,6 +2240,7 @@ export interface PlayEvent {
  *  whether it came from the spot or a free kick, in which case `id` and
  *  `name` are the assigned taker's when he was on the pitch. */
 export interface MyGoalLine {
+  cornerChance?: string;
   id: string;
   name: string;
   minute: number;
@@ -2312,6 +2316,7 @@ export interface PlayerRatingLine {
 }
 
 export interface MatchDetail {
+  cornerRoutine?: CornerRoutine;
   stats: MatchStats;
   /** My cards only. The sim tracks my discipline (suspensions are real);
       it holds no per-player state for the opposition, so it does not invent any. */
@@ -19419,7 +19424,7 @@ function tagOwnGoals(state: CareerState, live: LiveMatch, fx: MyFixture, half: 1
   const keyOf = (g: { minute: number; plus?: number; name: string }, side: 'me' | 'opp'): string =>
     `${match}|${g.minute + (g.plus ?? 0)}|${side}|${g.name}`;
   /* Never a goal from the spot or a direct free kick, and never a goal already tagged. */
-  const eligible = (g: { og?: unknown; penalty?: boolean; freeKick?: boolean }): boolean => !g.og && !g.penalty && !g.freeKick;
+  const eligible = (g: { og?: unknown; penalty?: boolean; freeKick?: boolean; cornerChance?: string }): boolean => !g.og && !g.penalty && !g.freeKick && !g.cornerChance;
   for (const g of mine) {
     if (!eligible(g)) continue;
     const key = keyOf(g, 'me');
@@ -19614,6 +19619,15 @@ function drawSegment(
       if (half === 1) { live.h1My!.push(...built.mine); live.h1Opp!.push(...built.theirs); }
       else { live.h2My!.push(...built.mine); live.h2Opp!.push(...built.theirs); }
     }
+  }
+  if (live.cornerRoutine) {
+    const routine = live.cornerRoutine;
+    const takenBy = state.setPieces?.[routine.flag === 'left' ? 'cornersLeft' : 'cornersRight'];
+    const built = resolveCornerDeliveries(routine, takenBy, play, [...(live.h1Play ?? []), ...(live.h2Play ?? [])], mineAt,
+      worldYear(state) + '/' + state.clubName + '/' + live.week + '/' + live.opponent + '/' + half, reviewKinds.includes('goal'));
+    play.push(...built.plays);
+    me.goals.push(...built.goals);
+    if (half === 1) live.h1My!.push(...built.goals); else live.h2My!.push(...built.goals);
   }
   if (half === 1) live.h1Play = [...(live.h1Play ?? []), ...play];
   else live.h2Play = [...(live.h2Play ?? []), ...play];
@@ -22031,6 +22045,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     etWords,
     added: live.added,
   });
+  if (live.cornerRoutine) detail.cornerRoutine = { ...live.cornerRoutine };
 
   const iAmHome = fx.home !== false; // neutral finals list us first
   return {
