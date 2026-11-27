@@ -265,7 +265,7 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1, children,
               return (
                 <p key={i}>
                   {link && start >= 0 ? (
-                    <>{p.slice(0, start)}<Link to={link.to} className="text-primary underline underline-offset-2">{link.text}</Link>{p.slice(start + link.text.length)}</>
+                    <>{p.slice(0, start)}<Link to={link.to} data-google-vignette="false" className="text-primary underline underline-offset-2">{link.text}</Link>{p.slice(start + link.text.length)}</>
                   ) : p}
                 </p>
               );
@@ -416,6 +416,7 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1, children,
               <Link
                 key={r.path}
                 to={r.path}
+                data-google-vignette="false"
                 className="rounded-xl border border-border bg-card px-3 py-2.5 transition-colors hover:border-primary/50"
               >
                 <span className="block text-lg">{r.emoji}</span>

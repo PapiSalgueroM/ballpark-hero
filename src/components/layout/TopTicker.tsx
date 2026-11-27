@@ -226,6 +226,7 @@ function ScoreCard({ row, hub, stale, follow }: { row: LiveScoreRow; hub: string
     <span data-no-prerender="true" className="inline-flex items-center h-full max-w-[100cqw] shrink-0 border-l border-border/60 md:max-w-none">
       <Link
         to={hub}
+        data-google-vignette="false"
         data-no-prerender="true"
         data-score-card=""
         data-stale={stale ? 'true' : undefined}
@@ -264,6 +265,7 @@ function SportBox({ group, open, stale, follow }: { group: SportGroup; open: boo
     <span data-no-prerender="true" className="inline-flex items-center h-full">
       <Link
         to={group.hub}
+        data-google-vignette="false"
         data-sport-box=""
         className={`inline-flex items-center h-full px-3 text-[10px] font-black tracking-[0.16em] uppercase transition-colors ${open ? 'bg-muted text-foreground' : 'text-muted-foreground'}`}
       >

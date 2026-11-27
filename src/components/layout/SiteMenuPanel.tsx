@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { Link } from 'react-router-dom';
+import { isGameRoute } from '@/components/StorageNotice';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { HUB_NAV } from '@/lib/sportHubNav';
 import { useRoutePath } from '@/hooks/useRoutePath';
@@ -18,6 +19,7 @@ const SITE_LINKS = [['/about', 'About'], ['/contact', 'Contact'], ['/privacy', '
 
 export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, id }: SiteMenuPanelProps) {
   const path = useRoutePath();
+  const vignette = isGameRoute(path) ? "false" : undefined;
   const [query, setQuery] = useState('');
   const heading = useRef<HTMLHeadingElement>(null);
   const field = useRef<HTMLInputElement>(null);
@@ -26,7 +28,7 @@ export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, id }: SiteMe
   useEffect(() => { if (!open) setQuery(''); }, [open]);
   const link = (to: string, label: string, detail?: string) => (
     <SheetClose asChild key={to}>
-      <Link to={to} aria-current={path === to ? 'page' : undefined}
+      <Link to={to} data-google-vignette={vignette} aria-current={path === to ? 'page' : undefined}
         className={`flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${path === to ? 'bg-primary/10 text-primary' : 'hover:bg-accent hover:text-accent-foreground'}`}>
         <span className="min-w-0 break-words">
           {label}{detail && <span className="block text-xs font-normal text-muted-foreground"> {detail}</span>}

@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { useRoutePath } from '@/hooks/useRoutePath';
+import { isGameRoute } from '@/components/StorageNotice';
 import { ReportSiteIssue } from '@/components/game/ReportSiteIssue';
 import { SoundToggle } from '@/components/game/SoundToggle';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
@@ -13,11 +15,12 @@ export function Footer({ soccerControls = false }: { soccerControls?: boolean } 
      of the text the sitemap dates a page by (Round 286). A footer change is
      not a reason for Google to recrawl 126 pages. */
   // Snapshot capture reads innerText, which is empty inside a closed disclosure.
+  const vignette = isGameRoute(useRoutePath()) ? "false" : undefined;
   const prerender = typeof window !== 'undefined' && !!(window as Window & { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__;
   return (
     <footer data-site-chrome="" className="mt-10 border-t border-border px-4 pb-6 pt-3 text-center text-xs text-muted-foreground">
       {soccerControls && (
-        <a href="#dukb-main" data-soccer-control-return="" data-no-prerender=""
+        <a href="#dukb-main" data-google-vignette="false" data-soccer-control-return="" data-no-prerender=""
           className="mx-auto mb-3 inline-flex min-h-11 items-center rounded-md border border-border px-3 font-semibold text-foreground hover:bg-muted focus-visible:outline-ring"
           onClick={event => {
             const main = document.getElementById('dukb-main');
@@ -28,10 +31,10 @@ export function Footer({ soccerControls = false }: { soccerControls?: boolean } 
           }}>Back to career controls</a>
       )}
       <nav aria-label="Site links" className="flex flex-wrap items-center justify-center gap-x-3">
-        <Link to="/about" className={linkClass}>About</Link>
-        <Link to="/contact" className={linkClass}>Contact</Link>
-        <Link to="/privacy" className={linkClass}>Privacy Policy</Link>
-        <Link to="/terms" className={linkClass}>Terms of Service</Link>
+        <Link data-google-vignette={vignette} to="/about" className={linkClass}>About</Link>
+        <Link data-google-vignette={vignette} to="/contact" className={linkClass}>Contact</Link>
+        <Link data-google-vignette={vignette} to="/privacy" className={linkClass}>Privacy Policy</Link>
+        <Link data-google-vignette={vignette} to="/terms" className={linkClass}>Terms of Service</Link>
         <button type="button" onClick={event => openConsentChoices(event.currentTarget)} className={linkClass}>
           Cookie choices
         </button>
@@ -43,16 +46,16 @@ export function Footer({ soccerControls = false }: { soccerControls?: boolean } 
         </summary>
         <nav aria-label="Sports" className="mt-2 flex flex-wrap items-center justify-center gap-x-3">
           {HUB_NAV.map(hub => (
-            <Link key={hub.route} to={hub.route} className={linkClass}>{hub.navLabel}</Link>
+            <Link data-google-vignette={vignette} key={hub.route} to={hub.route} className={linkClass}>{hub.navLabel}</Link>
           ))}
         </nav>
         <div className="flex flex-wrap items-center justify-center gap-x-3">
-          <Link to="/search" className={linkClass}>Search Games</Link>
-          <Link to="/records" className={linkClass}>Record Books</Link>
-          <Link to="/whats-new" className={linkClass}>What's New</Link>
-          <Link to="/leaderboard" className={linkClass}>Leaderboard</Link>
-          <Link to="/cookie-policy" className={linkClass}>Cookie Policy</Link>
-          <Link to="/accessibility" className={linkClass}>Accessibility</Link>
+          <Link data-google-vignette={vignette} to="/search" className={linkClass}>Search Games</Link>
+          <Link data-google-vignette={vignette} to="/records" className={linkClass}>Record Books</Link>
+          <Link data-google-vignette={vignette} to="/whats-new" className={linkClass}>What's New</Link>
+          <Link data-google-vignette={vignette} to="/leaderboard" className={linkClass}>Leaderboard</Link>
+          <Link data-google-vignette={vignette} to="/cookie-policy" className={linkClass}>Cookie Policy</Link>
+          <Link data-google-vignette={vignette} to="/accessibility" className={linkClass}>Accessibility</Link>
           <ThemeToggle variant="footer" />
           <SoundToggle variant="text" />
         </div>
