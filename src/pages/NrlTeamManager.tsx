@@ -179,7 +179,7 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
           {reloadUnavailable && <p>Reconnect or finish saving in this tab, then try reloading again.</p>}
         </div>
       )}
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+      <div data-nrl-club-grid="" className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
         {competition.clubs.map(club => (
           <button key={club.id} type="button" disabled={disabled} data-nrl-club={club.id}
             aria-label={`Manage ${club.name}`} onClick={() => onStart(club.id, boardChallenge, openingNames && (year === 2026 || club.id === 'bears'), judiciary)}

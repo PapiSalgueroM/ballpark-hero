@@ -48,6 +48,8 @@ async function context(width) {
         if (!unit) throw Error('Push without an available placement');
         unit.dataset.sweepPushed = '1';
         window.__sweepRequests.push({role:unit.closest('[data-dukb-manual-ad]').dataset.dukbManualAd,
+          careerBoardReady: location.pathname !== '/career' || !!document.querySelector('button[aria-label*="for career row"]'),
+          width:unit.getBoundingClientRect().width,
           private: !!document.querySelector('${privateScreen}') || !!(location.search || location.hash) });
         unit.setAttribute('data-ad-status', 'filled');
       } };
@@ -129,6 +131,7 @@ async function verify(page, path, width, requiredDocks = 0) {
   const wrapper = page.locator(key);
   await wrapper.waitFor({ state: 'attached' });
   await page.locator('#root footer[data-site-chrome]').waitFor({ state: 'attached' });
+  if (path === '/career') await wrapper.getByRole('button', { name: /for career row/ }).first().waitFor({ state: 'attached' });
   const docks = '[data-career-utility],[data-career-action-bar="floating"],[data-game-rail-dock],[data-dukb-set-aside]';
   if (requiredDocks) await wrapper.locator(docks).first().waitFor({ state: 'visible' });
   await page.waitForFunction(() => !document.querySelector('[data-game-desktop-rails] :is([aria-busy="true"],[data-game-help-pending],[data-seo-content="loading"])'),
@@ -152,10 +155,15 @@ async function verify(page, path, width, requiredDocks = 0) {
   const kind = registered.has(path) ? 'game' : UNLISTED_GAME_ROUTES.includes(path) ? 'unlisted' : HUB_NAV.some(hub=>hub.route===path) ? 'hub' : path === '/' ? 'home' : 'reading';
   const roles = first.placements.map(ad=>ad.role).sort();
   const noAds = kind === 'unlisted' || ['noindex','excluded save, recovery or search screen'].includes(first.reason);
+  assert(first.requests.every(hit => hit.role === 'public-footer' || hit.careerBoardReady), 'A rail was requested before the Career Quiz board arrived');
   assert(!first.requests.some(hit=>hit.private), path + ': a request occurred on an excluded screen');
   assert.equal(new Set(first.requests.map(hit => hit.role)).size, first.requests.length, path + ': repeated request for the same placement');
   assert(roles.every(role=>first.requests.some(hit=>hit.role===role)), path + ': mounted unit lacked a local fixture request');
   assert.deepEqual(roles, noAds ? [] : roles.length === 3 ? ['left-rail','public-footer','right-rail'] : ['public-footer'], path + ': placement set');
+  if (width >= 1280 && (path === '/' || (path === '/soccer-career' && requiredDocks))) {
+    const wanted = path === '/' ? (width >= 1920 ? 300 : 160) : (width >= 1366 ? 160 : 120);
+    assert.deepEqual(first.requests.filter(hit => hit.role !== 'public-footer').map(hit => hit.width), [wanted, wanted], path + ': issued creative widths at ' + width);
+  }
   assert.equal(first.publisher, noAds ? 0 : 1, path + ': publisher load count ' + JSON.stringify(first));
   assert(first.placements.every(ad=>ad.slot === '7540487748' && ad.status === 'filled'), path + ': pending or unexpected inventory');
   if (width >= 1280 && !noAds && roles.length === 1) assert(first.reason, path + ': no measured reason for skipping the side pair');
@@ -214,12 +222,45 @@ async function verify(page, path, width, requiredDocks = 0) {
   }
   assert(rect.documentWidth <= rect.width + 1, where);
   assert(rect.controls.length >= requiredDocks, where);
+  if (path === '/build-your-xi' && width === 1280 && sideCount === 2) {
+    const afterChange = await wrapper.evaluate(async game => {
+      const button = document.createElement('button');
+      Object.assign(button.style, { position: 'fixed', right: '1px', top: '45%', width: '60px', height: '44px' });
+      button.textContent = 'Late control';
+      game.append(button);
+      await new Promise(queueMicrotask);
+      const sideCount = document.querySelectorAll('[data-ad-rail]').length;
+      button.remove();
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      return [sideCount, window.__sweepRequests.length];
+    });
+    assert.deepEqual(afterChange, [0, first.requests.length], 'New fixed controls must clear the rails before paint, without another request');
+  }
   const row = { path, kind, width, roles, reason, requests: first.requests.length };
   console.log(JSON.stringify(row));
   return row;
 }
 
 try {
+  // Delivered publisher frames can keep a fixed width after their parent track shrinks.
+  const largeHome = await context(1920);
+  try {
+    const page = await largeHome.newPage();
+    await verify(page, '/', 1920);
+    await page.locator('[data-ad-rail] ins').evaluateAll(units => units.forEach(unit => {
+      const fill = document.createElement('div');
+      fill.style.width = unit.offsetWidth + 'px';
+      fill.style.height = '600px';
+      unit.appendChild(fill);
+    }));
+    for (const width of [1440, 1920]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      assert.equal(await page.locator('[data-ad-rail] ins').count(), 0, 'Retire an oversized creative for the rest of this Home visit');
+      assert.equal(await page.evaluate(() => window.__sweepRequests.length), 3, 'Resizing must not request a replacement');
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1));
+    }
+  } finally { await largeHome.close(); }
   const widths = (process.env.RAIL_WIDTHS ?? (published ? '1366' : '1280,1366,1920,390,320,1242,1279')).split(',').map(Number);
   const narrowed = process.env.ONLY?.split(',');
   const failures = [];

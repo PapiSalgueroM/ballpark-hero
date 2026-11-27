@@ -6,7 +6,7 @@
   display: none;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1280px), (min-width: 1254px) and (hover: hover) and (pointer: fine) {
   :global(#root):has(.frame[data-desktop-room]) {
     --game-ad-rail: clamp(160px, calc((100vw - 1152px) / 2), 200px);
     --creative-width: calc(var(--game-ad-rail) - 40px);
@@ -14,7 +14,9 @@
   }
 
   /* Sticky controls pass the rails on scroll. Keep their rows in the safe middle. */
-  :global(#root):has(.frame[data-desktop-room]) :is(header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child) {
+  :global(#root):has(.frame[data-desktop-room]) :is(header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child),
+  .frame[data-desktop-room]:has([data-active-career-help]) nav[data-site-chrome] > div:first-child,
+  .frame[data-desktop-room] [data-active-career-help] {
     max-width: calc(100% - var(--browse-rail-space) - var(--browse-rail-space));
     margin-inline: auto;
   }
@@ -77,6 +79,7 @@
   }
 
   .game :is([data-active-career-saves], [data-career-player-row]) {
+    padding-inline: 0.5rem;
     max-width: 45rem;
     margin-inline: auto;
   }
@@ -106,11 +109,19 @@
   .game [data-career-utility] > span:nth-child(2) {
     display: inline;
   }
+
+  .game main:has([data-nrl-club-grid]) {
+    width: min(100%, calc(100% - 2 * var(--browse-rail-space) + 40px));
+  }
+
+  .game [data-nrl-club-grid] {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 218px), 1fr));
+  }
 }
 
 /* Keep the 720px stats panel the same size as in the two-column dashboard.
    Seasons run across the row above it until there is room for a sidebar. */
-@media (1280px <= width < 1664px) {
+@media (1280px <= width < 1664px), (1254px <= width < 1280px) and (hover: hover) and (pointer: fine) {
   .game [data-career-panels] {
     grid-template-columns: minmax(0, 1fr);
     max-width: 45rem;
@@ -127,5 +138,32 @@
   .game [data-career-timeline-list] > * {
     flex: 0 0 16.25rem;
     margin-block: 0;
+  }
+}
+
+/* Home's 16px content padding adds to the space beside its launch links. */
+:global(#root):has(.frame[data-desktop-room][data-home-route]) {
+  --creative-width: 160px;
+  --browse-rail-space: max(300px, calc(var(--game-ad-rail) + 110px));
+}
+
+.frame[data-desktop-room][data-home-route] [data-home-search-tools] {
+  width: clamp(14rem, 36%, 26rem);
+}
+
+.frame[data-desktop-room][data-home-route] [data-home-dailies] select {
+  min-width: min(10rem, 100%);
+}
+
+@media (min-width: 1366px) {
+  :global(#root):has(.frame[data-desktop-room] [data-career-utilities]) {
+    --creative-width: 160px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :global(#root):has(.frame[data-desktop-room][data-home-route]) {
+    --creative-width: 300px;
+    --browse-rail-space: 440px;
   }
 }

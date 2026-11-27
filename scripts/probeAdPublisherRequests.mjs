@@ -16,7 +16,7 @@ const careerSave = await soccerCareerReplaySave();
 const { browser, close } = await guardedAdBrowser();
 
 async function observe(width, screen = 'lineup') {
-  const path = screen === 'lineup' ? '/build-your-xi' : '/soccer-career' + (screen === 'saves' ? '?view=saves' : '');
+  const path = screen === 'home' ? '/' : screen === 'lineup' ? '/build-your-xi' : '/soccer-career' + (screen === 'saves' ? '?view=saves' : '');
   const ctx = await browser.newContext({viewport: { width, height: width === 390 ? 844 : 900 }, hasTouch: width === 390,
     isMobile: width === 390, serviceWorkers: 'block', reducedMotion: 'reduce' });
   const result = { width, path, screen, documents: 0, beforeConsent: 0, publisher: 0, libraries: 0, framesBlocked: 0, auctionsBlocked: 0, matchedSizes: [], staticFailures: [] };
@@ -106,7 +106,8 @@ async function observe(width, screen = 'lineup') {
     const beforeScroll = [...result.matchedSizes];
     await page.evaluate(() => (document.querySelector('[data-public-footer-ad] ins') ?? document.querySelector('footer[data-site-chrome]'))?.scrollIntoView({ block: 'center' }));
     const widePair = width >= 1280 && !baseline;
-    const expectedSizes = width === 390 ? ['320x100'] : widePair ? ['120x600','120x600','728x90'] : ['728x90'];
+    const railWidth = screen === 'home' ? (width >= 1920 ? 300 : 160) : (screen === 'active' && width >= 1366 ? 160 : 120);
+    const expectedSizes = width === 390 ? ['320x100'] : widePair ? [railWidth + 'x600', railWidth + 'x600', '728x90'] : ['728x90'];
     const deadline = Date.now() + 18000;
     while (Date.now() < deadline && result.matchedSizes.length < expectedSizes.length) await page.waitForTimeout(200);
     console.log(JSON.stringify({ ...result, beforeScroll, unrelatedAuctionsBlocked: result.auctionsBlocked - result.matchedSizes.length, auctionsForwarded: 0, framesForwarded: 0 }));
@@ -120,8 +121,10 @@ async function observe(width, screen = 'lineup') {
 }
 
 try {
-  if (!process.argv.includes('--soccer')) for (const width of [390, 1280]) await observe(width);
-  if (!process.argv.includes('--lineup')) for (const width of [390, 1280, 1366]) {
+  const homeOnly = process.argv.includes('--home');
+  if (homeOnly) for (const width of [1280, 1366, 1920]) await observe(width, 'home');
+  if (!homeOnly && !process.argv.includes('--soccer')) for (const width of [390, 1280]) await observe(width);
+  if (!homeOnly && !process.argv.includes('--lineup')) for (const width of [390, 1280, 1366]) {
     for (const screen of ['entry', 'active', 'saves']) await observe(width, screen);
   }
   console.log('PASS: real publisher attempted the expected manual displays after advertising-only consent; every auction and ad frame was blocked.');

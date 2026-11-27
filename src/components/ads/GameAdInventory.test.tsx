@@ -16,7 +16,12 @@ it('mounts one shared ad after the footer and excludes private, legal and unknow
   expect(['/profile', '/admin', '/privacy', '/terms', '/absent'].some(isPublicDesktopRailRoute)).toBe(false);
 });
 
-it('requires 1280px of actual frame space and keeps the same game mounted through a resize', () => {
+it.each([1280, 1254])('fits the full desktop frame beside a native scrollbar at %ipx without remounting play', viewport => {
+  const frameWidth = viewport - 15;
+  vi.stubGlobal('innerWidth', viewport);
+  vi.spyOn(document.documentElement, 'clientWidth', 'get').mockReturnValue(frameWidth);
+  const media = window.matchMedia('(hover: hover)');
+  vi.spyOn(window, 'matchMedia').mockReturnValue({ ...media, matches: true });
   let reportWidth: (width: number) => void;
   vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
     const side = this.getAttribute('data-rail-edge');
@@ -37,14 +42,43 @@ it('requires 1280px of actual frame space and keeps the same game mounted throug
   fireEvent.change(input, { target: { value: 'in-progress guess' } });
   const rails = () => Array.from(view.container.querySelectorAll('[data-ad-rail]'), el => el.getAttribute('data-ad-rail'));
   expect(rails()).toEqual([]);
-  act(() => reportWidth(1279));
+  act(() => reportWidth(frameWidth - 1));
   expect(rails()).toEqual([]);
-  act(() => reportWidth(1280));
+  act(() => reportWidth(frameWidth - 1 / 3));
   expect(rails()).toEqual(['left', 'right']);
-  act(() => reportWidth(1279));
+  act(() => reportWidth(frameWidth));
+  expect(rails()).toEqual(['left', 'right']);
+  act(() => reportWidth(frameWidth - 1));
   expect(rails()).toEqual([]);
   expect(view.getByRole('textbox')).toBe(input);
   expect(input).toHaveValue('in-progress guess');
+});
+
+it('respects the scrollable Continue playing shelf, including its scrollbar and clipped save cards', async () => {
+  let shelfLeft = 270;
+  vi.spyOn(Element.prototype, 'clientWidth', 'get').mockReturnValue(1280);
+  vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+    let x = 0, y = 0, width = 1280, height = 1800;
+    const side = this.getAttribute('data-rail-edge');
+    if (side) { x = side === 'right' ? 1160 : 0; width = 120; }
+    if (this.hasAttribute('data-home-shelf-rail')) { x = shelfLeft; y = 300; width = 500; height = 65; }
+    if (this.tagName === 'A') { x = 1060; y = 310; width = 250; height = 40; }
+    return { left: x, top: y, right: x + width, bottom: y + height, width, height } as DOMRect;
+  });
+  vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
+  const view = render(<MemoryRouter><GameDesktopRails active><main><section data-home-continue="">
+    <div data-testid="shelf" data-home-shelf-rail="" style={{ overflowX: 'auto' }}><a data-continue-card="" href="/club-manager?slot=2">Resume slot 2</a></div>
+  </section></main></GameDesktopRails></MemoryRouter>);
+  const shelf = view.getByTestId('shelf'), rails = () => view.container.querySelectorAll('[data-ad-rail]').length;
+  await waitFor(() => expect(rails()).toBe(2));
+  shelfLeft = 269;
+  fireEvent.scroll(shelf);
+  await waitFor(() => expect(rails()).toBe(0));
+  shelfLeft = 270;
+  shelf.style.overflowX = 'visible';
+  fireEvent.scroll(shelf);
+  await act(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+  expect(rails()).toBe(0);
 });
 
 it.each(['/footle', '/soccer', '/'])('measures the controls inside wide wrappers and skips both rails inside 150px on %s', async path => {

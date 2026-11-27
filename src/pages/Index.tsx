@@ -546,7 +546,7 @@ export default function Index() {
               </p>
             </div>
 
-            <div className="mt-3 flex items-center gap-2 md:mt-0 md:w-[23rem] md:shrink-0 lg:w-[26rem]">
+            <div data-home-search-tools="" className="mt-3 flex items-center gap-2 md:mt-0 md:w-[23rem] md:shrink-0 lg:w-[26rem]">
               <div className="relative min-w-0 flex-1">
                 <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <input
