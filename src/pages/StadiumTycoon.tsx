@@ -66,6 +66,7 @@ import type { FactoryState, GearLevels, GraduateAttackOption } from '@/lib/wonde
 import { OVERLAY_ABOVE_BANNER, boxInsideOverlay } from '@/components/game/aboveConsentBanner';
 
 const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));
+const MatchdayDirector = lazy(() => import('@/components/tycoon/MatchdayDirector'));
 const SetPieceBoard = lazy(() => import('@/components/tycoon/SetPieceBoard').then(module => ({ default: module.WatchedSetPieceBoard })));
 
 /* ---------- tiny animation helpers ---------- */
@@ -144,6 +145,7 @@ export default function StadiumTycoon() {
     { id: 'stadium', label: 'Stadium', emoji: '🏟️', accent: stadiumAccent },
     { id: 'academy', label: 'Academy', emoji: '🎓', accent: academyAccent },
     { id: 'league', label: 'League', emoji: '🏆', accent: false },
+    { id: 'director', label: 'Matchday Director', emoji: '🎟️', accent: false },
   ];
 
   return (
@@ -161,7 +163,7 @@ export default function StadiumTycoon() {
         </header>
 
         {/* Round 580: the rooms. Each keeps its own clock whichever one is on screen. */}
-        <div className="grid grid-cols-3 gap-2 mb-2" role="group" aria-label="Tycoon rooms">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2" role="group" aria-label="Tycoon rooms">
           {tabs.map(t => (
             <button
               key={t.id}
@@ -199,6 +201,7 @@ export default function StadiumTycoon() {
           </div>
         )}
         <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />
+        {room === 'director' && <Suspense fallback={<p role="status">Opening Matchday Director...</p>}><MatchdayDirector /></Suspense>}
         <LeagueRoom g={g} visible={room === 'league'} attackOptions={room === 'league' && academyRef.current
           ? graduateAttackOptions(academyRef.current, loadLedger().gearLevel) : []} />
         {academyOpened && (
