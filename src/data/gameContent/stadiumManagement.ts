@@ -21,6 +21,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
         items: [
           "Watch the money counter climb. Every fan in the ground pays you every second.",
           "Tap the stadium for instant cash. The Megaphone track makes every tap stronger.",
+          "In Matchday Director, open Gate Control to staff four entrances over three fixtures. If North has ten fans and East is empty, a second scanner at North seats seven. Sending four fans East seats eight. Look ahead before choosing a permanent turnstile. You can hold kickoff once across the three matches.",
         ],
         subsections: [
           {

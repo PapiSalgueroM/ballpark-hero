@@ -910,6 +910,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
         heading: "Entering the draft and playing full seasons",
         items: [
           "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
+          "On the Training diamond, pitchers can play Inherited Runners. Work out of three one-run jams. A sinker can get two outs with one pitch, while a chase pitch can finish a hitter you set up earlier. Replay the innings to try a different sequence.",
           "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
           "For seasons supported by Week by week, Season Center shows your overall before and after each game if the season has saved rating checkpoints. Review its change by opening a finished game in the game log.",
           "Pitchers can open Week by week in supported seasons and reopen earlier years from Career Log. The simulated game reports show starts or relief appearances, strikeouts and any recorded pitching decision. The season review keeps your saved ERA.",

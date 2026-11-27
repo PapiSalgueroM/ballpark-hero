@@ -45,6 +45,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       {
         heading: "Match days: team sheet, Play Live or Quick Sim",
         items: [
+          "Open Tactics and choose Rehearse the next match. Coach your selected eleven against the next opponent from 60 minutes. Protect a one-goal lead or chase an equalizer. At 75 minutes you can change the instructions. After full time, choose whether to use the final call at the actual kickoff.",
           "Before each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.",
           "Open a player in Squad to set an in-game shirt number from 1 to 99. If a teammate wears it, Swap numbers shows what each player will get. Your assignments stay with the players at this club and appear in Play Live.",
           "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.",

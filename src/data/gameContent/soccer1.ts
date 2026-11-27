@@ -1382,6 +1382,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Studying the pitch for the blank tile",
         items: [
           "Study the pitch. Ten tiles carry names, one shows only a position and a question mark.",
+          "In Full XI, the optional Scouting Challenge gives you one report. Select an empty shirt and open its report to see three candidates. Get the pick right to fill the shirt with an assist, or miss and lock that shirt. Three and six unaided recalls each earn another report.",
         ],
       },
       {
