@@ -1,3 +1,9 @@
+### November 27, 2026. Installed game shortcuts and Windows side ads
+
+A 1280px desktop viewport with a 15px scrollbar supplied only 1265px to the game frame. The previous second width check suppressed the pair before it measured the game. Public desktop layouts now use the real page width for the scrollbar and check the actual space between each creative and its controls. Fine-pointer desktop windows at 1254 through 1279px can also qualify. Phones and touch-only devices in that extra band keep the footer.
+
+The installed site's Home address and three game shortcuts have a fixed public source marker. Advertising recognizes the exact manifest URLs after an advertising choice. Extra parameters, fragments, save screens and search remain excluded. Four regression cases that previously failed now load a single publisher tag each, including the Soccer Career shortcut. The NRL team picker uses fewer columns where this keeps the club buttons full-size beside two desktop ads.
+
 ### November 27, 2026. Saved Soccer Career desktop layout
 
 Training, Phone and Career saves share a centered row on desktop. The season action and history stay inside the play area. A saved career retained both 120 by 600 side units and its 728 by 90 footer at 1280 and 1366 pixels. Chrome kept the same 1024px game width and 720px skills panel through practice, contract review, signing and reload. Phone layouts retained the footer. Save selection made zero ad requests. The real Google publisher test intercepted each auction and ad frame before transmission.
