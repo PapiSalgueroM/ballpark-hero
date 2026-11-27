@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Closing Time: Basketball Clock Management Game | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"NBA Basketball Games","item":"https://douknowball.com/pro-basketball"},{"@type":"ListItem","position":3,"name":"Closing Time","item":"https://douknowball.com/closing-time"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does the clock run while I read the court?","acceptedAnswer":{"@type":"Answer","text":"No. You can inspect each spot, the scout report and the rules before calling a play."}},{"@type":"Question","name":"What happens if I finish level?","acceptedAnswer":{"@type":"Answer","text":"The drill records Overtime earned and awards one set point. It ends at the regulation horn."}},{"@type":"Question","name":"Can I carry a possession between this page and my career?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use Resume closing set from either entrance in the same browser. The set has its own save and career season statistics stay separate."}},{"@type":"Question","name":"How do I keep a score?","acceptedAnswer":{"@type":"Answer","text":"Finish the third situation from the standalone game to record the set score. Your on-device results also reopen after leaving or reloading."}},{"@type":"Question","name":"Is Closing Time free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Closing Time is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Closing Time: Basketball Clock Management Game | DoUKnowBall","description":"Coach both ends of three fourth quarters in this free basketball game. Read the coverage, manage the shot clock and use a timeout to set up a winning shot.","url":"https://douknowball.com/closing-time","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var selector = '[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]';
+        var sweep = function (root) {
+          try {
+            var all = root.querySelectorAll(selector);
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        var inspect = function (node, includeChildren) {
+          if (node.nodeType !== 1 || !node.isConnected) return;
+          if (node.matches(selector) && isBadge(node)) node.remove();
+          if (includeChildren && node.firstElementChild) sweep(node);
+        };
+        new MutationObserver(function (records) {
+          try {
+            for (var i = 0; i < records.length; i++) {
+              var record = records[i];
+              if (record.type === 'attributes') {
+                inspect(record.target, false);
+              } else {
+                var added = record.addedNodes;
+                for (var j = 0; j < added.length; j++) inspect(added[j], true);
+              }
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        }).observe(document.documentElement, {
+          childList: true, subtree: true, attributes: true, attributeFilter: ['id', 'class', 'href'],
+        });
+        var sweepDocument = function () { sweep(document); };
+        document.addEventListener('DOMContentLoaded', sweepDocument);
+        window.addEventListener('load', sweepDocument);
+      })();
+    </script>
+    <script data-dukb-consent-bootstrap="">
+      // Keep this gate aligned with consentPreferences and consentedScripts.
+      (function () {
+        var ANALYTICS_READY = false;
+        if (!ANALYTICS_READY) return;
+        try {
+          var value = JSON.parse(localStorage.getItem('cookie-consent-v2') || 'null');
+          var now = Date.now();
+          if (!value || value.version !== 2 || typeof value.advertising !== 'boolean'
+            || typeof value.analytics !== 'boolean' || value.analytics !== true
+            || typeof value.updatedAt !== 'number' || !Number.isFinite(value.updatedAt)
+            || value.updatedAt < 0 || value.updatedAt > now
+            || now - value.updatedAt >= 180 * 24 * 60 * 60 * 1000) return;
+          if (/^\/(?:reset-password|auth|account|profile|admin)(?:\/|$)/.test(location.pathname)) return;
+          function cleanUrl(input) {
+            try {
+              var url = new URL(input, location.origin);
+              return url.protocol === 'https:' || url.protocol === 'http:' ? url.origin + url.pathname : '';
+            } catch (e) { return ''; }
+          }
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('consent', 'default', {
+            ad_storage: 'denied', analytics_storage: 'denied',
+            ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.__DUKB_CONSENT_DEFAULTED__ = true;
+          window.gtag('consent', 'update', {
+            ad_storage: value.advertising && navigator.globalPrivacyControl !== true ? 'granted' : 'denied',
+            analytics_storage: 'granted', ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.gtag('js', new Date());
+          window.gtag('config', 'G-KZQK2G68YC', {
+            send_page_view: false, page_location: cleanUrl(location.href),
+            page_referrer: document.referrer ? cleanUrl(document.referrer) : '',
+            allow_google_signals: false, allow_ad_personalization_signals: false
+          });
+          var g = document.createElement('script');
+          g.async = true;
+          g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+          document.head.appendChild(g);
+        } catch (e) { /* Blocked storage keeps optional analytics off. */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/closing-time" data-rh="true"><meta name="description" content="Coach both ends of three fourth quarters in this free basketball game. Read the coverage, manage the shot clock and use a timeout to set up a winning shot." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/closing-time" data-rh="true"><meta property="og:description" content="Coach both ends of three fourth quarters in this free basketball game. Read the coverage, manage the shot clock and use a timeout to set up a winning shot." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:description" content="Coach both ends of three fourth quarters in this free basketball game. Read the coverage, manage the shot clock and use a timeout to set up a winning shot." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta property="og:title" content="Closing Time: Basketball Clock Management Game | DoUKnowBall" data-rh="true"><meta name="twitter:title" content="Closing Time: Basketball Clock Management Game | DoUKnowBall" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<p>Ads help keep the games free. Choose whether Google AdSense may use cookies for non-personalized ads. Google Analytics measures page visits. You can play with either or both off. Where we ask first, advertising permission lasts 30 days and we remember a refusal for 180 days. Google Analytics has its own 180-day choice. <a href="/privacy">Learn more</a></p>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Closing Time</h1>
+<p>Coach three fourth quarters. Score the basket, get the stop and decide when to spend your timeout.</p>
+<p>The clocks move when you act. On offense, tap the player with the ball to shoot or send it to another spot. In this drill open shots go in, guarded shots miss, and the defense rebounds every miss. Rim shots score two, wing or corner shots score three.</p>
+<p>Crossing half court takes four seconds. A pass takes two, a cut to the rim takes three and a shot takes two. Pass into coverage and help leaves your passer open for a return. Use one timeout per game to inbound in the frontcourt.</p>
+<p>On defense, cover the first look to force a miss. A four-second trap takes the ball from an isolated guard. A ready outlet beats the trap for a corner three. Tied or trailing opponents shoot after seven seconds. Opponents ahead use their shot clock and can hold to the horn. Both teams start in the penalty. A foul costs two seconds and gives them the free throws shown.</p>
+<p>Example: with five seconds left in the backcourt, a timeout, corner pass and shot use four seconds. The same pass and shot from the backcourt need eight.</p>
+<h2>Closing Time: Basketball Clock Management Game</h2>
+<p>Coach both ends of three fourth quarters in this free basketball game. Read the coverage, manage the shot clock and use a timeout to set up a winning shot.</p>
+<p>The scoreboard says you need three. The game clock says five seconds. What you can actually run depends on where the inbound starts. Closing Time puts you in charge of three simulated basketball finishes, calling the offense and the defense one possession at a time.</p>
+<p>You can play signed out from this page or open the same court in <a href="/nba-my-career">NBA My Career</a>. Both entrances keep one set on this device. Leave after a pass and the receiver, coverage, score, timeout and both clocks are there when you return.</p>
+<h2>How to play Closing Time</h2>
+<li>Start the set with Two for one. Your side trails 96 to 94 with 39 seconds left. The first court shows the ball on the wing, the open rim and the time each action will take.</li>
+<li>Tap the spot holding the ball to shoot. Tap another spot to pass or cut there. A covered receiver draws help away from the passer, so a return pass can produce a better shot.</li>
+<li>When the other side takes possession, read its first look and check the ballhandler for an outlet. Cover the rim, deny the corner, trap the ballhandler or foul to stop the clock.</li>
+<li>Play all three finishes. Protect the lead starts on defense, while One timeout left starts a point behind with seven seconds left. The same set is available for a rematch after the final horn.</li>
+<h2>Rules to know</h2>
+<li>The clocks advance only when you make a call. Crossing from the backcourt costs four seconds. Passing or shooting takes two seconds, and cutting to the rim takes three. Advancing with your timeout skips the crossing without changing either clock.</li>
+<li>In these drills an open rim shot scores two and an open wing or corner shot scores three. A covered shot misses and the defender rebounds. Holding the ball can take the last shot away from the opponent or use the seconds you needed yourself.</li>
+<li>A trap returns the ball in four seconds against an isolated ballhandler. A ready outlet passes out for a corner three. Fouling costs two seconds, with the number of made free throws shown before the call.</li>
+<li>A regulation win earns two set points, reaching overtime earns one, and a loss earns zero. The standalone score is the percentage of the six points earned across all three games, rounded to the nearest whole number.</li>
+<h2>Example walkthrough</h2>
+<p>In One timeout left you start down 102 to 101 with seven seconds on the game clock. The opponents can hold to the horn. Fouling stops them in two seconds and their one made free throw makes it 103 to 101.</p>
+<p>Your inbound is in the backcourt. Advance with the timeout, pass to the open corner and shoot. The two calls use four of the five remaining seconds. Your three gives you a 104 to 103 lead with one second for the other side.</p>
+<h2>Strategy tips</h2>
+<li>Check the game clock against the shot clock before holding. With 23 seconds left and your own clock also at 23, holding can end regulation. It is a good call up two and a very different call when tied.</li>
+<li>Compare the cost of a pass with the entire possession you have left. Reaching a teammate before the horn still leaves that teammate needing time to shoot.</li>
+<li>Look at the outlet as well as the first shot. The four seconds a trap takes can buy another possession. Trapping a guard who can see the corner gives the opponent three points instead.</li>
+<h2>Closing Time FAQ</h2>
+<h3>Does the clock run while I read the court?</h3>
+<p>No. You can inspect each spot, the scout report and the rules before calling a play.</p>
+<h3>What happens if I finish level?</h3>
+<p>The drill records Overtime earned and awards one set point. It ends at the regulation horn.</p>
+<h3>Can I carry a possession between this page and my career?</h3>
+<p>Yes. Use Resume closing set from either entrance in the same browser. The set has its own save and career season statistics stay separate.</p>
+<h3>How do I keep a score?</h3>
+<p>Finish the third situation from the standalone game to record the set score. Your on-device results also reopen after leaving or reloading.</p>
+<h3>Is Closing Time free to play?</h3>
+<p>Yes. Closing Time is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/nba-my-career">🌟 NBA My Career Draft night to the rafters. 5 positions, 100+ crossroads, and one very tempting phone call</a>
+<a href="/nba-gauntlet-draft">⚔️ Gauntlet Draft: NBA Pick your five, five cards at a time, then survive a five round cup</a>
+<a href="/buzzer-beater">🏀 Buzzer Beater Pick the arc, beat the hand, drop ten jump shots</a>
+<a href="/baseball-connections">⚾ MLB Connections Group baseball players</a>
+<a href="/ufc-chain">🔗 Combat Chain Build a chain of fighters who beat each other</a>
+<a href="/tennis-chain">🔗 Tennis Chain Build a chain of Grand Slam defeats</a>
+<div data-site-chrome>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">NBA</a>
+<a href="/hockey">NHL</a>
+<a href="/pro-football">NFL</a>
+<a href="/baseball">MLB</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/records">Record Books</a>
+<a href="/whats-new">What's New</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/cookie-policy">Cookie Policy</a>
+<a href="/accessibility">Accessibility</a>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+</div>
+</div>
+</div>
+</body>
+</html>

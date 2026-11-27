@@ -1481,6 +1481,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Picture America painted in 32 team colors, every state owned by its nearest stadium. Now play a season where each result redraws the borders, because in this football conquest game every winner annexes the loser's entire empire. Part season sim, part sports battle map, all chaos.",
       "The headline mode is Imperialism, the format the internet fell in love with: empires balloon, collapse, and flip on one upset. Arcade mode keeps the original play by play battles, player steals, and power ups.",
       "You do not just watch. You pick a team, call their game each week, and ride your empire to the final map.",
+      "In Road Trip you have five dates to win in three rival territories. Spend your scripted drive on a tough opponent, or keep it in reserve. A travel day takes you back to an earlier stop and gives you another script.",
     ],
     headings: {
       howToPlay: "How to play NFL Conquest, a free online NFL map conquest game",

@@ -1,8 +1,8 @@
 {
   "__version": 3,
   "/": {
-    "hash": "7151efc1d0d9335a",
-    "date": "2026-11-13"
+    "hash": "bf73e961fc2a5a7c",
+    "date": "2026-11-27"
   },
   "/about": {
     "hash": "a51853ba64b61812",
@@ -45,8 +45,8 @@
     "date": "2026-11-14"
   },
   "/build-your-xi": {
-    "hash": "bf7cf107b1801af3",
-    "date": "2026-11-15"
+    "hash": "4a9859387e61ba85",
+    "date": "2026-11-27"
   },
   "/buzzer-beater": {
     "hash": "2f701c5e11ccbd18",
@@ -92,6 +92,10 @@
     "hash": "975fe6d78adfb792",
     "date": "2026-10-17"
   },
+  "/closing-time": {
+    "hash": "141c698548228cb7",
+    "date": "2026-11-27"
+  },
   "/club-manager": {
     "hash": "42f2c35618b7b9a2",
     "date": "2026-11-27"
@@ -113,20 +117,20 @@
     "date": "2026-09-30"
   },
   "/conquest": {
-    "hash": "ff45877c128bbee4",
-    "date": "2026-09-30"
+    "hash": "f5bbbb5b9028737e",
+    "date": "2026-11-27"
   },
   "/conquest-mlb": {
-    "hash": "a42cc528c5934d2f",
-    "date": "2026-09-30"
+    "hash": "aa52e68db5826afd",
+    "date": "2026-11-27"
   },
   "/conquest-nba": {
     "hash": "0cb037cee753fd5e",
     "date": "2026-09-30"
   },
   "/conquest-nhl": {
-    "hash": "40b7e98bc6ce9d9d",
-    "date": "2026-09-30"
+    "hash": "2830d73d71fb71b1",
+    "date": "2026-11-27"
   },
   "/contact": {
     "hash": "b305f4d1eba2af59",
@@ -385,8 +389,8 @@
     "date": "2026-10-23"
   },
   "/nba-my-career": {
-    "hash": "ea2b22a923160e5a",
-    "date": "2026-11-16"
+    "hash": "8dd869f1d720cff2",
+    "date": "2026-11-27"
   },
   "/nba-playoff-format-history": {
     "hash": "e9ebd68869371222",
@@ -501,8 +505,8 @@
     "date": "2026-11-27"
   },
   "/pro-basketball": {
-    "hash": "aae02180933906c5",
-    "date": "2026-11-13"
+    "hash": "c5c2aa5e86b1cb0d",
+    "date": "2026-11-27"
   },
   "/pro-football": {
     "hash": "ac4407426c0f1da5",
@@ -673,7 +677,7 @@
     "date": "2026-10-06"
   },
   "/whats-new": {
-    "hash": "74df0978804d0084",
+    "hash": "fbc3a33c4dded80b",
     "date": "2026-11-27"
   },
   "/who-am-i": {

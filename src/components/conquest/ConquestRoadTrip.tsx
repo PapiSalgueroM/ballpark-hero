@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Route } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import ConquestRegionMap from '@/components/conquest/ConquestRegionMap';
@@ -27,6 +27,7 @@ export function ConquestRoadTrip({ sport, map, league }: { sport: ImperialismSpo
   const [choosingTeam, setChoosingTeam] = useState(false);
   const [pick, setPick] = useState<{ raw: string | null; to: string } | null>(null);
   const trigger = useRef<HTMLButtonElement>(null);
+  const stage = useRef<HTMLHeadingElement>(null);
   const [showMap, setShowMap] = useState(false);
   const name = (id: string) => teamLabel(sport, id);
   const rules = tripRules[league];
@@ -35,6 +36,10 @@ export function ConquestRoadTrip({ sport, map, league }: { sport: ImperialismSpo
   const finished = board && (board.wins === TRIP_TARGET || board.log.length === TRIP_DATES);
   const rivals = board ? tripChoices(graph, board) : [];
   const target = pick && pick.raw === raw && rivals.includes(pick.to) ? pick.to : null;
+  const onward = target && board ? tripChoices(graph, { ...board, at: target, stops: [...board.stops, target] }) : [];
+  useEffect(() => {
+    if (open && !choosingTeam) stage.current?.focus({ preventScroll: true });
+  }, [open, choosingTeam, target, raw]);
   const write = (value: TripRun) => {
     const commit = () => {
       if (read() === raw) safeLocalStorage.setItem(key, JSON.stringify(value));
@@ -68,7 +73,7 @@ export function ConquestRoadTrip({ sport, map, league }: { sport: ImperialismSpo
       </> : <>
         <section aria-label="Trip standings" aria-live="polite" className="rounded-xl border bg-muted/50 p-3">
           <p className="text-sm font-semibold">{name(run.team)} · {board.wins}/{TRIP_TARGET} road wins</p>
-          <h3 className="font-display text-lg font-bold">{board.wins === TRIP_TARGET ? 'Road trip won' : finished ? 'End of the road' : 'Date ' + (board.log.length + 1) + ' of ' + TRIP_DATES}</h3>
+          <h3 ref={!target ? stage : undefined} tabIndex={-1} className="font-display text-lg font-bold">{board.wins === TRIP_TARGET ? 'Road trip won' : finished ? 'End of the road' : 'Date ' + (board.log.length + 1) + ' of ' + TRIP_DATES}</h3>
           <p className="text-sm">Current stop: {name(board.at)} · {rules.resource}: {board.supply}/{rules.capacity}</p>
         </section>
         {board.log.length > 0 && <ol aria-label="Trip scorecard" className="space-y-1 text-sm">
@@ -86,7 +91,9 @@ export function ConquestRoadTrip({ sport, map, league }: { sport: ImperialismSpo
             <div className="flex flex-wrap gap-2">{board.stops.filter(id => id !== board.at).map(id => <button key={id} className={button} onClick={() => act(id, 'travel')}>Return to {name(id)}</button>)}</div>
           </details>}
         </> : <section className="grid gap-2" aria-label="Game plan">
-          <h4 className="font-bold">Away at {name(target)}</h4><p className="text-sm text-muted-foreground">{rules.hint} Win chances top out at 97%.</p>
+          <h4 ref={stage} tabIndex={-1} className="font-bold">Away at {name(target)}</h4>
+          {board.log.length + 1 < TRIP_DATES && <p className="text-sm">{onward.length ? 'From here you can face ' + onward.map(name).join(', ') + '.' : 'This stop is a dead end. You will need a travel day to reach another opponent.'}</p>}
+          <p className="text-sm text-muted-foreground">{rules.hint} Win chances top out at 97%.</p>
           <button className={button} onClick={() => act(target, 'regular')}>{rules.normal} · {chance(target, false)}</button>
           <button className={primary} disabled={!board.supply} onClick={() => act(target, 'boost')}>{rules.play} · {chance(target, true)}</button>
           <button className={button} onClick={() => setPick(null)}>Change destination</button>

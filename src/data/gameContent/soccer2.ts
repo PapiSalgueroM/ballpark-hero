@@ -1106,6 +1106,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Build Your XI hands you a formation, then a slot machine assigns a random club or country to every position. Your job is naming a player from that exact team who fits each slot. That is Mixed, the default clubs and countries mode.",
       "In Mixed, when the eleventh name lands, an AI referee grades the lineup and writes a short scouting report, then a season report plays a full year out with your XI: league finish, points, trophies and a top scorer. No two teams ever come out alike.",
       "Club year draft deals 11 different clubs from one recorded year. Club era draft uses five years and adds Boca Juniors, River Plate, Flamengo, Grêmio and Santos. Both modes use your selected records for a fictional season, and a missing player value or age leaves the completed XI unrated.",
+      "Once your Club year or Club era draft is complete, coach that eleven through the Tactical Cup. Read three fictional opponents, choose where to attack and adjust at halftime. Six points win the cup. Replaying the same draw lets you see what one different call would have changed.",
     ],
     headings: {
       howToPlay: "How to play Build Your XI, a free soccer lineup builder game",

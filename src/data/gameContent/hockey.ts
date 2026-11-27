@@ -716,6 +716,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
     intro: [
       "Every patch of the US map starts loyal to its nearest NHL arena, and none of it is safe.",
       "This is imperialism rules on ice: win a game, annex the loser's entire empire. Lose everything and you keep playing, because one win takes it all back. Five clubs even start with nothing.",
+      "Road Trip gives you five dates to win in three rival territories. Double-shift the top line to tilt a tough game in your favor. A win with four lines rolls an extra shift back into the bank. Check which opponents you can reach before picking your next stop.",
     ],
     headings: {
       howToPlay: "How to play NHL Conquest, a free hockey territory prediction game",

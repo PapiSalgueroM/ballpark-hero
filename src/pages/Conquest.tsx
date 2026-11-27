@@ -108,7 +108,7 @@ const Conquest = () => {
           <GameSeoContent
           pageHasOwnH1
             title="NFL Conquest: Territory Domination Game"
-            description="Two ways to conquer America. Imperialism mode plays the classic map format: every state starts with its nearest stadium, winners annex the loser's entire empire, wiped-out teams can storm back with one win, and a territory-seeded playoff crowns the ruler of the map. Arcade mode is the original battle sim with player steals and power-ups."
+            description="Plan a five-date Road Trip, play a full season or battle state by state. Imperialism mode plays the classic map format: every state starts with its nearest stadium, winners annex the loser's entire empire, wiped-out teams can storm back with one win, and a territory-seeded playoff crowns the ruler of the map. Arcade mode is the original battle sim with player steals and power-ups."
             howToPlay={[
               "Imperialism mode: pick your team, predict their game each week, then watch all 32 results redraw the map. Winners take EVERYTHING the loser owned.",
               "Press Play and every game in the week plays out on the map one at a time: the wheel lands on the attacker, the map zooms in, the final score lands, and the loser's states turn the winner's colour. Skip jumps to the results, and the timeline under the map shows the map after any earlier week.",

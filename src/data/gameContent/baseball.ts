@@ -717,6 +717,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
     intro: [
       "The imperialism format comes to the ballpark. Every territory starts out belonging to its nearest MLB park, and when two clubs meet, the winner takes everything the loser owns.",
       "Two clubs start with nothing. Toronto invades from across the border and San Diego gets boxed out by the California carve-up. One win hands either of them an entire empire.",
+      "For a short campaign, start a Road Trip. Choose a border rival and decide who pitches late. Use your closer to raise the chances at this stop, or stay with the regular pen to get an appearance back for the next game. Three road wins in five dates take the trip.",
     ],
     headings: {
       howToPlay: "How to play MLB Conquest, a free daily territory takeover game",
