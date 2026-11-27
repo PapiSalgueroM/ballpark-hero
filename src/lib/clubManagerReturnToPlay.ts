@@ -36,16 +36,19 @@ export function isReturnReceipt(raw: unknown): raw is ReturnReceipt {
 
 function readBook(raw: unknown): ReturnBook | null {
   const b = raw as ReturnBook;
-  if (!b || Array.isArray(b) || b.v !== 1 || (b.last !== undefined && !isReturnReceipt(b.last))) return null;
+  if (!b || Array.isArray(b) || b.v !== 1 || Object.keys(b).some(k => !['v','active','last'].includes(k))
+    || (b.last !== undefined && !isReturnReceipt(b.last))) return null;
   const a = b.active;
-  if (a !== undefined && !(a && label(a.club) && label(a.playerId) && nat(a.season) && nat(a.week) && isPlan(a.plan)
+  if (a !== undefined && !(a && !Object.keys(a).some(k => !['club','playerId','season','week','plan','major','training'].includes(k))
+    && label(a.club) && label(a.playerId) && nat(a.season) && nat(a.week) && isPlan(a.plan)
     && sessions(a.training) && (a.major === undefined || readMajorInjury(a.major)))) return null;
   return b;
 }
 
 const episodeFor = (s: CareerState) => {
   const a = readBook(s.returnToPlay)?.active;
-  return a?.club === s.clubName && (s.season > a.season || (s.season === a.season && s.week >= a.week)) ? a : null;
+  return a?.club === s.clubName && (s.season > a.season || (s.season === a.season && s.week >= a.week))
+    && s.squad.some(p => p.id === a.playerId && !p.loanFrom) ? a : null;
 };
 const candidate = (p: CMPlayer): ReturnCandidate => ({
   id:p.id, name:p.name, generated:!!(p.generated || p.isYouth || p.academyGrad), position:p.position, injuryWeeks:p.injuryWeeks,
