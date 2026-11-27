@@ -221,7 +221,7 @@ import {
 import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
-import { resolveCornerDeliveries, type CornerDelivery } from '@/lib/clubManagerCornerDelivery';
+import { cornerAssistId, resolveCornerDeliveries, type CornerDelivery } from '@/lib/clubManagerCornerDelivery';
 import type { FlankMove, FlankPlan } from '@/lib/clubManagerFlank';
 /* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
    balanced, and the slot clubManagerTactics.ts fills when it loads. Every reader below is a no op on balanced
@@ -17913,6 +17913,7 @@ function creditMyScorers(
   onPitchAt?: (minute: number) => CMPlayer[],
   /** Round 505: the duty a man was on at that minute, for the assist weight. */
   dutyAt?: (minute: number, p: CMPlayer) => Duty | null,
+  cornerPlay?: PlayEvent[],
 ): { goalCounts: Map<string, number>; assistCounts: Map<string, number>; assistNames: (string | null)[] } {
   const goalCounts = new Map<string, number>();
   const assistCounts = new Map<string, number>();
@@ -17934,6 +17935,7 @@ function creditMyScorers(
       sq.morale = clamp(sq.morale + 3, 5, 99);
     }
     let assistedBy: string | null = null;
+    let assister: CMPlayer | null | undefined;
     /* Round 505: a penalty or a direct free kick has no assist. The roll is
        still taken so the seeded stream reads the same either way. */
     if (Math.random() < ASSIST_SHARE && !line.penalty && !line.freeKick) {
@@ -17941,13 +17943,17 @@ function creditMyScorers(
       const others = (there.length ? there : xi).filter(p => p.id !== line.id && p.position !== 'GK');
       /* Round 1229 fix: the assist weight is the shared one the league book pays rivals by (the same
          arithmetic in the same order as the expression that was typed here, so the same double). */
-      const assister = weightedPick(others, p => assistWeight(p.position, p.rating) * dutyAssistMult(dutyAt?.(line.minute, p)));
-      if (assister && !own) {
-        assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
-        const aq = state.squad.find(p => p.id === assister.id);
-        if (aq) aq.seasonAssists += 1;
-        assistedBy = assister.name;
-      }
+      assister = weightedPick(others, p => assistWeight(p.position, p.rating) * dutyAssistMult(dutyAt?.(line.minute, p)));
+    }
+    if (line.cornerChance) {
+      const id = cornerAssistId(line, cornerPlay);
+      assister = state.squad.find(p => p.id === id);
+    }
+    if (assister && !own) {
+      assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
+      const aq = state.squad.find(p => p.id === assister.id);
+      if (aq) aq.seasonAssists += 1;
+      assistedBy = assister.name;
     }
     assistNames.push(assistedBy);
   }
@@ -21206,6 +21212,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       const i = myOnPitchAt(live, minute).indexOf(p.id);
       return i >= 0 ? liveDutyAt(state, live, i) : null;
     },
+    myLines.some(line => line.cornerChance) ? [...(live.h1Play ?? []), ...(live.h2Play ?? [])] : undefined,
   );
   /* Round 1146: an own goal goes on my list under the man of theirs who put
      it in, marked, with no assist; the man it was drawn for is not named. */

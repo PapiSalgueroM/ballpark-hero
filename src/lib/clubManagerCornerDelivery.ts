@@ -14,6 +14,15 @@ export interface CornerDelivery {
   outcome: 'cleared' | 'recycled' | 'shot' | 'disallowed';
 }
 
+/** The corner already recorded both players on the pitch, including in added time. */
+export function cornerAssistId(goal: MyGoalLine, play: PlayEvent[] | undefined): string | undefined {
+  const pass = play?.find(e => e.kind === 'corner' && e.side === 'me' && e.cornerDelivery?.id === goal.cornerChance
+    && e.minute === goal.minute && (e.plus ?? 0) === (goal.plus ?? 0))?.cornerDelivery;
+  if (!pass || pass.outcome !== 'shot') return undefined;
+  if (pass.kind === 'far-post') return goal.id === pass.targetId ? pass.takerId : undefined;
+  return goal.id === pass.takerId ? pass.targetId : undefined;
+}
+
 /** The input corners were awarded by the match. A routine can originate a new chance only at its own corner. */
 export function resolveCornerDeliveries(
   routine: CornerRoutine, assignedTaker: string | null | undefined, play: PlayEvent[],

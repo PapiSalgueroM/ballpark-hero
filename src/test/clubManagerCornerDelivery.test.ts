@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { bookCornerRoutine, changeLive, liveStatsAt, playNextEntry, resumeMatch, setSetPiece, startCareer, startSecondHalf,
+import { bookCornerRoutine, changeLive, liveStatsAt, makeHalftimeSub, playNextEntry, resumeMatch, setSetPiece, startCareer, startSecondHalf,
   type CareerState, type CornerRoutine, type PlayEvent } from '@/lib/clubManager';
-import { resolveCornerDeliveries } from '@/lib/clubManagerCornerDelivery';
+import { cornerAssistId, resolveCornerDeliveries } from '@/lib/clubManagerCornerDelivery';
 
 function seeded<T>(seed: number, run: () => T) {
   const original = Math.random;
@@ -119,6 +119,30 @@ describe('prepared competitive corner deliveries', () => {
     expect(played.report!.detail!.cornerRoutine).toEqual(routine);
     expect(played.report!.detail!.play!.some(e => e.cornerDelivery)).toBe(false);
     expect(played.state.cornerTraining).toBeUndefined();
+  });
+
+  it('credits the recorded far-post delivery or short return to its actual passer, even after a sub', () => {
+    const base = seeded(12207, () => startCareer('Brentford'));
+    for (const kind of ['far-post','short'] as const) {
+      const order = { flag:'left' as const, kind, takerId:'p-dango-ouattara', targetId:'p-nathan-collins' };
+      const booked = bookCornerRoutine(base,order)!;
+      const ready = seeded(18031,() => playNextEntry(booked,{ skipHalftime:true,varReviews:['goal'] })).state;
+      const first = seeded(51,() => playNextEntry(ready,{ varReviews:['goal'] })).state;
+      const goal = first.live!.h1My!.find(g => g.cornerChance)!;
+      const assister = first.squad.find(p => p.id === (kind === 'short' ? order.targetId : order.takerId))!;
+      expect(cornerAssistId(goal,first.live!.h1Play)).toBe(assister.id);
+      expect(cornerAssistId({ ...goal, id:assister.id },first.live!.h1Play)).toBeUndefined();
+      expect(cornerAssistId({ ...goal, plus:1 },first.live!.h1Play)).toBeUndefined();
+      const reserve = first.squad.find(p => !p.onLoan && !p.injuryWeeks && !p.suspendedMatches && p.position !== 'GK' && !first.live!.onPitch.includes(p.id))!;
+      reserve.name = assister.name;
+      first.squad = [reserve,...first.squad.filter(p => p.id !== reserve.id)];
+      const subbed = makeHalftimeSub(first,assister.id,reserve.id)!;
+      const result = seeded(317,() => resumeMatch(JSON.parse(JSON.stringify(subbed))));
+      const line = result.report!.myScorers.find(g => g.name === goal.name && g.minute === goal.minute)!;
+      expect(line.assist).toBe(assister.name);
+      expect(result.state.squad.find(p => p.id === assister.id)!.seasonAssists).toBe(assister.seasonAssists + 1);
+      expect(result.state.squad.find(p => p.id === reserve.id)!.seasonAssists).toBe(reserve.seasonAssists);
+    }
   });
 
   it('reviews the actual finish and removes an overturned goal from both the shot and scorer lists', () => {
