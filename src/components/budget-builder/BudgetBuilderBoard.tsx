@@ -4,7 +4,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, TOPICS, playerRating } from '@/lib/squadDeal';
 import { minimumCompletionCost } from '@/lib/budgetCompletion';
-import { BB_ERAS, useBudgetBuilder } from '@/hooks/useBudgetBuilder';
+import { BB_ERAS, budgetScore, useBudgetBuilder } from '@/hooks/useBudgetBuilder';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import type { Player } from '@/types/game';
 import styles from './BudgetBuilderBoard.module.css';
@@ -17,7 +17,7 @@ export function BudgetBuilderBoard() {
     era, setEra, budget,
     squad, activeSlot, setActiveSlot, candidates, search, setSearch,
     spent, remaining, filled, complete, teamRating,
-    criterion, criterionMet, moneyRating, series, playFinal, finalScore,
+    criterion, criterionMet, moneyXi, moneyRating, series, playFinal, finalScore, score,
     sign, release, reset, shareText,
     marketUnavailable, retryMarket,
   } = useBudgetBuilder();
@@ -168,6 +168,7 @@ export function BudgetBuilderBoard() {
   const afterSquad = proposedSquad ? Object.values(proposedSquad).filter(Boolean) as Player[] : [];
   const afterRating = afterSquad.length ? Math.round(afterSquad.reduce((sum, player) => sum + playerRating(player), 0) / afterSquad.length) : 0;
   const afterCondition = choice ? criterion.check(afterSquad, budget, afterRemaining) : false;
+  const scoringPreview = afterSquad.length === formation.slots.length ? budgetScore(afterRating, afterRemaining, afterCondition) : null;
   const openSlots = proposedSquad ? formation.slots.filter((_, index) => !proposedSquad[index]) : [];
   const minimum = openSlots.length ? minimumCompletionCost(openSlots, pool, new Set(afterSquad.map(player => player.name))) : null;
 
@@ -226,6 +227,19 @@ export function BudgetBuilderBoard() {
       </div>
 
       {/* Controls */}
+      <details className="mt-3 rounded-xl border border-border bg-card px-3 text-sm">
+        <summary className="cursor-pointer py-3 font-semibold">Scout the Money XI</summary>
+        <p className="text-xs text-muted-foreground">Your opponent fills each shirt in formation order with the most expensive eligible player still available in this market. Its budget is unlimited.</p>
+        <ul className="my-3 grid gap-x-4 gap-y-2 text-xs sm:grid-cols-2">
+          {formation.slots.map((slot, i) => {
+            const player = moneyXi[i];
+            return <li key={i} className="flex justify-between gap-2 border-b border-border pb-1">
+              <span><strong>{slot.label}</strong> {player?.name ?? 'No eligible player'}</span>
+              {player && <span className="shrink-0 text-muted-foreground">{playerRating(player)} OVR · ${player.marketValue}M</span>}
+            </li>;
+          })}
+        </ul>
+      </details>
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <select
           value={formation.name}
@@ -357,6 +371,10 @@ export function BudgetBuilderBoard() {
                 <dd>${minimum}M</dd>
               </div>}
             </dl>
+            {scoringPreview && <p className="mt-2 text-sm font-semibold">
+              {scoringPreview.total} points before the final. {scoringPreview.rating} for the XI, {scoringPreview.savings} for savings and {scoringPreview.demand} for the board demand.
+              {complete && current !== choice && <> Your current XI has {score.total - score.series} before the final.</>}
+            </p>}
             {openSlots.length > 0 && <p className="mt-2 text-xs text-muted-foreground">
               {minimum === null ? `This market cannot fill the ${openSlots.length} open ${openSlots.length === 1 ? 'slot' : 'slots'} with different players.`
                 : afterRemaining < minimum ? `$${minimum - afterRemaining}M short of the cheapest completion.`
@@ -428,6 +446,15 @@ export function BudgetBuilderBoard() {
             team rating · ${spent}M spent · ${remaining}M left over
           </p>
 
+          {!series && (
+            <p className="mt-3 text-sm font-semibold">Before the final you have {score.total} points.</p>
+          )}
+          <dl aria-label="Score breakdown" className="mx-auto mt-3 grid max-w-md grid-cols-2 gap-2 text-left text-xs sm:grid-cols-4">
+            <div><dt>XI rating</dt><dd className="font-bold">{score.rating}</dd></div>
+            <div><dt>Savings</dt><dd className="font-bold">{score.savings}</dd></div>
+            <div><dt>Board demand</dt><dd className="font-bold">{score.demand}</dd></div>
+            <div><dt>Series</dt><dd className="font-bold">{series ? score.series : 'Still to play'}</dd></div>
+          </dl>
           {!series && (
             <button
               onClick={playFinal}

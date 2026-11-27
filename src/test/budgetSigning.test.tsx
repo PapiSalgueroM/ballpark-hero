@@ -209,6 +209,9 @@ describe('Budget Builder signing decisions', () => {
 
   it('preserves the complete original XI, final score, series, completion and share against the unchanged hook', async () => {
     const view = await start();
+    const scouting = view.getByText('Scout the Money XI').closest('details')!;
+    expect(within(scouting).getAllByRole('listitem', { hidden: true })).toHaveLength(11);
+    expect(scouting).toHaveTextContent(tooDear.name);
     for (let index = 0; index < 11; index++) sign(view, xi[index], index);
     const boardState = boundary.state!; expect(boardState.complete).toBe(true); expect(boardState.spent).toBe(440);
     const actual = await vi.importActual<typeof import('@/hooks/useBudgetBuilder')>('@/hooks/useBudgetBuilder');
@@ -218,12 +221,19 @@ describe('Budget Builder signing decisions', () => {
     }
     expect(boardState.squad).toEqual(baseline.result.current.squad);
     expect(boardState.finalScore).toBe(baseline.result.current.finalScore);
+    const points = view.getByLabelText('Score breakdown');
+    expect(points).toHaveTextContent('Savings2');
+    open(view); preview(view, xi[0]);
+    expect(view.getByText(new RegExp(boardState.finalScore + ' points before the final'))).toBeVisible();
+    fireEvent.click(view.getByRole('button', { name: 'Cancel preview' }));
     vi.mocked(Math.random).mockImplementation(rng(901)); fireEvent.click(view.getByRole('button', { name: /Play the Final vs the Money XI/ }));
     const final = boundary.state!;
     vi.mocked(Math.random).mockImplementation(rng(901)); act(() => baseline.result.current.playFinal());
     expect(final.series).toEqual(baseline.result.current.series); expect(final.finalScore).toBe(baseline.result.current.finalScore);
     expect(final.shareText).toBe(baseline.result.current.shareText);
     expect(view.getByText(`Score: ${final.finalScore}`)).toBeVisible();
+    const values = [...points.querySelectorAll('dd')].map(cell => Number(cell.textContent));
+    expect(values.reduce((sum, part) => sum + part, 0)).toBe(final.finalScore);
     expect(recordCompletion).toHaveBeenCalledTimes(2);
     expect(recordCompletion).toHaveBeenNthCalledWith(1, '/budget-builder', final.finalScore, null, final.teamRating);
     fireEvent.click(view.getByRole('button', { name: 'Share my XI' })); await waitFor(() => expect(writeText).toHaveBeenCalledExactlyOnceWith(final.shareText));

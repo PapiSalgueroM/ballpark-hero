@@ -102,6 +102,7 @@ export interface BudgetBuilderState {
   series: SeriesResult | null;
   playFinal: () => void;
   finalScore: number;
+  score: ReturnType<typeof budgetScore>;
   sign: (p: Player) => void;
   release: (slotIndex: number) => void;
   reset: () => void;
@@ -133,6 +134,13 @@ export function budgetFor(moneyXi: (Player | null)[], eraId?: string): number {
   if (eraId === 'today') return 1000;
   const naive = moneyXi.reduce((s, p) => s + (p?.marketValue ?? 0), 0);
   return Math.max(100, Math.round((naive * 0.62) / 10) * 10);
+}
+
+export function budgetScore(rating: number, remaining: number, demandMet: boolean, outcome?: SeriesResult['outcome']) {
+  const savings = Math.floor(Math.max(0, remaining) / 200);
+  const demand = demandMet ? 10 : 0;
+  const series = outcome === 'win' ? 15 : outcome === 'draw' ? 5 : 0;
+  return { rating, savings, demand, series, total: rating + savings + demand + series };
 }
 
 export function useBudgetBuilder(): BudgetBuilderState {
@@ -233,20 +241,8 @@ export function useBudgetBuilder(): BudgetBuilderState {
       .sort((a, b) => b.marketValue - a.marketValue);
   }, [activeSlot, formation, topicPool, usedNames, squad, remaining, search]);
 
-  const finalScore = useMemo(() => {
-    if (!complete) return 0;
-    /* Round 315, the owner's review: "you get way too many points for this
-       game in comparison to the other games". The old formula (rating x 10
-       plus bonuses) paid out around 1,200 a play while most games top out
-       near 100, so this one game dominated the sitewide points. Same
-       ingredients, one tenth the scale: a great day lands a bit over 100,
-       like everywhere else. Old personal bests from the inflated scale will
-       stand until genuinely beaten, which is the honest reading of a best. */
-    let s = teamRating + Math.floor(Math.max(0, remaining) / 200);
-    if (criterionMet) s += 10;
-    if (series) s += series.outcome === 'win' ? 15 : series.outcome === 'draw' ? 5 : 0;
-    return s;
-  }, [complete, teamRating, remaining, criterionMet, series]);
+  const score = budgetScore(teamRating, remaining, criterionMet, series?.outcome);
+  const finalScore = complete ? score.total : 0;
 
   useGameCompletion('budget-builder', complete && series !== null, finalScore, teamRating);
 
@@ -310,7 +306,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
     era, setEra, budget,
     squad, activeSlot, setActiveSlot, candidates, search, setSearch,
     spent, remaining, filled, complete, teamRating,
-    criterion, criterionMet, moneyXi, moneyRating, series, playFinal, finalScore,
+    criterion, criterionMet, moneyXi, moneyRating, series, playFinal, finalScore, score,
     sign, release, reset, shareText,
   };
 }
