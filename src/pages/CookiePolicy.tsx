@@ -43,6 +43,7 @@ const CookiePolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Turning advertising off</h2>
+          <p className="mb-2">If Google's European consent message applies and has loaded, reopen Cookie choices in the footer and select <strong>Review Google’s European ad consent</strong> to change your answer to Google. You can also turn off site advertising in Cookie choices.</p>
           <p>Open Cookie choices, turn Advertising off and choose Save choices. We stop new advertising requests and clear matching advertising cookies our code can access. Your Google Analytics choice stays separate. We normally reload to stop already-loaded scripts. If your choice cannot be saved or a game has unsaved progress, a notice asks you to refresh when it is safe; already-loaded code may continue until then.</p>
           <p className="mt-2">Withdrawal does not erase information already received by a provider or remove cookies on another site or outside our code's access.</p>
         </div>

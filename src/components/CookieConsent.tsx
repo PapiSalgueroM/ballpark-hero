@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal, flushSync } from 'react-dom';
 import { Link } from 'react-router-dom';
+import { GoogleAdConsentReview } from './GoogleAdConsentReview';
 import { loadConsentedScripts, stopRevokedServices } from '@/lib/consentedScripts';
 import {
   ANALYTICS_READY, CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, CONSENT_KEY, CONSENT_MAX_AGE_MS, CONSENT_OPEN_EVENT,
@@ -228,6 +229,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
           </p>}
         </div>}
         {gpc && <p>Your browser's Global Privacy Control keeps advertising off.</p>}
+        {showDetails && !insideHelp && preferences?.advertising && !gpc && !pendingReload && <GoogleAdConsentReview />}
         {pendingReload && <p role="status">{ANALYTICS_READY ? 'Your updated choices apply to this visit.' : 'Advertising is off for this visit.'} Save your game or allow site storage, then choose Save choices to refresh. Already-loaded vendor code may keep running until then.</p>}
         <div className={inlineNotice || compact
           ? `grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center ${inlineNotice ? 'max-[358px]:min-h-[3.5rem] [&>button]:break-words' : ''}`
