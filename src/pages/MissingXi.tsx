@@ -1,4 +1,6 @@
 import { useState, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import LineupDuel from '@/components/missing-xi/LineupDuel';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -70,6 +72,12 @@ function isXiAction(a: unknown): a is XiAction {
  * site's React error #310 rule (TransferPathBoard's known bug class).
  */
 const MissingXi = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const duel = location.hash.startsWith('#duel=') ? location.hash : location.state?.missingXiDuel;
+  const openDuel = (card: string | null) => navigate({ pathname: location.pathname, search: location.search }, {
+    state: { ...location.state, missingXiDuel: card }, preventScrollReset: true,
+  });
   const [saved] = useState(loadMissingXiUnlimitedDraft);
   const [playMode, setPlayMode] = useState<PlayMode>(saved.draft?.active ? 'unlimited' : 'daily');
   const [fullXi, setFullXi] = useState(() => safeSessionStorage.getItem('missing-xi-full-open') === '1');
@@ -228,7 +236,7 @@ const MissingXi = () => {
       <GameShell help="none"
         width="wide"
         title="MISSING XI"
-        subtitle={fullXi ? 'Name all eleven starters from a famous match.' : 'One player is missing from this famous lineup. Name him in 3 guesses.'}
+        subtitle={duel ? 'Three missing starters. Challenge a friend to the same match.' : fullXi ? 'Name all eleven starters from a famous match.' : 'One player is missing from this famous lineup. Name him in 3 guesses.'}
         headerExtra={
           <>
             <RulesGate title="How to Play Missing XI">
@@ -267,44 +275,51 @@ const MissingXi = () => {
                 <h3 className="font-bold text-foreground mb-2">Full XI</h3>
                 <p className="text-muted-foreground">Choose a historical match and name the team in any order. Full names and unique surnames count. Tap a position for the first letter. If you find nine starters and used a hint for one, your unassisted total is eight. Each match keeps its own best.</p>
               </section>
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Lineup Duel</h3>
+                <p className="text-muted-foreground">Solve three blanks in order, with three guesses each. Pass a blank for zero. Two first guesses and one second guess earn 270/300. Share your scorecard to play the same match and compare each blank with a friend.</p>
+              </section>
             </RulesGate>
 
             {/* Daily / Unlimited toggle */}
             <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
-              {(['daily', 'unlimited', 'full'] as const).map(m => (
+              {(['daily', 'unlimited', 'full', 'duel'] as const).map(m => (
                 <button
                   key={m}
                   type="button"
-                  aria-pressed={fullXi ? m === 'full' : playMode === m}
+                  aria-pressed={duel ? m === 'duel' : fullXi ? m === 'full' : playMode === m}
                   onClick={() => {
+                    if (m === 'duel') { if (!duel) openDuel('#duel'); return; }
+                    if (duel) openDuel(null);
                     setFullXi(m === 'full');
                     if (m === 'full') safeSessionStorage.setItem('missing-xi-full-open', '1');
                     else { safeSessionStorage.removeItem('missing-xi-full-open'); switchPlayMode(m); }
                   }}
                   className={cn(
                     'min-h-11 whitespace-nowrap px-2.5 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all',
-                    (fullXi ? m === 'full' : playMode === m) ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
+                    (duel ? m === 'duel' : fullXi ? m === 'full' : playMode === m) ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
-                  {m === 'daily' ? '📅 Daily' : m === 'unlimited' ? '∞ Unlimited' : 'Full XI'}
+                  {m === 'daily' ? '📅 Daily' : m === 'unlimited' ? '∞ Unlimited' : m === 'full' ? 'Full XI' : 'Duel'}
                 </button>
               ))}
             </div>
 
-            {!fullXi && playMode === 'daily' && (
+            {!duel && !fullXi && playMode === 'daily' && (
               <p data-no-prerender className="text-xs text-muted-foreground mt-3">Daily lineup, {editionDate}. Same puzzle for everyone.</p>
             )}
           </>
         }
       >
-        {fullXi && <FullXiRecall />}
-        {!fullXi && (isLoading || !puzzle) && (
+        {duel && <LineupDuel hash={duel} todayId={dailyPuzzle.lineup.id} open={openDuel} />}
+        {!duel && fullXi && <FullXiRecall />}
+        {!duel && !fullXi && (isLoading || !puzzle) && (
           <div className="flex justify-center py-16">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         )}
 
-        {!fullXi && !isLoading && puzzle && (
+        {!duel && !fullXi && !isLoading && puzzle && (
           <div className="space-y-5">
             <div className="bg-surface-1 border border-border rounded-2xl p-5 text-center">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
