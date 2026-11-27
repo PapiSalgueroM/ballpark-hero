@@ -19620,7 +19620,7 @@ function drawSegment(
       else { live.h2My!.push(...built.mine); live.h2Opp!.push(...built.theirs); }
     }
   }
-  if (live.cornerRoutine) {
+  if (live.cornerRoutine && isCornerRoutine(live.cornerRoutine)) {
     const routine = live.cornerRoutine;
     const takenBy = state.setPieces?.[routine.flag === 'left' ? 'cornersLeft' : 'cornersRight'];
     const built = resolveCornerDeliveries(routine, takenBy, play, [...(live.h1Play ?? []), ...(live.h2Play ?? [])], mineAt,
@@ -22045,7 +22045,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     etWords,
     added: live.added,
   });
-  if (live.cornerRoutine) detail.cornerRoutine = { ...live.cornerRoutine };
+  if (live.cornerRoutine && isCornerRoutine(live.cornerRoutine)) detail.cornerRoutine = { ...live.cornerRoutine };
 
   const iAmHome = fx.home !== false; // neutral finals list us first
   return {

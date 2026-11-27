@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { changeLive, liveStatsAt, playNextEntry, resumeMatch, setSetPiece, startCareer, startSecondHalf,
+import { bookCornerRoutine, changeLive, liveStatsAt, playNextEntry, resumeMatch, setSetPiece, startCareer, startSecondHalf,
   type CareerState, type CornerRoutine, type PlayEvent } from '@/lib/clubManager';
 import { resolveCornerDeliveries } from '@/lib/clubManagerCornerDelivery';
 
@@ -91,10 +91,34 @@ describe('prepared competitive corner deliveries', () => {
     expect(added.minute).toBe(90); expect(added.plus).toBeGreaterThan(0);
     const shot = stoppage.find(e => e.kind === 'shot' && e.cornerChance === added.cornerDelivery!.id)!;
     expect([shot.minute,shot.plus]).toEqual([added.minute,added.plus]);
-    const noTarget = secondHalf(state,6,{ ...routine, targetId: 'not-playing' });
-    const nil = seeded(61, () => resumeMatch(noTarget));
-    expect(nil.report!.detail!.cornerRoutine?.targetId).toBe('not-playing');
-    expect(nil.report!.detail!.play!.some(e => e.cornerDelivery)).toBe(false);
+  });
+
+  it('ends the named route after an actual injury or dismissal and keeps the ordinary later corners', () => {
+    const { state, routine } = dressingRoom('Brentford');
+    for (const [seed,targetId,minute,exit] of [
+      [1,'p-mamadou-sangare',52,'injury'], [374,'p-igor-thiago',59,'red'],
+    ] as const) {
+      const live = secondHalf(state,seed,{ ...routine,targetId }).live!;
+      const exits = exit === 'injury' ? live.h2Injuries : live.h2Cards?.filter(c => c.kind === 'red');
+      expect(exits?.some(e => e.id === targetId && e.minute === minute)).toBe(true);
+      const left = live.h2Play!.filter(e => e.kind === 'corner' && e.side === 'me' && e.flank === 'left');
+      expect(left.some(e => e.minute < minute && e.cornerDelivery?.targetId === targetId)).toBe(true);
+      expect(left.some(e => e.minute >= minute)).toBe(true);
+      expect(left.filter(e => e.minute >= minute).every(e => !e.cornerDelivery)).toBe(true);
+    }
+  });
+
+  it('retains a genuine zero-attempt report after a paid week and the actual kickoff', () => {
+    const career = seeded(12207, () => startCareer('Brentford'));
+    const routine: CornerRoutine = { flag:'left', kind:'far-post', takerId:'p-dango-ouattara', targetId:'p-nathan-collins' };
+    const booked = bookCornerRoutine(career,routine)!;
+    const last = seeded(18031,() => playNextEntry(booked,{ skipHalftime:true,varReviews:['goal'] }));
+    expect(last.report!.detail).not.toHaveProperty('cornerRoutine');
+    expect(last.state.cornerTraining?.paid).toEqual({ taker:3, target:3 });
+    const played = seeded(1,() => playNextEntry(JSON.parse(JSON.stringify(last.state)),{ skipHalftime:true,varReviews:['goal'] }));
+    expect(played.report!.detail!.cornerRoutine).toEqual(routine);
+    expect(played.report!.detail!.play!.some(e => e.cornerDelivery)).toBe(false);
+    expect(played.state.cornerTraining).toBeUndefined();
   });
 
   it('reviews the actual finish and removes an overturned goal from both the shot and scorer lists', () => {
