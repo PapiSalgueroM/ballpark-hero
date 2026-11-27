@@ -88,6 +88,12 @@ function revealSport(target: HTMLElement) {
   target.focus({ preventScroll: true });
 }
 
+function HomeTagline({ className }: { className: string }) {
+  return <p className={`text-[13px] leading-5 text-muted-foreground md:text-base md:leading-6 ${className}`}>
+    {`Sports trivia, daily puzzles and career sims. ${GAME_COUNT_LABEL} free games, no account needed.`}
+  </p>;
+}
+
 function getPopularFallbackGames(): GameDef[] {
   const all = VISIBLE_CATEGORIES.flatMap(c => c.games);
   return POPULAR_FALLBACK_PATHS
@@ -370,6 +376,7 @@ export default function Index() {
           <ContinueRow />
           <GamePicksRow paths={gamePicks} onToggle={toggleGamePick} onEmpty={() => launchGamesRef.current?.querySelector<HTMLAnchorElement>('[data-stage-card]')?.focus({ preventScroll: true })} />
           <FeaturedStage />
+          <HomeTagline className="min-[430px]:hidden" />
         </div>
         <div className="min-w-0">
           <DailyRail />
@@ -541,12 +548,10 @@ export default function Index() {
                   his shape. The Round 297 honesty rule survives the cut: the
                   account claim stays phrased as what is true, every game plays
                   without one. The legal disclaimer lives in the footer. */}
-              <p className="mt-1 text-[13px] leading-5 text-muted-foreground md:mt-1.5 md:text-base md:leading-6">
-                {`Sports trivia, daily puzzles and career sims. ${GAME_COUNT_LABEL} free games, no account needed.`}
-              </p>
+              <HomeTagline className="mt-1 hidden min-[430px]:block md:mt-1.5" />
             </div>
 
-            <div data-home-search-tools="" className="mt-3 flex items-center gap-2 md:mt-0 md:w-[23rem] md:shrink-0 lg:w-[26rem]">
+            <div data-home-search-tools="" className="mt-2 flex items-center gap-2 min-[430px]:mt-3 md:mt-0 md:w-[23rem] md:shrink-0 lg:w-[26rem]">
               <div className="relative min-w-0 flex-1">
                 <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <input

@@ -197,13 +197,15 @@
 @media (max-width: 639px) {
   .continueSection { display: grid; grid-template-columns: 74px minmax(0, 1fr); align-items: center; gap: 6px; padding: 6px; }
   .continueHeader { margin-bottom: 0; }
-  .multipleSaves { grid-template-columns: minmax(0, 1fr); }
+  .multipleSaves { grid-template-columns: 96px minmax(0, 1fr); }
+  .multipleSaves .continueHeader { flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; }
   .continueHeading { display: block; margin: 0; font-size: 13px; line-height: 1.25; }
   .continueHeading svg { margin-bottom: 3px; }
-  .multipleSaves .continueHeading { display: flex; }
-  .multipleSaves .continueHeading svg { margin: 0; }
+  .multipleSaves .continueHeading { font-size: 12px; line-height: 16px; }
+  .multipleSaves .continueHeading svg { display: none; }
+  .multipleSaves .continueRail { container-type: inline-size; }
   .continueCard { width: min(248px, calc(100vw - 134px)); }
-  .multipleSaves .continueCard { width: min(248px, 75vw); }
+  .multipleSaves .continueCard { width: min(248px, 100cqi); }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .lead .art, .game .cta svg, .managerLaunch .launchArrow { transition: transform 220ms ease-out; }
