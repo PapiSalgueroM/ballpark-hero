@@ -31,6 +31,8 @@ describe('legal and story transparency', () => {
     expect(within(section).getByText(/turn Google Analytics on or off separately in Cookie choices/)).toBeVisible();
     expect(within(section).getByText(/180 days/)).toBeVisible();
     expect(screen.getByText(/If you opt in, Google Analytics 4 receives the public page address and title/)).toBeVisible();
-    expect(screen.getAllByText(/30 days/)).toHaveLength(3);
+    expect(screen.getByText(/permanently delete your account and the data linked to it within 30 days/)).toBeVisible();
+    expect(screen.getByText(/we will respond within 30 days/)).toBeVisible();
+    expect(screen.getByText(/we answer within 30 days/i)).toBeVisible();
   });
 });

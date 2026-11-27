@@ -30,9 +30,10 @@ const profiles = [
 ];
 const markers = { route: 'COOKIE_BROWSER_ROUTE', footer: 'COOKIE_BROWSER_FOOTER_NAV',
   privacy: 'COOKIE_BROWSER_PRIVACY_LINK', copy: 'COOKIE_BROWSER_COPY', choices: 'COOKIE_BROWSER_CHOICES' };
-const analyticsCopy = 'Advertising and Google Analytics start off. You can choose either one separately.';
+const analyticsCopy = 'Renewing Advertising leaves your Google Analytics choice and its 180-day period unchanged.';
 const claims = [analyticsCopy,
-  'That period applies to your cookie choice, not a promise to delete game saves or provider records after 180 days.',
+  'If you allow Advertising, we ask again every 30 days. Ads pause until you confirm.',
+  'If you decline, we remember your refusal for 180 days.',
   'Lovable still measures basic visits, engagement, performance, and browser errors after Reject all.',
   'Withdrawal does not erase information already received by a provider or remove cookies on another site or outside our code\'s access.',
 ];
@@ -154,7 +155,9 @@ async function open(profile, id, control) {
     });
     await context.addInitScript(({ key, init, save, bytes, gpc }) => {
       if (!localStorage.getItem(init)) {
-        localStorage.setItem(key, JSON.stringify({ version: 2, advertising: !!gpc, analytics: !!gpc, updatedAt: Date.now() }));
+        const now = Date.now();
+        localStorage.setItem(key, JSON.stringify({ version: 2, advertising: !!gpc, analytics: !!gpc, updatedAt: now,
+          ...(gpc ? { advertisingConfirmedAt: now } : {}) }));
         localStorage.setItem(save, bytes); localStorage.setItem(init, '1');
       }
       if (gpc) Object.defineProperty(navigator, 'globalPrivacyControl', { configurable: true, value: true });
@@ -394,7 +397,11 @@ function controls() {
   const footerAnchor = footerAnchors[0][0];
   const copies = [changedCopy('wrong-footer-destination', entry, text, footerAnchor,
     footerAnchor.replace('to:"/cookie-policy"', 'to:"/privacy"'), markers.footer)];
-  const cookieChunks = [...staticFiles.keys()].filter(file => file.endsWith('.js') && fs.readFileSync(path.join(DIST, file.slice(1)), 'utf8').includes(analyticsCopy));
+  const cookieChunks = [...staticFiles.keys()].filter(file => {
+    if (!file.endsWith('.js')) return false;
+    const chunk = fs.readFileSync(path.join(DIST, file.slice(1)), 'utf8');
+    return chunk.includes('Cookie Policy - DoUKnowBall') && chunk.includes(analyticsCopy);
+  });
   assert.equal(cookieChunks.length, 1, 'COOKIE_SETUP: unique actual compiled policy disclosure chunk');
   const cookieText = fs.readFileSync(path.join(DIST, cookieChunks[0].slice(1)), 'utf8');
   copies.push(changedCopy('missing-analytics-disclosure', cookieChunks[0], cookieText, analyticsCopy,

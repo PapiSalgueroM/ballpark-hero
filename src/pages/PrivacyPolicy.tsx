@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSiteBack } from '@/hooks/useSiteBack';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
+import { RegionalAdChoices } from '@/components/legal/RegionalAdChoices';
 import { OAUTH_PROVIDERS } from '@/lib/authProviders';
 
 const PrivacyPolicy = () => {
@@ -39,7 +40,8 @@ const PrivacyPolicy = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">2. Cookies &amp; Local Storage</h2>
           <p>This site uses browser local storage to save your game progress, best scores, preferences, and UI state, and to remember your optional cookie choices. Local storage data stays on your device and is not transmitted to our servers except as described in Section 1.</p>
-          <p className="mt-2">For a new visitor in the EEA, UK or Switzerland, Advertising stays off until you choose it. We also ask first if we cannot confirm your region. Elsewhere, Advertising starts on and you can turn it off in Cookie choices. An existing choice takes priority. Google Analytics always requires a separate opt-in. <strong>Accept all</strong> turns it on, <strong>Reject all</strong> keeps it off, and <strong>Save choices</strong> applies your selection. {ANALYTICS_READY ? 'You can turn Google Analytics on or off separately in Cookie choices.' : 'Google Analytics 4 stays paused.'} Lovable's basic visitor analytics continues under either choice, as described in Section 10. If your browser exposes a <strong>Global Privacy Control</strong> signal to the site, Advertising stays off even if you previously enabled it. You can play the games with Advertising off. We ask you to choose again after 180 days.</p>
+          <RegionalAdChoices />
+          <p className="mt-2">Google Analytics always requires a separate opt-in. Renewing Advertising leaves your Google Analytics choice and its 180-day period unchanged. <strong>Accept all</strong> enables both available options, <strong>Reject all</strong> keeps them off, and <strong>Save choices</strong> applies your selection. {ANALYTICS_READY ? 'You can turn Google Analytics on or off separately in Cookie choices.' : 'Google Analytics 4 stays paused.'} Lovable's basic visitor analytics continues under either choice, as described in Section 10. You can play the games with Advertising off.</p>
           <p className="mt-2">You can open <strong>Cookie choices</strong> here or in the footer without changing your saved setting. You can turn Advertising off and choose <strong>Save choices</strong>. Saving a withdrawal clears the relevant optional cookies our code can access on this site. We normally reload to stop scripts that are already loaded. If your choice cannot be saved or a game has unsaved progress, new advertising requests stay off and a notice asks you to refresh when it is safe. Your Google Analytics choice stays separate. This does not erase information already received by a provider or remove cookies controlled by another site or inaccessible to our code. You can also manage cookies and clear stored site data in your browser settings. For requests concerning data already collected, see Section 6.</p>
           <p className="mt-2">Read our <Link to="/cookie-policy" className="underline hover:text-foreground transition-colors">Cookie Policy</Link> for a focused guide to browser storage and changing your choices.</p>
           <button type="button" data-no-prerender="" onClick={event => openConsentChoices(event.currentTarget)}

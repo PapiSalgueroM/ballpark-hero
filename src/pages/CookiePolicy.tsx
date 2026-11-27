@@ -2,6 +2,7 @@ import { ANALYTICS_READY, openConsentChoices } from '@/lib/consentPreferences';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
+import { RegionalAdChoices } from '@/components/legal/RegionalAdChoices';
 
 const CookiePolicy = () => {
   return (
@@ -27,9 +28,9 @@ const CookiePolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Your choices</h2>
-          <p>For a new visitor in the EEA, UK or Switzerland, Advertising stays off until you choose it. We also ask first if we cannot confirm your region. Elsewhere, Advertising starts on and you can turn it off in Cookie choices. An existing choice takes priority. Google Analytics always requires a separate opt-in. Advertising stays off if your browser exposes Global Privacy Control to the site, even if you previously turned Advertising on.</p>
-          <p className="mt-2">{ANALYTICS_READY ? 'Reject all keeps both options off. Accept all turns on both available options.' : 'Reject all keeps Advertising off. Accept all turns Advertising on where available.'} Save choices applies your selection. We ask again after 180 days. That period applies to your cookie choice, not a promise to delete game saves or provider records after 180 days.</p>
-          <p className="mt-2">For a new visitor, our browser code reads the country code from Cloudflare on this site. It keeps only the applicable ad setting in memory for this visit. We do not save the country or IP address for this check.</p>
+          <RegionalAdChoices />
+          <p className="mt-2">Google Analytics always requires a separate opt-in. Renewing Advertising leaves your Google Analytics choice and its 180-day period unchanged. {ANALYTICS_READY ? 'Reject all keeps both options off. Accept all turns on both available options.' : 'Reject all keeps Advertising off. Accept all turns Advertising on where available.'} Save choices applies your selection. These time limits apply to cookie choices. Game saves and provider records have their own retention periods.</p>
+          <p className="mt-2">To determine which advertising choice applies, our browser code reads the country code from Cloudflare on this site. It keeps only the applicable ad setting in memory for this visit. We do not save the country or IP address for this check.</p>
           <p className="mt-2">Open Cookie choices here or in the footer whenever you want. Opening the settings does not change your saved choice.</p>
           <button type="button" data-no-prerender="" onClick={event => openConsentChoices(event.currentTarget)}
             className="mt-2 inline-flex min-h-11 items-center rounded-md border border-border px-3 font-medium text-foreground underline hover:bg-muted focus-visible:outline-ring">
