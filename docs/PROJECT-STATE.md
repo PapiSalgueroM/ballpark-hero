@@ -1,4 +1,16 @@
-### November 27, 2026. Club Manager flank buildup
+### November 27, 2026. Match Centre kickoff buildup in Club Manager
+
+In the Match Centre, open Kickoff buildup and choose a side. The fullback and winger shown are projections from the current lineup and fitness. The manager can use the chosen route from the opening whistle in Play Live or Quick Sim, including a Quick Sim with a named bench order. The selection takes effect when the match starts. The next fixture returns to normal buildup.
+
+On local entry `index-bPW0iIWg.js` the starting pair changed from Diouf and Schade on the left to Kayode and Ouattara on the right. Changing or clearing the draft made zero career-save writes. A real Brentford fixture against Tottenham finished 2-1 with ordinary buildup and 1-2 with the left overlap on the same draw. Playing live and quick simming agreed on those two scorelines. The local production build and 139 focused tests passed. All 159 unattended competitive cup fixtures preserved the preceding engine's saves, reports and random draws. All ten deliberate changes failed the comparison.
+
+### November 27, 2026. Live flank tactics published in Club Manager
+
+Lovable published `a3bac33df` in deployment `8c15e1c0-2c09-4594-8144-07bea5a323b7`. Home, Club Manager and What's New served `index-Bfrkyf9x.js`. Both changed snapshots matched. All 176 sitemap URLs passed the custom-domain crawler check. IndexNow accepted both changed URLs with HTTP 200.
+
+In a saved Brentford match against Tottenham, the overlap created a 71st-minute goal for Igor Thiago and left space for Mohammed Kudus to score on the counter. It finished 2-2. Holding cover finished 1-2. On a separate draw the opponent added left-side cover at 67 minutes. The manager switched right a minute later, reloaded and finished 1-1. Watching or skipping reproduced the same events, chances and result. The ordinary full save matched the preceding published entry. A separate comparison preserved all 159 unattended competitive fixtures and rejected ten deliberately altered controls.
+
+The public match passed 50 ad placement checks and 13 consent cases, including one real US edge response. With analytics consent, Home, Club Manager and Back each produced one GA4 page view. Tactical changes, playing the match and browsing its report added zero. Test collections and ad auctions were intercepted. The published starting screen used 204.3 KiB of its 226 KiB transfer budget. The existing historical simulation fleet remains under investigation.
 
 Play Live now lets a manager send the fullback past the winger or keep cover behind the ball, on either side. Three successful entries down one side draw extra cover there. The manager can switch sides during play. The report follows the named passers, receivers, covering players and resulting shots from the same match.
 
