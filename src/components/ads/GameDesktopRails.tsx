@@ -105,7 +105,7 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
     const measure = (width: number) => {
       const pageWidth = document.documentElement.clientWidth;
       // A native scrollbar narrows the full page, including its rail frame.
-      setFits(width >= 1280 || (media.matches && pageWidth > 0 && width >= pageWidth));
+      setFits(width >= 1280 || (media.matches && pageWidth > 0 && Math.round(width) >= pageWidth));
     };
     const check = () => measure(element.clientWidth);
     check();

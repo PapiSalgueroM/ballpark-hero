@@ -44,6 +44,8 @@ it.each([1280, 1254])('fits the full desktop frame beside a native scrollbar at 
   expect(rails()).toEqual([]);
   act(() => reportWidth(frameWidth - 1));
   expect(rails()).toEqual([]);
+  act(() => reportWidth(frameWidth - 1 / 3));
+  expect(rails()).toEqual(['left', 'right']);
   act(() => reportWidth(frameWidth));
   expect(rails()).toEqual(['left', 'right']);
   act(() => reportWidth(frameWidth - 1));
