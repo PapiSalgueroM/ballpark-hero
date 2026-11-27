@@ -249,7 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
-  <script>document.documentElement.classList.add('dukb-js')</script>
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -266,6 +286,12 @@
 <a href="/">Back to the games</a>
 <h1>What's New</h1>
 <p>The running log of what changed around here, newest first. We ship a lot. If something looks off after an update, hit the Report a problem button in the footer and we will get on it.</p>
+<h2>November 27, 2026</h2>
+<li>Open Training in <a href="/soccer-career">Soccer Career</a> and pick Break the Press. Draw two defenders out of position and find a teammate in the end zone. Each of the three pitches keeps your shortest winning sequence.</li>
+<li>Open Matchday Director in <a href="/stadium-tycoon">Stadium Tycoon</a>. Can you get 680 fans through the gates in six fixtures? Set ticket prices, staff the food counters and put your best signed contract on the books.</li>
+<li>After drafting your <a href="/nba-starting-5">NBA Starting 5</a>, coach them in a best-of-three exhibition. Name a ball handler and decide who shoots when the defense sends a second defender.</li>
+<li>Pick Scout rival in <a href="/fantasy-draft">Fantasy Draft</a>. Check who could still be there on your next turn before you pass up the last defender you want.</li>
+<li>Set a halftime plan in <a href="/club-manager">Club Manager</a>. Protect a one-goal lead or chase a deficit. You can override the plan in the dressing room.</li>
 <h2>November 2026</h2>
 <li>Club Manager adds Japan and China. Start a new <a href="/club-manager">Club Manager</a> career with any of the 20 J1 League clubs or 16 Chinese Super League clubs. Japan uses the verified 2026/27 fixture order. China plays a simulated 30-match draw and starts with the real 2026 point deductions. Both use generated opening squads and simulated dates and results.</li>
 <li>Soccer Perfect Season. Take one real player from each of 11 randomly drawn clubs, with two rerolls for the whole draft. See which clubs are coming, fill your XI and try to win all 38 matches. <a href="/soccer-perfect-season">Play Daily or Unlimited</a>.</li>
@@ -818,7 +844,10 @@
 <li>DoUKnowBall launched with the first wave of daily soccer games. It has grown to eleven sports and 130+ games since, and it is still growing.</li>
 <p>Want something added or changed? <a href="/contact">Tell us</a>. A lot of what you see above started as a player suggestion.</p>
 <div data-site-chrome>
-<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
 <a href="/soccer">Soccer</a>
 <a href="/pro-basketball">NBA</a>
 <a href="/hockey">NHL</a>
@@ -826,17 +855,13 @@
 <a href="/baseball">MLB</a>
 <a href="/college">College</a>
 <a href="/search">Search Games</a>
-<a href="/about">About</a>
-<a href="/contact">Contact</a>
-<a href="/whats-new">What's New</a>
 <a href="/records">Record Books</a>
+<a href="/whats-new">What's New</a>
 <a href="/leaderboard">Leaderboard</a>
-<a href="/privacy">Privacy Policy</a>
 <a href="/cookie-policy">Cookie Policy</a>
-<a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Google Analytics is paused. Lovable still measures basic visits.</p>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<p>Ads help keep the games free. Choose whether Google AdSense may use cookies for non-personalized ads. Google Analytics measures page visits. You can play with either or both off. Where we ask first, advertising permission lasts 30 days and we remember a refusal for 180 days. Google Analytics has its own 180-day choice. <a href="/privacy">Learn more</a></p>
 </div>
 </div>
 </div>

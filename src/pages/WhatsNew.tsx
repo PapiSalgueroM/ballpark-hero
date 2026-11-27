@@ -25,6 +25,16 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">November 27, 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>Open Training in <Link to="/soccer-career" className="text-primary hover:underline">Soccer Career</Link> and pick Break the Press. Draw two defenders out of position and find a teammate in the end zone. Each of the three pitches keeps your shortest winning sequence.</li>
+            <li>Open Matchday Director in <Link to="/stadium-tycoon" className="text-primary hover:underline">Stadium Tycoon</Link>. Can you get 680 fans through the gates in six fixtures? Set ticket prices, staff the food counters and put your best signed contract on the books.</li>
+            <li>After drafting your <Link to="/nba-starting-5" className="text-primary hover:underline">NBA Starting 5</Link>, coach them in a best-of-three exhibition. Name a ball handler and decide who shoots when the defense sends a second defender.</li>
+            <li>Pick Scout rival in <Link to="/fantasy-draft" className="text-primary hover:underline">Fantasy Draft</Link>. Check who could still be there on your next turn before you pass up the last defender you want.</li>
+            <li>Set a halftime plan in <Link to="/club-manager" className="text-primary hover:underline">Club Manager</Link>. Protect a one-goal lead or chase a deficit. You can override the plan in the dressing room.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">November 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">Club Manager adds Japan and China.</strong> Start a new <Link to="/club-manager" className="text-primary hover:underline">Club Manager</Link> career with any of the 20 <span data-cm-fixture-added="j1">J1 League</span> clubs or 16 Chinese Super League clubs. Japan uses the verified 2026/27 fixture order. China plays a simulated 30-match draw and starts with the real 2026 point deductions. Both use generated opening squads and simulated dates and results.</li>

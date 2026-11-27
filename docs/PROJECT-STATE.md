@@ -1,10 +1,14 @@
-### November 27, 2026. Matchday Director, halftime tactics and a scouting draft rival
+### November 27, 2026. Break the Press, matchday campaigns, coaching and draft rivals
+
+Soccer Career's Training Ground includes Break the Press. Pick passes on three small pitches. The passer advances when there is room, and two defenders shift toward the receiver. Five passes are available per attempt. The shortest verified wins take three, four and five passes. Undo and Retry are free. Each board keeps its best winning sequence separately from the career save and seasonal training reward.
 
 Open Matchday Director in Stadium Tycoon to run six home fixtures. Community season asks for 680 admissions and $250 in the bank. Cup run asks for 510 admissions and $1,700. Four crew run gates and food counters. Ticket prices change turnout and future support. Turnstiles and food counters cost cash and stay for later fixtures. The signed contracts keep the best successful Community crowd and Cup cash across seasons. The original stadium and academy keep their own saves.
 
 Club Manager can protect a one-goal lead or go after a halftime deficit, including the aggregate score in a second leg. The optional plan works in watched and quick matches and explains its decision in the match report. The manager can still give a different halftime instruction. In 100 matched simulations, 40 halftime scores triggered a change and four final results changed.
 
 In Fantasy Draft, choose Scout rival before drafting. It looks ahead to its next turn and can take a player because your available positions and the remaining cover make waiting risky. The planner uses that same opponent for its estimates. In 360 paired drafts across the six rules and both snake orders, every team completed a legal formation. Resuming a draft keeps its opponent.
+
+After scoring an NBA Starting 5, the player can coach that five in a best-of-three exhibition. Pick a handler and decide whether to shoot through coverage or pass to cutters. The opponent can pressure the handler from the previous game. A signed-out browser can resume the series. One verified five won 2 to 0 or lost 1 to 2 with different calls at 390 and 1366 pixels. The original five's scoring and awards still use its career averages.
 
 ### November 27, 2026. Full-width desktop scores and navigation
 
