@@ -3,6 +3,7 @@ import { HelpCircle } from 'lucide-react';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import ImperialismBoardShared from '@/components/conquest/ImperialismBoardShared';
+import { SoccerFrontier } from '@/components/conquest/SoccerFrontier';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -37,6 +38,7 @@ const SoccerConquest = () => {
               <HelpCircle className="w-5 h-5" />
             </button>
           </div>
+          <SoccerFrontier />
           <ImperialismBoardShared sport={SOCCER_IMPERIALISM} map={SOCCER_CONQUEST_MAP} game={SOCCER_CONQUEST_GAME} helpOpen={showHelp} onHelpOpenChange={setShowHelp} />
           <GameSeoContent
             pageHasOwnH1

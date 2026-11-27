@@ -289,7 +289,7 @@ function hexNeighbours(col: number, row: number): [number, number][] {
 }
 
 /** Offset to cube coordinates, so distance is a max of three differences. */
-function hexDistance(a: [number, number], b: [number, number]): number {
+export function hexDistance(a: [number, number], b: [number, number]): number {
   const cube = ([c, r]: [number, number]) => {
     const x = c - (r - (r & 1)) / 2;
     const z = r;
