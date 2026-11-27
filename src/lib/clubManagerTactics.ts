@@ -42,6 +42,7 @@ import {
   type AiStyleId, type InstructionKey, type InstructionStep, type Setting, type TacticStats, type TeamInstructions,
 } from '@/lib/clubManagerTacticsCore';
 
+import { drawFlankPlay, isFlankPlan } from '@/lib/clubManagerFlank';
 export { BALANCED, INSTRUCTION_KEYS, isBalanced, readInstructions, logEverSet } from '@/lib/clubManagerTacticsCore';
 export type { AiStyleId, InstructionKey, InstructionStep, Setting, TacticStats, TeamInstructions } from '@/lib/clubManagerTacticsCore';
 
@@ -362,6 +363,18 @@ function possShift(live: LiveMatch, half: 1 | 2): number {
  *  again, a junk value, a formation or duty that is not one, or the shape already standing). */
 function change(state: CareerState, live: LiveMatch, ch: LiveChange, m: number, p: number): boolean {
   const plus = p ? { plus: p } : {};
+  if (ch.kind === 'flank') {
+    if (live.penaltyCalls || (ch.plan !== null && !isFlankPlan(ch.plan))) return false;
+    if (!ch.plan) {
+      if (!live.flankPlan) return false;
+      delete live.flankPlan;
+    } else {
+      if (live.flankPlan?.side === ch.plan.side && live.flankPlan.support === ch.plan.support) return false;
+      live.flankPlan = { side: ch.plan.side, support: ch.plan.support };
+      live.flankDraw ??= Math.floor(Math.random() * 0x100000000);
+    }
+    return true;
+  }
   if (ch.kind === 'instructions') {
     const next = readInstructions(ch.instructions);
     const now = liveInstructions(live);
@@ -400,6 +413,7 @@ function change(state: CareerState, live: LiveMatch, ch: LiveChange, m: number, 
 }
 
 setTacticsImpl({
+  flank: drawFlankPlay,
   edge: (state, fx: MyFixture, xi: XiSlot[], instr, half, oppStyle) => tacticBoost({
     mine: instr, theirs: AI_STYLES[matchOpponentStyle(state, fx.opponent, oppStyle)].instructions, half,
     fit: xi.length ? xi.reduce((s, x) => s + x.p.fitness, 0) / xi.length : 80, duties: xi.map(x => x.duty),

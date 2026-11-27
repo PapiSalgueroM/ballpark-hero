@@ -14,6 +14,7 @@
  * Imports engine types only, so the engine imports this without a cycle.
  */
 import type { CareerState, LiveChange, LiveMatch, MatchDetail, MyFixture, XiSlot } from '@/lib/clubManager';
+import type { drawFlankPlay } from '@/lib/clubManagerFlank';
 
 export type Setting = -1 | 0 | 1;
 export type InstructionKey = 'press' | 'tempo' | 'width' | 'line';
@@ -61,6 +62,7 @@ export const logEverSet = (log: InstructionStep[] | undefined): boolean => (log 
 
 /** What the engine asks of the tactics module. Every call is made only off balanced. */
 export interface TacticsImpl {
+  flank: typeof drawFlankPlay;
   /** The goal rate boosts my instructions are worth in a half against the other side's style. */
   edge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: TeamInstructions, half: 1 | 2, oppStyle?: AiStyleId): { atk: number; def: number };
   /** A stretch's knock factor and shots per expected goal. */
