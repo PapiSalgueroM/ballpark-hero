@@ -2,12 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { CONSENT_CHANGED_EVENT, getAdSenseScript, loadAdSense } from '@/lib/consentedScripts';
 import { CONSENT_EFFECTIVE_CHANGED_EVENT, CONSENT_KEY, getEffectiveConsent } from '@/lib/consentPreferences';
 
-declare global {
-  interface Window {
-    adsbygoogle: unknown[];
-  }
-}
-
 interface AdBannerProps {
   slot: string;
   placement?: 'public-footer' | 'left-rail' | 'right-rail';

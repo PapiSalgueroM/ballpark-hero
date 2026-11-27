@@ -11,6 +11,7 @@ export const GA_MEASUREMENT_ID = 'G-KZQK2G68YC';
 
 declare global {
   interface Window {
+    adsbygoogle: AdSenseQueue;
     dataLayer?: unknown[];
     dukbGaLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
