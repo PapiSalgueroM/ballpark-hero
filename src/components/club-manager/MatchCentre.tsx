@@ -14,6 +14,8 @@ import { kickoffFlankPlayers, type FlankPlan } from '@/lib/clubManagerFlank';
 import { FlankRoutePicker } from './FlankRoutePicker';
 import { PhaseShapePicker } from './PhaseShapePicker';
 import { phasePositions, type PhaseOrder } from '@/lib/clubManagerPhaseShapes';
+import { AnalystDesk } from './AnalystDesk';
+import type { AnalystMode } from '@/lib/clubManagerAnalyst';
 
 /**
  * Round 157: the pre-match facts screen, modelled on what a matchday app
@@ -58,9 +60,9 @@ interface MatchCentreProps {
   talkRead: string | null;
   talkStale: boolean;
   onChangeLineup?: () => void;
-  onQuickSim: (order?: BenchOrder, flankPlan?: FlankPlan, phaseOrder?: PhaseOrder) => void;
+  onQuickSim: (order?: BenchOrder, flankPlan?: FlankPlan, phaseOrder?: PhaseOrder, analystMode?: AnalystMode) => void;
   /** Round 158's animated viewer, which Round 472 made the one live way in. */
-  onLive: (flankPlan?: FlankPlan, phaseOrder?: PhaseOrder) => void;
+  onLive: (flankPlan?: FlankPlan, phaseOrder?: PhaseOrder, analystMode?: AnalystMode) => void;
   onBack: () => void;
 }
 
@@ -70,10 +72,13 @@ export function MatchCentre({
   const f = facts;
   const [flankPlan, setFlankPlan] = useState<FlankPlan | null>(null);
   const [phaseOrder, setPhaseOrder] = useState<PhaseOrder | null>(null);
+  const [analystMode, setAnalystMode] = useState<AnalystMode | null>(null);
   const pair = flankPlan && kickoffFlankPlayers(career, flankPlan.side);
-  const startQuick = (order?: BenchOrder) => phaseOrder
-    ? onQuickSim(order, flankPlan ?? undefined, phaseOrder)
-    : onQuickSim(order, flankPlan ?? undefined);
+  const selected = [flankPlan ?? undefined, phaseOrder ?? undefined, analystMode ?? undefined] as const;
+  const startQuick = (order?: BenchOrder) => analystMode ? onQuickSim(order, ...selected)
+    : phaseOrder ? onQuickSim(order, selected[0], phaseOrder) : onQuickSim(order, selected[0]);
+  const startLive = () => analystMode ? onLive(...selected)
+    : phaseOrder ? onLive(selected[0], phaseOrder) : onLive(selected[0]);
   /* Round 1522: the style they play (keyed, no draw), the one the engine reads. */
   const style = career?.clubStrengths ? opponentStyle(career, f.opponent) : null;
   const venue = f.home === true ? 'Home' : f.home === false ? 'Away' : 'Neutral venue';
@@ -231,6 +236,7 @@ export function MatchCentre({
         </dl>}
       </FlankRoutePicker>
       <PhaseShapePicker order={phaseOrder} positionsFor={order => phasePositions(career, undefined, undefined, order)} onChange={setPhaseOrder} />
+      <AnalystDesk career={career} opponent={f.opponent} mode={analystMode ?? undefined} onMode={setAnalystMode} />
       <BenchOrderCard key={career.season + ':' + career.week} career={career} onSim={startQuick} />
 
       {/* Actions. Round 472: one match, two ways through it. There used to be
@@ -240,7 +246,7 @@ export function MatchCentre({
           quick one costs you nothing but the ninety minutes. */}
       <div className="grid grid-cols-2 gap-2">
         <button
-          onClick={() => phaseOrder ? onLive(flankPlan ?? undefined, phaseOrder) : onLive(flankPlan ?? undefined)}
+          onClick={startLive}
           data-cm-way="live"
           className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
         >

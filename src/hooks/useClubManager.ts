@@ -26,6 +26,7 @@ import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib/clubManager';
 import type { FlankPlan } from '@/lib/clubManagerFlank';
 import type { PhaseOrder } from '@/lib/clubManagerPhaseShapes';
+import type { AnalystMode } from '@/lib/clubManagerAnalyst';
 import { bookCornerRoutine, cancelCornerRoutine, type CornerRoutine } from '@/lib/clubManager';
 import { tacticsImpl, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
 import { carryShape } from '@/lib/clubManagerCarry';
@@ -112,7 +113,7 @@ function carryAcross(state: CareerState, from: Formation, to: Formation): { xiId
    needs it before any match of it is played; until it is in, every match action below waits (does nothing), and
    the effect in the hook loads it. The screens that set instructions import it themselves. */
 const needsTactics = (c: CareerState | null | undefined): boolean =>
-  !!c && (!!c.instructions || !!c.live?.flankPlan || !!c.live?.phaseOrder || !!c.live?.phaseHistory?.length ||
+  !!c && (!!c.instructions || !!c.live?.flankPlan || !!c.live?.phaseOrder || !!c.live?.phaseHistory?.length || !!c.live?.analystWatch ||
     !!c.live?.returnPress || c.live?.returnPressUsed === true || !!c.live?.instrLog?.length || !!c.live?.formChanges?.length);
 const tacticsWait = (c: CareerState | null | undefined): boolean => needsTactics(c) && tacticsImpl() === null;
 const loadTactics = (): Promise<unknown> => import('@/lib/clubManagerTactics');
@@ -374,11 +375,9 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
      the engine's own words (doorRefusal, loanOutRefusal), or null when it went
      through. A refused press used to be a dead button. */
   const [deskNote, setDeskNote] = useState<string | null>(null);
-  const [positionBlock, setPositionBlock] = useState<{ career: CareerState; phaseOrder?: true } | null>(null);
+  const [positionBlock, setPositionBlock] = useState<{ career: CareerState; message?: string } | null>(null);
   const positionNotice = career && positionBlock?.career === career
-    ? positionBlock.phaseOrder
-      ? 'Your phase shapes could not start with this lineup. Check the team sheet, then choose a shape order again in Match Centre.'
-      : 'This match could not continue. Its saved positioning data needs review. Your saved data has been kept.'
+    ? positionBlock.message ?? 'This match could not continue. Its saved positioning data needs review. Your saved data has been kept.'
     : null;
 
   // Persist the career on every change.
@@ -1056,12 +1055,20 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     setPhase('seasonEnd');
   }, [canSettle]);
 
-  const runEntry = useCallback((skipHalftime: boolean, benchOrder?: BenchOrder, flankPlan?: FlankPlan, phaseOrder?: PhaseOrder) => {
+  const runEntry = useCallback((skipHalftime: boolean, benchOrder?: BenchOrder, flankPlan?: FlankPlan, phaseOrder?: PhaseOrder, analystMode?: AnalystMode) => {
     if (!career || !canSettle(career)) return;
-    if (heldForTactics(() => { runEntry(skipHalftime, benchOrder, flankPlan, phaseOrder); }, !!(flankPlan || phaseOrder) && !career.live)) return;
-    const res = playNextEntry(career, { skipHalftime, benchOrder, flankPlan, phaseOrder, ...cmVarGameAsk(CM_VAR_LIVE) });
+    if (heldForTactics(() => { runEntry(skipHalftime, benchOrder, flankPlan, phaseOrder, analystMode); },
+      !!(flankPlan || phaseOrder || analystMode) && !career.live)) return;
+    const res = playNextEntry(career, { skipHalftime, benchOrder, flankPlan, phaseOrder, analystMode, ...cmVarGameAsk(CM_VAR_LIVE) });
     if (res.blocked === 'position-state-invalid') { setPositionBlock({ career }); return; }
-    if (res.blocked === 'phase-order-unavailable') { setPositionBlock({ career, phaseOrder: true }); return; }
+    if (res.blocked === 'phase-order-unavailable') {
+      setPositionBlock({ career, message: 'Your phase shapes could not start with this lineup. Check the team sheet, then choose a shape order again in Match Centre.' });
+      return;
+    }
+    if (res.blocked === 'analyst-unavailable') {
+      setPositionBlock({ career, message: 'The analyst could not start a watch for this fixture. Reopen Match Centre for the current opponent.' });
+      return;
+    }
     if (res.kind === 'seasonOver') {
       settleSeason(career, res.state);
       return;
@@ -1097,9 +1104,11 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     }
   }, [career, canSettle, heldForTactics, settleSeason]);
 
-  const play = useCallback((flankPlan?: FlankPlan, phaseOrder?: PhaseOrder) => runEntry(false, undefined, flankPlan, phaseOrder), [runEntry]);
+  const play = useCallback((flankPlan?: FlankPlan, phaseOrder?: PhaseOrder, analystMode?: AnalystMode) =>
+    runEntry(false, undefined, flankPlan, phaseOrder, analystMode), [runEntry]);
   /** Round 157: the quick sim. One tap, full result, no dressing room stop. */
-  const quickPlay = useCallback((order?: BenchOrder, flankPlan?: FlankPlan, phaseOrder?: PhaseOrder) => runEntry(true, order, flankPlan, phaseOrder), [runEntry]);
+  const quickPlay = useCallback((order?: BenchOrder, flankPlan?: FlankPlan, phaseOrder?: PhaseOrder, analystMode?: AnalystMode) =>
+    runEntry(true, order, flankPlan, phaseOrder, analystMode), [runEntry]);
 
   /* Round 93: his calendar complaint. "u can click through and sim much
      faster... simulate through date or play match or whatever." Quick sim

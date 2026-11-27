@@ -225,6 +225,7 @@ import { addAppearanceFee, appearanceFeeTerms, canBookAppearanceFee, recordFeeAp
 export { appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, canBookAppearanceFee, type AppearanceFee } from '@/lib/clubManagerAppearanceFees';
 import { cornerAssistId, resolveCornerDeliveries, type CornerDelivery } from '@/lib/clubManagerCornerDelivery';
 import type { FlankMove, FlankPlan } from '@/lib/clubManagerFlank';
+import type { AnalystMode, AnalystNotebook, AnalystWatch, AnalystObservation } from './clubManagerAnalyst';
 import type { PhaseOrder, PhaseStep, PhaseMove } from '@/lib/clubManagerPhaseShapes';
 import type { ReturnPressEvent, ReturnPressOrder } from '@/lib/clubManagerReturnPress';
 /* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
@@ -2332,6 +2333,7 @@ export interface PlayerRatingLine {
 }
 
 export interface MatchDetail {
+  analystNote?: AnalystObservation;
   phaseHistory?: PhaseStep[];
   returnPressUsed?: true;
   cornerRoutine?: CornerRoutine;
@@ -3286,6 +3288,7 @@ export interface SeasonSummary {
 }
 
 export interface CareerState {
+  analystNotebook?: AnalystNotebook;
   appearanceFees?: AppearanceFee[];
   seniorClub?: SeniorClub;
   saveVersion: number;
@@ -3780,6 +3783,7 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  analystWatch?: AnalystWatch;
   phaseOrder?: PhaseOrder;
   phaseHistory?: PhaseStep[];
   returnPress?: ReturnPressOrder;
@@ -3920,7 +3924,7 @@ export interface PlayResult {
   /** Round 466: 'reached' only ever comes back to a caller that passed
    *  untilWeek, when the week pointer got there without a match to play. */
   kind: 'window' | 'match' | 'seasonOver' | 'halftime' | 'reached';
-  blocked?: 'position-state-invalid' | 'phase-order-unavailable';
+  blocked?: 'position-state-invalid' | 'phase-order-unavailable' | 'analyst-unavailable';
   report?: MatchWeekReport;
   live?: LiveMatch;
 }
@@ -22170,6 +22174,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     added: live.added,
   });
   if (live.cornerRoutine && isCornerRoutine(live.cornerRoutine)) detail.cornerRoutine = { ...live.cornerRoutine };
+  if (live.analystWatch) {
+    const note=tacticsImpl()?.fileAnalyst(state,live);
+    if (note) detail.analystNote=note;
+  }
   if (live.phaseHistory) detail.phaseHistory = tacticsImpl()?.phaseHistoryAt(live) ?? live.phaseHistory;
   if (live.returnPressUsed === true) detail.returnPressUsed = true;
   if (state.appearanceFees) settleAppearanceFees(state,{season:state.season,week:live.week});
@@ -23182,7 +23190,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; benchOrder?: BenchOrder; flankPlan?: FlankPlan; phaseOrder?: PhaseOrder }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; benchOrder?: BenchOrder; flankPlan?: FlankPlan; phaseOrder?: PhaseOrder; analystMode?: AnalystMode }): PlayResult {
+  if (opts?.analystMode != null && (career.live || opts.untilWeek !== undefined || career.worldRatingRunIn || nextFixture(career).kind !== 'match'
+    || !tacticsImpl()?.analystReady(career,opts.analystMode))) return {state:career,kind:'reached',blocked:'analyst-unavailable'};
   if (opts?.phaseOrder != null && (career.live || opts.untilWeek !== undefined || nextFixture(career).kind !== 'match'
     || !tacticsImpl()?.phasePositions(career, undefined, undefined, opts.phaseOrder).available)) {
     return { state: career, kind: 'reached', blocked: 'phase-order-unavailable' };
@@ -23243,7 +23253,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
      daily games' (Manager Hot Seat passes it beside noCoach, for the same reason: a daily is a seed
      replayed through this function and never carries a book). */
   if (!opts?.noBook) ensureLeagueBook(state);
-  const expected = (opts?.flankPlan || opts?.phaseOrder) && !state.live && opts.untilWeek === undefined ? nextFixture(state) : null;
+  const expected = (opts?.flankPlan || opts?.phaseOrder || opts?.analystMode) && !state.live && opts.untilWeek === undefined ? nextFixture(state) : null;
   const flankOrder = expected?.kind === 'match' && opts?.flankPlan ? { fixture: expected, plan: opts.flankPlan } : undefined;
   while (state.week < state.calendar.length) {
     /* Round 466: a sim to a day stops at the first entry the day does not
@@ -23362,7 +23372,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     }
     if (!opts?.noBook && entry.type === 'uclGroup' && entry.round === 0) openChampionsLeagueScorers(state);
     const phase = expected?.kind === 'match' && opts?.phaseOrder ? { fixture: expected, order: opts.phaseOrder } : undefined;
-    const live = kickOff(state, entry, opts?.varReviews, !opts?.noBook, flankOrder, phase);
+    const analyst = expected?.kind === 'match' && opts?.analystMode ? { fixture:expected, mode:opts.analystMode } : undefined;
+    const live = kickOff(state, entry, opts?.varReviews, !opts?.noBook, flankOrder, phase, analyst);
     if (!opts?.skipHalftime) {
       state.live = live;
       return { state, kind: 'halftime', live };
@@ -23385,7 +23396,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
  */
 function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk = false, careerMatch = false,
   flankOrder?: { fixture: Extract<NextFixtureInfo, {kind: 'match'}>; plan: FlankPlan },
-  phase?: { fixture: Extract<NextFixtureInfo, {kind: 'match'}>; order: PhaseOrder }): LiveMatch {
+  phase?: { fixture: Extract<NextFixtureInfo, {kind: 'match'}>; order: PhaseOrder },
+  analyst?: { fixture: Extract<NextFixtureInfo,{kind:'match'}>; mode:AnalystMode }): LiveMatch {
   /* Round 1303: the kinds of review the caller asked for (the game asks with the ledger's list, CM_VAR_KINDS). */
   const varKinds = cmVarKindsAsked(varReviews);
   const fx = fixtureFor(state, entry)!;
@@ -23469,6 +23481,9 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
       live.cornerRoutine = { ...prepared.order };
     }
     delete state.cornerTraining;
+  }
+  if (analyst && analyst.fixture.opponent===fx.opponent && analyst.fixture.compLabel===fx.compLabel && analyst.fixture.home===fx.home) {
+    tacticsImpl()?.setAnalyst(state,live,analyst.mode,{minute:0});
   }
   if (phase && phase.fixture.opponent === fx.opponent && phase.fixture.compLabel === fx.compLabel && phase.fixture.home === fx.home) {
     tacticsImpl()?.setPhase(state, live, phase.order, { minute: 0 });
@@ -23668,6 +23683,7 @@ export function changeRoom(career: CareerState, live: LiveMatch, minute: number,
 }
 
 export type LiveChange =
+  | { kind: 'analystWatch'; mode: AnalystMode | null }
   | { kind: 'phaseOrder'; order: PhaseOrder | null }
   | { kind: 'returnPress'; target: string | null }
   | { kind: 'flank'; plan: FlankPlan | null }
@@ -23732,6 +23748,12 @@ export function changeLive(
     ? Math.min(Math.floor(plus), boardNow) : 0;
   /* Round 1331: the match's own rule. Under five in three, a change in play that opens a new stoppage
      needs one left; a change at a break, or at a stoppage already used, does not. */
+  // Recording is observational. Changing the watch must never redraw a committed half or disturb its random stream.
+  if (change.kind === 'analystWatch') {
+    if (!tacticsImpl()?.setAnalyst(state,live,change.mode,{minute:m,...plusOf({plus:p})})) return null;
+    live.minute=m;
+    return state;
+  }
   const rule = change.kind === 'sub' ? matchRuleOf(state) : null;
   const inPlay = !!rule && rule.stops !== null && !isBreakChange(live, m, p);
   if (change.kind === 'sub') {
@@ -26040,6 +26062,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
 
   const state: CareerState = {
     ...JSON.parse(JSON.stringify(career)) as CareerState,
+    ...(career.analystNotebook !== undefined ? {analystNotebook:career.analystNotebook} : {}),
     ...(Array.isArray(rosterCareer.appearanceFees) ? {appearanceFees:rosterCareer.appearanceFees.map(row =>
       row?.status === 'void' && career.appearanceFees?.some(old => old?.id === row.id && old.status === 'tracking')
         ? { ...row, closed:{season,week:0} } : row)} : {}),
