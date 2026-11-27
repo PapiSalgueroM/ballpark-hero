@@ -144,7 +144,7 @@ it('returns keyboard focus without scrolling on Back, Escape and Close after the
   fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' });
   await returned('Review frontier campaign');
   fireEvent.click(opener);
-  fireEvent.click(screen.getByRole('button', { name: 'Close', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Close' }));
   await returned('Review frontier campaign');
 });
 
