@@ -1,5 +1,5 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { safeLocalStorage } from '@/lib/safeStorage';
 import type { CollegeGridData } from '@/lib/collegeGrid';
 import { SCOUT_KEY, dealScoutRun, placeScout, readScoutRun, reviewScoutRun, scoutFact, type ScoutRun, type ScoutFocus } from '@/lib/collegeGridScouting';
@@ -43,10 +43,12 @@ export function CollegeGridScouting({ puzzle, data, loadKey }: {
   };
   return (
     <div className="mt-4 text-center">
-      <button className={button} onClick={() => { setMessage(''); setOpen(true); }}>
-        {run ? 'Open scouting challenge' : 'Play scouting challenge'}
-      </button>
       <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <button type="button" className={button} onClick={() => setMessage('')}>
+            {run ? 'Open scouting challenge' : 'Play scouting challenge'}
+          </button>
+        </DialogTrigger>
         <DialogContent className="max-h-[90dvh] w-[calc(100%-1rem)] max-w-md overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Scouting challenge</DialogTitle>

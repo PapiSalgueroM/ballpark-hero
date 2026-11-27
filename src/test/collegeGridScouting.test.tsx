@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { afterEach, beforeAll, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { CollegeGridScouting } from '@/components/college-grid/CollegeGridScouting';
 import { collegeGridPuzzles } from '@/data/collegeGridPuzzles';
 import { decodeCollegeKey, judgeCollegeCell, toCollegeJudgeEntry, type CollegeGridData } from '@/lib/collegeGrid';
@@ -64,7 +64,7 @@ it('swaps occupied spots, refuses duplicated assignments, and keeps a changed ke
   expect(run.tries).toEqual([]);
 });
 
-it('retains one scout, an edited class and the first miss through reload, then wins without altering the daily save', () => {
+it('retains one scout, an edited class and the first miss through reload, then wins without altering the daily save', async () => {
   const dailyKey = 'college-grid-daily-fixture';
   localStorage.setItem(dailyKey, 'existing daily action');
   const mount = () => render(<CollegeGridScouting puzzle={board} data={key} loadKey={async () => key} />);
@@ -95,6 +95,8 @@ it('retains one scout, an edited class and the first miss through reload, then w
   fireEvent.click(screen.getByRole('button', { name: 'Deal position room' }));
   expect(get().focus).toBe('position');
   expect(get().tries).toHaveLength(0);
+  fireEvent.click(screen.getByRole('button', { name: 'Back to daily grid' }));
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Open scouting challenge' })).toHaveFocus());
 });
 
 it('allows two verified misses and reveals the class, while absent records preserve every saved byte', async () => {
