@@ -193,7 +193,7 @@ const CareerGame = () => {
       >
         {/* Loading guard */}
         {(isLoadingPool || isLoading) ? (
-          <div className="flex justify-center py-10">
+          <div aria-busy="true" className="flex justify-center py-10">
             <p data-no-prerender className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>
         ) : (

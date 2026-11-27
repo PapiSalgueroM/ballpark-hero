@@ -48,6 +48,7 @@ async function context(width) {
         if (!unit) throw Error('Push without an available placement');
         unit.dataset.sweepPushed = '1';
         window.__sweepRequests.push({role:unit.closest('[data-dukb-manual-ad]').dataset.dukbManualAd,
+          careerBoardReady: location.pathname !== '/career' || !!document.querySelector('button[aria-label*="for career row"]'),
           private: !!document.querySelector('${privateScreen}') || !!(location.search || location.hash) });
         unit.setAttribute('data-ad-status', 'filled');
       } };
@@ -129,6 +130,7 @@ async function verify(page, path, width, requiredDocks = 0) {
   const wrapper = page.locator(key);
   await wrapper.waitFor({ state: 'attached' });
   await page.locator('#root footer[data-site-chrome]').waitFor({ state: 'attached' });
+  if (path === '/career') await wrapper.getByRole('button', { name: /for career row/ }).first().waitFor({ state: 'attached' });
   const docks = '[data-career-utility],[data-career-action-bar="floating"],[data-game-rail-dock],[data-dukb-set-aside]';
   if (requiredDocks) await wrapper.locator(docks).first().waitFor({ state: 'visible' });
   await page.waitForFunction(() => !document.querySelector('[data-game-desktop-rails] :is([aria-busy="true"],[data-game-help-pending],[data-seo-content="loading"])'),
@@ -152,6 +154,7 @@ async function verify(page, path, width, requiredDocks = 0) {
   const kind = registered.has(path) ? 'game' : UNLISTED_GAME_ROUTES.includes(path) ? 'unlisted' : HUB_NAV.some(hub=>hub.route===path) ? 'hub' : path === '/' ? 'home' : 'reading';
   const roles = first.placements.map(ad=>ad.role).sort();
   const noAds = kind === 'unlisted' || ['noindex','excluded save, recovery or search screen'].includes(first.reason);
+  assert(first.requests.every(hit => hit.role === 'public-footer' || hit.careerBoardReady), 'A rail was requested before the Career Quiz board arrived');
   assert(!first.requests.some(hit=>hit.private), path + ': a request occurred on an excluded screen');
   assert.equal(new Set(first.requests.map(hit => hit.role)).size, first.requests.length, path + ': repeated request for the same placement');
   assert(roles.every(role=>first.requests.some(hit=>hit.role===role)), path + ': mounted unit lacked a local fixture request');
@@ -214,6 +217,20 @@ async function verify(page, path, width, requiredDocks = 0) {
   }
   assert(rect.documentWidth <= rect.width + 1, where);
   assert(rect.controls.length >= requiredDocks, where);
+  if (path === '/build-your-xi' && width === 1280 && sideCount === 2) {
+    const afterChange = await wrapper.evaluate(async game => {
+      const button = document.createElement('button');
+      Object.assign(button.style, { position: 'fixed', right: '1px', top: '45%', width: '60px', height: '44px' });
+      button.textContent = 'Late control';
+      game.append(button);
+      await new Promise(queueMicrotask);
+      const sideCount = document.querySelectorAll('[data-ad-rail]').length;
+      button.remove();
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      return [sideCount, window.__sweepRequests.length];
+    });
+    assert.deepEqual(afterChange, [0, first.requests.length], 'New fixed controls must clear the rails before paint, without another request');
+  }
   const row = { path, kind, width, roles, reason, requests: first.requests.length };
   console.log(JSON.stringify(row));
   return row;

@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { flushSync } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { normalizeRoutePath } from '@/lib/routePath';
 import { isGameRoute } from '@/components/StorageNotice';
@@ -105,11 +106,17 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
       setClearPath(null);
       return;
     }
-    const measure = () => {
+    const measure = (beforePaint = false) => {
       // The edge drawer covers a rail. Closing it must not buy another impression.
       if (document.querySelector(menuTrigger + '[aria-expanded="true"]')) visit.current.retired = true;
       const offset = visit.current.retired || document.querySelector(menuPanel) ? null : safeRailOffset(container, game);
-      if (offset === null && visit.current.allocated) visit.current.retired = true;
+      if (offset === null && visit.current.allocated) {
+        visit.current.retired = true;
+        if (beforePaint) {
+          flushSync(() => setClearPath(null));
+          return;
+        }
+      }
       if (offset !== null) container.style.setProperty('--rail-start', offset + 'px');
       setClearPath(offset !== null ? path : null);
     };
@@ -119,7 +126,11 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
     };
     const resized = new ResizeObserver(schedule);
     resized.observe(game);
-    const changed = new MutationObserver(schedule);
+    const changed = new MutationObserver(() => {
+      // A newly rendered board can cover a filled rail before the next animation frame.
+      if (visit.current.allocated && !visit.current.retired) measure(true);
+      else schedule();
+    });
     changed.observe(game, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class', 'style', 'hidden', 'open', 'aria-busy', 'data-seo-content'] });
     const menu = new MutationObserver(records => {
       if (records.some(record => (record.target instanceof Element && record.target.matches(menuTrigger)) ||

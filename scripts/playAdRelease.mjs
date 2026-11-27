@@ -335,6 +335,7 @@ async function ranked() {
           const before = counts(evidence);
           try {
             await open(page, path);
+            if (path === '/career') await page.getByRole('button', { name: /for career row/ }).first().waitFor({ state: 'attached' });
             await page.locator('[data-public-footer-ad] ins[data-ad-status="filled"]').waitFor();
             await page.waitForTimeout(900);
             const roles = await page.locator(slots).evaluateAll(els => els.map(el => {
