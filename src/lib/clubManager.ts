@@ -221,8 +221,8 @@ import {
 import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
-import { addAppearanceFee, appearanceFeeTerms, recordFeeAppearances, settleAppearanceFees, voidAppearanceFee, type AppearanceFee } from '@/lib/clubManagerAppearanceFees';
-export { appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, type AppearanceFee } from '@/lib/clubManagerAppearanceFees';
+import { addAppearanceFee, appearanceFeeTerms, canBookAppearanceFee, recordFeeAppearances, seasonAppearanceFeeSpend, settleAppearanceFees, voidAppearanceFee, type AppearanceFee } from '@/lib/clubManagerAppearanceFees';
+export { appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, canBookAppearanceFee, type AppearanceFee } from '@/lib/clubManagerAppearanceFees';
 import { cornerAssistId, resolveCornerDeliveries, type CornerDelivery } from '@/lib/clubManagerCornerDelivery';
 import type { FlankMove, FlankPlan } from '@/lib/clubManagerFlank';
 import type { ReturnPressEvent, ReturnPressOrder } from '@/lib/clubManagerReturnPress';
@@ -12214,7 +12214,7 @@ export function dealPackageValue(career: CareerState, ask: number, amount: numbe
  */
 export function makeOffer(career: CareerState, amount: number, extras?: DealExtras): CareerState | null {
   const neg = career.negotiation;
-  if (extras?.appearanceTrigger !== undefined && !appearanceFeeTerms(extras.addOn,extras.appearanceTrigger)) return null;
+  if (extras?.appearanceTrigger !== undefined && (!appearanceFeeTerms(extras.addOn,extras.appearanceTrigger) || !canBookAppearanceFee(career))) return null;
   if (!neg || neg.status !== 'open') return null;
   /* Round 506: once the clubs have shaken hands the fee is closed and the only
      table left is his. Without this an offer made while the terms panel was
@@ -12484,7 +12484,7 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
   const amount = neg.agreedFee ?? 0;
   const extras = neg.agreedExtras;
   const contingent = appearanceFeeTerms(extras?.addOn,extras?.appearanceTrigger);
-  if (extras?.appearanceTrigger !== undefined && (!contingent || (career.appearanceFees !== undefined && !Array.isArray(career.appearanceFees)))) return null;
+  if (extras?.appearanceTrigger !== undefined && (!contingent || !canBookAppearanceFee(career))) return null;
   const swap = extras?.swapId ? career.squad.find(p => p.id === extras.swapId) : null;
   /* Round 507 fix, the belt to canLeaveSquad's braces: if the seller priced a
      man into this package and he is not in the squad any more, the deal cannot
@@ -17435,7 +17435,7 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
          0.045, roughly 15m on a 60m target, so a board objective could be
          reported as met while the kitty said otherwise. */
       const net = (career.seasonSignings ?? []).reduce(
-        (s, x) => s + (x.dir === 'out' ? x.fee : -(x.fee + (x.bonus ?? 0))), 0);
+        (s, x) => s + (x.dir === 'out' ? x.fee : -(x.fee + (x.bonus ?? 0))), 0) - seasonAppearanceFeeSpend(career);
       if (seasonDone) {
         status = net >= 0 ? 'done' : 'failed';
       } else {
@@ -25895,7 +25895,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     : career.uclExit === 'QF' ? 2
     : career.uclExit === 'R16' ? 1
     : 0;
-  const seasonIn = career.seasonSignings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0);
+  const seasonIn = career.seasonSignings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0) + seasonAppearanceFeeSpend(career);
   const seasonOut = career.seasonSignings.filter(t => t.dir === 'out').reduce((n, t) => n + t.fee, 0);
   const xpAward = seasonXp({
     wins: myTableRow ? myTableRow.w : 0,

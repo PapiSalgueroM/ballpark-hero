@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { acceptBid, appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, beginLeagueCoachSeason,
+import { acceptBid, appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, applyForJob, beginLeagueCoachSeason, canBookAppearanceFee,
   buildMarket, dealPackageValue, finishSeason, generateIncomingBids, loanOutPlayer, makeHalftimeSub, makeOffer,
   offerTerms, playNextEntry, recallLoanedPlayer, resumeMatch, setTransferStatus, startCareer, startNegotiation,
   startNextSeason, type AppearanceFee, type CareerState, type DealExtras } from '@/lib/clubManager';
 import { joinClubNow } from '@/lib/clubManagerCalendar';
 import { settleAppearanceFees } from '@/lib/clubManagerAppearanceFees';
+import { closeLedger, projectFinances } from '@/lib/clubManagerFinances';
 
 function seeded<T>(seed: number, action: () => T): T {
   const original = Math.random;
@@ -58,6 +59,28 @@ function listedSale(state: CareerState, id: string) {
     }
   }
   throw Error('No ordinary bid accepted');
+}
+
+function endOfSeason(initial: CareerState) {
+  let state = structuredClone(initial);
+  for (let n=0; state.week<state.calendar.length && n<120; n++) {
+    state = seeded(33652+Math.imul(n,2654435761),() => playNextEntry(state,{skipHalftime:true})).state;
+  }
+  expect(state.week).toBe(state.calendar.length);
+  return seeded(33955,()=>finishSeason(state)).state;
+}
+
+function takeJob(career: CareerState, club: string) {
+  let application: CareerState | null=null;
+  for(let seed=1;seed<120 && !application;seed++){
+    const sent=seeded(Math.imul(seed,2654435761),()=>applyForJob(career,club));
+    if(sent?.jobHunt?.open && sent.jobHunt.open.roll<0.05) application=sent;
+  }
+  expect(application).not.toBeNull();
+  let before=application!;
+  for(let n=0;before.jobHunt?.open?.status==='pending' && n<10;n++) before=play(before,false,20+n).state;
+  expect(before.jobHunt!.open!.status).toBe('accepted');
+  return {before,hired:seeded(241,()=>joinClubNow(before))!};
 }
 
 describe('negotiated senior league appearance fees', () => {
@@ -141,11 +164,15 @@ describe('negotiated senior league appearance fees', () => {
     expect(row.paid).toBeLessThan(5);
     expect(charged.budget).toBe(5);
     expect(row.payments).toEqual([{season:1,week:5,amount:row.paid}]);
+    const beforePayments = structuredClone(charged);
+    delete beforePayments.appearanceFees;
+    expect(closeLedger(charged).transferOut-closeLedger(beforePayments).transferOut).toBeCloseTo(row.paid,2);
+    expect(projectFinances(charged).spendActual-projectFinances(beforePayments).spendActual).toBeCloseTo(row.paid,2);
     const noMoney = JSON.parse(JSON.stringify(charged)) as CareerState;
     settleAppearanceFees(noMoney,{season:1,week:5});
     expect(appearanceFeeDesk(noMoney)[0]).toEqual(row);
     // A reopened transfer window permits an ordinary bid before the following match.
-    const sold = listedSale({...noMoney,transferWindow:'winter'},row.playerId);
+    const sold = listedSale({...noMoney,transferWindow:'january'},row.playerId);
     expect(appearanceFeeDesk(sold)[0]).toEqual(row);
     const settled=play(sold,false,6).state, final=appearanceFeeDesk(settled)[0];
     expect(final.status).toBe('paid');
@@ -173,4 +200,77 @@ describe('negotiated senior league appearance fees', () => {
     expect(appearanceFeeDesk(sale)[0]).toMatchObject({status:'void',appearances:1,paid:0,closed:{season:1,week:first.week}});
     expect(appearanceFeeDesk(play(sale,false,1).state)[0].status).toBe('void');
   });
+
+  it('carries actual league progress across summer and jobs without crediting inherited fixtures', () => {
+    const first=play(sign({addOn:5,appearanceTrigger:15}),true,0).state;
+    const row=appearanceFeeDesk(first)[0];
+    const away=seeded(522,()=>loanOutPlayer(first,row.playerId,undefined,undefined,'straight'))!;
+    const finished=endOfSeason(away);
+    expect(appearanceFeeDesk(finished)[0]).toEqual(row);
+    const home=seeded(1013904226,()=>startNextSeason(finished));
+    expect(home.season).toBe(2);
+    expect(appearanceFeeDesk(home)[0]).toEqual(row);
+    const resumed=play(JSON.parse(JSON.stringify(home)),true,0).state;
+    expect(appearanceFeeDesk(resumed)[0]).toMatchObject({appearances:2,lastAppearance:{season:2}});
+    const destination='Everton';
+    const newClub=seeded(1013904226,()=>startNextSeason(finished,destination));
+    expect(newClub.clubName).toBe(destination);
+    expect(appearanceFeeClubs(newClub)).toEqual(['Aston Villa']);
+    expect(appearanceFeeDesk(newClub)).toEqual([]);
+    expect(appearanceFeeDesk(newClub,'Aston Villa')[0]).toEqual(row);
+    expect(appearanceFeeDesk(play(newClub,true,4).state,'Aston Villa')[0]).toEqual(row);
+    // Send a real application and wait for the other board to decide.
+    const move=takeJob(first,'Everton'), hired=move.hired;
+    const previous=appearanceFeeDesk(move.before)[0];
+    expect(hired.clubName).toBe('Everton');
+    expect(appearanceFeeDesk(hired)).toEqual([]);
+    expect(appearanceFeeDesk(hired,'Aston Villa')[0]).toEqual(previous);
+    const returning=takeJob(hired,'Aston Villa').hired;
+    expect(returning.clubName).toBe('Aston Villa');
+    expect(appearanceFeeDesk(returning)[0]).toEqual(previous);
+    const man=returning.squad.find(p=>p.worldRosterKey===previous.worldKey)!;
+    expect(man).toBeDefined();
+    // The return rebuilt a different XI. Put that exact registration on the team sheet.
+    const slot=returning.xiIds.indexOf(man.id);
+    if (slot<0) returning.xiIds[1]=man.id;
+    let managed=returning;
+    for(let n=0;n<10 && appearanceFeeDesk(managed)[0].appearances===previous.appearances;n++) managed=play(managed,true,n).state;
+    expect(appearanceFeeDesk(managed)[0].appearances).toBe(previous.appearances+1);
+  },30000);
+
+  it('preserves unsupported ledgers, charges the correct club on summer cash and itemizes only this season', () => {
+    const state=four();
+    state.budget=6.5;
+    const partial=play(state,true,5).state;
+    const debt=appearanceFeeDesk(partial)[0];
+    expect(debt.status).toBe('due');
+    const finished=endOfSeason(sign());
+    finished.appearanceFees=[debt];
+    const control=structuredClone(finished);
+    delete control.appearanceFees;
+    const stay=seeded(1013904226,()=>startNextSeason(finished));
+    const plain=seeded(1013904226,()=>startNextSeason(control));
+    const paid=appearanceFeeDesk(stay)[0];
+    expect(paid).toMatchObject({status:'paid',paid:5,lastPaid:{season:2,week:0}});
+    const remaining=Math.round((debt.amount-debt.paid)*100)/100;
+    expect(paid.payments).toEqual([...debt.payments,{season:2,week:0,amount:remaining}]);
+    expect(plain.budget-stay.budget).toBeCloseTo(remaining,2);
+    expect(closeLedger(stay).transferOut).toBe(remaining);
+    const other='Everton';
+    const moved=seeded(1013904226,()=>startNextSeason(finished,other));
+    const without=seeded(1013904226,()=>startNextSeason(control,other));
+    expect(moved.budget).toBe(without.budget);
+    expect(closeLedger(moved).transferOut).toBe(closeLedger(without).transferOut);
+    expect(appearanceFeeDesk(moved,'Aston Villa')[0]).toEqual(debt);
+    const bad=table();
+    for(const saved of [{version:2,ledger:[debt]},[debt,{...debt,version:2}],[debt,debt],[{...debt,newTerms:'future'}]]) {
+      bad.appearanceFees=saved as unknown as AppearanceFee[];
+      expect(canBookAppearanceFee(bad)).toBe(false);
+      expect(makeOffer(bad,27.8,{addOn:5,appearanceTrigger:5})).toBeNull();
+      const ordinary=seeded(7345,()=>makeOffer(bad,27.8,{addOn:5}))!;
+      const signed=seeded(511,()=>offerTerms(ordinary,ordinary.negotiation!.terms!.want))!;
+      expect(signed.negotiation!.status).toBe('agreed');
+      expect(signed.appearanceFees).toEqual(saved);
+    }
+  },30000);
 });

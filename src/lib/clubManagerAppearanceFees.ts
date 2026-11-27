@@ -32,14 +32,20 @@ export function appearanceFeeTerms(amount: unknown, threshold: unknown): {amount
 const dateValid = (d: FeeDate | undefined) => !!d && Number.isSafeInteger(d.season) && d.season >= 1
   && Number.isSafeInteger(d.week) && d.week >= 0;
 const later = (a: FeeDate, b: FeeDate) => a.season > b.season || (a.season === b.season && a.week > b.week);
+const v1Keys = new Set(['version','id','playerId','player','generated','worldKey','buyer','seller','amount','threshold','appearances',
+  'paid','payments','status','signed','lastAppearance','triggered','lastPaid','closed']);
 
 function readable(row: AppearanceFee | null): row is AppearanceFee {
-  return !!row && row.version === 1 && [row.id,row.playerId,row.player,row.buyer,row.seller].every(k => typeof k === 'string' && !!k)
+  return !!row && row.version === 1 && Object.keys(row).every(key => v1Keys.has(key))
+    && [row.id,row.playerId,row.player,row.buyer,row.seller].every(k => typeof k === 'string' && !!k)
     && row.buyer !== row.seller && !!appearanceFeeTerms(row.amount,row.threshold) && dateValid(row.signed)
     && Number.isInteger(row.appearances) && row.appearances >= 0 && row.appearances <= row.threshold
     && Number.isFinite(row.paid) && row.paid >= 0 && row.paid <= row.amount && Math.round(row.paid*100)/100 === row.paid
-    && Array.isArray(row.payments) && row.payments.every(p => dateValid(p) && Number.isFinite(p.amount) && p.amount > 0)
+    && [row.lastAppearance,row.triggered,row.lastPaid,row.closed].every(d => d === undefined || dateValid(d))
+    && Array.isArray(row.payments) && row.payments.every(p => dateValid(p) && Number.isFinite(p.amount)
+      && p.amount > 0 && Math.round(p.amount*100)/100 === p.amount)
     && row.payments.reduce((sum,p) => sum + Math.round(p.amount*100),0) === Math.round(row.paid*100)
+    && (row.paid === 0 || dateValid(row.lastPaid)) && (row.status !== 'void' && row.status !== 'paid' || dateValid(row.closed))
     && (row.appearances === 0 || dateValid(row.lastAppearance))
     && (row.status === 'tracking' || row.status === 'void'
       ? row.appearances < row.threshold && row.paid === 0
@@ -48,7 +54,14 @@ function readable(row: AppearanceFee | null): row is AppearanceFee {
 }
 
 function rows(career: CareerState): AppearanceFee[] {
-  return Array.isArray(career.appearanceFees) ? career.appearanceFees.filter(readable) : [];
+  if (!Array.isArray(career.appearanceFees)) return [];
+  const saved = career.appearanceFees;
+  const identities = new Set<string>(), duplicates = new Set<string>();
+  for (const row of saved) {
+    if (row && identities.has(row.id)) duplicates.add(row.id);
+    if (row) identities.add(row.id);
+  }
+  return saved.filter(row => readable(row) && !duplicates.has(row.id));
 }
 
 export function appearanceFeeDesk(career: CareerState, club = career.clubName): AppearanceFee[] {
@@ -57,6 +70,17 @@ export function appearanceFeeDesk(career: CareerState, club = career.clubName): 
 
 export function appearanceFeeClubs(career: CareerState): string[] {
   return [...new Set(rows(career).map(row => row.buyer))];
+}
+
+export function canBookAppearanceFee(career: CareerState): boolean {
+  return career.appearanceFees === undefined
+    || (Array.isArray(career.appearanceFees) && rows(career).length === career.appearanceFees.length);
+}
+
+export function seasonAppearanceFeeSpend(career: CareerState): number {
+  const cents = rows(career).filter(r => r.buyer === career.clubName).reduce((sum,row) => sum +
+    row.payments.reduce((total,p) => total + (p.season === career.season ? Math.round(p.amount*100) : 0),0),0);
+  return cents/100;
 }
 
 export function addAppearanceFee(career: CareerState, player: CMPlayer, seller: string, amount: number, threshold: 5 | 15): void {
@@ -74,7 +98,7 @@ const sameRegistration = (row: AppearanceFee, p: CMPlayer) => p.appearanceFeeId 
   || (!!row.worldKey && p.worldRosterKey === row.worldKey);
 
 export function voidAppearanceFee(career: CareerState, player: CMPlayer, from: string): CareerState {
-  if (!Array.isArray(career.appearanceFees)) return career;
+  if (!Array.isArray(career.appearanceFees) || !canBookAppearanceFee(career)) return career;
   const matching = (r: AppearanceFee) => readable(r) && r.status === 'tracking' && r.buyer === from && sameRegistration(r,player);
   if (!career.appearanceFees.some(matching)) return career;
   return { ...career, appearanceFees:career.appearanceFees.map(r => matching(r)
@@ -83,7 +107,7 @@ export function voidAppearanceFee(career: CareerState, player: CMPlayer, from: s
 
 /** Earn the appearance before a deadline-day bid can take the player away at this whistle. */
 export function recordFeeAppearances(career: CareerState, date: FeeDate, leaguePlayers: readonly CMPlayer[]): void {
-  if (!Array.isArray(career.appearanceFees)) return;
+  if (!Array.isArray(career.appearanceFees) || !canBookAppearanceFee(career)) return;
   career.appearanceFees = career.appearanceFees.map(row => {
     if (!readable(row) || row.buyer !== career.clubName || row.status !== 'tracking' ||
         later(row.signed,date) || (row.lastAppearance && !later(date,row.lastAppearance))) return row;
@@ -98,12 +122,10 @@ export function recordFeeAppearances(career: CareerState, date: FeeDate, leagueP
 
 /** Pay from the buying club's actual budget after its match cash flows or when its summer allocation arrives. */
 export function settleAppearanceFees(career: CareerState, date: FeeDate): void {
-  if (!Array.isArray(career.appearanceFees) || !Number.isFinite(career.budget)) return;
+  if (!Array.isArray(career.appearanceFees) || !canBookAppearanceFee(career) || !Number.isFinite(career.budget)) return;
   let cash = Math.round(career.budget * 100);
-  const seen = new Set<string>();
   career.appearanceFees = career.appearanceFees.map(row => {
-    if (!readable(row) || row.buyer !== career.clubName || row.status !== 'due' || seen.has(row.id)) return row;
-    seen.add(row.id);
+    if (row.buyer !== career.clubName || row.status !== 'due' || later(row.lastPaid ?? row.triggered!,date)) return row;
     const balance = Math.round(row.amount*100) - Math.round(row.paid*100);
     const payment = Math.min(balance,Math.max(0,cash-500));
     if (!payment) return row;
