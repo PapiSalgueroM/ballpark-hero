@@ -120,6 +120,7 @@ export function GameNavbar() {
             <SiteMenuHost />
             <Link
               to="/"
+              data-google-vignette="false"
               className="inline-flex min-h-11 min-w-0 items-center font-display font-black text-primary transition-opacity hover:opacity-80"
             >
               <span className="text-base uppercase tracking-[0.18em] [overflow-wrap:anywhere] sm:text-2xl sm:tracking-[0.22em]">

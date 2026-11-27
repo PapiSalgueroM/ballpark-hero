@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState, type ComponentType, type KeyboardEv
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
+import { isGameRoute } from '@/components/StorageNotice';
 import { Button } from '@/components/ui/button';
 import type { SiteMenuPanelProps } from './SiteMenuPanel';
 import { useSiteMenuPlacement } from './SiteMenuHost';
@@ -61,7 +62,7 @@ export function SiteMenu() {
           {failed ? 'Menu could not load. Use Search Games, or refresh to try again.' : 'Loading menu...'}
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
-          <Link to="/search" onClick={close} className="inline-flex min-h-11 items-center rounded-lg border border-border px-3 text-sm">Search Games</Link>
+          <Link to="/search" data-google-vignette={isGameRoute(pathname) ? "false" : undefined} onClick={close} className="inline-flex min-h-11 items-center rounded-lg border border-border px-3 text-sm">Search Games</Link>
           <button type="button" onClick={close} className="min-h-11 rounded-lg border border-border px-3 text-sm">Cancel</button>
         </div>
       </div>

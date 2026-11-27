@@ -206,7 +206,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
         {/* Reserve the narrow inline layout's extra text line before Inter arrives. */}
         <p className={inlineNotice ? 'max-[369px]:min-h-[3.75rem]' : undefined}>
           Ads help keep DoUKnowBall free. Accepting advertising helps support the site. You can still play if you reject. We ask again in 180 days.{' '}
-          <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn more</Link>
+          <Link to="/privacy" data-google-vignette="false" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
         {!compact && <div className="flex flex-wrap gap-x-6 gap-y-2">
           <label className="inline-flex min-h-11 items-center gap-2 text-foreground">

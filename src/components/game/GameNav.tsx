@@ -152,6 +152,7 @@ export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
             <Link
               key={game.path}
               to={game.path}
+              data-google-vignette="false"
               className="rounded-2xl border border-border bg-card p-4 hover:border-primary/40 hover:shadow-lg transition-all group flex flex-col items-center text-center"
             >
               <span className="text-3xl mb-2 block">{game.emoji}</span>
@@ -173,6 +174,7 @@ export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
               what a thumb needs, and it is the link back to everything. */}
           <Link
             to="/"
+            data-google-vignette="false"
             className="inline-flex items-center rounded-full px-4 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
           >
             See all games →

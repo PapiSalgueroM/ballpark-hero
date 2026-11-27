@@ -379,7 +379,7 @@ const AppContent = () => {
       {/* Round 215: the first tab stop on every page jumps a keyboard player
           past the ticker and nav straight to the content. Invisible until
           focused, styled in index.css. */}
-      <a href="#dukb-main" className="dukb-skip-link">Skip to main content</a>
+      <a href="#dukb-main" data-google-vignette="false" className="dukb-skip-link">Skip to main content</a>
       <ScrollToTop />
       {!gameRoute && pathname !== "/" && <CookieConsent />}
       {/* Round 167: the site's own wire across the top of every screen. */}
