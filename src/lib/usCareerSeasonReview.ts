@@ -5,6 +5,7 @@ import type { NhlCareerPos, NhlSeasonLine } from '@/lib/nhlMyCareer';
 import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
 import { formatNumber } from '@/lib/formatNumber';
 import { earnedDrawTrust } from '@/lib/nhlDefensiveDraws';
+import { CHANGEUP_REPS } from '@/lib/mlbChangeup';
 
 export interface CareerReviewStat { label: string; value: string; numeric?: { raw?: number; digits?: number } }
 export interface CareerReviewStats { regular: CareerReviewStat[]; postseason: CareerReviewStat[]; gamesLabel: string; regularValues: CareerReviewStat[] }
@@ -160,6 +161,12 @@ export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerRevi
     ? [text('Bullpen role', s.bullpenRole === 'closer' ? 'Closer' : 'Setup')] : [];
   const battingApproach = pos !== 'SP' && pos !== 'RP' && s.contactApproach === true
     ? [text('Batting approach', 'Shorter swing'), number('Hits', s.hits), number('At-bats', s.ab)] : [];
+  const changeup = (pos === 'SP' || pos === 'RP') && s.changeup;
+  const repertoire = changeup ? [
+    text('Changeup development', `${changeup.experienceBefore} to ${Math.min(CHANGEUP_REPS, changeup.experienceBefore + changeup.faced)} of ${CHANGEUP_REPS} outings`),
+    number('Two-strike changeup matchups', changeup.faced), number('Extra changeup strikeouts', changeup.strikeouts),
+    number('Changeup walks', changeup.walks), number('Health spent on changeup walks', changeup.fatigue),
+  ] : [];
   let postseason = [number('Team postseason games', s.poGames)];
   if (pos === 'RP' && recorded(s.poAppearances) && Number.isSafeInteger(s.poAppearances) && s.poAppearances >= 0
     && recorded(s.poGames) && Number.isSafeInteger(s.poGames) && s.poGames > 0 && s.poAppearances <= s.poGames) {
@@ -170,7 +177,7 @@ export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerRevi
   } else {
     postseason.push(text('Performance', s.poLine));
   }
-  return { ...stats(s.teamResult, [...regular, ...rates, ...bullpenRole, ...battingApproach], postseason), gamesLabel: pos === 'SP' ? 'Starts' : pos === 'RP' ? 'Appearances' : 'Games' };
+  return { ...stats(s.teamResult, [...regular, ...rates, ...bullpenRole, ...battingApproach, ...repertoire], postseason), gamesLabel: pos === 'SP' ? 'Starts' : pos === 'RP' ? 'Appearances' : 'Games' };
 }
 
 export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerReviewStats {

@@ -3,12 +3,13 @@ import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 import { NHL_DRAW_ASSIGNMENT, NHL_DRAW_CAMP_EDGE, NHL_DRAW_CAMP_MINIMUM, NHL_DRAW_ICE_COST, type NhlDefensiveDraws } from './nhlDefensiveDraws';
 import { nbaLateClockOptions, type LateClockRead, type LateClockResult } from './nbaLateClock';
+import { CHANGEUP_LABEL, CHANGEUP_REPS, changeupExperience, type MlbChangeupLine } from './mlbChangeup';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking' | 'zone-draws' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain' | LateClockRead;
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'two-strike-changeup' | 'playoff-checking' | 'zone-draws' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain' | LateClockRead;
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking' | 'zone-draws' | LateClockRead;
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'two-strike-changeup' | 'playoff-checking' | 'zone-draws' | LateClockRead;
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch' | 'alternate';
@@ -179,6 +180,7 @@ function validPlan(c: UsCareerCore, sport: UsSport, plan: UsCareerProgramme): bo
       if (key === 'tactics' && plan.tactics === 'playoff-checking') return sport === 'nhl' && nhlCheckingForward(c.pos);
       if (key === 'tactics' && plan.tactics === 'zone-draws') return sport === 'nhl' && c.pos === 'C';
       if (key === 'tactics' && plan.tactics === 'extra-relief') return sport === 'mlb' && c.pos === 'RP';
+      if (key === 'tactics' && plan.tactics === 'two-strike-changeup') return sport === 'mlb' && (c.pos === 'SP' || c.pos === 'RP');
       return usProgrammeMenus(c, sport).find(menu => menu.id === key)?.options.some(o => o.id === plan[key]);
     });
 }
@@ -324,6 +326,10 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
       { id: 'normal', label: spotStarts ? 'Usual spot duty' : 'Your usual approach', effect: spotStarts ? 'Keep your usual long-relief and spot-start workload.' : 'Keep your current style.' },
       { id: 'attack', label: attack, effect: attackEffect },
       { id: 'support', label: support, effect: supportEffect },
+      ...(sport === 'mlb' && (c.pos === 'SP' || c.pos === 'RP') && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0) ? [{
+        id: 'two-strike-changeup' as const, label: CHANGEUP_LABEL,
+        effect: `Call it against one hitter per outing. A chase can add a strikeout. A miss can turn into a walk. Every three walks from this plan cost one health, up to three. You've completed ${changeupExperience(c.seasons)} of ${CHANGEUP_REPS} outings to develop the pitch. Your progress follows you to a new club.`,
+      }] : []),
       ...(sport === 'mlb' && c.pos === 'RP' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0) ? [{
         id: 'extra-relief' as const, label: MLB_EXTRA_RELIEF_LABEL,
         effect: `Your usual playoff appearances follow your regular season workload. If your club qualifies and you have ${MLB_EXTRA_RELIEF_HEALTH} health to spend, pitch in one more team game. You pay only if you take the mound an extra time.`,
@@ -532,6 +538,16 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
         decision.actual = line.games;
         decision.unit = 'starts';
       }
+    }
+    if (section === 'tactics' && choice === 'two-strike-changeup' && sport === 'mlb') {
+      decision.label = CHANGEUP_LABEL;
+      const pitch = (line as UsCareerSeason & { changeup?: MlbChangeupLine }).changeup;
+      if (played && pitch) {
+        pitch.fatigue = Math.min(3, Math.floor(pitch.walks / 3), Math.max(0, Math.floor(c.health)));
+        c.health -= pitch.fatigue;
+        decision.actual = pitch.strikeouts;
+        decision.unit = 'extra changeup strikeouts';
+      } else if (played) decision.outcome = 'unused';
     }
     if (played && extraRelief) {
       if ('poExtraRelief' in line && line.poExtraRelief === true) {

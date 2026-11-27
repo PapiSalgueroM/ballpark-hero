@@ -55,6 +55,7 @@ import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, t
 import { moraleForm } from './careerForm';
 import { stageUsSeasonRating, type UsSeasonRating } from './usInSeasonRating';
 import { MLB_EXTRA_RELIEF_HEALTH, MLB_SPOT_START_INJURY_POINTS, mlbSpotStartsAvailable, type ProgrammePreparation } from './usCareerProgramme';
+import { pitchChangeups, type MlbChangeupLine } from './mlbChangeup';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -170,6 +171,7 @@ export interface MlbSeasonLine {
   avg?: number; hr?: number; rbi?: number; sb?: number;
   // pitchers
   wins?: number; lossesP?: number; era?: number; so?: number;
+  changeup?: MlbChangeupLine;
   // Round 58: relievers and richer hitting lines
   saves?: number; holds?: number; obp?: number; doubles?: number;
   bullpenRole?: MlbBullpenRole;
@@ -692,6 +694,15 @@ export function simMlbSeason(
     notes.push(bullpenRole === 'closer' ? 'Bullpen role: closer, pitching for saves.' : 'Bullpen role: setup, pitching for holds.');
   }
   const line = mlbLineOnSlate(full, work);
+  if (programme?.plan.tactics === 'two-strike-changeup' && programme.plan.sport === 'mlb'
+    && programme.plan.year === c.year && programme.plan.team === c.team && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0)
+    && MLB_PITCHERS.includes(c.pos) && line.games > 0 && line.so !== undefined) {
+    const pitch = pitchChangeups(c, line.games, form);
+    line.changeup = pitch;
+    line.so += pitch.strikeouts;
+    if (line !== full && full.so !== undefined) full.so += Math.round(pitch.strikeouts * US_ENGINE_SEASON.mlb / work);
+    notes.push(`You called the two-strike changeup against ${pitch.faced} hitters, adding ${pitch.strikeouts} strikeouts and allowing ${pitch.walks} walks.`);
+  }
   const usualBatting = contact ? { avg: full.avg, hr: full.hr } : null;
   if (contact) {
     shortenMlbSwing(line, full, work);
