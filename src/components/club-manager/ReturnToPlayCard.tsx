@@ -21,20 +21,24 @@ function TrainingRecord({ training }: { training: readonly ReturnTraining[] }) {
   </details>;
 }
 
-function ActiveReturn({ active, duringMatch = false }: { active: Active; duringMatch?: boolean }) {
+function ActiveReturn({ active, career, duringMatch = false }: { active: Active; career: CareerState; duringMatch?: boolean }) {
   const { player, plan, status, cue, forecast } = active;
+  const named = (id: string, name: string) => {
+    const man = career.squad.find(row => row.id === id);
+    return <>{name}{(man?.generated || man?.isYouth || man?.academyGrad) && <MadeUpTag className="ml-1" />}</>;
+  };
   return <div className="space-y-1">
     <p><strong>{player.name}</strong>{player.generated && <MadeUpTag className="ml-1" />} · {planName[plan]}</p>
     <p>{statusText[status]}</p>
     {player.major && <p>{status === 'recovering' ? majorInjuryLabel(player.major) : `Original injury · ${majorInjuryLabel(player.major)}`}</p>}
     {!player.major && player.injuryWeeks > 0 && <p>{player.injuryWeeks} {player.injuryWeeks === 1 ? 'week' : 'weeks'} on the injury list</p>}
-    <p>Simulated setback estimate for the planned minutes is <strong>{forecast[0]}% to {forecast[1]}%</strong>. The player’s actual minutes and recorded training determine what happens next.</p>
+    <p>Simulated setback estimate for the target window is <strong>{forecast[0]}% to {forecast[1]}%</strong>. Added time, the next training session and an unavailable substitute can change the workload.</p>
     {status === 'ready' && !duringMatch && <p>
       {plan === 'late-cameo' ? 'Pick a bench role for this return.' : 'Pick him to start, with a substitute ready.'}
       {' '}{active.projectedStart ? 'He is in the projected XI.' : 'He is outside the projected XI.'}
     </p>}
     {status === 'ready' && !duringMatch && (cue
-      ? <p>In Quick Sim the coach can bring on {cue.inName} for {cue.outName} {cue.window === 'late' ? 'between 72 and 82 minutes' : 'between 58 and 68 minutes'}. A named bench order takes priority.</p>
+      ? <p>In Quick Sim the coach can bring on {named(cue.inId, cue.inName)} for {named(cue.outId, cue.outName)} {cue.window === 'late' ? 'between 72 and 82 minutes' : 'between 58 and 68 minutes'}. A named bench order takes priority.</p>
       : <p>Quick Sim needs a compatible change from the chosen lineup. In Play Live, use your substitutions to manage the minutes.</p>)}
     {duringMatch && <p>Manage his minutes using your live substitutions. Extra time counts toward his workload.</p>}
     <TrainingRecord training={active.training} />
@@ -48,7 +52,7 @@ export function ReturnToPlayMatchCard({ career, duringMatch = false }: { career:
   return <details className="rounded-lg border border-border bg-card px-2">
     <summary className="min-h-11 cursor-pointer py-3 text-xs font-bold">First appearance plan · {active.player.name}</summary>
     <section aria-label="First appearance plan" className="pb-2 text-xs">
-      <ActiveReturn active={active} duringMatch={duringMatch} />
+      <ActiveReturn active={active} career={career} duringMatch={duringMatch} />
     </section>
   </details>;
 }
@@ -63,7 +67,7 @@ export function ReturnToPlayReport({ receipt }: { receipt: unknown }) {
       <p>{receipt.started ? 'Started at kickoff' : `Came on at ${minuteLabel(receipt.entry)}`} and played until {exit}. <strong>{receipt.minutes} {receipt.minutes === 1 ? 'minute' : 'minutes'} recorded.</strong></p>
       <p>Simulated setback chance with this workload was {receipt.riskPercent}%.</p>
       {receipt.outcome === 'settled' && <p className="font-semibold">Completed the return workload.</p>}
-      {receipt.outcome === 'setback' && <p className="font-semibold">The return caused a setback. Expected out for {receipt.setbackWeeks} {receipt.setbackWeeks === 1 ? 'week' : 'weeks'}.</p>}
+      {receipt.outcome === 'setback' && <p className="font-semibold">The return caused a setback. He needs {receipt.setbackWeeks} more {receipt.setbackWeeks === 1 ? 'recovery week' : 'recovery weeks'}.</p>}
       {receipt.outcome === 'match-injury' && <p className="font-semibold">He picked up an injury during the match. See the treatment room for his current timeline.</p>}
       {receipt.outcome === 'training-injury' && <p className="font-semibold">Training recorded a separate injury. See the treatment room for his current timeline.</p>}
       <TrainingRecord training={receipt.training} />
@@ -88,7 +92,7 @@ export function ReturnToPlayDeskCard({ career, onCommit }: {
   return <section aria-label="Plan a return from injury" className="space-y-2 rounded-xl border border-border bg-card p-3 text-xs">
     <h3 className="text-sm font-bold">Plan a return from injury</h3>
     {locked ? <p>The return plan is unavailable for changes right now.</p> : active ? <>
-      <ActiveReturn active={active} />
+      <ActiveReturn active={active} career={career} />
       <div className="flex flex-wrap gap-2">
         <button className="min-h-11 rounded-md border border-border px-2 font-semibold" type="button"
           onClick={() => commit(current => bookReturnToPlay(current, active.player.id, active.plan === 'late-cameo' ? 'managed-start' : 'late-cameo'))}>
@@ -116,7 +120,7 @@ export function ReturnToPlayDeskCard({ career, onCommit }: {
           Managed start. Use him from kickoff and plan a change around the hour.
         </label>
       </fieldset>
-      {forecast && <p>Initial simulated setback estimate for this plan is <strong>{forecast[0]}% to {forecast[1]}%</strong>.</p>}
+      {forecast && <p>Initial simulated setback estimate for the target window is <strong>{forecast[0]}% to {forecast[1]}%</strong>.</p>}
       <details>
         <summary className="min-h-11 cursor-pointer py-3 font-semibold">Return rules and example</summary>
         <p>A player waits for his normal clearance. For a late cameo, give him a bench place. If he comes on at 78 minutes and sees out 90+4, he records 16 minutes. An unused bench spot leaves the plan waiting for his first appearance.</p>
