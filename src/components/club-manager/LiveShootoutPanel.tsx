@@ -21,19 +21,19 @@ export function LiveShootoutPanel({ career, onKick, onFinish }: {
       <h1 id="live-pens-title" ref={heading} tabIndex={-1} className="text-lg font-black">Penalty shootout</h1>
       <button type="button" className="min-h-11 min-w-11 rounded-lg border border-border" aria-label="Shootout rules" aria-expanded={help} onClick={() => setHelp(!help)}>?</button>
     </header>
-    <p className="text-sm">Choose one of the players who finished the match for each kick. Everyone takes one before anyone goes again. For example, save your striker for the fifth kick or send him up first.</p>
-    {help && <p className="rounded-lg bg-secondary/40 p-3 text-sm">Each team gets five kicks unless one side is out of reach. If it stays level, each pair can win it. Taker and opposing keeper ratings affect the chance. Delegate to let the coach finish from this score using your eligible takers.</p>}
+    <p className="text-sm">Five kicks each, then sudden death if level. Only the players who finished the match can take one. Save your striker for the fifth kick or send him up first.</p>
+    {help && <p className="rounded-lg bg-secondary/40 p-3 text-sm">The shootout ends early if one side is out of reach. Everyone takes one before anyone goes again. In sudden death, each pair can win it. Taker and opposing keeper ratings affect the chance. Delegate to let the coach finish from this score using your eligible takers.</p>}
     {run ? <>
       <div role="status" className="rounded-lg bg-secondary/40 p-3">
         <p className="font-bold">{career.clubName} {run.mine} - {run.theirs} {opponent}</p>
-        {latest.map(k => <p key={k.side} className="text-sm">{k.taker} {k.result === 'saved' ? 'had a penalty saved' : k.result}.</p>)}
+        {latest.map(k => <p key={k.side} className="text-sm">{k.taker}{k.gen ? ' (generated)' : ''} {k.result === 'saved' ? 'had a penalty saved' : k.result}.</p>)}
         <p className="text-sm font-bold">{run.done ? run.mine > run.theirs ? 'You win the shootout.' : 'The other side wins the shootout.'
           : own.length >= 5 ? `Sudden death. Your kick ${own.length + 1}.` : `Your kick ${own.length + 1} of 5.`}</p>
       </div>
       {run.done ? <button type="button" className="min-h-11 w-full rounded-lg bg-primary font-bold text-primary-foreground" onClick={onFinish}>Finish the match</button> : <>
         <label className="block text-sm font-bold">Next penalty taker
           <select className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-2" value={selected?.id} onChange={e => setPick(e.target.value)}>
-            {run.options.map(p => <option key={p.id} value={p.id}>{p.name} · {p.position} · {p.rating}</option>)}
+            {run.options.map(p => <option key={p.id} value={p.id}>{p.name}{p.generated ? ' (generated)' : ''} · {p.position} · {p.rating}</option>)}
           </select>
         </label>
         {selected && <p className="text-sm">{selected.name} has a {Math.round(100 * shootoutKickChance(selected, run.keeperRating))}% chance to score this kick in the simulation.</p>}
