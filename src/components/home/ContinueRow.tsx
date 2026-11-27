@@ -102,6 +102,7 @@ export function ContinueRow() {
               <li key={entry.path}>
                 <Link
                   to={entry.path}
+                  data-google-vignette="false"
                   style={sportStyle(sport)}
                   data-continue-card={game.path}
                   className={styles.continueCard}

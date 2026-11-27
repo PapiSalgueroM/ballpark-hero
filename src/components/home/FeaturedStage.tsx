@@ -86,7 +86,7 @@ function StageCard({ card, lead, resumeTo }: { card: Card; lead: boolean; resume
   const to = resuming && game.path === '/club-manager' ? game.path + CLUB_MANAGER_ACTIVE_RESUME_QUERY : resumeTo ?? game.path;
 
   return (
-    <Link to={to} style={sportStyle(sport)} data-stage-card={game.path}
+    <Link to={to} data-google-vignette="false" style={sportStyle(sport)} data-stage-card={game.path}
       className={cn(styles.game, lead && styles.lead)}>
       <span aria-hidden="true" className={styles.art}>
         <Suspense fallback={null}><HomeArt art={entry.art} /></Suspense>

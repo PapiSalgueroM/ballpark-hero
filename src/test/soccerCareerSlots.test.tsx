@@ -85,6 +85,11 @@ describe('Soccer Career save chooser', () => {
     expect(screen.getByRole('link', { name: 'New career in slot 2' })).toHaveAttribute('href', SLOTS[1].path);
     expect(screen.getByRole('link', { name: 'Review slot 3' })).toHaveAttribute('href', SLOTS[2].path);
     expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute('href', SLOTS[0].path);
+    for (const name of ['Resume slot 1', 'New career in slot 2', 'Review slot 3', 'Back']) {
+      const link = screen.getByRole('link', { name });
+      expect(link.tagName).toBe('A');
+      expect(link).toHaveAttribute('data-google-vignette', 'false');
+    }
     expect(write).not.toHaveBeenCalled();
     expect(remove).not.toHaveBeenCalled();
   });
