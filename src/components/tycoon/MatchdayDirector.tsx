@@ -1,3 +1,4 @@
+import StadiumGateControl from '@/components/tycoon/StadiumGateControl';
 import { useEffect, useRef, useState } from 'react';
 import { campaigns, earnedContracts, forecast, openingGround, openingShift, playSeason, projects, readDirectorSeason, ticketPrices, winningScore, type Campaign, type Season, type Shift } from '@/lib/matchdayDirector';
 import { safeLocalStorage, safeSetItem } from '@/lib/safeStorage';
@@ -64,6 +65,7 @@ export default function MatchdayDirector() {
         {campaign && <p className="text-sm text-muted-foreground">{campaign.name} · {finished ? 'Final accounts' : `Fixture ${week + 1} of 6`}</p>}</div>
       {season && <button type="button" className={button} aria-expanded={showRules} aria-label="Matchday Director rules" onClick={() => setShowRules(!showRules)}>?</button>}
     </div>
+    <StadiumGateControl />
     {(!season || showRules) && <div className="my-3 space-y-1 text-sm">
       <p>Run the gates and food counters for six home fixtures. Pick a ticket price, put four crew on duty and decide when to build. Each new turnstile adds 26 admissions per fixture. Each new counter can serve 21 more meals.</p>
       <p>Two on gates and two on food can admit 66 fans and serve 34 meals on opening day. Turning fans away reduces the next crowd. Community prices bring in 18 extra fans and build your following. Premium prices draw 22 fewer. Meals sell for $3. Your lease and crew cost $200 per fixture.</p>
