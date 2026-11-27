@@ -20,6 +20,8 @@ The manager can pay for one pair to rehearse a far-post run or a short return pa
 
 ### Where the management games set the bar
 
+The November 27 audit reviewed all 60 manager cards against the published corner build. Nine contained a verified playable decision with a recorded consequence, 47 had partial coverage and four core player decisions remained unverified. The audit gives the source lines and open work for each card. [Club Manager coverage inventory](audits/club-manager-masterplan-coverage-2026-11-27.md)
+
 The current career benchmarks cover different parts of the job. Transfer stages and future transfer rights, development under form and fitness, and shareable career scenarios all give a manager choices across seasons. Our scouting brief and two-summer succession desk lead to ordinary signings and renewals. Comparing those terms, and testing how later obligations settle, still needs its own audit. [EA's FC 27 career notes](https://www.ea.com/games/ea-sports-fc/fc-27/news/pitch-notes-fc27-career-mode-deep-dive)
 
 The tactical benchmarks include separate formations with and without the ball, live changes and post-match analysis. Our flank partnerships, opponent cover shifts and rehearsed corners produce named events in the match and report. Choosing different whole-team shapes for each phase, deliberately triggering a press against a particular opponent and studying that opponent across previous matches remain open. [Football Manager formations](https://www.footballmanager.com/fm26/features/possession-out-possession-fm26s-new-tactical-evolution) and [FM27 match engine notes](https://www.footballmanager.com/fm27/features/fm27-tactical-tweaks-and-match-engine-upgrades)
