@@ -386,6 +386,7 @@ async function main() {
       assert.equal(rows.filter(r => r.status === 'passed').length, Object.keys(cases).length);
       await writeFile(path.join(evidence, 'native-fixtures.json'), JSON.stringify({ injury: findQuickSubsFixture(original), fatigue: findQuickSubsFixture(original, 'fatigue') }));
     }
+    for (const row of rows.filter(row => row.status !== 'skipped')) console.log(row.status, row.title);
     console.log(`simCmQuickSubs ${control || 'normal'}: real coaching outcomes and independent unmanaged baseline passed.`);
   } finally {
     process.off('unhandledRejection', captureUnhandled); process.off('uncaughtExceptionMonitor', captureUnhandled);

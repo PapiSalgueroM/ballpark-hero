@@ -131,7 +131,7 @@ const stripComments = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`
 /* ---- the engine and the two match screens, regressed when a control asks ---- */
 const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 const CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'MatchReportCard.tsx');
-const PAGE = path.join(ROOT, 'src', 'pages', 'ClubManager.tsx');
+const PAGE = path.join(ROOT, 'src', 'components', 'club-manager', 'ClubManagerDeferredViews.tsx');
 const sourceBefore = {}, verifySources = [];
 for (const file of [ENGINE, CARD, PAGE]) {
   const bytes = fs.readFileSync(file);
@@ -221,7 +221,7 @@ const ENTRY = `${TMP}/matchScreen.${process.pid}.entry.mjs`;
 const BUNDLE = `${TMP}/matchScreen.${process.pid}.bundle.cjs`;
 // Preserve the historical unmanaged parity arm. Automatic coaching has its own outcomes.
 const noCoachPath = `${TMP}/clubManager.noCoach.${process.pid}.ts`;
-const coachHeader = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
+const coachHeader = 'export function coachQuickMatch(career: CareerState, order?: BenchOrder): CareerState {\n';
 const paritySource = lf(fs.readFileSync(enginePath, 'utf8'));
 if (paritySource.split(coachHeader).length !== 2) throw new Error('One current coach export is required for unmanaged parity');
 fs.writeFileSync(noCoachPath, paritySource.replace(coachHeader, coachHeader + '  return career;\n'));
@@ -582,9 +582,9 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
      call and the switch itself must exist exactly once and be the coach. */
   const coached = engineSrc.match(/resumeMatch\(coached\(state\)\)/g) ?? [];
   if (coached.length !== 2) fail(`${coached.length} Quick paths use the same coach and settlement; both must`);
-  const coachSwitch = engineSrc.match(/const coached = \(s: CareerState\): CareerState => \(opts\?\.noCoach \? s : coachQuickMatch\(s\)\);/g) ?? [];
+  const coachSwitch = engineSrc.match(/const coached = \(s: CareerState\): CareerState => \(opts\?\.noCoach \? s : coachQuickMatch\(s, opts\?\.benchOrder\)\);/g) ?? [];
   if (coachSwitch.length !== 1) fail(`${coachSwitch.length} switches decide whether the quick sim coach runs; there is one, and it calls the coach unless noCoach is passed`);
-  const kickOffs = engineSrc.match(/\bkickOff\(state, entry(?:, opts\?\.varReviews)?\)/g) ?? [];
+  const kickOffs = engineSrc.match(/(?<!function )\bkickOff\(/g) ?? [];
   if (kickOffs.length !== 1) fail(`${kickOffs.length} places kick a match off, and there is one`);
   /* And the two screens that start a match. The hub is counted in the source
      because it only draws with a save; the Match Centre is rendered and every
@@ -604,8 +604,9 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
   if (centreWays.length !== 2 || !centreWays.includes('live') || !centreWays.includes('quick')) {
     fail(`the Match Centre offers ${centreWays.length} ways into a match (${centreWays.join(', ')}), and it offers live and quick`);
   }
-  if (centreButtons !== 7) {
-    fail(`the Match Centre draws ${centreButtons} buttons; it draws 7 (back, four team talk tones, and the two ways to play), so a new one has appeared`);
+  const disclosures = [...centre.matchAll(/<button\b[^>]*aria-expanded="false"[^>]*>\s*(Starter fitness|Quick Sim bench order)\s*<\/button>/g)];
+  if (new Set(disclosures.map(match => match[1])).size !== 2 || centreButtons - disclosures.length !== 7) {
+    fail(`the Match Centre drew ${centreButtons} buttons with ${disclosures.length} known preparation panels. Expected Back, four team talk options and two ways to play alongside those panels.`);
   }
   console.log(`   the engine plays a match in ${calls.length} places, both off one kick off, and each of the two screens offers exactly 2 ways in (${centreButtons} buttons on the Match Centre)`);
 }
