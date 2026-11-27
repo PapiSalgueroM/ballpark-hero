@@ -1,4 +1,5 @@
 import { fundSecondYouthPlace } from '@/lib/clubManagerYouthTeam';
+import { startMentoring } from '@/lib/clubManagerMentoring';
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { MutableRefObject, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
@@ -107,6 +108,7 @@ const HalftimeScreen = lazy(() => import('@/components/club-manager/HalftimeScre
 const MatchReportCard = lazy(() => import('@/components/club-manager/MatchReportCard').then(m => ({ default: m.MatchReportCard })));
 const AcademyScreen = lazy(() => import('@/components/club-manager/AcademyScreen').then(m => ({ default: m.AcademyScreen })));
 const YouthTeamPanel = lazy(() => import('@/components/club-manager/YouthTeamPanel'));
+const AcademyMentoringCard = lazy(() => import('@/components/club-manager/AcademyMentoringCard'));
 const SecondClubPanel = lazy(() => import('@/components/club-manager/SecondClubPanel'));
 const TrainingScreen = lazy(() => import('@/components/club-manager/TrainingScreen').then(m => ({ default: m.TrainingScreen })));
 const RolesScreen = lazy(() => import('@/components/club-manager/RolesScreen').then(m => ({ default: m.RolesScreen })));
@@ -1212,7 +1214,8 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                   onRecall={g.callScoutHome}
                   onPromote={g.promote}
                   onRelease={g.release}
-                /><YouthTeamPanel career={c} onFound={g.openYouthTeam} onEnter={g.fundYouthTeam} onRotate={g.rotateYouth} onSecondPlace={(club, season, id) => g.commitClubAction(c => fundSecondYouthPlace(c, club, season, id))} /></ScreenLoading>
+                /><AcademyMentoringCard career={c} onStart={(graduate, mentor) => g.commitClubAction(current => startMentoring(current, c.clubName, c.season, graduate, mentor))} />
+                  <YouthTeamPanel career={c} onFound={g.openYouthTeam} onEnter={g.fundYouthTeam} onRotate={g.rotateYouth} onSecondPlace={(club, season, id) => g.commitClubAction(c => fundSecondYouthPlace(c, club, season, id))} /></ScreenLoading>
               )}
 
               {hubPanel === 'training' && (
