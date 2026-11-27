@@ -1,4 +1,10 @@
-### November 27, 2026. European ad consent controls awaiting publication
+### November 27, 2026. Saved Soccer Career desktop layout
+
+Training, Phone and Career saves share a centered row on desktop. The season action and history stay inside the play area. A saved career retained both 120 by 600 side units and its 728 by 90 footer at 1280 and 1366 pixels. Chrome kept the same 1024px game width and 720px skills panel through practice, contract review, signing and reload. Phone layouts retained the footer. Save selection made zero ad requests. The real Google publisher test intercepted each auction and ad frame before transmission.
+
+The earlier Home and ad layout release was published separately. Its two responsive images matched the files served by douknowball.com. The public GA4 replay counted Home, Soccer Career, Back and reload once each after opt-in. Reject and withdrawal made no collection requests. The site's 174 sitemap addresses had titles, descriptions, self-canonicals and indexable HTML when checked. Google's indexing decisions are recorded separately in Search Console.
+
+### November 27, 2026. European ad consent controls
 
 The separate regional release lets a player who has enabled Advertising reopen Google's European consent message from Cookie choices. The button appears when Google's loaded consent platform reports that its European rules apply. The player's saved site settings stay separate. Advertising and Google Analytics still require affirmative choices.
 
