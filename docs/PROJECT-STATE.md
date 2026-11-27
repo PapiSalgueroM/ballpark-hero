@@ -4,6 +4,8 @@ Career Quiz and the five Connect Four games center their boards between desktop 
 
 Budget Builder shows the Money XI's actual lineup, prices and formation before the final. A signing that fills the last shirt or replaces a starter previews the squad rating, savings and board points before the final. The score breakdown uses the same calculation as the leaderboard and the shared result.
 
+NBA My Career players can prepare to shoot late in the clock against single coverage or pass out of a double team. Minutes and the scouting report shape how many possessions they get. The recorded points, assists and season review reflect their decision when they reload the career.
+
 Google's US regulations message was published for all supported states. The footer's first-party Cookie choices control is available everywhere. The regional release was verified across 167 eligible direct entries with 41 additional consent, storage and navigation checks.
 
 ### November 27, 2026. Regional advertising, saved Club Manager and academy decisions
