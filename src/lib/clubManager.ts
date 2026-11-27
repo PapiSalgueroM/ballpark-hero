@@ -1,4 +1,5 @@
 import { playYouthFixture, restoreYouthTeam } from '@/lib/clubManagerYouthTeam';
+import { recordMentoringMatch, restoreMentoring, type AcademyMentoring } from '@/lib/clubManagerMentoring';
 import { closeSeniorSeason, type SeniorClub } from '@/lib/clubManagerSecondClub';
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
@@ -1869,6 +1870,7 @@ export type FacilityKind = 'recruitment' | 'coaching' | 'facilities';
 
 /** The club's youth setup. Everything here is upgradable and everything bites. */
 export interface Academy {
+  mentoring?: AcademyMentoring;
   youthTeam?: import('@/lib/clubManagerYouthTeam').YouthTeam;
   /** 1 to 20. How good the club is at getting the best juniors in the door. */
   recruitment: number;
@@ -21617,7 +21619,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const tacticsDay = logEverSet(live.instrLog) ? tacticsImpl()?.day(state, fx, live, second, lastMinute) ?? null : null;
   if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
   else tickWeek(state, new Set(xi.map(p => p.id)));
-  if (entry.type === 'league') playYouthFixture(state, entry.round, fx.opponent);
+  if (entry.type === 'league') {
+    playYouthFixture(state, entry.round, fx.opponent);
+    const mentoringResult = recordMentoringMatch(state, entry.round, fx.opponent, live);
+    if (mentoringResult) events.push(mentoringResult);
+  }
   const ratingsActive = state.inSeasonRatings && !state.worldRatingRunIn;
   if (ratingsActive && entry.type === 'league') {
     const ratingChanges = applyLeagueRatingChanges(state, events);
@@ -26234,6 +26240,7 @@ export function loadCareer(slotSave?: string): CareerState | null {
     }
     parsed = restoreTrimmedContracts(parsed);
     restoreYouthTeam(parsed);
+    restoreMentoring(parsed);
     /* Round 127: repair the save the moment it is opened rather than on the
        first kick off. ensureRoles has always run at the top of playNextEntry,
        which is the house pattern and is enough for the engine, but it is NOT

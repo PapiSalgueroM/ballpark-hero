@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useUfcGame } from '@/hooks/useUfcGame';
 import { UfcFighterSearch } from '@/components/ufc/UfcFighterSearch';
 import { UfcGameBoard } from '@/components/ufc/UfcGameBoard';
+import { ufcShareGrid } from '@/components/ufc/ufcClues';
 import { UfcHowToPlay } from '@/components/ufc/UfcHowToPlay';
 import UfcDivisionRun from '@/components/ufc/UfcDivisionRun';
 import { GameNav } from '@/components/game/GameNav';
@@ -136,9 +137,9 @@ const UfcGame = () => {
                 )
               }
               funFact={gameStatus === 'lost' ? <>{targetFighter?.weightClass} · {targetFighter?.record}</> : undefined}
-              emojiGrid={gameStatus === 'won' ? `🏆 UFC Guesser: ${targetFighter?.name} in ${guesses.length}/${maxGuesses}` : `😞 UFC Guesser: answer was ${targetFighter?.name}`}
+              emojiGrid={ufcShareGrid(guesses)}
               share={{
-                score: gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`,
+                score: `${gameStatus === 'won' ? guesses.length : 'X'}/${maxGuesses} (${mode === 'daily' ? 'Daily' : 'Unlimited'})`,
                 gameName: 'UFC Guesser',
                 gamePath: '/ufc',
               }}

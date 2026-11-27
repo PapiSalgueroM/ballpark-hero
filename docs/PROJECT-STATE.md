@@ -1,3 +1,11 @@
+### November 27, 2026. Regional advertising, saved Club Manager and academy decisions
+
+New visitors with a confirmed country outside the EEA, UK and Switzerland can receive non-personalized ads on eligible public pages. Cloudflare's same-site country response supplies the initial default. An unknown location, unreadable storage, prior rejection or Global Privacy Control cannot grant advertising. Existing choices take priority, and Analytics stays opt-in. Cookie choices is available in the footer. A public document can initialize its publisher once even if no manual unit fits. Save management and account screens keep their exclusions.
+
+Home fits its search and games to the actual space between the ads. Club Manager checks the active dashboard and Home Continue shortcut separately from selecting, importing or exporting saves. Eligible desktop gameplay can request two side ads and a footer. Phone gameplay has the footer.
+
+In Soccer Career, first-team training exchanges two youth matches for up to three additional planned league appearances if the academy club signs the player. Club Manager graduates can earn one rating point within potential by playing 120 minutes alongside a compatible senior mentor across four league matches. The Academy keeps the opponent and minutes for each match. Old saves need no conversion.
+
 ### November 27, 2026. Installed game shortcuts and Windows side ads
 
 A 1280px desktop viewport with a 15px scrollbar supplied only 1265px to the game frame. The previous second width check suppressed the pair before it measured the game. Public desktop layouts now use the real page width for the scrollbar and check the actual space between each creative and its controls. Fine-pointer desktop windows at 1254 through 1279px can also qualify. Phones and touch-only devices in that extra band keep the footer.
@@ -29,6 +37,14 @@ Use `node scripts/playAdRelease.mjs` against the built site for ranked direct vi
 The separate, unchanged Club Manager replay reports the same shootout-heading and season-review navigation findings on the pre-release build. The first career save-and-resume flows complete. Search Console supplies the 25 search landing pages, and Lovable exposes ten most-viewed pages. Use the matched AdSense and Lovable reports for sitewide revenue and reach.
 
 The all-page layout replay covered 172 routes at 320, 390, 1280, 1366 and 1920 pixels, including all 135 registered games. Every registered game received a footer on entry. Side pairs appeared on 131, 128 and 134 game entries at the three desktop widths. The exact allocation depends on the controls the game draws. Google's real library requested the two compact-desktop side units and the footer on the Soccer Career entry page. Active careers on this build used the footer, and the save picker made zero requests. The owner restored Google-managed optimization. The account has Auto ads, Auto optimize, banner, anchor and side rail formats enabled. Vignettes remain off because the width setting cannot ensure phone-only delivery.
+
+### November 27, 2026. NHL faceoffs, Conquest history and ranked game fixes
+
+Verified on a local production build. NHL My Career centers can take defensive-zone draws and trade offensive ice time for a chance to earn a camp edge with the same club next season. Across 128 paired seasons the assignment produced 24,138 draws, 12,706 wins and 89 earned camp edges. All 128 pairs had identical games played. The ordinary role scored 6,202 points across those seasons and the assignment scored 5,758. Chrome restored both the assignment and the season result after reload on phone and desktop. The 400-career NHL simulation passed.
+
+In Soccer, NFL, NBA, MLB and NHL Conquest, players can revisit a completed round's standings and look up who previously held a territory. The round label advances when the player chooses Continue. Signed-out Chrome played three rounds in each sport at 390px and 1366px, then checked the standings and both territory owners against the saved moves. All ten runs retained their results across two reloads apiece.
+
+Club Manager's transfer market finds original player and club names from plain keyboard input. In a fresh Crystal Palace career, `joao felix` and `odegaard` each found the intended player and `atletico madrid` found the same 24 rows as the accented spelling. Ederson and Éderson remained separate shortlist choices after reload. Stadium Tycoon's current and archived match reports now separate junior guests from walk-ups. A 120-person gate with 30 season-ticket holders and 12 junior guests showed 78 walk-ups. UFC Guesser shares the nine clues from each played row and the score without disclosing the fighter. Chrome checked wins, losses, giving up before guessing and Unlimited mode, including a downloaded result image. The NHL, Conquest and three ranked game suites passed 35 focused tests in total.
 
 ### November 26, 2026. Career records, drafts and auctions
 

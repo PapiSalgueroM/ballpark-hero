@@ -5,6 +5,7 @@ import ConquestScenePlayer, { useScenePlayer } from '@/components/conquest/Conqu
 import ConquestWheel from '@/components/conquest/ConquestWheel';
 import ConquestTimeline from '@/components/conquest/ConquestTimeline';
 import ConquestStandingsStrip from '@/components/conquest/ConquestStandingsStrip';
+import ConquestTerritoryHistory from '@/components/conquest/ConquestTerritoryHistory';
 import { ImperialismHowToPlay } from '@/components/conquest/ImperialismHowToPlay';
 import { CelebrationStyles, ConfettiBurst } from '@/components/club-manager/Celebration';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -12,7 +13,7 @@ import type { ConquestMapSport } from '@/lib/conquestMapLook';
 import { bboxArea, pathBoundingBox } from '@/lib/conquestMapGeometry';
 import { arrowAngle, buildScenes, wheelSpec } from '@/lib/conquestScenes';
 import {
-  empireCounts, landlessTeams, statesOf, homeWinProb, matchupMomentum, teamLabel, recordLabel, regionNoun,
+  applyRecords, emptyRecords, empireCounts, landlessTeams, statesOf, homeWinProb, matchupMomentum, teamLabel, recordLabel, regionNoun,
   type ImperialismSport, type ImperialismTeam, type ImperialismGameSpec,
 } from '@/lib/imperialismEngine';
 import { edgeNote } from '@/lib/conquestMomentum';
@@ -174,7 +175,6 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
   const counts = useMemo(() => empireCounts(sport, owners), [sport, owners]);
   const total = Object.keys(owners).length;
   const landless = useMemo(() => landlessTeams(sport, owners), [sport, owners]);
-  const inPlayoffs = run?.bracket != null;
   const roundLabel = run ? labelOfRound(sport, run) : '';
 
   const featured = useMemo(() => (run ? featuredPairing(sport, run) : null), [sport, run]);
@@ -223,6 +223,9 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
      scene's frame while a round plays out (and its closing frame until
      Continue, so the last wave finishes), else the live map. */
   const scrubbing = run !== null && scrubIndex !== null && scrubIndex >= 0 && scrubIndex < run.history.length - 1;
+  const standingsRecords = scrubbing
+    ? run.rounds.slice(0, scrubIndex).reduce((table, round) => applyRecords(table, round.games), emptyRecords(sport))
+    : records;
   const stageOwners = scrubbing ? run.history[scrubIndex] : scenes.length > 0 ? player.frame.owners : owners;
   const pendingBattle: ConquestBattleView | null = featured && phase === 'preview'
     ? { attacker: featured[0], defender: featured[1], stage: 'pending' }
@@ -431,11 +434,12 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
   const myStates = favorite ? statesOf(owners, favorite).length : 0;
   const callReceipt = sport.key === 'soccer' ? run.lastCall : null;
   const toLive = () => setScrubIndex(null);
+  const upcomingRound = run.bracket ? roundLabel : `${roundLabel} of ${sport.regularRounds}`;
 
   return (
     <div className="space-y-3">
       <p data-conquest-status className="text-center text-[11px] text-muted-foreground">
-        <b className="text-foreground">{inPlayoffs ? roundLabel : `${sport.roundNoun} ${run.round} of ${sport.regularRounds}`}</b>
+        <b className="text-foreground">{phase !== 'preview' && run.lastRound ? run.lastRound.label : upcomingRound}</b>
         {favorite && (
           <>
             {' · '}
@@ -492,12 +496,13 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
         sport={sport}
         map={map}
         owners={scrubbing ? stageOwners : owners}
-        records={records}
+        records={standingsRecords}
         favorite={favorite}
         highlightTeam={highlightTeam}
         onHighlight={setHighlightTeam}
         compact={narrow}
       />
+      {!sceneActive && <ConquestTerritoryHistory sport={sport} map={map} history={run.history} labels={timelineLabels} />}
 
       {/* Release brings the map back to now: the scrubbed map is a peek. */}
       <div onPointerUp={toLive} onPointerCancel={toLive} onKeyUp={toLive} onTouchEnd={toLive}>

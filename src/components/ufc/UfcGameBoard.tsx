@@ -1,23 +1,13 @@
 import { useState } from 'react';
 import { UfcGuessResult, UfcCellResult } from '@/types/ufc';
 import { cn } from '@/lib/utils';
+import { clues } from './ufcClues';
 
 interface UfcGameBoardProps {
   guesses: UfcGuessResult[];
   maxGuesses: number;
 }
 
-const clues = [
-  { key: 'yearsActive', label: 'Years active', short: 'YRS', emoji: '📅' },
-  { key: 'weightClass', label: 'Weight class', short: 'WEIGHT', emoji: '⚖️' },
-  { key: 'nationality', label: 'Nationality', short: 'NAT', emoji: '🌍' },
-  { key: 'age', label: 'Age', short: 'AGE', emoji: '🎂' },
-  { key: 'wins', label: 'Wins', short: 'WINS', emoji: '✅' },
-  { key: 'losses', label: 'Losses', short: 'LOSSES', emoji: '❌' },
-  { key: 'draws', label: 'Draws', short: 'DRAWS', emoji: '🤝' },
-  { key: 'koTko', label: 'KO/TKO', short: 'KO/TKO', emoji: '💥' },
-  { key: 'submissions', label: 'Submissions', short: 'SUBS', emoji: '🔒' },
-] as const;
 const statusText = { correct: 'Exact', close: 'Close', incorrect: 'No match' };
 const statusClass = {
   correct: 'bg-correct text-correct-foreground',

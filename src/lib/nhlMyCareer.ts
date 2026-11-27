@@ -11,6 +11,7 @@ import { formatNumber } from './formatNumber';
 
 import { NHL_TEAMS } from '@/data/conquestDataNhl';
 import { NHL_PLAYOFF_FORMAT } from '@/data/usSeasonLedgerNhl';
+import { earnedDrawTrust, NHL_DRAW_CAMP_EDGE, NHL_DRAW_ICE_COST, playDefensiveDraws, type NhlDefensiveDraws } from './nhlDefensiveDraws';
 import { nhlCheckingForward, NHL_CHECKING_SERIES_POINTS, NHL_CHECKING_SCORING_COST, NHL_SHUTDOWN_BERTH_POINTS, NHL_SHUTDOWN_OFFENSIVE_COST, type ProgrammePreparation } from './usCareerProgramme';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nhlSeasonScore, wonAward } from './careerAwards';
@@ -131,6 +132,7 @@ export interface NhlSeasonLine {
   wins?: number; svpct?: number;
   /** Planned starts on the actual slate before any injury, when the goalie shared the crease. */
   tandemStarts?: number;
+  defensiveDraws?: NhlDefensiveDraws;
   /** Round 103: the run to the Cup, or the four games that ended it. */
   poGames?: number; poGoals?: number; poAssists?: number; poPoints?: number;
   /** Personal postseason starts for a goalie who entered the season as the backup. */
@@ -408,8 +410,11 @@ export function nhlAssignRole(c: NhlCareerState, teamQuality: number, rng: () =>
 export function nhlCampBattle(c: NhlCareerState, teamQuality: number, rng: () => number = Math.random): string | null {
   if (!c.role) c.role = 'starter'; /* pre-183 save repair */
   const incumbent = nhlIncumbentOvr(teamQuality, rng);
+  const previous = c.seasons.at(-1);
+  const drawTrust = c.pos === 'C' && previous?.team === c.team && previous.year === c.year - 1 && earnedDrawTrust(previous.defensiveDraws);
+  const campRating = c.ovr + (drawTrust ? NHL_DRAW_CAMP_EDGE : 0);
   if (c.role === 'starter') {
-    if (c.ovr < incumbent - 5) {
+    if (campRating < incumbent - 5) {
       c.role = 'backup';
       c.morale = Math.max(20, c.morale - 10);
       return c.pos === 'G'
@@ -418,10 +423,11 @@ export function nhlCampBattle(c: NhlCareerState, teamQuality: number, rng: () =>
     }
     return null;
   }
-  const p = Math.max(0.05, Math.min(0.9, 0.1 + (c.ovr - incumbent) * 0.07));
-  if (c.ovr >= incumbent - 1 || rng() < p) {
+  const p = Math.max(0.05, Math.min(0.9, 0.1 + (campRating - incumbent) * 0.07));
+  if (campRating >= incumbent - 1 || rng() < p) {
     c.role = 'starter';
     c.morale = Math.min(100, c.morale + 10);
+    if (drawTrust) return 'Your defensive-zone work counted in camp. You moved up from the fourth line.';
     return c.pos === 'G'
       ? '🚀 The crease is yours. Number one, opening night.'
       : '🚀 You won the camp battle. Top of the lineup, big minutes.';
@@ -531,6 +537,8 @@ export function simNhlSeason(
   const usualOdds = Math.max(0.05, Math.min(0.9, (strength - 66) / 28));
   let playoffOdds = usualOdds;
   let offensiveIceShare = iceShare;
+  const zoneDraws = c.pos === 'C' && programme?.plan.sport === 'nhl' && programme.plan.tactics === 'zone-draws';
+  if (zoneDraws) offensiveIceShare *= 1 - NHL_DRAW_ICE_COST / 100;
   if (c.pos === 'D' && programme?.plan.sport === 'nhl' && programme.plan.tactics === 'defend') {
     const coverage = iceShare * fullGames / US_ENGINE_SEASON.nhl;
     playoffOdds = Math.min(0.9, usualOdds + NHL_SHUTDOWN_BERTH_POINTS / 100 * coverage);
@@ -553,6 +561,12 @@ export function simNhlSeason(
   if (slate !== US_ENGINE_SEASON.nhl) full.slate = slate;
   Object.assign(full, nhlStatLineFor({ form, pos: c.pos, scoringMult: c.archetype.scoringMult, games: fullGames, iceShare: offensiveIceShare }, rng));
   const line = nhlLineOnSlate(full, work);
+  if (zoneDraws && line.games > 0) {
+    const draws = playDefensiveDraws(c, line.games, form);
+    line.defensiveDraws = draws;
+    const verdict = earnedDrawTrust(draws) ? 'You earned an edge at your next camp with this club.' : 'Your next camp keeps its usual evaluation.';
+    notes.push(`Defensive-zone shifts: won ${draws.won} of ${draws.taken} faceoffs in your own end. ${verdict}`);
+  }
   if (tandem) line.tandemStarts = cut(plannedStarts);
   if (seasonRating) line.seasonRating = seasonRating;
   // Round 123: computed up here rather than down with the rest of the awards

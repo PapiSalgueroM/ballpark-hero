@@ -1,12 +1,13 @@
 import type { UsCareerCore, UsCareerSeason } from './usCareerSport';
 import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
+import { NHL_DRAW_ASSIGNMENT, NHL_DRAW_CAMP_EDGE, NHL_DRAW_CAMP_MINIMUM, NHL_DRAW_ICE_COST, type NhlDefensiveDraws } from './nhlDefensiveDraws';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain';
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking' | 'zone-draws' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain';
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking';
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking' | 'zone-draws';
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch' | 'alternate';
@@ -175,6 +176,7 @@ function validPlan(c: UsCareerCore, sport: UsSport, plan: UsCareerProgramme): bo
       if (key === 'tactics' && plan.tactics === 'playoff-minutes') return sport === 'nba';
       if (key === 'tactics' && plan.tactics === 'spot-starts') return sport === 'mlb' && c.pos === 'SP';
       if (key === 'tactics' && plan.tactics === 'playoff-checking') return sport === 'nhl' && nhlCheckingForward(c.pos);
+      if (key === 'tactics' && plan.tactics === 'zone-draws') return sport === 'nhl' && c.pos === 'C';
       if (key === 'tactics' && plan.tactics === 'extra-relief') return sport === 'mlb' && c.pos === 'RP';
       return usProgrammeMenus(c, sport).find(menu => menu.id === key)?.options.some(o => o.id === plan[key]);
     });
@@ -359,6 +361,10 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
         label: 'Shutdown assignment',
         effect: `Take the tougher matchups. Give up ${NHL_SHUTDOWN_OFFENSIVE_COST}% of your regular season offensive ice time to add up to ${NHL_SHUTDOWN_BERTH_POINTS} percentage points to playoff qualification. The gain scales with games and minutes played. At the 90% qualification cap it costs nothing.`,
       }] : []),
+      ...(sport === 'nhl' && c.pos === 'C' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0) ? [{
+        id: 'zone-draws' as const, label: NHL_DRAW_ASSIGNMENT,
+        effect: `Take four draws per game in your own end, or two on the fourth line. Give up ${NHL_DRAW_ICE_COST}% of your offensive ice time. Win more than half of at least ${NHL_DRAW_CAMP_MINIMUM} draws and your coach counts your rating ${NHL_DRAW_CAMP_EDGE} points higher at next year's camp with this club. Faceoff specialists have the best chance.`,
+      }] : []),
     ] },
     { id: 'expectation', label: 'Coach expectations', options: [{ id: 'normal', label: 'No extra target', effect: 'Keep the normal season.' }, { id: 'steady', label: 'Steady availability', effect: 'Play ' + gamesTarget(c, sport, false) + ' games: morale +3 (morale tops out at 100). Miss it: morale -3.' }, { id: 'stretch', label: 'Earn a bigger role', effect: 'Play ' + gamesTarget(c, sport, true) + ' games: morale +6 (morale tops out at 100). Miss it: morale -5. This does not guarantee a starting spot.' }] },
     { id: 'partnership', label: 'Teammate partnership', options: [{ id: 'normal', label: 'Keep your own routine', effect: 'No extra partnership input.' }, { id: 'build', label: sport === 'nba' ? 'Build a two-player rhythm' : sport === 'nhl' ? c.pos === 'G' ? 'Work with your defense pair' : 'Build line chemistry' : sport === 'mlb' ? c.pos === 'SP' || c.pos === 'RP' ? 'Work with your catcher' : 'Build a lineup partnership' : c.pos === 'QB' ? 'Work with your receivers' : 'Build unit chemistry', effect: 'A role-based teammate partnership, with no invented player. At least ' + gamesBase(c, sport) + ' games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6.' + partnerText }] },
@@ -457,10 +463,18 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     const secondUnitRequest = section === 'tactics' && secondUnit;
     const extraRelief = section === 'tactics' && choice === 'extra-relief';
     const checking = sport === 'nhl' && section === 'tactics' && choice === 'playoff-checking';
-    const label = checking ? NHL_CHECKING_LABEL : extraRelief ? MLB_EXTRA_RELIEF_LABEL : insideRoutes ? NFL_INSIDE_ROUTES_LABEL : playoffMinutes ? NBA_PLAYOFF_MINUTES_LABEL
+    const zoneDraws = sport === 'nhl' && section === 'tactics' && choice === 'zone-draws';
+    const label = zoneDraws ? NHL_DRAW_ASSIGNMENT : checking ? NHL_CHECKING_LABEL : extraRelief ? MLB_EXTRA_RELIEF_LABEL : insideRoutes ? NFL_INSIDE_ROUTES_LABEL : playoffMinutes ? NBA_PLAYOFF_MINUTES_LABEL
       : spotStarts ? MLB_SPOT_START_LABEL : secondUnitRequest ? NBA_SECOND_UNIT_LABEL
         : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
     const decision: ProgrammeDecision = { section, label, outcome: played ? 'completed' : 'interrupted' };
+    if (played && zoneDraws) {
+      const draws = (line as UsCareerSeason & { defensiveDraws?: NhlDefensiveDraws }).defensiveDraws;
+      if (draws) {
+        decision.actual = draws.won;
+        decision.unit = 'defensive draws won';
+      } else decision.outcome = 'unused';
+    }
     if (played && sport === 'nba' && section === 'tactics' && choice === 'defend' && !preparation?.idle?.includes(section)) {
       const defence = nbaDefensiveAssignment(c.pos);
       const actual = (line as UsCareerSeason & { spg?: number; bpg?: number })[defence.stat];

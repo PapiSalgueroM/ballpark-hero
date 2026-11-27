@@ -335,7 +335,7 @@ export function SeasonMatchResults({ league, current = false }: { league: Tycoon
               {TICKET_POLICIES.find(p => p.id === ticketOffer.policy)?.label} tickets · {formatNumber(ticketOffer.seats)} seats
             </span>}
             {seasonTicketFans !== undefined && attendance !== undefined && <span className="block text-muted-foreground">
-              {formatNumber(seasonTicketFans)} season-ticket holders · {formatNumber(attendance - seasonTicketFans)} walk-ups
+              {formatNumber(seasonTicketFans)} season-ticket holders · {formatNumber(attendance - seasonTicketFans - (juniors?.admitted ?? 0))} walk-ups
             </span>}
             {plan && <span className="block text-muted-foreground">{MATCH_PLANS[plan.kind].label} from {plan.minute}′</span>}
             {scouting && <span className="block text-muted-foreground">

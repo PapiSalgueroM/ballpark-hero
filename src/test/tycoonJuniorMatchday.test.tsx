@@ -1,8 +1,8 @@
-import { cleanup, fireEvent, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, expect, it, vi } from 'vitest';
 import { resetMocks } from './dailyReload/mocks';
 import { mountPage } from './dailyReload/harness';
-import StadiumTycoon from '@/pages/StadiumTycoon';
+import StadiumTycoon, { SeasonMatchResults } from '@/pages/StadiumTycoon';
 import {
   attendance, AWAY_MATCHDAY_SEC, bookJuniorDay, deserializeTycoon, incomePerSec, juniorDayOffer, matchdayFixtures, newTycoon,
   offlineEarnings, offlineRateOf, orderMatchProgrammes, playAwayMatchdays, playMinute, programmeFixture, reserveSeasonTickets,
@@ -18,7 +18,7 @@ const book = (s: TycoonState) => {
 const finish = (s: TycoonState) => { s.minute = 89; playMinute(s, () => 1, [], { pay: true }); };
 afterEach(() => { cleanup(); localStorage.clear(); vi.restoreAllMocks(); vi.unstubAllGlobals(); resetMocks(); });
 
-it.each([ [90, 0], [120, 12], [114, 6] ])('protects paid season seats and settles a real home date for %i supporters', (fanbase, displaced) => {
+it.each([ [90, 0, 68], [120, 12, 78], [114, 6, 80] ])('protects paid season seats and settles a real home date for %i supporters', (fanbase, displaced, walkUps) => {
   let s: TycoonState = { ...newTycoon(now), fanbase, money: 500, levels: { snacks: 2, shop: 1 } };
   s = reserveSeasonTickets(s, s.rep, s.league!.season, seasonTicketQuote(s)!);
   s = signStadiumSponsor(s, s.rep, s.league!.season, 'attendance');
@@ -50,9 +50,20 @@ it.each([ [90, 0], [120, 12], [114, 6] ])('protects paid season seats and settle
   expect(live.league!.sponsor!.qualifying - qualifiedBefore).toBe(Number(a.crowd >= target));
   if (fanbase === 90) expect(live.league!.sponsor!.qualifying - control.league!.sponsor!.qualifying).toBe(1);
   expect(live.juniorDay).toBeUndefined();
+  const report = render(<SeasonMatchResults league={live.league!} current />);
+  const seats = s.league!.seasonTickets!.seats;
+  const checkCrowd = () => {
+    const match = within(report.getAllByRole('listitem', { hidden: true })[2]);
+    expect(match.getByText(`${seats} season-ticket holders · ${walkUps} walk-ups`)).toBeInTheDocument();
+    expect(match.getByText(/Junior day · 12 guests/)).toBeInTheDocument();
+    expect(a.crowd).toBe(seats + walkUps + 12);
+  };
+  checkCrowd();
   while (live.league!.season === 0) finish(live);
   live = reload(live);
   expect(live.lastCompletedLeague?.results?.flatMap(row => row.juniors ? [row.juniors] : [])).toEqual([{ admitted: 12, displaced, newFans: 3 }]);
+  report.rerender(<SeasonMatchResults league={live.lastCompletedLeague!} />);
+  checkCrowd();
 });
 
 it('limits the offline rate to one scheduled fixture and keeps admissions and programme buyers on the same crowd', () => {
