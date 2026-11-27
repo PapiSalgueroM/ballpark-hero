@@ -37,6 +37,7 @@ function fixtureSquad(slots: typeof MLB_SLOTS) {
 }
 
 const tick = (ms: number) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
+const dailyMode = /^Daily Everyone gets the same wheel/;
 const beforeMidnight = new Date('2026-11-13T04:59:59Z');
 const afterMidnight = new Date('2026-11-13T05:00:01Z');
 
@@ -64,7 +65,7 @@ describe.each([
 
   async function chooseMode(page: MountedPage, mode: 'Daily' | 'Classic' = 'Daily') {
     const board = within(page.container);
-    await click(board.getByRole('button', { name: new RegExp(`^${mode}\\b`) }));
+    await click(board.getByRole('button', { name: mode === 'Daily' ? dailyMode : /^Classic Ratings visible/ }));
     await tick(10);
     return board;
   }
@@ -150,7 +151,7 @@ it('NHL resumes the exact Daily lineup, spent reroll and next random draw before
   const mount = () => mountPage(<PerfectSeasonNhl />, path);
   const open = async (page: MountedPage) => {
     const board = within(page.container);
-    await click(board.getByRole('button', { name: /^Daily\b/ }));
+    await click(board.getByRole('button', { name: dailyMode }));
     await tick(10);
     return board;
   };
@@ -189,7 +190,7 @@ it('NHL rejects mismatched Daily wheel bytes and always prefers a finished attem
   const path = '/perfect-season-nhl', date = getDailyDateET(), key = nhlDailyDraftKey(date);
   const open = async () => {
     const board = within(mountPage(<PerfectSeasonNhl />, path).container);
-    await click(board.getByRole('button', { name: /^Daily\b/ }));
+    await click(board.getByRole('button', { name: dailyMode }));
     await tick(2);
     return board;
   };
@@ -213,7 +214,7 @@ it('NHL rejects mismatched Daily wheel bytes and always prefers a finished attem
 it('NHL holds a terminal result on a denied save and a retry records it only once', async () => {
   const path = '/perfect-season-nhl', date = getDailyDateET();
   const board = within(mountPage(<PerfectSeasonNhl />, path).container);
-  await click(board.getByRole('button', { name: /^Daily\b/ }));
+  await click(board.getByRole('button', { name: dailyMode }));
   await tick(2);
   const set = Storage.prototype.setItem;
   const fail = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function(key, value) {
