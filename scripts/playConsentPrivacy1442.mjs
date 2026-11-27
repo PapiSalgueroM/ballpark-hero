@@ -158,7 +158,12 @@ try {
     const { ctx, requests } = await context();
     try {
       await ctx.addInitScript(() => Object.defineProperty(navigator, 'globalPrivacyControl', { configurable: true, value: true }));
-      const page = await ctx.newPage(); await page.goto(SITE + '/privacy'); await region(page).waitFor();
+      const page = await ctx.newPage(); await page.goto(SITE + '/privacy');
+      const choices = page.getByRole('button', { name: 'Cookie choices', exact: true });
+      await choices.waitFor();
+      assert.equal(await region(page).isVisible(), false, 'GPC suppresses the automatic prompt');
+      assert.equal(vendors(requests).length, 0);
+      await choices.click();
       const advertising = region(page).getByRole('checkbox', { name: /Advertising/i });
       assert.equal(await advertising.isDisabled(), true);
       await region(page).getByRole('button', { name: 'Accept all', exact: true }).click();

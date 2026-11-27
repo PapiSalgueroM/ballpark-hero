@@ -131,7 +131,7 @@ if (CONTROL === 'barenudge') nudgeRaw = rewrite(nudgeRaw, 'if (reloadToRetryChun
 if (CONTROL === 'consentnosave') preferencesRaw = rewrite(preferencesRaw, '  if (!settlePendingSaves()) return false;', '', 'consentnosave');
 if (CONTROL === 'consentbare') consentRaw = rewrite(consentRaw, 'if (canReloadAfterWithdrawal(pendingRevoked.current)) {', 'if (true) {', 'consentbare');
 if (CONTROL === 'consentblocked') preferencesRaw = rewrite(preferencesRaw, "  if (getStorageTrouble() === 'blocked') return false;", '', 'consentblocked');
-if (CONTROL === 'consentdurable') preferencesRaw = rewrite(preferencesRaw, 'parseConsentPreferences(window.localStorage.getItem(CONSENT_KEY))', 'parseConsentPreferences(safeLocalStorage.getItem(CONSENT_KEY))', 'consentdurable');
+if (CONTROL === 'consentdurable') preferencesRaw = rewrite(preferencesRaw, 'const raw = window.localStorage.getItem(CONSENT_KEY);', 'const raw = safeLocalStorage.getItem(CONSENT_KEY);', 'consentdurable');
 /* Round 1338: the page flag, in memory like the rest. */
 if (CONTROL === 'nowait') fresh = rewrite(fresh, 'if (reloadAsked || reloadOnceForStaleChunk())', 'if (reloadOnceForStaleChunk())', 'nowait');
 if (CONTROL === 'flagfirst') {
@@ -254,11 +254,12 @@ console.log('6) the update toast and consent withdrawal ask for waiting saves be
   const gate = (preferences.match(/export function canReloadAfterWithdrawal\([^\n]*\n[\s\S]*?\n\}/) ?? [''])[0];
   const asks = gate.indexOf('if (!settlePendingSaves()) return false;');
   const blocks = gate.indexOf("if (getStorageTrouble() === 'blocked') return false;");
-  const durable = gate.indexOf('parseConsentPreferences(window.localStorage.getItem(CONSENT_KEY))');
+  const nativeRead = gate.indexOf('const raw = window.localStorage.getItem(CONSENT_KEY);');
+  const durable = gate.indexOf('const durable = parseConsentPreferences(raw);');
   const seamImport = /import\s*\{[^}]*\bsettlePendingSaves\b[^}]*\}\s*from ['"]@\/lib\/safeStorage['"]/.test(preferences);
   const saveSafe = seamImport && asks >= 0 && asks < gate.indexOf('try {');
   const blockedSafe = blocks >= 0 && blocks < gate.indexOf('try {');
-  const durableSafe = durable > gate.indexOf('try {') && /catch \{ return false; \}/.test(gate)
+  const durableSafe = nativeRead > gate.indexOf('try {') && durable > nativeRead && /catch \{ return false; \}/.test(gate)
     && /return !durable \|\| \(\(!revoked\.advertising \|\| !durable\.advertising\)\s*&& \(!revoked\.analytics \|\| !ANALYTICS_READY \|\| !durable\.analytics\)\);/.test(gate);
   if (nudgeBare) fail('UpdateNudge reloads the page itself: its Refresh would go over a save the browser refused');
   if (!nudgeGuarded) fail('UpdateNudge does not reload through reloadToRetryChunk from freshBuild');

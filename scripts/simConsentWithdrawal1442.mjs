@@ -9,7 +9,13 @@ fs.mkdirSync(out, { recursive: true });
 const controls = manifest.files.map(row => {
   if (row.name === 'expiredDraft') return { ...row,
     old: row.old.replace('if (!saved) setAdvertising(false);',
-      'if (!saved) {\n        setAdvertising(false);\n        setAnalytics(false);\n      }'),
+      'if (!saved && !advertisingEdited.current) setAdvertising(next.advertising);\n      if (!saved && !explicitlyOpen.current) setAnalytics(false);'),
+  };
+  if (row.name === 'durableShadow') return { ...row,
+    old: 'const raw = window.localStorage.getItem(CONSENT_KEY);', new: 'const raw = safeLocalStorage.getItem(CONSENT_KEY);',
+  };
+  if (row.name === 'gpcRestore') return { ...row,
+    old: 'writeConsentPreferences({ advertising: false, analytics: saved.analytics }, saved.updatedAt);',
   };
   if (row.name === 'analyticsCollection') return { ...row,
     source: 'src/lib/consentPreferences.ts', alias: '@/lib/consentPreferences',
