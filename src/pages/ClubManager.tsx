@@ -949,8 +949,8 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                 talkRead={matchRead}
                 talkStale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
                 onChangeLineup={() => { setTacticsTile(null); g.setActiveTab('tactics'); }}
-                onQuickSim={(order, flankPlan) => { setHubPanel(null); setWatchMode(false); g.quickPlay(order, flankPlan); }}
-                onLive={flankPlan => { setHubPanel(null); setWatchMode(true); g.play(flankPlan); }}
+                onQuickSim={(order, flankPlan, phaseOrder) => { setHubPanel(null); setWatchMode(false); g.quickPlay(order, flankPlan, phaseOrder); }}
+                onLive={(flankPlan, phaseOrder) => { setHubPanel(null); setWatchMode(true); g.play(flankPlan, phaseOrder); }}
                 onBack={() => setHubPanel(null)}
               /></ScreenLoading>
             </div>

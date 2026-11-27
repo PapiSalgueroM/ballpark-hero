@@ -15,6 +15,8 @@ import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker
 import { opponentStyle } from '@/lib/clubManagerTactics';
 import { FlankRoutePicker } from './FlankRoutePicker';
 import { ReturnPressPicker } from './ReturnPressPicker';
+import { PhaseShapePicker } from './PhaseShapePicker';
+import { phasePositions } from '@/lib/clubManagerPhaseShapes';
 
 export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', minute, plus }: {
   career: CareerState;
@@ -39,6 +41,9 @@ export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', mi
         <FlankRoutePicker title="Flank buildup" plan={live.flankPlan} onChange={plan => onChange({ kind: 'flank', plan })} />
       <ReturnPressPicker career={career} live={live} minute={minute ?? 46} plus={plus}
         onSelect={target => onChange({ kind: 'returnPress', target })} />
+      <PhaseShapePicker order={live.phaseOrder}
+        positionsFor={order => phasePositions(career, live, minute === undefined ? undefined : { minute, plus }, order)}
+        onChange={order => onChange({ kind: 'phaseOrder', order })} />
       <InstructionsPicker
         value={liveInstructions(live)}
         onChange={instructions => onChange({ kind: 'instructions', instructions })}
