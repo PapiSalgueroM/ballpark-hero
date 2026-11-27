@@ -278,6 +278,7 @@ export function resolveSeasonDerbies(input: DerbyResolveInput): SeasonDerby[] {
   const myStr = clubStrength(world, input.club, input.year, input.elite);
   const isGK = input.position === "GK";
   const q = clampN(input.goals / Math.max(input.apps, 1) / 1.6, 0, 0.6);
+  let appsLeft = Math.min(input.leagueApps, input.apps);
   let goalsLeft = isGK ? 0 : Math.max(0, input.goals);
   const resolved: SeasonDerby[] = [];
   for (const d of found) {
@@ -287,7 +288,9 @@ export function resolveSeasonDerbies(input: DerbyResolveInput): SeasonDerby[] {
     const list: DerbyMeeting[] = [];
     for (let i = 0; i < meetings; i += 1) {
       const home = (i % 2 === 0) === homeFirst;
-      const played = rng() < input.leagueApps / 38;
+      // Keep drawing after the last appearance so the team score keeps its seed.
+      const played = rng() < input.leagueApps / 38 && appsLeft > 0;
+      if (played) appsLeft -= 1;
       const { gf, ga } = playDerbyMeeting(rng, myStr, theirStr, home, input.leagueTitle);
       let goals = 0;
       let won = false;

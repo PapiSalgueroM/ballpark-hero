@@ -12,7 +12,22 @@ export interface FinishedBingo {
   gaveUp: boolean;
   answers: string[];
 }
-const key = 'player_bingo_finished_v1';
+export const FINISHED_BINGO_KEY = 'player_bingo_finished_v1';
+
+export function withBingoLock(key: string, update: () => void) {
+  if (!navigator.locks) { update(); return; }
+  let pending = true;
+  const commit = () => {
+    if (!pending) return;
+    pending = false;
+    window.removeEventListener('pagehide', commit);
+    update();
+  };
+  // A tab can close or reload before the browser grants its queued lock.
+  window.addEventListener('pagehide', commit);
+  try { void navigator.locks.request(key, commit).catch(commit); }
+  catch { commit(); }
+}
 
 export function recallQuestions(tiles: BingoTile[], locked: Record<string, string>) {
   const placed = tiles.filter(tile => Object.prototype.hasOwnProperty.call(locked, tile.id));
@@ -30,7 +45,7 @@ export function recallQuestions(tiles: BingoTile[], locked: Record<string, strin
 
 export function readFinishedBingo(): FinishedBingo | null {
   try {
-    const r = JSON.parse(localStorage.getItem(key) ?? 'null') as FinishedBingo | null;
+    const r = JSON.parse(localStorage.getItem(FINISHED_BINGO_KEY) ?? 'null') as FinishedBingo | null;
     if (!r || typeof r.id !== 'string' || !r.id || !['won', 'lost'].includes(r.phase)
       || !['deck', 'strikes', 'banked', 'blackout'].includes(r.endReason) || typeof r.extended !== 'boolean' || typeof r.gaveUp !== 'boolean'
       || !Number.isInteger(r.strikes) || r.strikes < 0 || r.strikes > (r.extended ? 4 : 3)
@@ -45,15 +60,29 @@ export function readFinishedBingo(): FinishedBingo | null {
   } catch { return null; }
 }
 
-export function saveFinishedBingo(result: FinishedBingo, firstSave: boolean) {
-  try {
-    const previous = readFinishedBingo();
-    if (firstSave || (previous?.id === result.id && previous.answers.every((answer, i) => result.answers[i] === answer))) {
-      localStorage.setItem(key, JSON.stringify(result));
+function writeFinishedBingo(result: FinishedBingo) {
+  try { localStorage.setItem(FINISHED_BINGO_KEY, JSON.stringify(result)); } catch { /* The board is still available in memory. */ }
+}
+
+export function saveFinishedBingo(result: FinishedBingo) {
+  withBingoLock(FINISHED_BINGO_KEY, () => writeFinishedBingo(result));
+}
+
+export function answerBingoRecall(id: string, answers: string[], answer: string, onResult: (answers: string[]) => void) {
+  withBingoLock(FINISHED_BINGO_KEY, () => {
+    const saved = readFinishedBingo();
+    if (saved?.id === id && !saved.answers.every((name, i) => answers[i] === name)) {
+      onResult(saved.answers);
+      return;
     }
-  } catch { /* The board is still available in memory. */ }
+    const next = [...answers, answer];
+    if (saved?.id === id) writeFinishedBingo({ ...saved, answers: next });
+    onResult(next);
+  });
 }
 
 export function clearFinishedBingo(id: string) {
-  try { if (readFinishedBingo()?.id === id) localStorage.removeItem(key); } catch { /* Storage unavailable. */ }
+  withBingoLock(FINISHED_BINGO_KEY, () => {
+    try { if (readFinishedBingo()?.id === id) localStorage.removeItem(FINISHED_BINGO_KEY); } catch { /* Storage unavailable. */ }
+  });
 }

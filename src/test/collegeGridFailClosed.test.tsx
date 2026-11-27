@@ -45,6 +45,7 @@ const state = vi.hoisted(() => ({
   tableReads: 0,
   /** The same, never reset: the paged control's proof that it fired. */
   tableReadsEver: 0,
+  selectionTable: vi.fn(),
   acceptedLoads: 0,
   toasts: [] as unknown[][],
 }));
@@ -52,6 +53,7 @@ const state = vi.hoisted(() => ({
 vi.mock('@/integrations/supabase/client', () => {
   const paged = (process.env.CG_FAILCLOSED_CONTROL || '') === 'paged';
   const from = (table: string) => {
+    if (table === 'college_grid_selections' && state.selectionTable.getMockImplementation()) return state.selectionTable();
     if (table === 'college_grid_players') {
       state.tableReads += 1;
       state.tableReadsEver += 1;
@@ -221,6 +223,7 @@ beforeEach(() => {
   net.calls.length = 0;
   state.toasts.length = 0;
   state.tableReads = 0;
+  state.selectionTable.mockReset();
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
   vi.stubGlobal('fetch', (url: unknown) => { net.calls.push(String(url)); return net.respond(String(url)); });
 });
@@ -373,6 +376,93 @@ describe('College Grid fail closed (Round 1105)', () => {
     expect(dailyKeys()).toEqual([]);
     expect(state.toasts).toEqual([]);
   }, 120_000);
+});
+
+describe('College Grid community rarity', () => {
+  const counted = (count: number | null, error: unknown = null) => ({ count, error });
+  function serveSelections(counts: () => Promise<ReturnType<typeof counted>>, insert = vi.fn(async () => ({ error: null as unknown }))) {
+    state.selectionTable.mockImplementation(() => ({
+      select: () => {
+        const query = Object.assign(counts(), { eq: () => query });
+        return query;
+      },
+      insert,
+    }));
+    return insert;
+  }
+
+  it.each([
+    ['first selection', counted(0), counted(0), null, 101],
+    ['known crowd', counted(9), counted(2), null, 30],
+    ['unavailable total', counted(null, 'offline'), counted(2), null, null],
+    ['unavailable player count', counted(9), counted(null), null, null],
+    ['inconsistent counts', counted(1), counted(2), null, null],
+    ['failed insertion', counted(0), counted(0), 'offline', null],
+  ] as const)('keeps the correct pick and restores its rarity for %s', async (_, total, player, insertError, expected) => {
+    serveGood();
+    const counts = vi.fn().mockResolvedValueOnce(total).mockResolvedValueOnce(player);
+    const insert = serveSelections(counts, vi.fn(async () => ({ error: insertError })));
+    const view = await mount();
+    await pick(view, 0, yesName);
+    expect(insert).toHaveBeenCalledTimes(1);
+    expect(view.result.current.cells[0]).toMatchObject({ status: 'correct', playerName: yesName, rarity: expected });
+    expect(view.result.current.rarityScore).toBe(expected === null ? null : Math.min(100, expected));
+    view.unmount();
+    const reopened = await mount();
+    expect(reopened.result.current.guessesLeft).toBe(14);
+    expect(reopened.result.current.cells[0].rarity).toBe(expected);
+  });
+
+  it('holds the original cell and accepts one pick while the community write is pending', async () => {
+    serveGood();
+    let completeInsert!: (reply: { error: null }) => void;
+    const pending = new Promise<{ error: null }>(resolve => { completeInsert = resolve; });
+    const insert = serveSelections(async () => counted(0), vi.fn(() => pending));
+    const view = await mount();
+    await tick(50);
+    expect(view.result.current.keyReady).toBe(true);
+    act(() => view.result.current.setActiveCell(0));
+    let first!: Promise<void>, second!: Promise<void>;
+    await act(async () => {
+      first = view.result.current.submitGuess(yesName);
+      second = view.result.current.submitGuess(yesName);
+      await vi.advanceTimersByTimeAsync(5);
+    });
+    expect(view.result.current.validating).toBe(true);
+    act(() => view.result.current.setActiveCell(4));
+    expect(view.result.current.activeCell).toBe(0);
+    expect(insert).toHaveBeenCalledTimes(1);
+    await act(async () => { completeInsert({ error: null }); await Promise.all([first, second]); });
+    expect(view.result.current.activeCell).toBeNull();
+    expect(view.result.current.guessesLeft).toBe(14);
+    expect(view.result.current.cells[0].playerName).toBe(yesName);
+    act(() => view.result.current.setActiveCell(4));
+    expect(view.result.current.activeCell).toBe(4);
+  });
+
+  it('drops a pending count if another tab already filled that cell', async () => {
+    serveGood();
+    let releaseCount!: (reply: ReturnType<typeof counted>) => void;
+    const pending = new Promise<ReturnType<typeof counted>>(resolve => { releaseCount = resolve; });
+    const counts = vi.fn().mockResolvedValue(counted(0)).mockReturnValueOnce(pending);
+    const insert = serveSelections(counts);
+    const firstTab = await mount();
+    const otherTab = await mount();
+    await tick(50);
+    act(() => firstTab.result.current.setActiveCell(0));
+    let firstPick!: Promise<void>;
+    await act(async () => { firstPick = firstTab.result.current.submitGuess(yesName); });
+    expect(counts).toHaveBeenCalledTimes(1);
+    await pick(otherTab, 0, yesName);
+    const [key] = dailyKeys();
+    const otherSave = localStorage.getItem(key);
+    act(() => { window.dispatchEvent(new StorageEvent('storage', { key, newValue: otherSave })); });
+    expect(firstTab.result.current.cells[0].playerName).toBe(yesName);
+    await act(async () => { releaseCount(counted(0)); await firstPick; });
+    expect(insert).toHaveBeenCalledTimes(1);
+    expect(firstTab.result.current.correctCount).toBe(1);
+    expect(localStorage.getItem(key)).toBe(otherSave);
+  });
 });
 
 describe('decodeCollegeKey: null on any doubt, never a row from a damaged file', () => {

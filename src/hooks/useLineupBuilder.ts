@@ -221,15 +221,14 @@ export function useLineupBuilder() {
       setValidationError(STALE_DRAFT_MESSAGE);
       return;
     }
-    const usedNames = new Set(teamAssignments.filter((_, i) => i !== filledCount).map(t => t.name));
+    const usedNames = new Set(teamAssignments.map(t => t.name));
     const all = draftChoice.mode !== 'mixed'
       ? (draftChoice.mode === 'club-era' ? clubEraClubs : clubYearClubs).map(name => ({ name, isNation: false }))
       : [
           ...ALL_CLUBS.map(name => ({ name, isNation: false })),
           ...ALL_NATIONS.map(name => ({ name, isNation: true })),
         ];
-    const available = all.filter(t => !usedNames.has(t.name)
-      && (draftChoice.mode === 'mixed' || t.name !== teamAssignments[filledCount]?.name));
+    const available = all.filter(t => !usedNames.has(t.name));
     const pick = available[Math.floor(Math.random() * available.length)];
     if (pick) {
       const next = [...teamAssignments];

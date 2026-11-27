@@ -736,7 +736,9 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     intro: [
       "One mystery pro football player, six career clues, and a score that shrinks every time you need another hint. You start with nothing but a draft round and a year, and it becomes a staring contest with your own memory.",
       "The clue order is the difficulty curve. Draft info could be thousands of guys. The full team history should feel obvious, which is exactly why solving early feels so good.",
+      "Want to see which team drafts you? Create a prospect in NFL My Career.",
     ],
+    introLinks: [{ paragraph: 2, text: "NFL My Career", to: "/nfl-my-career" }],
     headings: {
       howToPlay: "How to play NFL Career Path, a free daily NFL guessing game",
       rules: "NFL Career Path rules: clues, scoring and difficulty",

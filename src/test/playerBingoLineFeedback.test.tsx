@@ -1,6 +1,6 @@
 // Fictional criteria and reveal pools exercise real page placement and line scoring.
 import './dailyReload/mocks';
-import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -39,8 +39,8 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); });
 
-async function start() {
-  const view = render(<HelmetProvider><MemoryRouter initialEntries={['/player-bingo']}><PlayerBingo /></MemoryRouter></HelmetProvider>);
+async function start(baseElement = document.body) {
+  const view = render(<HelmetProvider><MemoryRouter initialEntries={['/player-bingo']}><PlayerBingo /></MemoryRouter></HelmetProvider>, { baseElement });
   await waitFor(() => expect(view.getByTitle('Fixture tile 0')).toBeEnabled());
   return view;
 }
@@ -69,6 +69,26 @@ function intersection(view: View) {
 }
 
 describe('Player Bingo earned line feedback', () => {
+  it('keeps the higher personal best when an older board banks one line', async () => {
+    const older = await start(document.body.appendChild(document.createElement('div')));
+    const newer = await start(document.body.appendChild(document.createElement('div')));
+    intersection(newer);
+    giveUp(newer);
+    expect(newer.getByText(/^Best run/)).toHaveTextContent('3/12');
+    newer.unmount();
+
+    rowFive(older);
+    fireEvent.click(older.getByRole('button', { name: 'Bank the win' }));
+    expect(older.getByText(/^Best run/)).toHaveTextContent('3/12');
+    expect(older.container.querySelector('[data-fixture-share]')).toHaveAttribute('data-fixture-share', '1/12 lines · 100 pts');
+    older.unmount();
+
+    const reopened = render(<HelmetProvider><MemoryRouter initialEntries={['/player-bingo']}><PlayerBingo /></MemoryRouter></HelmetProvider>);
+    expect(reopened.getByText(/^Best run/)).toHaveTextContent('3/12');
+    expect(reopened.container.querySelector('[data-fixture-share]')).toHaveAttribute('data-fixture-share', '1/12 lines · 100 pts');
+    expect(recordCompletion.mock.calls.map(([, points]) => points)).toEqual([300, 100]);
+  });
+
   it('announces one added line as 100 while the actual total moves 100 to 200', async () => {
     const view = await start(); rowFive(view); continueRun(view);
     for (const cell of [0, 1, 2, 3]) place(view, cell);
@@ -133,6 +153,52 @@ describe('Player Bingo earned line feedback', () => {
     expect(view.getByRole('heading', { name: 'BLACKOUT!' })).toBeVisible();
     expect(view.container.querySelector('[data-fixture-share]')).toHaveAttribute('data-fixture-share', '12/12 lines · 1700 pts');
     expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/player-bingo', 1700, 'Tester');
+  });
+
+  it('resumes the first recorded recall answer when a second tab answers the same question', async () => {
+    const first = await start(document.body.appendChild(document.createElement('div')));
+    rowFive(first);
+    fireEvent.click(first.getByRole('button', { name: 'Bank the win' }));
+    const second = render(<HelmetProvider><MemoryRouter initialEntries={['/player-bingo']}><PlayerBingo /></MemoryRouter></HelmetProvider>,
+      { baseElement: document.body.appendChild(document.createElement('div')) });
+    const page = within(document.body);
+    fireEvent.click(first.getByRole('button', { name: 'Recall your board' }));
+    fireEvent.click(page.getByRole('button', { name: 'Fictional Reveal 1' }));
+    fireEvent.click(page.getByRole('button', { name: 'Close' }));
+
+    fireEvent.click(second.getByRole('button', { name: 'Recall your board' }));
+    fireEvent.click(page.getByRole('button', { name: 'Fictional Reveal 0' }));
+    expect(page.getByRole('list')).toHaveTextContent('You picked Fictional Reveal 1. Your placement was Fictional Reveal 0.');
+    fireEvent.click(page.getByRole('button', { name: 'Fictional Reveal 2' }));
+    fireEvent.click(page.getByRole('button', { name: 'Fictional Reveal 4' }));
+    expect(page.getByText('You remembered 2 of 3 placements.')).toBeVisible();
+    second.unmount();
+    act(() => window.dispatchEvent(new StorageEvent('storage', { key: 'player_bingo_finished_v1' })));
+    expect(first.getByRole('button', { name: 'Board recall 2/3' })).toBeEnabled();
+    first.unmount();
+    const reopened = render(<HelmetProvider><MemoryRouter initialEntries={['/player-bingo']}><PlayerBingo /></MemoryRouter></HelmetProvider>);
+    expect(reopened.getByRole('button', { name: 'Board recall 2/3' })).toBeEnabled();
+    expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/player-bingo', 100, 'Tester');
+  });
+
+  it('saves the line and finished board once when the page closes before its locks are granted', async () => {
+    const board = await start();
+    const waiting: (() => void)[] = [];
+    const locks = { request: (_key: string, commit: () => void) => { waiting.push(commit); return Promise.resolve(); } };
+    vi.stubGlobal('navigator', Object.create(navigator, { locks: { value: locks } }));
+    try {
+      rowFive(board);
+      fireEvent.click(board.getByRole('button', { name: 'Bank the win' }));
+      expect(waiting).toHaveLength(2);
+      expect(localStorage.getItem('player_bingo_best_lines_v2')).toBeNull();
+      expect(localStorage.getItem('player_bingo_finished_v1')).toBeNull();
+      act(() => { window.dispatchEvent(new Event('pagehide')); });
+      expect(board.container).toHaveTextContent('Best run 1/12');
+      expect(JSON.parse(localStorage.getItem('player_bingo_finished_v1')!)).toMatchObject({ phase: 'won', seen: 5 });
+      const writes = vi.spyOn(Storage.prototype, 'setItem');
+      act(() => waiting.forEach(commit => commit()));
+      expect(writes).not.toHaveBeenCalled();
+    } finally { vi.unstubAllGlobals(); }
   });
 
   it('announces earned feedback then clears after 1800ms with static reduced-motion binding', async () => {

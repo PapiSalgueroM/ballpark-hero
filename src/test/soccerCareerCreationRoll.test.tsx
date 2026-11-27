@@ -354,10 +354,14 @@ describe('Soccer Career rating98 diagnostic', () => {
     await import('@/components/soccer-career/SoccerCareerBuildEditor');
     await act(async () => { fireEvent.click(view.getByRole('button', { name: /Customize your build/i })); });
     const overall = view.getByRole('textbox', { name: /^Starting overall$/ });
+    fireEvent.change(overall, { target: { value: '7' } });
+    expect(overall).toHaveValue('7');
     fireEvent.change(overall, { target: { value: '72' } }); fireEvent.blur(overall);
     const ceiling = view.getByRole('textbox', { name: /^Starting growth ceiling$/ });
     fireEvent.change(ceiling, { target: { value: '45' } }); fireEvent.blur(ceiling);
     expect(ceiling).toHaveValue('74');
+    fireEvent.change(ceiling, { target: { value: '8' } });
+    expect(ceiling).toHaveValue('8');
     fireEvent.change(ceiling, { target: { value: '88' } }); fireEvent.blur(ceiling);
     expect(ceiling).toHaveValue('88');
     expect(Number(view.getByText('Room to grow', { exact: true }).parentElement!.lastElementChild!.textContent)).toBe(16);

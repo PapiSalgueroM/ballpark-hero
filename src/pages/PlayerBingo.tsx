@@ -28,7 +28,7 @@ import { FirstLineBanner, LineFlash } from '@/components/player-bingo/LineBanner
 
 /** Why the run ended, for result-screen copy. */
 import { BoardRecall } from '@/components/player-bingo/BoardRecall';
-import { clearFinishedBingo, readFinishedBingo, saveFinishedBingo, type BingoEnd, type BingoTile } from '@/lib/playerBingoRecall';
+import { answerBingoRecall, clearFinishedBingo, FINISHED_BINGO_KEY, readFinishedBingo, saveFinishedBingo, withBingoLock, type BingoEnd, type BingoTile } from '@/lib/playerBingoRecall';
 
 type EndReason = BingoEnd | null;
 
@@ -182,13 +182,29 @@ const PlayerBingo = () => {
   const blackout = tilesFilled >= BOARD_SIZE;
   const score = linesCompleted * 100 + (blackout ? 500 : 0);
   useEffect(() => {
-    if ((phase !== 'won' && phase !== 'lost') || !endReason) return;
-    const firstSave = !boardId.current;
-    if (firstSave) boardId.current = crypto.randomUUID();
+    if ((phase !== 'won' && phase !== 'lost') || !endReason || boardId.current) return;
+    boardId.current = crypto.randomUUID();
     saveFinishedBingo({ id: boardId.current, phase, endReason,
       tiles: shownTiles.map(({ id, label, icon }) => ({ id, label, icon })), locked, strikes,
-      seen: seenCount, gaveUp, extended, answers }, firstSave);
-  }, [phase, endReason, shownTiles, locked, strikes, seenCount, gaveUp, extended, answers]);
+      seen: seenCount, gaveUp, extended, answers: [] });
+  }, [phase, endReason, shownTiles, locked, strikes, seenCount, gaveUp, extended]);
+  useEffect(() => {
+    if (phase !== 'won' && phase !== 'lost') return;
+    const syncRecall = (event: StorageEvent) => {
+      if (event.key !== FINISHED_BINGO_KEY) return;
+      const saved = readFinishedBingo();
+      if (saved && saved.id === boardId.current) setAnswers(saved.answers);
+    };
+    window.addEventListener('storage', syncRecall);
+    return () => window.removeEventListener('storage', syncRecall);
+  }, [phase]);
+  const answerRecall = (index: number, answer: string) => {
+    if (index !== answers.length) return;
+    const id = boardId.current;
+    answerBingoRecall(id, answers, answer, next => {
+      if (id === boardId.current) setAnswers(next);
+    });
+  };
   const newBoard = () => { if (data) start(data, criteria); else void boot(); };
 
   /** Move to the next reveal, or end the run if the deck is spent. */
@@ -210,11 +226,15 @@ const PlayerBingo = () => {
       cells.forEach((c, i) => { if (c && next[c.id]) nextIdxs.add(i); });
       const linesNow = countCompletedLines(nextIdxs);
       if (linesNow > 0) {
-        setBest(b => {
-          const nextBest = Math.max(b, linesNow);
-          try { localStorage.setItem(BEST_KEY, String(nextBest)); } catch { /* private mode */ }
-          return nextBest;
-        });
+        const updateBest = () => {
+          const savedBest = loadBest();
+          const nextBest = Math.max(best, savedBest, linesNow);
+          if (nextBest > savedBest) {
+            try { localStorage.setItem(BEST_KEY, String(nextBest)); } catch { /* private mode */ }
+          }
+          setBest(previous => Math.max(previous, nextBest));
+        };
+        withBingoLock(BEST_KEY, updateBest);
       }
       // Blackout: the whole board is filled, instant win with the big bonus.
       if (Object.keys(next).length >= BOARD_SIZE) {
@@ -481,8 +501,7 @@ const PlayerBingo = () => {
             </div>
 
             {(phase === 'won' || phase === 'lost') && <div className="text-center">
-              <BoardRecall tiles={shownTiles} locked={locked} answers={answers} onAnswer={(index, answer) =>
-                setAnswers(previous => previous.length === index ? [...previous, answer] : previous)} />
+              <BoardRecall tiles={shownTiles} locked={locked} answers={answers} onAnswer={answerRecall} />
             </div>}
             {/* Round 644: both screens record the score they show. Before it
                 neither passed one, so 1,966 finishes stored no score and a

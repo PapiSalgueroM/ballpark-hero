@@ -235,6 +235,29 @@ function mulberry32(seed: number): () => number {
 const SEEDS = 25;
 const REROLLS = 12;
 
+it.each([
+  { team: { name: 'Real Madrid', isNation: false }, draw: 0 },
+  { team: { name: 'Cameroon', isNation: true }, draw: 1 - Number.EPSILON },
+])('a Mixed reroll replaces $team.name and keeps the other ten assignments', ({ team, draw }) => {
+  const otherTeams = clubs.slice(1, 11).map(name => ({ name, isNation: false }));
+  const assignments = [otherTeams[0], team, ...otherTeams.slice(1)];
+  const slots = [[0, { ...FORMATIONS['4-4-2'][0], playerName: 'Fixture Keeper',
+    assignedTeam: assignments[0].name, isNation: false }]];
+  localStorage.setItem(draftKey, JSON.stringify({ formation: '4-4-2', draftChoice: { mode: 'mixed' }, teamAssignments: assignments, slots }));
+  const page = render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
+  vi.mocked(Math.random).mockReturnValue(draw);
+  fireEvent.click(screen.getByTitle('Reroll: get a different team'));
+  const saved = JSON.parse(localStorage.getItem(draftKey)!);
+  const replacement = saved.teamAssignments[1];
+  expect(assignments.map(t => t.name)).not.toContain(replacement.name);
+  expect(saved.teamAssignments).toEqual([otherTeams[0], replacement, ...otherTeams.slice(1)]);
+  expect(saved.slots).toEqual(slots);
+  page.unmount();
+  const resumed = renderHook(() => useLineupBuilder());
+  expect(api(resumed).currentTeam).toEqual(replacement);
+  expect(api(resumed).filledCount).toBe(1);
+});
+
 describe('Build Your XI draws under a seeded generator', () => {
   it('a Club year draft deals clubs only, never a withheld club, and every reroll moves to another club', async () => {
     expect(CLUB_YEAR_WITHHELD.has('Arsenal'),

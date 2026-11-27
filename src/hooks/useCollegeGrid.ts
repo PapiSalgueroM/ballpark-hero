@@ -44,7 +44,7 @@ import { COLLEGE_KEY_URLS } from '@/lib/collegeGridKey';
  */
 
 type GridAction =
-  | { t: 'ok'; cellIndex: number; playerName: string; rarity: number; board: string }
+  | { t: 'ok'; cellIndex: number; playerName: string; rarity: number | null; board: string }
   | { t: 'x'; board: string; cellIndex?: number; playerName?: string };
 
 const GUESS_LIMIT = 15;
@@ -127,6 +127,7 @@ export function useCollegeGrid() {
     puzzle: dailyPuzzle,
     guesses: dailyActions,
     addGuess: addDailyGuess,
+    takeNewerSave,
     gameStatus: rawDailyStatus,
     isLoading: dailyLoading,
     reset,
@@ -139,6 +140,8 @@ export function useCollegeGrid() {
   });
 
   const puzzle = dailyPuzzle ?? collegeGridPuzzles[0];
+  const latestActions = useRef(dailyActions);
+  latestActions.current = dailyActions;
 
   /* A restored log from another board (or from before actions carried a
      board id) is cleared before play; until then the board stays hidden. */
@@ -150,10 +153,7 @@ export function useCollegeGrid() {
   const isLoading = dailyLoading || staleLog;
 
   const [activeCell, setActiveCellNow] = useState<number | null>(null);
-  /* True while a pick waits for the key. The open cell does not move during
-     that wait: the pick is judged for the cell it was made on, so a tap on
-     another cell would only move the highlight and the prompt to a cell the
-     spinner is not about, and the box would then close on it. */
+  /* Keep the prompt on this cell while the key or community counts are pending. */
   const pickWaits = useRef(false);
   const setActiveCell = useCallback((cell: number | null) => {
     if (!pickWaits.current) setActiveCellNow(cell);
@@ -183,7 +183,7 @@ export function useCollegeGrid() {
   const gameStatus: FootballGridGameStatus = rawDailyStatus !== 'playing' ? 'complete' : 'playing';
 
   const rarityScore = useMemo(() => {
-    if (correctActions.length === 0) return null;
+    if (!correctActions.length || correctActions.some(a => a.rarity == null)) return null;
     const avg = correctActions.reduce((sum, a) => sum + Math.min(a.rarity, 100), 0) / correctActions.length;
     return Math.round(avg);
   }, [correctActions]);
@@ -222,22 +222,24 @@ export function useCollegeGrid() {
   }, [correctActions, correctCount, dailyActions, getRowCol, gridData, guessesLeft, isLoading, rawDailyStatus]);
 
   const fetchRarity = useCallback(
-    async (puzzleId: string, cellIndex: number, playerName: string): Promise<number> => {
+    async (puzzleId: string, cellIndex: number, playerName: string): Promise<number | null> => {
       try {
-        const { count: totalCount } = await supabase
+        const { count: totalCount, error: totalError } = await supabase
           .from('college_grid_selections')
           .select('*', { count: 'exact', head: true })
           .eq('puzzle_id', puzzleId)
           .eq('cell_index', cellIndex);
-        const { count: playerCount } = await supabase
+        if (totalError || totalCount === null) return null;
+        const { count: playerCount, error: playerError } = await supabase
           .from('college_grid_selections')
           .select('*', { count: 'exact', head: true })
           .eq('puzzle_id', puzzleId)
           .eq('cell_index', cellIndex)
           .eq('player_name', playerName.toLowerCase());
-        return rarityPercent(totalCount ?? 0, playerCount ?? 0);
+        if (playerError || playerCount === null || playerCount > totalCount) return null;
+        return rarityPercent(totalCount, playerCount);
       } catch {
-        return 50;
+        return null;
       }
     },
     [],
@@ -245,8 +247,8 @@ export function useCollegeGrid() {
 
   const submitGuess = useCallback(
     async (playerName: string) => {
-      if (activeCell === null || gameStatus !== 'playing' || validating || staleLog) return;
-      if (cells[activeCell].status === 'correct') return;
+      if (activeCell === null || gameStatus !== 'playing' || pickWaits.current || staleLog) return;
+      if (cells[activeCell].status === 'correct' || takeNewerSave()) return;
 
       /* The cell and its two labels are captured before anything is awaited,
          so a tap on another cell while the key is still coming cannot move
@@ -254,6 +256,7 @@ export function useCollegeGrid() {
       const capturedCell = activeCell;
       const { rowAttr, colAttr } = getRowCol(capturedCell);
       const board = puzzle.id;
+      const stillCurrent = () => mounted.current && latestActions.current === dailyActions && !takeNewerSave();
 
       /* ROUND 1105: FAIL CLOSED WHILE THE KEY IS MISSING. Both key files are
          asked for on mount and a player needs seconds to tap a cell and type a
@@ -281,7 +284,7 @@ export function useCollegeGrid() {
         }
         /* He left the page while the pick waited: drop it. Nothing is written
            and nothing is said. */
-        if (!mounted.current) return;
+        if (!stillCurrent()) return;
         if (!data) {
           toast(KEY_UNVERIFIED);
           return;
@@ -317,6 +320,7 @@ export function useCollegeGrid() {
       }
 
       setValidating(true);
+      pickWaits.current = true;
 
       try {
         if (verdict === 'yes') {
@@ -324,27 +328,31 @@ export function useCollegeGrid() {
              formula adds the player's own row itself; inserting first counted
              it twice (a first pick read 100 instead of the unicorn 101). */
           const rarity = await fetchRarity(board, capturedCell, player.name);
-          await supabase.from('college_grid_selections').insert({
-            puzzle_id: board,
-            cell_index: capturedCell,
-            player_name: player.name.toLowerCase(),
-          });
-          addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: player.name, rarity, board });
+          if (!stillCurrent()) return;
+          let recordedRarity: number | null = null;
+          try {
+            const { error } = await supabase.from('college_grid_selections').insert({
+              puzzle_id: board,
+              cell_index: capturedCell,
+              player_name: player.name.toLowerCase(),
+            });
+            if (!error) recordedRarity = rarity;
+          } catch { /* The verified pick still counts locally. */ }
+          if (stillCurrent()) addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: player.name, rarity: recordedRarity, board });
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName: player.name });
           setTimeout(() => setWrongFlash(null), 1500);
           addDailyGuess({ t: 'x', board, cellIndex: capturedCell, playerName: player.name });
         }
-      } catch {
-        /* The verdict is already in hand; only the rarity write can fail,
-           and a correct pick still counts without its crowd number. */
-        if (verdict === 'yes') addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: player.name, rarity: 50, board });
       } finally {
-        setValidating(false);
-        setActiveCell(null);
+        pickWaits.current = false;
+        if (mounted.current) {
+          setValidating(false);
+          setActiveCellNow(null);
+        }
       }
     },
-    [activeCell, gameStatus, validating, gridData, staleLog, cells, puzzle, getRowCol, fetchRarity, addDailyGuess, loadKey, setActiveCell],
+    [activeCell, gameStatus, gridData, staleLog, cells, puzzle, getRowCol, fetchRarity, addDailyGuess, dailyActions, takeNewerSave, loadKey],
   );
 
   useGameCompletion('college-grid', rawDailyStatus !== 'playing', correctCount * 100);

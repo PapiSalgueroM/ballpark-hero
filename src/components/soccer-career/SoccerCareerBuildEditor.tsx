@@ -47,12 +47,10 @@ function NumberStepper({ value, min, max, onChange, label, disabled, wide }: {
     if (digits === "" || digits === "-") { setDraft(digits); return; }
     const n = Number(digits);
     if (!Number.isFinite(n)) { setDraft(""); return; }
+    // The first 7 in 72 is below the overall minimum while typing.
+    if (n >= 0 && n < min) { setDraft(digits); return; }
     const c = clampTo(n);
     onChange(c);
-    /* Found by driving it at 390 wide: typing 99999 into the overall box left
-       99999 sitting in it while the career underneath was correctly 99, which
-       reads as a broken control even though nothing was broken. The box keeps
-       what you typed only while what you typed is legal. */
     setDraft(c === n ? digits : String(c));
   };
   const btn = "h-8 w-8 shrink-0 rounded-md border border-border bg-muted/20 text-[11px] font-black text-foreground disabled:opacity-30 active:scale-95 transition-transform";
@@ -68,8 +66,11 @@ function NumberStepper({ value, min, max, onChange, label, disabled, wide }: {
         value={draft ?? String(value)}
         onChange={(e) => commit(e.target.value)}
         onFocus={(e) => e.currentTarget.select()}
-        onBlur={() => setDraft(null)}
-        onKeyDown={(e) => { if (e.key === "Enter") { setDraft(null); (e.currentTarget as HTMLInputElement).blur(); } }}
+        onBlur={() => {
+          if (draft && draft !== "-" && Number(draft) < min) onChange(min);
+          setDraft(null);
+        }}
+        onKeyDown={(e) => { if (e.key === "Enter") e.currentTarget.blur(); }}
         className={`${wide ? "w-16" : "w-12"} h-8 shrink-0 rounded-md border border-border bg-background text-center text-sm font-black tabular-nums focus:border-emerald-500`}
       />
       <button type="button" aria-label={`${label} up 1`} disabled={disabled || value >= max} onClick={() => onChange(clampTo(value + 1))} className={btn}>+1</button>

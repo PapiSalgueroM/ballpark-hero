@@ -63,7 +63,8 @@ vi.mock('@/components/game/PostGameStats', () => ({ default: () => null }));
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import SoccerCareer from '@/pages/SoccerCareer';
-import { readSeasonDerbies, derbyRecord, DERBY_HELP_RULES } from '@/lib/soccerCareerDerby';
+import { readSeasonDerbies, resolveSeasonDerbies, derbyRecord, DERBY_HELP_RULES } from '@/lib/soccerCareerDerby';
+import { savedDerbyHistory } from '@/lib/soccerCareerDerbyHistory';
 import { GameHelp } from '@/components/game/GameHelp';
 import { loadGameContent } from '@/data/gameContent/loader';
 import { flatGuide } from '@/data/gameContent/guideShape';
@@ -139,6 +140,30 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); Math.random = realRandom; });
 afterAll(async () => { await new Promise(r => setTimeout(r, 1500)); });
+
+describe('Soccer Career: derby appearances', () => {
+  it.each([
+    { apps: 1, leagueApps: 1, appearance: 1 },
+    { apps: 8, leagueApps: 1, appearance: 1 },
+    { apps: 1, leagueApps: 38, appearance: 0 },
+  ])('fits every rival into $apps total and $leagueApps league appearances', ({ apps, leagueApps, appearance }) => {
+    const derbies = resolveSeasonDerbies({
+      club: 'Arsenal', league: 'Premier League', year: 2027, clubs, elite: E.ELITE_CLUBS,
+      position: 'ST', apps, leagueApps, goals: 1, leagueTitle: false,
+      seedKey: 'Academy 179|Arsenal|2027|1|1|0|6.6|derby',
+    });
+    const season = { type: 'playing', club: 'Arsenal', apps, leagueApps, goals: 1, derbies };
+    const history = savedDerbyHistory(JSON.parse(JSON.stringify({ seasons: [season] })));
+    expect(history.seasons[0].status).toBe('saved');
+    expect(history.player.played).toBe(1);
+    expect(history.meetings.map(m => [m.rival, m.home, m.gf, m.ga])).toEqual([
+      ['Tottenham', true, 3, 0], ['Tottenham', false, 2, 0],
+      ['Chelsea', false, 0, 3], ['Chelsea', true, 0, 1],
+    ]);
+    expect(history.meetings[appearance].played).toBe(true);
+    expect(history.missed).toBe(3);
+  });
+});
 
 describe('Soccer Career: derbies on the real page', () => {
   it('a derby season shows in the summary, the timeline and the career stats', async () => {

@@ -1,3 +1,15 @@
+### November 26, 2026. Ranked game pages
+
+The November traffic rankings put Soccer Career, the homepage and Club Manager first. The site's 25 highest-clicked Google landing pages all appear in the index. Two of Lovable's top ten by views are missing. The site links to Stadium Tycoon in the Club Manager guide and to NFL My Career in the NFL Career Path guide. Both links are in the saved HTML that a crawler receives. [Page rankings and measurement sources](TRAFFIC-PRIORITIES-2026-11-26.md)
+
+College Grid keeps a verified answer when the community count is unavailable. The pick stays on its original cell, and the board and share result omit the unmeasured rarity. Player Bingo keeps the higher personal best across tabs. Two tabs reopening the same board recall keep the first recorded answer to each question. Both games were replayed in signed-out Chrome at 390 and 1366 pixels against a local build.
+
+New Soccer Career seasons cap a player's derby appearances at both the league and season appearance totals. In the one-appearance Arsenal replay the record book retains all four team fixtures. Across 13,440 paired simulations, all 42,240 team scores and venues matched the previous engine. Existing career saves are read as recorded. The separate historical engine comparison mentioned in the release 1090 handoff is still open.
+
+Soccer Career now accepts starting ratings entered one digit at a time. Build Your XI always deals a different team in a mixed reroll while preserving the rest of the lineup. Both fixes passed mobile and desktop Chromium replays, including saved games after reload. The 25 search leaders plus seven other host leaders passed all 64 mobile and desktop page checks.
+
+The local type check, build, 249 focused game tests and 17 site and guide checks passed. Signed-out mobile and desktop browser runs followed both added links into the games.
+
 Stadium help follows the actual matchday offer
 
 The worked examples use the engine quotes for junior admissions and programme sales. At a 120-seat ground the offer sets aside 12 places and adds three supporters. Printing 15 programmes costs $30 and breaks even at ten $3 sales.

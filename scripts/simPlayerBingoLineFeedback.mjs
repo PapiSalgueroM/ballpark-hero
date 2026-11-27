@@ -8,11 +8,12 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const control = process.env.PLAYER_BINGO_LINE_CONTROL || '';
-assert.ok(['', 'constant', 'delta', 'status', 'motion'].includes(control));
+assert.ok(['', 'constant', 'delta', 'status', 'motion', 'best', 'recall', 'close'].includes(control));
+const caseCount = 10;
 const files = [
   'src/pages/PlayerBingo.tsx', 'src/components/player-bingo/LineBanner.tsx',
   'src/lib/playerBingo.ts', 'src/components/game/ResultScreen.tsx',
-  'src/test/playerBingoLineFeedback.test.tsx',
+  'src/test/playerBingoLineFeedback.test.tsx', 'src/lib/playerBingoRecall.ts',
 ];
 const holdSource = bytes => ({ bytes, source: bytes.toString('utf8').replaceAll('\r\n', '\n') });
 const held = await Promise.all(files.map(async file => [file, holdSource(await readFile(path.join(root, file)))]));
@@ -20,6 +21,9 @@ const oneLine = 'announces one added line as 100 while the actual total moves 10
 const twoLines = 'announces two intersection lines as 200 while the actual total moves 100 to 300';
 const accessible = 'announces earned feedback then clears after 1800ms with static reduced-motion binding';
 const mutations = {
+  best: [0, 'const savedBest = loadBest();', 'const savedBest = 0;', ['keeps the higher personal best when an older board banks one line']],
+  recall: [5, 'onResult(saved.answers);', 'onResult([...answers, answer]);', ['resumes the first recorded recall answer when a second tab answers the same question']],
+  close: [5, "window.addEventListener('pagehide', commit);", "window.addEventListener('pageshow', commit);", ['saves the line and finished board once when the page closes before its locks are granted']],
   constant: [1, '+{points} bonus', '+100 bonus', [twoLines]],
   delta: [0, 'points: (linesNow - linesCompleted) * 100', 'points: linesNow * 100', [oneLine, twoLines]],
   status: [1, 'role="status"', '', [accessible]],
@@ -48,7 +52,7 @@ try {
     assert.notEqual(changed, source, 'Disposable source actually changes');
     const copy = path.join(folder, path.basename(files[index]));
     await writeFile(copy, changed); owned.push(copy);
-    const alias = index === 0 ? '@/pages/PlayerBingo' : '@/components/player-bingo/LineBanner';
+    const alias = files[index].replace(/^src\//, '@/').replace(/\.tsx?$/, '');
     env.NO_DOUBLE_SWAP = JSON.stringify({ [alias]: copy });
   }
   const reportFile = path.join(folder, 'report.json'); owned.push(reportFile);
@@ -60,25 +64,25 @@ try {
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   assert.equal(report.numPendingTests, 0);
   const rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, 7);
+  assert.equal(rows.length, caseCount);
   if (control) {
     const intended = mutations[control][3];
     assert.equal(run.status, 1);
     assert.equal(report.numFailedTests, intended.length);
-    assert.equal(report.numPassedTests, 7 - intended.length);
+    assert.equal(report.numPassedTests, caseCount - intended.length);
     for (const title of intended) assert.equal(rows.filter(row => row.title === title).length, 1);
     for (const row of rows) {
       assert.equal(row.status, intended.includes(row.title) ? 'failed' : 'passed', row.fullName);
       if (row.status === 'failed') assert.match(row.failureMessages.join('\n'), /expect\(element\)\.toHave(?:TextContent|Attribute|Class)/);
     }
     console.log(`simPlayerBingoLineFeedback ${control}: one executable behavior changed in a disposable component or page.`);
-    console.log(`simPlayerBingoLineFeedback ${control}: ${intended.length} exact earned-feedback assertions reject the control, ${7 - intended.length} independent cases pass.`);
+    console.log(`simPlayerBingoLineFeedback ${control}: ${intended.length} targeted cases reject the control, ${caseCount - intended.length} independent cases pass.`);
     console.log(`simPlayerBingoLineFeedback ${control}: first-line bank, full blackout, wrong guess, skip and deck exhaustion accounting remain green.`);
     console.log(`simPlayerBingoLineFeedback ${control}: ${rows.find(row => row.status === 'failed').failureMessages[0].split('\n')[0]}`);
   } else {
     if (run.status !== 0) process.stdout.write(output);
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 7); assert.equal(report.numFailedTests, 0);
-    console.log('simPlayerBingoLineFeedback: seven actual page placement and completion cases pass, none skipped.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, caseCount); assert.equal(report.numFailedTests, 0);
+    console.log(`simPlayerBingoLineFeedback: ${caseCount} page placement, completion and saved board cases pass, none skipped.`);
     console.log('simPlayerBingoLineFeedback: real line counting earns 100 for one added line and 200 for an intersection, matching displayed totals.');
     console.log('simPlayerBingoLineFeedback: first-line bank is 100, blackout is 1700, shares and once-only result booking stay exact.');
     console.log('simPlayerBingoLineFeedback: status feedback keeps its 1800ms lifetime and uses motion-safe animation classes.');
