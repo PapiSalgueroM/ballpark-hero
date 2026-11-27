@@ -75,4 +75,7 @@ it('links a finish to its delivery, reads a later review and leaves the live sco
   expect(live).not.toHaveTextContent('scored');
   view.rerender(<RehearsedCornerReview play={[otherGoal]} routine={routine} />);
   expect(screen.getByRole('region', { name: 'Rehearsed corners' })).toHaveTextContent('0 rehearsed deliveries');
+  const unfamiliar = { ...routine, version: 2 };
+  view.rerender(<RehearsedCornerReview play={play} routine={unfamiliar} />);
+  expect(screen.queryByRole('region', { name: 'Rehearsed corners' })).toBeNull();
 });

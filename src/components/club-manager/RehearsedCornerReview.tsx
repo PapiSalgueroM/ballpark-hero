@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { minuteLabel, type CornerRoutine, type PlayEvent } from '@/lib/clubManager';
+import { isCornerRoutine, minuteLabel, type CornerRoutine, type PlayEvent } from '@/lib/clubManager';
 import { MadeUpTag } from './SquadScreen';
 
 export function RehearsedCornerReview({ play, routine, live = false }: {
@@ -8,6 +8,7 @@ export function RehearsedCornerReview({ play, routine, live = false }: {
   live?: boolean;
 }) {
   const [step, setStep] = useState(0);
+  if (!isCornerRoutine(routine)) return null;
   const corners = play.filter(e => e.kind === 'corner' && e.cornerDelivery)
     .sort((a, b) => a.minute - b.minute || (a.plus ?? 0) - (b.plus ?? 0));
   const title = live ? 'Latest rehearsed corner' : 'Rehearsed corners';
