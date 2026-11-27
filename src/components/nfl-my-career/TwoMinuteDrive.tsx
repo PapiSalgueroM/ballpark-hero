@@ -55,6 +55,17 @@ function DriveRoom({ scenario, onBack, onFinish, playoff }: { scenario: DriveSce
   const snap = (action: Action) => { if (driveStep(scenario, d, action)) commit([...card.actions, action]); };
   const down = ['1st', '2nd', '3rd', '4th'][d.down - 1];
   const distance = d.line === 100 ? 'goal' : d.line - d.spot;
+  let before = kickoff(scenario);
+  const film = card.actions.map((action, i) => {
+    const after = driveStep(scenario, before, action)!;
+    const label = action === 'timeout' ? 'Timeout' : action === 'spike' ? 'Spike' : action === 'kick' ? 'Field goal' : plays[action].name;
+    const row = <li key={i} className="border-t border-border py-2">
+      <strong>{gameClock(before.seconds)} · {fieldPosition(before.spot)} · {label}</strong>
+      <p>{after.recap}</p>
+    </li>;
+    before = after;
+    return row;
+  });
 
   return <div className="space-y-3">
     <div className="flex items-center justify-between gap-2">
@@ -71,12 +82,15 @@ function DriveRoom({ scenario, onBack, onFinish, playoff }: { scenario: DriveSce
       </div>
       <div aria-hidden="true" className="relative my-2 h-14 overflow-hidden rounded-md border-2 border-emerald-200/80 bg-emerald-900">
         <div className="absolute inset-0" style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent 0, transparent calc(10% - 1px), #86b8a0 calc(10% - 1px), #86b8a0 10%)' }} />
+        <span className="absolute inset-y-0 right-0 w-[38%] bg-emerald-300/15" />
+        <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 font-mono text-[10px] font-bold text-emerald-100">50</span>
         <span className="absolute inset-y-0 w-1 -translate-x-1/2 bg-yellow-300" style={{ left: 'min(calc(100% - 2px), ' + d.line + '%)' }} />
         <span className="absolute inset-y-0 w-0.5 bg-white motion-safe:transition-[left]" style={{ left: 'clamp(0.6rem, ' + d.spot + '%, calc(100% - 0.6rem))' }}>
           <span className="absolute top-1/2 h-3 w-5 -translate-x-1/2 -translate-y-1/2 -rotate-12 rounded-[70%] border-2 border-white bg-amber-800" />
         </span>
       </div>
       <p className="text-sm font-semibold">{fieldPosition(d.spot)}{!d.verdict && ' · ' + down + ' and ' + distance + ' · ' + (d.running ? 'Clock running' : 'Clock stopped')}</p>
+      <p className="mt-1 text-xs text-muted-foreground">Yellow line to gain. Shaded area is field goal range.</p>
     </div>
     {d.recap && <p className="rounded-lg border-l-4 border-primary bg-muted p-2 text-sm" role="status">{d.recap}</p>}
     {d.verdict ? <section className="space-y-2">
@@ -94,6 +108,10 @@ function DriveRoom({ scenario, onBack, onFinish, playoff }: { scenario: DriveSce
           <button className={button} type="button" onClick={() => snap('spike')}>Spike the ball</button></div></div>}
       {fieldGoalYards(d) <= 55 && <button className={button} type="button" onClick={() => snap('kick')}>Kick from {fieldGoalYards(d)} yards for {scenario.deficit > 3 ? 'three points' : scenario.deficit === 3 ? 'overtime' : 'the win'}</button>}
     </>}
+    {film.length > 0 && <details className="rounded-lg border border-border px-3 text-sm">
+      <summary className="cursor-pointer py-3 font-semibold">Drive film ({film.length})</summary>
+      <ol>{film}</ol>
+    </details>}
     {saveNote && <p role="status" className="text-xs">{saveNote}</p>}
   </div>;
 }
@@ -172,10 +190,10 @@ export function TwoMinuteDriveBoard({ onFinish }: { onFinish?: Finish } = {}) {
   if (scenario) return <DriveRoom key={scenario.id} scenario={scenario} onFinish={onFinish} onBack={() => { returnTo.current = scenario.id; setScenario(null); }} />;
   return <div className="space-y-3">
     <DriveRules />
-    <button id="two-minute-playoff" type="button" className={button + ' w-full border-primary/50 text-left'} onClick={() => setPostseason(true)}>
+    <button id="two-minute-playoff" type="button" className={button + ' w-full border-primary/50 bg-primary/10 text-left'} onClick={() => setPostseason(true)}>
       <strong className="block">Playoff Run</strong><span className="text-xs font-normal">Three knockout drives. One shared timeout.</span>
     </button>
-    <div className="grid gap-2">{drives.map(s => {
+    <div className="grid gap-2 sm:grid-cols-2">{drives.map(s => {
       const card = read(s), last = replayDrive(s, card.actions);
       return <button type="button" id={'two-minute-' + s.id} className={button + ' text-left'} key={s.id} onClick={() => setScenario(s)}>
         <span className="flex items-baseline justify-between gap-2"><strong>{s.name}</strong><span className="font-mono">{gameClock(s.seconds)}</span></span>
