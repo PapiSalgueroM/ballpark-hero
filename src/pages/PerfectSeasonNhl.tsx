@@ -28,6 +28,8 @@ import { perfectSeasonTagline } from '@/lib/perfectSeasonOdds';
 import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
 import { BestSoFar, SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 import { SeasonVerdict } from '@/components/perfect-season/SeasonVerdict';
+import { NhlCupSeries } from '@/components/perfect-season/NhlCupSeries';
+import { makeCupRun } from '@/lib/nhlCupSeries';
 import {
   decodeNhlDailyDraft, nhlDailyDraftKey, nhlDailyWheelIdentity, readNhlDailyDraft, writeNhlDailyDraft,
   NHL_DAILY_REROLLS, NHL_DAILY_SPIN_TRIES, type NhlPerfectSeasonDraft,
@@ -90,6 +92,7 @@ const PerfectSeasonNhl = () => {
   const [dailySaveWarning, setDailySaveWarning] = useState(false);
   const [settleRetry, setSettleRetry] = useState(0);
   const terminalHeld = useRef(false);
+  const seasonSeed = useRef(0);
 
   const openSlots = useMemo(
     () => NHL_SLOTS.filter(s => !picks[s.key]).map(s => s.key),
@@ -307,6 +310,7 @@ const PerfectSeasonNhl = () => {
       ? Math.floor(dailyPicker.current(2 ** 31))
       : randomSeed();
     const result = simulateSeason(overall, NHL_GAMES, seed);
+    seasonSeed.current = seed;
     setSim(result);
     setRevealed(0);
     setPhase('sim');
@@ -485,6 +489,7 @@ const PerfectSeasonNhl = () => {
             })}
           </div>
           <div className="max-w-2xl mx-auto text-center"><BestSoFar best={best} /></div>
+          <NhlCupSeries />
           </>
         )}
 
@@ -759,6 +764,7 @@ const PerfectSeasonNhl = () => {
                 onRestart={restart}
               />
             )}
+            {phase === 'done' && mode !== 'daily' && <NhlCupSeries entry={makeCupRun(picks, sim.wins, seasonSeed.current)} />}
           </div>
         )}
 
